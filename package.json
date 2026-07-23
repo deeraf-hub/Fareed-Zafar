@@ -1,0 +1,20 @@
+{
+  "name": "messenger-to-whatsapp-forwarder",
+  "version": "1.0.0",
+  "description": "Forwards every incoming Facebook Messenger (Page inbox) message to a WhatsApp number in real time via the Meta Graph API and WhatsApp Business Cloud API.",
+  "main": "src/server.js",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "license": "MIT"
+}
