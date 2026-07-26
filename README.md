@@ -145,6 +145,6 @@ src/
   whatsapp.js         Cloud API sender: text, media (link + upload), template fallback, retries
   config.js           Environment configuration
 scripts/
-  send-test.js        Credential check: sends a test WhatsApp message (npm run test:whatsapp)
+  check-whatsapp.js   Credential check: sends a test WhatsApp message (npm run test:whatsapp)
 test/                 Unit tests (npm test)
 ```
