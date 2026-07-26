@@ -59,9 +59,16 @@ async function forwardAttachment(att, caption) {
   const filename = att.payload?.title || undefined;
   try {
     await sendMediaByLink(type, url, caption);
-  } catch (err) {
-    console.warn(`Send-by-link failed (${err.message}); retrying via upload.`);
-    await sendMediaByUpload(type, url, caption, filename);
+  } catch (linkErr) {
+    console.warn(`Send-by-link failed (${linkErr.message}); retrying via upload.`);
+    try {
+      await sendMediaByUpload(type, url, caption, filename);
+    } catch (uploadErr) {
+      // Oversized or unsupported media — deliver the link as text so the
+      // message is never silently lost.
+      console.warn(`Upload fallback failed (${uploadErr.message}); sending link as text.`);
+      await sendText(`${caption}\n📎 Attachment (${att.type}) could not be re-sent directly. Download link (expires after a few days):\n${url}`);
+    }
   }
 }
 

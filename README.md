@@ -83,9 +83,10 @@ In the App Dashboard, add both products:
 ```bash
 cp .env.example .env     # fill in every value
 npm install
+npm run test:whatsapp    # sends a test message to your phone — verifies Step 2 worked
 npm start                # or: docker build -t fwd . && docker run --env-file .env -p 3000:3000 fwd
 ```
-Expose it at a public HTTPS URL (for local testing, `ngrok http 3000` works).
+`npm run test:whatsapp` confirms your WhatsApp credentials end-to-end before you touch the webhook side; if it fails it prints the most likely cause. Then expose the service at a public HTTPS URL (for local testing, `ngrok http 3000` works).
 
 Then register the webhook: App Dashboard → **Messenger → Settings → Webhooks**:
 - Callback URL: `https://your-host/webhook`
@@ -123,14 +124,13 @@ Once approved (usually minutes to hours), set `WHATSAPP_TEMPLATE_NAME=new_messen
 
 ---
 
-## If direct forwarding to WhatsApp doesn't fit
+## If the Cloud API onboarding is a blocker
 
-Closest alternatives, in order of fidelity:
+The destination stays WhatsApp either way — these are just different ways to reach it:
 
-1. **Keep this exact service, change the last hop.** The forwarder is one file (`src/whatsapp.js`); swapping it for a sender to **Telegram (free Bot API, no 24 h window, no approval process, unlimited media)** takes minutes and removes every WhatsApp policy constraint. Telegram is the best "closest result" if WhatsApp's template/window rules are a deal-breaker.
-2. **A BSP instead of the Cloud API** — Twilio, 360dialog, Vonage resell the same WhatsApp API with easier onboarding and support, at a small per-message markup. Same code shape, different endpoint.
-3. **Meta's own notifications** — the Meta Business Suite app can push Page-inbox notifications to your phone. No message *content in WhatsApp*, but zero setup.
-4. **Email bridge** — forward each message to your inbox instead; simplest possible fallback, loses immediacy.
+1. **A BSP instead of the direct Cloud API** — Twilio, 360dialog, or Vonage resell the exact same WhatsApp Business API with easier onboarding and human support, at a small per-message markup. Same code shape, different endpoint and token; only `src/whatsapp.js` would change.
+2. **Meta's free test number first** — you don't need to finish real-number onboarding to start: the test sender number Meta provides works immediately and can deliver to your (verified) personal number. Attach a permanent number later with zero code changes.
+3. **Meta Business Suite push notifications** — as an interim stopgap while App Review is pending, the Business Suite app pushes Page-inbox alerts to your phone (not into WhatsApp, and without this project's formatting, but zero setup).
 
 ---
 
@@ -144,5 +144,7 @@ src/
   messenger.js        Sender-name lookup (Graph API) with caching
   whatsapp.js         Cloud API sender: text, media (link + upload), template fallback, retries
   config.js           Environment configuration
+scripts/
+  send-test.js        Credential check: sends a test WhatsApp message (npm run test:whatsapp)
 test/                 Unit tests (npm test)
 ```
