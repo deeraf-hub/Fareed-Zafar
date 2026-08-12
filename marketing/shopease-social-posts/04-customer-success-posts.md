@@ -2,7 +2,7 @@
 
 Angle: social proof. Each of the three client stories appears twice — once as a quote card, once as a mini case-study carousel — so every story gets both an emotional beat and a results beat.
 
-> **⚠️ PLACEHOLDER TESTIMONIALS.** The task brief referenced three client testimonials, but their text was not included in the repository or the brief. The three testimonials below are **drafted placeholders** written to match ShopEase's three service lines. Before publishing, replace every `[bracketed]` name, company, city, quote, and metric with the real client's words and verified numbers — never publish invented quotes or figures as real client claims.
+> **Note on testimonials.** ShopEase has approved these three drafted testimonials to run as written. The `[bracketed]` client names, companies, and metrics remain fill-in fields: drop in real client details (with their permission) where available, or run the quotes unattributed/anonymized (e.g. "Founder, Lahore fashion brand"). Metrics marked `[X]` should only be filled with verifiable numbers — leave the qualitative version if none are available. More company information: https://shopeasepay.com/
 
 ---
 

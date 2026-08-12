@@ -18,7 +18,7 @@ Templates and color tokens reference `brand-design-system.md`.
   - The gaps costing you customers
   - A roadmap — whether you build with us or not
 - Large amber pill button, navy text: `Book my free call`
-- Bottom strip in 60% white: *"Limited slots each week · shopease.pk/consult"* `[placeholder URL]`
+- Bottom strip in 60% white: *"Limited slots each week · shopeasepay.com"*
 
 **Caption:**
 > The most useful 30 minutes you'll spend on your business this month — and it costs nothing. 📞
@@ -156,7 +156,7 @@ Templates and color tokens reference `brand-design-system.md`.
 - A small teal tape-corner graphic on the photo card for a personal-scrapbook feel.
 - Below, in Midnight Navy Poppins Bold: **"We started ShopEase because great businesses were losing to bad websites."**
 - Sub-line in Slate: *"— [Founder Name], Founder"* `[placeholder]`
-- Small amber CTA chip: `Our story → shopease.pk/about` `[placeholder URL]`
+- Small amber CTA chip: `Our story → shopeasepay.com`
 
 **Caption:**
 > A personal note, from our founder. 💚

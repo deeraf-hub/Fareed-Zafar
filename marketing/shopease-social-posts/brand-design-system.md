@@ -32,7 +32,7 @@ This is the shared visual language for all 30 post designs in this package. Ever
 
 - **Wordmark:** "Shop" in Cloud White (or Midnight Navy on light backgrounds) + "Ease" in Growth Teal, Poppins SemiBold. Optional monogram: a rounded storefront awning whose right edge becomes an upward arrow, in Growth Teal.
 - **Placement:** wordmark top-left or bottom-left of every post, 48 px margin.
-- **URL footer:** `shopease.pk` in Inter Medium, bottom-right, Slate on light / 60%-white on dark. *(Placeholder — replace with the real domain before publishing.)*
+- **URL footer:** `shopeasepay.com` in Inter Medium, bottom-right, Slate on light / 60%-white on dark.
 - **Safe margins:** 64 px on all sides of a 1080px canvas. Nothing but background bleeds past them.
 
 ## 4. Visual Motifs

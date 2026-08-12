@@ -62,10 +62,13 @@ Three posts per week, rotating pillars so no week is all-sales and no week is al
 
 Rules of thumb: LinkedIn Tue–Thu 9–11 a.m. PKT · Instagram/Facebook 7–9 p.m. PKT · always reply to comments within the first hour · pin Post 29 on every profile.
 
-## ⚠️ Placeholders to Replace Before Publishing
+## Company Website
 
-1. **Testimonials (Posts 19–24):** the three client testimonials referenced in the campaign brief were not available in this repository, so drafted placeholders are used. Replace every `[bracketed]` client name, company, city, quote, and metric with real, client-approved text and verified numbers before publishing.
-2. **Domain/URLs:** `shopease.pk`, `/consult`, `/about` are placeholders — swap in the real domain and landing pages.
-3. **Founder details (Post 30):** name, photo, and quote need the real founder's input.
-4. **Lead magnet (Post 28):** the "10 Things Every Pakistani Business Website Needs in 2026" checklist PDF must be produced before that post runs.
-5. **Stats:** Posts 3 and 9 cite published third-party research (Google/SOASTA, BrightEdge) — re-verify before use. All client metrics in case studies are `[X]` placeholders by design.
+All designs and captions reference ShopEase's website: **https://shopeasepay.com/** — use it as the URL footer on every post and the destination for every "link in bio" CTA.
+
+## Notes Before Publishing
+
+1. **Testimonials (Posts 19–24):** approved by ShopEase to run as written. `[Bracketed]` client names/companies are fill-in fields — add real client details (with permission) where available, or run the quotes anonymized (e.g. "Founder, Lahore fashion brand"). Fill `[X]` metrics only with verifiable numbers.
+2. **Founder details (Post 30):** name, photo, and quote need the founder's input.
+3. **Lead magnet (Post 28):** the "10 Things Every Pakistani Business Website Needs in 2026" checklist PDF must be produced before that post runs.
+4. **Stats:** Posts 3 and 9 cite published third-party research (Google/SOASTA, BrightEdge) — re-verify before use.

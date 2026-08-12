@@ -127,7 +127,7 @@ Templates and color tokens reference `brand-design-system.md`.
 - Headline banner across the top on Midnight Navy: **"SEO myths, retired."**
 - **Left panel** (Slate-tinted, ✕ icon in a gray circle): label `THE MYTH` — *"We did SEO last year. It's done."* Beneath it, a flat-lining gray graph.
 - **Right panel** (teal-tinted, ✓ icon in a teal circle): label `THE REALITY` — *"SEO is a habit, not an event. Consistent work compounds into rankings competitors can't quickly take back."* Beneath it, a rising teal curve with an amber endpoint dot.
-- Footer strip: wordmark left, `shopease.pk` right.
+- Footer strip: wordmark left, `shopeasepay.com` right.
 
 **Caption:**
 > "We already did SEO." 🚫

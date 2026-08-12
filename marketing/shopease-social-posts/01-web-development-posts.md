@@ -16,7 +16,7 @@ Templates and color tokens reference `brand-design-system.md`.
   **"Your website is your hardest-working employee."**
 - Supporting line in Inter, 70% white: *"It sells at 2 a.m., answers questions, and never takes Eid holidays. Ours are built to."*
 - Amber CTA chip bottom-left: `Build yours →`
-- Wordmark top-left is replaced by wordmark bottom-left + `shopease.pk` bottom-right.
+- Wordmark top-left is replaced by wordmark bottom-left + `shopeasepay.com` bottom-right.
 
 **Caption:**
 > Your best salesperson doesn't sleep.
@@ -100,7 +100,7 @@ Templates and color tokens reference `brand-design-system.md`.
   4. **Protected admin access** — only your team gets in
   5. **Software kept current** — patched before problems find you
 - Amber highlight bar behind row 2 (payment handling).
-- Small shield icon with the teal storefront-arrow monogram, bottom-right, beside `shopease.pk`.
+- Small shield icon with the teal storefront-arrow monogram, bottom-right, beside `shopeasepay.com`.
 
 **Caption:**
 > You lock your shop every night. Is your website locked too?
