@@ -1,0 +1,1178 @@
+<title>ShopEase Campaign Gallery</title>
+<style>
+  :root{
+    /* page chrome — theme-aware */
+    --bg:#F5F7FB; --surface:#FFFFFF; --ink:#16263F; --muted:#5A6B85;
+    --line:#E2E7F1; --acc:#00A093; --acc-soft:rgba(0,160,147,.1);
+    /* brand tokens — fixed artwork colors, never theme-swapped */
+    --b-navy:#0A1F44; --b-teal:#00B3A4; --b-amber:#FFB100; --b-mist:#F4F6FA;
+    --b-slate:#5A6B85; --ep:#00A650; --jc:#C41F3A;
+    --fd:'Poppins','Avenir Next','Trebuchet MS',system-ui,sans-serif;
+    --fb:'Inter','Segoe UI',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0C1626; --surface:#131F35; --ink:#E9EEF7; --muted:#9AA9C0;
+      --line:#263751; --acc:#2BC8B9; --acc-soft:rgba(43,200,185,.12);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0C1626; --surface:#131F35; --ink:#E9EEF7; --muted:#9AA9C0;
+    --line:#263751; --acc:#2BC8B9; --acc-soft:rgba(43,200,185,.12);
+  }
+  *{box-sizing:border-box; margin:0}
+  body{background:var(--bg); color:var(--ink); font-family:var(--fb); line-height:1.5;}
+  .wrap{max-width:1260px; margin:0 auto; padding:40px 24px 90px;}
+
+  /* ---------- page header ---------- */
+  .hero{display:flex; flex-direction:column; gap:14px; padding-bottom:30px; border-bottom:1px solid var(--line);}
+  .hero .kicker{font-size:12px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--acc);}
+  .hero h1{font-family:var(--fd); font-size:clamp(28px,4vw,42px); line-height:1.1; text-wrap:balance; max-width:20ch;}
+  .hero .lede{color:var(--muted); max-width:62ch; font-size:15px;}
+  .swatches{display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;}
+  .sw{display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--muted); background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:5px 12px 5px 6px;}
+  .sw i{width:18px; height:18px; border-radius:50%; border:1px solid rgba(0,0,0,.08);}
+  .hero .fine{font-size:12px; color:var(--muted);}
+  .hero .fine code{font-family:ui-monospace,monospace; font-size:11px; background:var(--acc-soft); border-radius:4px; padding:1px 5px;}
+
+  /* ---------- pillar sections ---------- */
+  .pillar{margin-top:54px;}
+  .phead{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:6px;}
+  .phead .pn{font-family:var(--fd); font-weight:700; font-size:13px; color:var(--acc); letter-spacing:1.5px; text-transform:uppercase;}
+  .phead h2{font-family:var(--fd); font-size:24px;}
+  .pnote{color:var(--muted); font-size:13.5px; max-width:70ch; margin-bottom:22px;}
+
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:26px; align-items:start;}
+  .postcard{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px; display:flex; flex-direction:column; gap:12px;}
+  .meta{display:flex; flex-direction:column; gap:7px;}
+  .meta .pt{font-weight:650; font-size:14.5px; font-family:var(--fd);}
+  .meta .pt span{color:var(--acc); margin-right:6px;}
+  .tags{display:flex; flex-wrap:wrap; gap:6px;}
+  .tag{font-size:10.5px; border:1px solid var(--line); padding:2.5px 9px; border-radius:999px; color:var(--muted);}
+  .tag.plat{border-color:transparent; background:var(--acc-soft); color:var(--acc); font-weight:600;}
+  details.cap{border-top:1px dashed var(--line); padding-top:9px; font-size:12.5px;}
+  details.cap summary{cursor:pointer; color:var(--acc); font-weight:600; font-size:12px; list-style-position:inside;}
+  details.cap summary:focus-visible{outline:2px solid var(--acc); outline-offset:2px; border-radius:4px;}
+  .ctext{white-space:pre-line; margin-top:9px; color:var(--ink); line-height:1.6;}
+  .ctext .ht{color:var(--muted);}
+
+  /* mini slide strip for carousels */
+  .strip{display:flex; gap:6px; overflow-x:auto; padding-bottom:2px;}
+  .sl{flex:0 0 66px; aspect-ratio:4/5; border-radius:6px; padding:6px; font-size:7.5px; line-height:1.3; display:flex; flex-direction:column; gap:4px; font-family:var(--fd);}
+  .sl .n{width:12px; height:12px; border-radius:4px; background:var(--b-teal); color:#fff; font-size:7px; font-weight:700; display:grid; place-items:center;}
+  .sl.dark{background:var(--b-navy); color:#fff;}
+  .sl.light{background:var(--b-mist); color:var(--b-navy); border:1px solid #E2E7F1;}
+  .sl.cta-sl{background:linear-gradient(135deg,#0A1F44,#046a6b); color:#fff;}
+  .sl b{font-weight:650;}
+
+  /* ---------- mockup canvas ---------- */
+  .mk{width:100%; aspect-ratio:1; border-radius:9px; position:relative; overflow:hidden; font-family:var(--fd); box-shadow:0 1px 2px rgba(10,31,68,.14);}
+  .mk.r45{aspect-ratio:4/5;}
+  .bg-deep{background:linear-gradient(135deg,#0A1F44 0%,#08315A 46%,#046A6B 80%,#00B3A4 100%);}
+  .bg-navy{background:#0A1F44;}
+  .bg-mist{background:#F4F6FA;}
+  .bg-white{background:#FFFFFF;}
+  .pad{position:absolute; inset:0; padding:20px; display:flex; flex-direction:column; gap:9px;}
+  .dots{position:absolute; width:110px; height:110px; background-image:radial-gradient(rgba(255,255,255,.17) 1.4px, transparent 1.5px); background-size:13px 13px; pointer-events:none;}
+  .glow{position:absolute; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, rgba(0,179,164,.42), transparent 62%); pointer-events:none;}
+  .inner-frame{position:absolute; inset:10px; border:1.5px solid var(--b-teal); border-radius:6px; opacity:.5; pointer-events:none;}
+
+  .eb{font-size:8.5px; letter-spacing:2.2px; color:var(--b-teal); font-weight:700; text-transform:uppercase; font-family:var(--fb);}
+  .eb.on-light{color:#03897e;}
+  .h-xl{font-size:23px; line-height:1.13; font-weight:700; text-wrap:balance;}
+  .h-lg{font-size:19px; line-height:1.16; font-weight:700; text-wrap:balance;}
+  .h-md{font-size:15.5px; line-height:1.2; font-weight:700; text-wrap:balance;}
+  .cw{color:#fff;} .cn{color:var(--b-navy);} .ct{color:var(--b-teal);} .ca{color:var(--b-amber);} .cs{color:var(--b-slate);}
+  .sub{font-size:10.5px; line-height:1.45; font-family:var(--fb);}
+  .dim{color:rgba(255,255,255,.72);}
+  .tiny{font-size:8px; font-family:var(--fb);}
+  .cta-chip{align-self:flex-start; background:var(--b-amber); color:var(--b-navy); font-weight:700; font-size:10px; padding:7px 14px; border-radius:999px;}
+  .cta-chip.teal{background:var(--b-teal); color:#fff;}
+  .wm{font-weight:700; font-size:12px; letter-spacing:.2px;}
+  .wm .w{color:#fff;} .wm .wn{color:var(--b-navy);} .wm .e{color:var(--b-teal);} .wm .p{color:var(--b-amber);}
+  .mk-foot{margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end; gap:8px;}
+  .url{font-size:8.5px; color:rgba(255,255,255,.62); font-family:var(--fb);}
+  .url.on-light{color:var(--b-slate);}
+
+  .ckl{display:flex; flex-direction:column; gap:6px;}
+  .ck{display:flex; gap:8px; align-items:flex-start; font-size:9.5px; color:var(--b-slate); line-height:1.35; padding:4px 7px; border-radius:6px; font-family:var(--fb);}
+  .ck b{color:var(--b-navy); font-weight:650;}
+  .ck .ic{flex:0 0 14px; height:14px; border-radius:50%; background:var(--b-teal); color:#fff; font-size:8.5px; display:grid; place-items:center; margin-top:1px;}
+  .ck.hl{background:rgba(255,177,0,.2);}
+
+  .stat{font-size:74px; font-weight:800; line-height:1; letter-spacing:-1px;}
+  .lbar{height:6px; border-radius:3px; background:rgba(255,255,255,.16); overflow:hidden;}
+  .lbar i{display:block; height:100%; width:72%; background:var(--b-teal); border-radius:3px;}
+  .stairs{display:flex; align-items:flex-end; gap:10px; height:74px;}
+  .stairs>div{flex:1; display:flex; flex-direction:column; justify-content:flex-end; gap:4px; text-align:center;}
+  .stairs i{display:block; background:var(--b-teal); border-radius:5px 5px 0 0;}
+  .stairs .lab{font-size:7.5px; color:rgba(255,255,255,.8); font-family:var(--fb);}
+  .tl{display:flex; gap:4px; align-items:flex-start;}
+  .tl .nd{flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; font-size:7.5px; color:rgba(255,255,255,.82); text-align:center; font-family:var(--fb);}
+  .tl .nd i{width:10px; height:10px; border-radius:50%; background:var(--b-teal);}
+  .tl .nd.hot i{background:var(--b-amber); box-shadow:0 0 9px rgba(255,177,0,.85);}
+  .tl.on-light .nd{color:var(--b-slate);}
+
+  .sbar{background:#fff; border-radius:999px; padding:8px 13px; font-size:9.5px; color:#5A6B85; display:flex; align-items:center; gap:7px; box-shadow:0 6px 18px rgba(0,0,0,.28); font-family:var(--fb);}
+  .sbar .mag{color:var(--b-teal); font-weight:700;}
+  .sbar .cur{width:1.5px; height:11px; background:var(--b-teal);}
+
+  .wal{display:flex; gap:8px; flex-wrap:wrap;}
+  .wc{background:#fff; border-radius:8px; padding:6px 11px; display:flex; align-items:center; gap:6px; font-size:9px; font-weight:700; color:#1c2b45; box-shadow:0 4px 14px rgba(0,0,0,.2); font-family:var(--fb);}
+  .wc i{width:9px; height:9px; border-radius:50%;}
+  .wc.ep i{background:var(--ep);} .wc.jc i{background:var(--jc);}
+
+  .stars{color:var(--b-amber); font-size:12px; letter-spacing:2px;}
+  .qm{position:absolute; top:0px; left:12px; font-size:110px; color:var(--b-teal); opacity:.18; font-family:Georgia,serif; line-height:1.1; pointer-events:none;}
+  .quote{font-size:11px; line-height:1.5; color:var(--b-navy); font-weight:500; position:relative;}
+  .client{display:flex; gap:8px; align-items:center;}
+  .av{width:30px; height:30px; border-radius:50%; background:var(--b-teal); color:#fff; display:grid; place-items:center; font-size:9.5px; font-weight:700; flex:0 0 30px;}
+  .cl1{font-size:10px; font-weight:700; color:var(--b-navy); line-height:1.25;}
+  .cl2{font-size:8.5px; color:var(--b-slate); font-family:var(--fb);}
+  .stags{display:flex; gap:5px; flex-wrap:wrap;}
+  .stag{font-size:7.5px; font-weight:600; color:#03897e; border:1px solid rgba(0,179,164,.5); border-radius:999px; padding:2px 8px; font-family:var(--fb);}
+
+  .split{position:absolute; inset:0; display:grid; grid-template-rows:auto 1fr;}
+  .split .ban{background:var(--b-navy); color:#fff; padding:11px 15px; font-weight:700; font-size:12.5px;}
+  .split .cols{display:grid; grid-template-columns:1fr 1fr;}
+  .split .col{padding:13px; display:flex; flex-direction:column; gap:7px; font-size:9px; line-height:1.4; font-family:var(--fb);}
+  .col.bad{background:#E8EAF0; color:#5A6B85;}
+  .col.good{background:#DFF5F2; color:#123;}
+  .bdg{width:18px; height:18px; border-radius:50%; display:grid; place-items:center; font-size:10px; font-weight:700; color:#fff;}
+  .bdg.x{background:#8A93A6;} .bdg.c{background:var(--b-teal);}
+  .col .lb{font-size:7.5px; letter-spacing:1.6px; font-weight:700;}
+  .col.bad .lb{color:#79839a;} .col.good .lb{color:#03897e;}
+  .col .big{font-weight:700; font-size:10.5px; font-family:var(--fd);}
+  .col.bad .big{color:#4a5670;} .col.good .big{color:var(--b-navy);}
+
+  .ph{width:118px; border-radius:16px; background:#fff; border:5px solid #0A1F44; padding:9px 8px; display:flex; flex-direction:column; gap:6px; box-shadow:0 14px 30px rgba(10,31,68,.28); font-family:var(--fb);}
+  .ph .bar{height:7px; border-radius:3px; background:#E7EBF3;}
+  .paybtn{border-radius:6px; padding:6px 7px; font-size:7.5px; font-weight:700; display:flex; align-items:center; gap:5px; border:1px solid #E2E7F1; color:#16263F; background:#fff;}
+  .paybtn i{width:8px; height:8px; border-radius:50%;}
+  .toast{border-radius:6px; padding:5px 7px; font-size:7.5px; font-weight:700; background:#DFF5F2; color:#03695f;}
+  .callout{font-size:8px; color:var(--b-slate); display:flex; gap:5px; align-items:center; font-family:var(--fb);}
+  .callout i{width:14px; height:14px; border-radius:50%; background:var(--b-teal); color:#fff; font-size:8px; font-weight:700; display:grid; place-items:center; font-style:normal; flex:0 0 14px;}
+
+  .lap{border:5px solid #0A1F44; border-radius:10px 10px 2px 2px; background:#fff; padding:8px; display:flex; flex-direction:column; gap:5px;}
+  .lap .hero-b{height:26px; border-radius:4px; background:linear-gradient(120deg,#0A1F44,#00B3A4);}
+  .lap .prod{display:grid; grid-template-columns:repeat(3,1fr); gap:4px;}
+  .lap .prod i{aspect-ratio:1; border-radius:3px; background:#E7EBF3;}
+  .lap-base{height:6px; background:#0A1F44; border-radius:0 0 8px 8px; margin:0 -14px;}
+
+  .qcard{background:#fff; border-radius:10px; padding:9px 11px; font-size:8.5px; color:#16263F; box-shadow:0 8px 22px rgba(0,0,0,.28); line-height:1.4; font-family:var(--fb);}
+  .qcard .who{color:#5A6B85; font-size:7.5px; margin-top:3px;}
+  .qcard .stars{font-size:8px; letter-spacing:1px;}
+
+  .photo{aspect-ratio:16/10; border-radius:10px; background:linear-gradient(145deg,#C9D4E2,#8FA3BB); display:grid; place-items:center; color:#3d4f68; font-size:9px; text-align:center; padding:10px; transform:rotate(-1deg); box-shadow:0 10px 26px rgba(10,31,68,.22); position:relative; font-family:var(--fb);}
+  .tape{position:absolute; width:44px; height:13px; background:rgba(0,179,164,.45); top:-7px; left:22px; transform:rotate(-7deg); border-radius:2px;}
+
+  .conf{position:absolute; top:0; left:0; right:0; height:64px; background-image:radial-gradient(#00B3A4 1.5px, transparent 1.7px), radial-gradient(#FFB100 1.5px, transparent 1.7px); background-size:27px 23px, 33px 27px; background-position:0 0, 13px 9px; opacity:.5; pointer-events:none;}
+  .ubox{border:1.5px solid var(--b-amber); border-radius:8px; padding:6px 4px; font-size:8px; font-weight:600; color:#fff; text-align:center; flex:1; font-family:var(--fb);}
+
+  .letters{display:flex; gap:7px;}
+  .letters i{width:26px; height:26px; border-radius:7px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.35); color:#fff; font-style:normal; font-weight:700; font-size:12px; display:grid; place-items:center;}
+  .swipe{font-size:8.5px; color:rgba(255,255,255,.75); font-family:var(--fb);}
+
+  .rescards{display:flex; flex-direction:column; gap:5px;}
+  .rescard{background:#fff; border-radius:6px; padding:6px 9px; font-size:8px; color:#16263F; font-family:var(--fb);}
+  .rescard b{color:#0A57C2; font-weight:600; display:block; font-size:8.5px;}
+  .rescard.dead{opacity:.42; transform:translateY(4px) rotate(1deg);}
+
+  .parcel{width:84px; height:60px; border-radius:8px; background:#C9A87B; position:relative; box-shadow:0 10px 24px rgba(0,0,0,.3);}
+  .parcel:before{content:""; position:absolute; left:50%; top:0; bottom:0; width:10px; transform:translateX(-50%); background:rgba(255,255,255,.4);}
+  .rtd{position:absolute; top:18px; left:-9px; background:var(--jc); color:#fff; font-size:8px; font-weight:800; letter-spacing:1px; padding:3px 8px; transform:rotate(-8deg); border-radius:3px;}
+
+  .icnrow{display:flex; gap:8px;}
+  .icn{width:30px; height:30px; border-radius:8px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.35); display:grid; place-items:center; font-size:13px;}
+
+  .flyw{display:grid; grid-template-columns:1fr 1fr; gap:5px; font-size:7.5px; color:var(--b-slate); font-family:var(--fb);}
+  .flyw i{font-style:normal; border:1px solid rgba(0,179,164,.55); border-radius:999px; padding:3px 7px; text-align:center;}
+  .flyw i.rep{border-color:var(--b-amber); color:#8a6100; font-weight:700;}
+
+  footer.end{margin-top:70px; padding-top:22px; border-top:1px solid var(--line); color:var(--muted); font-size:12.5px; display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;}
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important;} }
+</style>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">ShopEase Pay · 30-Post Social Campaign</div>
+  <h1>ShopEase Campaign Gallery</h1>
+  <p class="lede">Visual mockups for all 30 post designs across five content pillars — web development, SEO &amp; content, payment integration, customer success, and conversion. Each card shows the on-image design, its format and platforms, and the exact publish-ready caption.</p>
+  <div class="swatches">
+    <span class="sw"><i style="background:#0A1F44"></i>Midnight Navy #0A1F44</span>
+    <span class="sw"><i style="background:#00B3A4"></i>Growth Teal #00B3A4</span>
+    <span class="sw"><i style="background:#FFB100"></i>Signal Amber #FFB100</span>
+    <span class="sw"><i style="background:#F4F6FA"></i>Mist Gray #F4F6FA</span>
+    <span class="sw"><i style="background:#5A6B85"></i>Slate #5A6B85</span>
+  </div>
+  <p class="fine">Production type: Poppins (display) + Inter (body) — this preview uses system fallbacks where those aren't installed. Full specs live in the repo under <code>marketing/shopease-social-posts/</code>. Web: shopeasepay.com · Facebook: @Shopeasepay</p>
+</header>
+
+<!-- ================= PILLAR 1 ================= -->
+<section class="pillar">
+  <div class="phead"><span class="pn">Pillar 1</span><h2>Modern Web Development</h2></div>
+  <p class="pnote">MERN-stack capability translated into business outcomes: speed, security, scalability, and a process that doesn't intimidate first-time website buyers.</p>
+  <div class="grid">
+
+  <article class="postcard">
+    <div class="mk bg-deep">
+      <div class="dots" style="top:0;left:0"></div>
+      <div class="pad">
+        <span class="eb">Web Development</span>
+        <div class="h-xl cw">Your website is your hardest-working employee.</div>
+        <p class="sub dim">It sells at 2 a.m., answers questions, and never takes Eid holidays. Ours are built to.</p>
+        <span class="cta-chip">Build yours →</span>
+        <div class="mk-foot"><span class="wm"><span class="w">Shop</span><span class="e">Ease</span></span><span class="url">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>01</span>Your Hardest-Working Employee</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Template A · Statement</span><span class="tag plat">LinkedIn</span><span class="tag plat">Facebook</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">Your best salesperson doesn't sleep.
+
+A well-built website takes orders at 2 a.m., answers the questions you're tired of repeating, and represents your brand perfectly every single time — whether one customer visits or ten thousand.
+
+We build fast, secure, custom web stores on the MERN stack for businesses across Pakistan that are ready to grow beyond their DMs.
+
+If your business still lives only on Instagram and WhatsApp, let's change that. Book a free consultation — link in bio.
+
+<span class="ht">#WebDevelopment #EcommercePakistan #DigitalPakistan #OnlineStore #SmallBusinessPakistan #BusinessGrowth</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk r45 bg-deep">
+      <div class="pad">
+        <span class="eb">Web Development</span>
+        <div class="h-lg cw">Your developer says “MERN stack.” Here's what that means for your business.</div>
+        <div class="letters"><i>M</i><i>E</i><i>R</i><i>N</i></div>
+        <div class="mk-foot"><span class="wm"><span class="w">Shop</span><span class="e">Ease</span></span><span class="swipe">swipe →</span></div>
+      </div>
+    </div>
+    <div class="strip">
+      <div class="sl light"><span class="n">M</span><b>MongoDB</b>Your data grows with you</div>
+      <div class="sl light"><span class="n">E</span><b>Express</b>The engine behind every order</div>
+      <div class="sl light"><span class="n">R</span><b>React</b>A storefront that feels instant</div>
+      <div class="sl light"><span class="n">N</span><b>Node.js</b>Built to handle the rush</div>
+      <div class="sl cta-sl"><span class="n">→</span><b>One modern stack.</b>Get a free consultation</div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>02</span>MERN, in Plain Business Terms</div>
+      <div class="tags"><span class="tag">1080×1350 · 6 slides</span><span class="tag">Template C · Carousel</span><span class="tag plat">Instagram</span><span class="tag plat">LinkedIn</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">"We build on the MERN stack" — great, but what does that actually do for your business? 🧵
+
+Swipe for the no-jargon version. The short answer: a store that loads instantly, never buckles on sale day, and scales as you grow — the same technologies powering Netflix and PayPal, sized for your business.
+
+You shouldn't need a computer science degree to invest in your own website. That's what we're here for.
+
+Questions about your current site's tech? Ask in the comments — we answer all of them.
+
+<span class="ht">#MERNStack #WebDevelopment #EcommercePakistan #TechExplained #DigitalPakistan #OnlineStore</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk bg-navy">
+      <div class="dots" style="bottom:0;left:0"></div>
+      <div class="pad">
+        <span class="eb">Web Development</span>
+        <div class="stat ca">53%</div>
+        <div class="h-md cw">of visitors abandon a site that takes more than 3 seconds to load.</div>
+        <span class="tiny dim">Source: Google/SOASTA research</span>
+        <div class="lbar"><i></i></div>
+        <p class="sub dim">Our builds load in under 2.</p>
+        <div class="mk-foot"><span class="cta-chip teal">Test your site speed — free</span><span class="url">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>03</span>The 3-Second Rule</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Template B · Stat</span><span class="tag plat">Instagram</span><span class="tag plat">Facebook</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">You have 3 seconds. ⏱️
+
+More than half of your visitors won't wait longer than that for your site to load. Every extra second is a customer walking out of a shop they never fully entered — and you paid to bring them there.
+
+Speed isn't a luxury feature. It's the difference between an ad budget that converts and one that evaporates. Every store we ship is performance-tested to load in under 2 seconds on Pakistani mobile networks, because that's where your customers actually are.
+
+Want to know your site's real load time? Comment "SPEED" and we'll run a free audit.
+
+<span class="ht">#WebPerformance #EcommercePakistan #WebDevelopment #ConversionRate #DigitalPakistan #SmallBusinessPakistan</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk bg-mist">
+      <div class="pad">
+        <div class="h-md cn">Would you leave your shop unlocked overnight?</div>
+        <span class="tiny cs">Your website security checklist:</span>
+        <div class="ckl">
+          <div class="ck"><span class="ic">✓</span><span><b>SSL encryption</b> — the padlock customers look for before paying</span></div>
+          <div class="ck hl"><span class="ic">✓</span><span><b>Secure payment handling</b> — wallet &amp; card data never exposed</span></div>
+          <div class="ck"><span class="ic">✓</span><span><b>Regular backups</b> — one bad day never erases your business</span></div>
+          <div class="ck"><span class="ic">✓</span><span><b>Protected admin access</b> — only your team gets in</span></div>
+          <div class="ck"><span class="ic">✓</span><span><b>Software kept current</b> — patched before problems find you</span></div>
+        </div>
+        <div class="mk-foot"><span class="wm"><span class="wn">Shop</span><span class="e">Ease</span></span><span class="url on-light">🛡 shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>04</span>Is Your Website a Locked Shop?</div>
+      <div class="tags"><span class="tag">1200×1200</span><span class="tag">Template E · Checklist</span><span class="tag plat">LinkedIn</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">You lock your shop every night. Is your website locked too?
+
+One security incident can cost more than years of hosting — lost orders, lost data, and hardest of all, lost customer trust. Once a customer sees a browser warning on your checkout page, they rarely come back.
+
+Every site we build ships with all five of these as standard, not as add-ons. Security isn't a premium tier — it's the foundation.
+
+Not sure whether your current site would pass this checklist? Send us a message — we'll take a look, no strings attached.
+
+<span class="ht">#WebsiteSecurity #EcommercePakistan #WebDevelopment #SSL #PakistanBusiness #TrustMatters</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk bg-deep">
+      <div class="pad">
+        <span class="eb">Web Development</span>
+        <div class="h-lg cw">Built for 100 orders a day. Ready for 10,000.</div>
+        <div class="stairs">
+          <div><i style="height:26px"></i><span class="lab">100/day</span></div>
+          <div><i style="height:48px"></i><span class="lab">1,000/day</span></div>
+          <div><i style="height:72px; background:linear-gradient(180deg,#FFB100,#00B3A4)"></i><span class="lab">10,000/day</span></div>
+        </div>
+        <p class="sub dim">Scalability means never rebuilding your website just because your business grew.</p>
+        <div class="mk-foot"><span class="cta-chip">Plan your growth with us</span><span class="url">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>05</span>Built for 100 Orders, Ready for 10,000</div>
+      <div class="tags"><span class="tag">1200×1200</span><span class="tag">Template B · Stat</span><span class="tag plat">LinkedIn</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">The most expensive website is the one you have to build twice.
+
+We've met too many business owners whose site worked fine at 100 orders a day — then a viral reel, a TV mention, or a strong sale season arrived, and everything crashed at the exact moment it mattered most.
+
+Scalable architecture means your store grows with your ambition: more products, more traffic, more orders, same solid foundation. You invest once, and it keeps up.
+
+Planning for growth is cheaper than repairing for it. Let's talk about where your business is headed — free consultation, link in bio.
+
+<span class="ht">#Scalability #EcommercePakistan #WebDevelopment #BusinessGrowth #DigitalPakistan #MERNStack</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk r45 bg-mist">
+      <div class="glow" style="top:30%;left:20%"></div>
+      <div class="pad">
+        <div class="h-md cn">From idea to live store — without the confusion.</div>
+        <div style="display:flex; justify-content:center; padding:6px 0 2px;">
+          <div class="lap" style="width:150px"><div class="hero-b"></div><div class="prod"><i></i><i></i><i></i></div><div class="lap-base"></div></div>
+          <div class="ph" style="width:64px; margin-left:-22px; margin-top:18px; padding:6px;"><div class="bar" style="background:linear-gradient(120deg,#0A1F44,#00B3A4); height:14px;"></div><div class="bar"></div><div class="bar" style="width:70%"></div></div>
+        </div>
+        <div class="tl on-light">
+          <div class="nd"><i></i>Discover<br>we map your goals</div>
+          <div class="nd"><i></i>Design<br>you approve every screen</div>
+          <div class="nd"><i></i>Build<br>tested &amp; secure</div>
+          <div class="nd hot"><i></i>Launch<br>we stay with you</div>
+        </div>
+        <div class="mk-foot"><span class="cta-chip">Start step 1 — it's free</span><span class="url on-light">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>06</span>From Idea to Live Store</div>
+      <div class="tags"><span class="tag">1080×1350</span><span class="tag">Template G · Device</span><span class="tag plat">Instagram</span><span class="tag plat">Facebook</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">"I want a website, but I don't know where to start."
+
+We hear this every week — and it's exactly why our process starts with a conversation, not a contract. Here's how an idea becomes your live store:
+
+1️⃣ Discover — we understand your business, customers, and goals
+2️⃣ Design — you see and approve every screen before we build
+3️⃣ Build — clean, fast, secure development on the MERN stack
+4️⃣ Launch — your store goes live, and we stay for support and growth
+
+No jargon. No surprises. No disappearing after launch — we're a growth partner, not a one-time vendor.
+
+Step 1 is a free discovery call. Book yours through the link in bio.
+
+<span class="ht">#WebDevelopment #OnlineStore #EcommercePakistan #SmallBusinessPakistan #DigitalPakistan #StartupPakistan</span></div></details>
+  </article>
+
+  </div>
+</section>
+
+<!-- ================= PILLAR 2 ================= -->
+<section class="pillar">
+  <div class="phead"><span class="pn">Pillar 2</span><h2>SEO &amp; Content Strategy</h2></div>
+  <p class="pnote">Visibility, reach, and traffic — SEO framed as compounding, ownable growth rather than a mysterious black box.</p>
+  <div class="grid">
+
+  <article class="postcard">
+    <div class="mk bg-deep">
+      <div class="glow" style="top:-30%;right:-20%"></div>
+      <div class="pad">
+        <span class="eb">SEO &amp; Content</span>
+        <div class="sbar"><span class="mag">⌕</span>best [your product] in pakistan<span class="cur"></span></div>
+        <div class="h-lg cw">If customers can't find you, they'll find your competitor.</div>
+        <p class="sub dim">Every day, thousands of people search for exactly what you sell.</p>
+        <div class="mk-foot"><span class="cta-chip">Get found →</span><span class="url">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>07</span>Found or Forgotten</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Template A · Statement</span><span class="tag plat">All platforms</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">Right now, someone is searching Google for exactly what you sell.
+
+The only question is whose website they'll find.
+
+SEO isn't a technical luxury — it's your shop sign on the busiest street in the world. Businesses that rank get a steady stream of customers who arrive already looking to buy. Businesses that don't are invisible at the exact moment of highest intent.
+
+We build data-driven SEO and content strategies that put growing Pakistani businesses in front of the customers already searching for them.
+
+Want to know what your customers are searching for? Comment "SEARCH" and we'll share the top queries in your industry.
+
+<span class="ht">#SEO #DigitalPakistan #ContentStrategy #PakistanBusiness #OnlineVisibility #BusinessGrowth</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk r45 bg-deep">
+      <div class="pad">
+        <span class="eb">SEO &amp; Content</span>
+        <div class="rescards">
+          <div class="rescard"><b>Your Competitor — Page 1</b>They get the click. Every time.</div>
+          <div class="rescard"><b>Another Competitor</b>Also here. Also winning.</div>
+          <div class="rescard dead"><b>Your website</b>…somewhere on page 4</div>
+        </div>
+        <div class="h-lg cw">5 reasons your website isn't showing up on Google.</div>
+        <div class="mk-foot"><span class="wm"><span class="w">Shop</span><span class="e">Ease</span></span><span class="swipe">swipe →</span></div>
+      </div>
+    </div>
+    <div class="strip">
+      <div class="sl light"><span class="n">1</span><b>Too slow.</b>Slow sites sink on mobile</div>
+      <div class="sl light"><span class="n">2</span><b>Wrong words.</b>Customers type “ladies kurta online”</div>
+      <div class="sl light"><span class="n">3</span><b>Stale content.</b>Nothing new = nothing to rank</div>
+      <div class="sl light"><span class="n">4</span><b>No mentions.</b>Zero links, low trust</div>
+      <div class="sl light"><span class="n">5</span><b>Hidden errors.</b>Invisible to you, obvious to Google</div>
+      <div class="sl cta-sl"><span class="n">→</span><b>All five are fixable.</b>Free SEO audit</div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>08</span>5 Reasons You're Invisible on Google</div>
+      <div class="tags"><span class="tag">1080×1350 · 7 slides</span><span class="tag">Template C · Carousel</span><span class="tag plat">Instagram</span><span class="tag plat">LinkedIn</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">Your website isn't on page 1 of Google. It's not bad luck — it's usually one of these five reasons. 👉 Swipe.
+
+The encouraging part: every single one is fixable, and fixing them compounds. SEO done right in month 1 is still bringing you customers in month 24 — it's the closest thing to owning, rather than renting, your traffic.
+
+We start every SEO engagement with a full audit so you know exactly where you stand before spending a rupee on strategy.
+
+Want yours? The audit is free — link in bio.
+
+<span class="ht">#SEO #SEOAudit #DigitalPakistan #ContentStrategy #EcommercePakistan #SmallBusinessPakistan</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk bg-navy">
+      <div class="pad">
+        <span class="eb">SEO &amp; Content</span>
+        <div class="stat ct">68%</div>
+        <div class="h-md cw">of online experiences begin with a search engine.</div>
+        <span class="tiny dim">Source: BrightEdge</span>
+        <svg viewBox="0 0 260 46" style="width:100%; height:44px;" aria-hidden="true"><path d="M8 38 C 90 38, 150 30, 210 12" fill="none" stroke="#00B3A4" stroke-width="2.5"/><circle cx="8" cy="38" r="5" fill="#fff" opacity=".85"/><circle cx="210" cy="12" r="6" fill="#FFB100"/></svg>
+        <p class="sub dim">Rankings aren't vanity. They're your pipeline.</p>
+        <div class="mk-foot"><span class="cta-chip teal">Own your rankings</span><span class="url">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>09</span>Where Buying Journeys Begin</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Template B · Stat</span><span class="tag plat">LinkedIn</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">68% of online experiences begin with a search engine. Not with an ad. Not with social media. With a search.
+
+That means for most of your future customers, the journey to buying from you starts in a Google search box — and where you rank decides whether that journey includes you at all.
+
+Paid ads stop working the moment you stop paying. Rankings keep working while you sleep. The smartest growth budgets in 2026 do both — but only one of them compounds.
+
+Let's build your search pipeline. Free strategy call, link in bio.
+
+<span class="ht">#SEO #DigitalMarketing #DigitalPakistan #BusinessGrowth #ContentStrategy #PakistanBusiness</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk bg-white">
+      <div class="inner-frame"></div>
+      <div class="pad" style="padding:24px">
+        <div class="h-md cn">What you should get from an SEO partner every month.</div>
+        <span class="tiny cs">If you're paying for SEO and not seeing these — ask why.</span>
+        <div class="ckl">
+          <div class="ck"><span class="ic">✓</span><span><b>Keyword &amp; ranking report</b> — in plain language</span></div>
+          <div class="ck"><span class="ic">✓</span><span><b>Content published</b> — pages targeting real searches</span></div>
+          <div class="ck"><span class="ic">✓</span><span><b>Technical health fixes</b> — speed, errors, mobile</span></div>
+          <div class="ck"><span class="ic">✓</span><span><b>Competitor snapshot</b> — what they rank for that you don't</span></div>
+          <div class="ck hl"><span class="ic">✓</span><span><b>Traffic → enquiry tracking</b> — customers are the point</span></div>
+          <div class="ck"><span class="ic">✓</span><span><b>A conversation</b> — a human explaining it, not just a PDF</span></div>
+        </div>
+        <div class="mk-foot"><span class="wm"><span class="wn">Shop</span><span class="e">Ease</span></span><span class="url on-light">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>10</span>What a Real SEO Partner Does Monthly</div>
+      <div class="tags"><span class="tag">1200×1200</span><span class="tag">Template E · Checklist</span><span class="tag plat">LinkedIn</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">"We're doing SEO for you" should never be the whole report.
+
+SEO has a reputation problem in our market — too many businesses pay monthly for months and can't say what they actually received. So here's our transparency checklist: six things you should expect from any SEO partner, including us. Screenshot it. Use it in your next vendor meeting. ✅
+
+We send every client a plain-language monthly report and walk through it on a call — because you can't steer growth you don't understand.
+
+If your current SEO reporting doesn't look like this, let's talk. Link in bio.
+
+<span class="ht">#SEO #ContentStrategy #DigitalPakistan #TransparentMarketing #PakistanBusiness #SmallBusinessPakistan</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk">
+      <div class="split">
+        <div class="ban">SEO myths, retired.</div>
+        <div class="cols">
+          <div class="col bad">
+            <span class="bdg x">✕</span>
+            <span class="lb">THE MYTH</span>
+            <span class="big">“We did SEO last year. It's done.”</span>
+            <svg viewBox="0 0 100 30" style="width:100%; margin-top:auto;" aria-hidden="true"><path d="M4 15 L96 15" stroke="#9AA3B5" stroke-width="2.5" fill="none"/></svg>
+          </div>
+          <div class="col good">
+            <span class="bdg c">✓</span>
+            <span class="lb">THE REALITY</span>
+            <span class="big">SEO is a habit, not an event. Consistency compounds.</span>
+            <svg viewBox="0 0 100 30" style="width:100%; margin-top:auto;" aria-hidden="true"><path d="M4 26 C 40 26, 60 18, 90 6" stroke="#00B3A4" stroke-width="2.5" fill="none"/><circle cx="90" cy="6" r="4" fill="#FFB100"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>11</span>SEO Is Not a One-Time Fix</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Template F · Split</span><span class="tag plat">Instagram</span><span class="tag plat">Facebook</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">"We already did SEO." 🚫
+
+We hear this a lot — and it's like saying "we already did exercise." Search rankings are a living scoreboard: Google updates its algorithm thousands of times a year, competitors publish, customer search habits shift.
+
+The reality? Consistency wins. A steady monthly rhythm of content, fixes, and refinement compounds into page-1 positions that are genuinely hard for competitors to take from you. That durability is the whole point.
+
+Stop sprinting occasionally. Start compounding. Free SEO strategy call — link in bio.
+
+<span class="ht">#SEO #SEOMyths #ContentStrategy #DigitalPakistan #BusinessGrowth #PakistanBusiness</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk r45 bg-mist">
+      <div class="glow" style="bottom:-20%;left:-20%"></div>
+      <div class="pad">
+        <div class="h-md cn">Content that sells while you sleep.</div>
+        <span class="tiny cs">One good guide can bring customers for years.</span>
+        <div style="display:flex; gap:12px; align-items:flex-start;">
+          <div class="ph" style="width:104px;">
+            <div class="bar" style="width:85%; background:#0A1F44; height:8px;"></div>
+            <div class="bar"></div><div class="bar" style="width:80%"></div>
+            <div class="paybtn" style="background:#DFF5F2; border-color:#00B3A4;"><i style="background:#00B3A4"></i>Add to Cart</div>
+            <div class="bar" style="width:65%"></div>
+          </div>
+          <div class="flyw" style="flex:1; align-self:center;">
+            <i>Helpful content</i><i>Google ranking</i>
+            <i>Free traffic</i><i>Customers</i>
+            <i class="rep" style="grid-column:1/-1;">↻ repeat</i>
+          </div>
+        </div>
+        <div class="mk-foot"><span class="wm"><span class="wn">Shop</span><span class="e">Ease</span></span><span class="url on-light">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>12</span>Content That Sells While You Sleep</div>
+      <div class="tags"><span class="tag">1080×1350</span><span class="tag">Template G · Device</span><span class="tag plat">Instagram</span><span class="tag plat">LinkedIn</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">Your best salesperson might be a blog post. 📝
+
+A size guide. A "how to choose" article. An honest comparison. Content like this answers the questions your customers are already Googling — and every answer is a doorway into your store that stays open 24/7, at zero cost per click.
+
+This is what content strategy actually means: not posting for the sake of posting, but building a library of assets that rank, earn trust, and quietly convert — month after month, while you focus on running the business.
+
+We plan, write, and optimize it end-to-end. Curious what content your customers are searching for? Comment "CONTENT" and we'll tell you.
+
+<span class="ht">#ContentStrategy #ContentMarketing #SEO #DigitalPakistan #EcommercePakistan #BusinessGrowth</span></div></details>
+  </article>
+
+  </div>
+</section>
+<!-- ================= PILLAR 3 ================= -->
+<section class="pillar">
+  <div class="phead"><span class="pn">Pillar 3</span><h2>Payment Gateway Integration</h2></div>
+  <p class="pnote">Easypaisa &amp; JazzCash — meeting customers where their money already is. Wallet brand colors appear only inside logo chips, never as post colors.</p>
+  <div class="grid">
+
+  <article class="postcard">
+    <div class="mk bg-deep">
+      <div class="pad">
+        <span class="eb">Payment Integration</span>
+        <div class="h-lg cw">Most of your customers don't have a credit card.</div>
+        <div class="h-md ct">But almost all of them have a mobile wallet.</div>
+        <div class="wal"><span class="wc ep"><i></i>easypaisa</span><span class="wc jc"><i></i>JazzCash</span></div>
+        <p class="sub dim">If your checkout doesn't speak Easypaisa and JazzCash, it's turning customers away.</p>
+        <div class="mk-foot"><span class="cta-chip">Add wallet payments →</span><span class="url">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>13</span>Can They Actually Pay You?</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Template A · Statement</span><span class="tag plat">Facebook</span><span class="tag plat">Instagram</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">Here's the checkout question that decides your conversion rate in Pakistan:
+
+"Can I pay with Easypaisa or JazzCash?"
+
+Card penetration here is a fraction of wallet penetration — tens of millions of Pakistanis carry their money in a mobile wallet, not on a Visa. A checkout built only for cards (or only for cash on delivery) quietly filters out the majority of your buyers at the final step.
+
+We integrate Easypaisa and JazzCash directly into your store — smooth for your customer, automatic for you.
+
+Is your checkout wallet-ready? If not, let's fix that this month. Link in bio.
+
+<span class="ht">#Easypaisa #JazzCash #EcommercePakistan #DigitalPayments #PakistanBusiness #OnlineStore</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk r45 bg-deep">
+      <div class="pad">
+        <span class="eb">Payment Integration</span>
+        <div style="display:flex; justify-content:center; padding:12px 0 8px;"><div class="parcel"><span class="rtd">RETURNED</span></div></div>
+        <div class="h-lg cw">Cash on delivery is costing you more than you think.</div>
+        <div class="mk-foot"><span class="wm"><span class="w">Shop</span><span class="e">Ease</span></span><span class="swipe">swipe →</span></div>
+      </div>
+    </div>
+    <div class="strip">
+      <div class="sl light"><span class="n">1</span><b>Refused parcels.</b>Delivery paid both ways, sale lost</div>
+      <div class="sl light"><span class="n">2</span><b>Frozen cash flow.</b>Money rides in a courier van</div>
+      <div class="sl light"><span class="n">3</span><b>Fake orders.</b>No payment, no commitment</div>
+      <div class="sl light"><span class="n">4</span><b>Manual reconciliation.</b>Hours lost every week</div>
+      <div class="sl cta-sl"><span class="n">→</span><b>Prepaid wallets fix all four.</b>Make the switch</div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>14</span>The True Cost of Cash on Delivery</div>
+      <div class="tags"><span class="tag">1080×1350 · 6 slides</span><span class="tag">Template C · Carousel</span><span class="tag plat">Instagram</span><span class="tag plat">Facebook</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">COD feels free. It isn't. 📦
+
+Every online seller in Pakistan knows the pain: the parcel that comes back refused, the cash stuck with the courier, the "order" that was never real. Swipe for the four hidden costs of running on cash on delivery alone →
+
+The fix isn't dropping COD overnight — it's giving customers a prepaid option they already trust. When Easypaisa and JazzCash sit right in your checkout, a meaningful slice of buyers happily pays upfront: committed orders, instant cash flow, zero reconciliation drama.
+
+We'll integrate both wallets into your store and have you accepting prepaid orders fast. Details at the link in bio.
+
+<span class="ht">#CashOnDelivery #Easypaisa #JazzCash #EcommercePakistan #DigitalPayments #OnlineSellerPakistan</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk r45 bg-mist">
+      <div class="glow" style="top:15%;left:25%"></div>
+      <div class="pad">
+        <div class="h-md cn">Three taps to paid.</div>
+        <span class="tiny cs">Checkout the way your customers already pay for everything else.</span>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <div class="ph">
+            <div class="bar" style="width:60%; background:#0A1F44; height:8px;"></div>
+            <div class="bar"></div>
+            <div class="paybtn"><i style="background:#00A650"></i>Pay with Easypaisa</div>
+            <div class="paybtn"><i style="background:#C41F3A"></i>Pay with JazzCash</div>
+            <div class="toast">✓ Paid — order confirmed</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:9px;">
+            <span class="callout"><i>1</i>Choose wallet</span>
+            <span class="callout"><i>2</i>Approve in app</span>
+            <span class="callout"><i>3</i>Paid — confirmed</span>
+          </div>
+        </div>
+        <div class="mk-foot"><span class="cta-chip">See it live on your store</span><span class="url on-light">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>15</span>Three Taps to Paid</div>
+      <div class="tags"><span class="tag">1080×1350</span><span class="tag">Template G · Device</span><span class="tag plat">Instagram</span><span class="tag plat">Reels cover</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">Your customer already pays their electricity bill, mobile load, and Careem rides with a wallet. Their money lives in Easypaisa and JazzCash.
+
+So why does your checkout make them go find a card they may not even have?
+
+With native wallet integration, paying you takes three taps: choose wallet → approve in app → done. No forms, no friction, no "I'll complete this later" (they won't).
+
+Familiar payment = trusted payment = completed order. It's the simplest conversion upgrade most Pakistani stores can make.
+
+Want to see it running on your own store? Book a free demo — link in bio.
+
+<span class="ht">#Easypaisa #JazzCash #CheckoutExperience #EcommercePakistan #DigitalPayments #ConversionRate</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk bg-navy">
+      <div class="pad">
+        <span class="eb">Payment Integration</span>
+        <div style="font-size:20px; font-weight:700; color:#6B7A94; text-decoration:line-through;">Months.</div>
+        <div class="stat ca" style="font-size:64px;">Days.</div>
+        <div class="sub dim">That's how fast your store can be accepting Easypaisa &amp; JazzCash with the right integration partner.</div>
+        <div class="tl">
+          <div class="nd"><i></i>Docs &amp; merchant setup</div>
+          <div class="nd"><i></i>Integration &amp; testing</div>
+          <div class="nd hot"><i></i>Live payments</div>
+        </div>
+        <div class="mk-foot"><span class="cta-chip">Start onboarding this week</span><span class="url">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>16</span>Live in Days, Not Months</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Template B · Stat</span><span class="tag plat">LinkedIn</span><span class="tag plat">Facebook</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">"Payment gateway integration" sounds like a six-month corporate project. It doesn't have to be.
+
+The slow part is rarely the technology — it's not knowing the process: which merchant documents you need, how approval works, how to test properly, what to configure and in which order. We've done it enough times that nothing surprises us anymore.
+
+We handle the merchant onboarding paperwork alongside you, build the integration, test every edge case, and take you live — in days, not months.
+
+Every week without wallet payments is a week of quietly lost orders. Let's start yours now — link in bio.
+
+<span class="ht">#PaymentGateway #Easypaisa #JazzCash #EcommercePakistan #FastOnboarding #DigitalPakistan</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk bg-white">
+      <div class="inner-frame"></div>
+      <div class="pad" style="padding:24px">
+        <div class="h-md cn">Is your checkout helping you sell — or helping customers leave?</div>
+        <span class="tiny cs">The seamless-checkout checklist:</span>
+        <div class="ckl">
+          <div class="ck hl"><span class="ic">✓</span><span><b>Local wallets first</b> — Easypaisa &amp; JazzCash above the fold</span></div>
+          <div class="ck"><span class="ic">✓</span><span><b>No forced sign-up</b> — guest checkout in under a minute</span></div>
+          <div class="ck"><span class="ic">✓</span><span><b>Mobile-perfect</b> — thumb-friendly, no pinch-zooming</span></div>
+          <div class="ck"><span class="ic">✓</span><span><b>Instant confirmation</b> — status updates in real time</span></div>
+          <div class="ck"><span class="ic">✓</span><span><b>Clear failure recovery</b> — a failed payment retries, not restarts</span></div>
+          <div class="ck"><span class="ic">✓</span><span><b>Automatic reconciliation</b> — every payment matched to its order</span></div>
+        </div>
+        <div class="mk-foot"><span class="wm"><span class="wn">Shop</span><span class="e">Ease</span></span><span class="url on-light">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>17</span>Seamless Checkout Checklist</div>
+      <div class="tags"><span class="tag">1200×1200</span><span class="tag">Template E · Checklist</span><span class="tag plat">LinkedIn</span><span class="tag plat">Instagram</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">Abandoned carts aren't a mystery. Walk through your own checkout on your phone tonight and count the obstacles. 🛒
+
+Every extra field, every forced account, every "we only accept bank transfer" is a paying customer you already convinced — lost at the last metre. Checkout is where marketing money either becomes revenue or evaporates.
+
+This is our six-point standard for every store we build or upgrade. Screenshot it and audit yourself — or send us your store link and we'll do it for you, free.
+
+<span class="ht">#CheckoutOptimization #Easypaisa #JazzCash #EcommercePakistan #AbandonedCart #ConversionRate</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk">
+      <div class="split">
+        <div class="ban">The same store. One change.</div>
+        <div class="cols">
+          <div class="col bad">
+            <span class="bdg x">✕</span>
+            <span class="lb">BEFORE</span>
+            <span class="big">Bank transfer / COD only</span>
+            <span>Customers drop off at payment.</span>
+            <div style="margin-top:auto; opacity:.55;"><div class="paybtn">🏦 Bank transfer only</div></div>
+          </div>
+          <div class="col good">
+            <span class="bdg c">✓</span>
+            <span class="lb">AFTER</span>
+            <span class="big">Wallets your customers already use</span>
+            <div class="wal" style="gap:5px;"><span class="wc ep" style="padding:4px 8px;"><i></i>easypaisa</span><span class="wc jc" style="padding:4px 8px;"><i></i>JazzCash</span></div>
+            <div class="toast" style="margin-top:auto; background:#FFB100; color:#0A1F44;">Order confirmed ✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>18</span>Checkout, Before &amp; After</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Template F · Split</span><span class="tag plat">Instagram</span><span class="tag plat">Facebook</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">Same products. Same prices. Same traffic. One change at checkout. 🔁
+
+When customers see payment options they already use daily, hesitation disappears. When they see "bank transfer only" — or nothing but COD — doubt walks in, and doubt doesn't buy.
+
+Wallet integration isn't a technical upgrade. It's a trust upgrade at the exact moment trust matters most: when someone is holding their money out to you.
+
+Ready for your own before-and-after? We'll integrate Easypaisa and JazzCash into your store in days. Free consultation — link in bio.
+
+<span class="ht">#BeforeAndAfter #Easypaisa #JazzCash #EcommercePakistan #DigitalPayments #OnlineStorePakistan</span></div></details>
+  </article>
+
+  </div>
+</section>
+
+<!-- ================= PILLAR 4 ================= -->
+<section class="pillar">
+  <div class="phead"><span class="pn">Pillar 4</span><h2>Customer Success Stories</h2></div>
+  <p class="pnote">Three client stories, each told twice — a quote card for the emotional beat, a case-study carousel for the results beat. Bracketed names and [X] metrics are fill-in fields; quotes are approved to run as written, anonymized if needed.</p>
+  <div class="grid">
+
+  <article class="postcard">
+    <div class="mk bg-mist">
+      <div class="qm">“</div>
+      <div class="pad" style="padding:26px 22px 20px;">
+        <p class="quote">We ran our whole business through Instagram DMs. ShopEase built us a store that takes orders while we sleep — Easypaisa payments and all. Within [X months], online orders became our biggest channel.</p>
+        <div class="stars">★★★★★</div>
+        <div class="client"><span class="av">AB</span><span><span class="cl1">[Client Name]</span><br><span class="cl2">Founder, [Fashion Retail Brand] · Lahore</span></span></div>
+        <div class="mk-foot"><span class="stags"><span class="stag">Web Development</span><span class="stag">Payments</span></span><span class="url on-light">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>19</span>Testimonial: The Store That Left the DMs</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Template D · Quote</span><span class="tag plat">Instagram</span><span class="tag plat">Facebook</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">From "DM to order" to a store that never sleeps. 🌙
+
+When [Client Name] came to us, [Fashion Retail Brand] was thriving on Instagram — and drowning in it. Every order meant manual messages, payment screenshots, and address confusion.
+
+We built them a custom MERN-stack store with Easypaisa and JazzCash checkout. Now customers browse, pay, and order on their own — and the team spends those hours growing the brand instead of managing chats.
+
+Your business might be one website away from getting its evenings back. Let's talk — link in bio.
+
+<span class="ht">#CustomerSuccess #EcommercePakistan #WebDevelopment #Easypaisa #SmallBusinessPakistan #ClientStory</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk r45 bg-deep">
+      <div class="pad">
+        <span class="eb">Client Story</span>
+        <div class="h-lg cw">From Instagram DMs to a store that sells itself.</div>
+        <span style="align-self:flex-start; background:#fff; border-radius:999px; padding:5px 12px; font-size:9px; font-weight:700; color:#0A1F44;">[Fashion Retail Brand]</span>
+        <div class="mk-foot"><span class="wm"><span class="w">Shop</span><span class="e">Ease</span></span><span class="swipe">swipe →</span></div>
+      </div>
+    </div>
+    <div class="strip">
+      <div class="sl light"><span class="n">1</span><b>The challenge</b>Orders buried in DMs &amp; screenshots</div>
+      <div class="sl light"><span class="n">2</span><b>The build</b>Custom store + wallet checkout + dashboard</div>
+      <div class="sl dark"><span class="n">3</span><b>[X]% more orders</b>[X] hrs/week saved · [X]% prepaid</div>
+      <div class="sl cta-sl"><span class="n">→</span><b>Your turn?</b>Book a free consultation</div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>20</span>Case Study: [Fashion Retail Brand]</div>
+      <div class="tags"><span class="tag">1080×1350 · 5 slides</span><span class="tag">Template C · Carousel</span><span class="tag plat">LinkedIn</span><span class="tag plat">Instagram</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">Case study: what actually changed when [Fashion Retail Brand] stopped selling through DMs. 🧵 Swipe →
+
+The challenge: a great product buried under manual order-taking. The build: a custom store with local wallet checkout. The result: [X]% more monthly orders, [X] hours a week back, and a growing share of prepaid payments that ended their COD return problem.
+
+No magic — just the right foundation, built once, built properly.
+
+If your growth is trapped in your inbox, we should talk. Free consultation, link in bio.
+
+<span class="ht">#CaseStudy #EcommercePakistan #WebDevelopment #Easypaisa #JazzCash #BusinessGrowth</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk bg-mist">
+      <div class="qm">“</div>
+      <div class="pad" style="padding:26px 22px 20px;">
+        <div class="sbar" style="box-shadow:0 4px 12px rgba(10,31,68,.1); align-self:flex-start;"><span class="mag">⌕</span>[service] in karachi<span style="background:#00B3A4; color:#fff; border-radius:4px; font-size:7.5px; font-weight:700; padding:1px 5px;">#1</span></div>
+        <p class="quote">We were invisible on Google — customers literally couldn't find us. ShopEase's SEO and content plan changed that in [X months]. Now our biggest source of new enquiries is people searching for exactly what we do.</p>
+        <div class="stars">★★★★★</div>
+        <div class="client"><span class="av">CD</span><span><span class="cl1">[Client Name]</span><br><span class="cl2">Director, [Services Company] · Karachi</span></span></div>
+        <div class="mk-foot"><span class="stags"><span class="stag">SEO</span><span class="stag">Content Strategy</span></span><span class="url on-light">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>21</span>Testimonial: Found on Page One</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Template D · Quote</span><span class="tag plat">LinkedIn</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">"Customers couldn't find us." Now they can't miss them. 🔎
+
+[Services Company] had years of experience and a strong reputation — offline. Online, they were on page 4 of Google, which is the same as nowhere.
+
+A structured SEO and content program — real keyword research, monthly content their customers actually search for, and technical fixes under the hood — moved them onto page one for the searches that matter. Today, search is their biggest source of new enquiries, and it costs them nothing per click.
+
+Being great at what you do isn't enough if no one can find you. Let's make you findable — link in bio.
+
+<span class="ht">#CustomerSuccess #SEO #ContentStrategy #DigitalPakistan #PakistanBusiness #ClientStory</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk r45 bg-deep">
+      <div class="pad">
+        <span class="eb">Client Story</span>
+        <div class="h-lg cw">From page 4 of Google to page 1 — and staying there.</div>
+        <div class="rescards" style="width:80%;">
+          <div class="rescard"><b>[Services Company]</b>Page 1 — and holding.</div>
+          <div class="rescard dead"><b>Where they started</b>page 4 · invisible</div>
+        </div>
+        <div class="mk-foot"><span class="wm"><span class="w">Shop</span><span class="e">Ease</span></span><span class="swipe">swipe →</span></div>
+      </div>
+    </div>
+    <div class="strip">
+      <div class="sl light"><span class="n">1</span><b>The challenge</b>Strong offline, invisible online</div>
+      <div class="sl light"><span class="n">2</span><b>The strategy</b>Keywords · [X] pages · tech cleanup</div>
+      <div class="sl dark"><span class="n">3</span><b>[X]× traffic</b>Page-1 for [X] key searches</div>
+      <div class="sl cta-sl"><span class="n">→</span><b>Get found.</b>Free SEO audit</div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>22</span>Case Study: [Services Company]</div>
+      <div class="tags"><span class="tag">1080×1350 · 5 slides</span><span class="tag">Template C · Carousel</span><span class="tag plat">LinkedIn</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">Case study: how [Services Company] went from invisible to unmissable on Google. Swipe →
+
+No tricks, no shortcuts — a disciplined monthly rhythm of content, optimization, and technical fixes. That's what modern SEO is: compounding work that turns into rankings competitors can't easily take back.
+
+[X] months in, organic search became their single biggest enquiry channel. It still is.
+
+Want to know how far you are from page 1? The audit is free — link in bio.
+
+<span class="ht">#CaseStudy #SEO #ContentStrategy #DigitalPakistan #BusinessGrowth #PakistanBusiness</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk bg-mist">
+      <div class="qm">“</div>
+      <svg viewBox="0 0 300 90" style="position:absolute; bottom:0; left:0; width:100%; opacity:.14;" aria-hidden="true"><path d="M0 82 C 90 80, 180 60, 300 12" stroke="#00B3A4" stroke-width="5" fill="none"/></svg>
+      <div class="pad" style="padding:26px 22px 20px;">
+        <p class="quote">ShopEase didn't just build our website — they built our whole online engine. Store, SEO, JazzCash and Easypaisa payments, all working together. They feel like part of our team, not a vendor.</p>
+        <div class="stars">★★★★★</div>
+        <div class="client"><span class="av">EF</span><span><span class="cl1">[Client Name]</span><br><span class="cl2">Co-founder, [Home &amp; Living Brand] · Islamabad</span></span></div>
+        <div class="mk-foot"><span class="stags"><span class="stag">Web Development</span><span class="stag">SEO</span><span class="stag">Payments</span></span><span class="url on-light">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>23</span>Testimonial: The Growth Partner</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Template D · Quote</span><span class="tag plat">LinkedIn</span><span class="tag plat">Instagram</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">The best compliment we get isn't about code. It's this: "They feel like part of our team." 🤝
+
+[Home &amp; Living Brand] came to us for a website. What they got was a growth engine: a fast custom store, an SEO program that brings buyers in, and wallet payments that let those buyers pay in seconds. Each piece makes the others work harder — that's the point of having one partner instead of three vendors.
+
+We measure our success in your growth, not in deliverables shipped.
+
+Looking for a partner, not a supplier? That's the only way we work. Link in bio.
+
+<span class="ht">#CustomerSuccess #GrowthPartner #EcommercePakistan #WebDevelopment #SEO #JazzCash</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk r45 bg-deep">
+      <div class="pad">
+        <div class="h-lg cw" style="text-align:center;">Don't take our word for it.</div>
+        <p class="sub dim" style="text-align:center; margin-top:-4px;">Take theirs.</p>
+        <div style="display:flex; flex-direction:column; gap:9px; padding:2px 6px;">
+          <div class="qcard" style="transform:rotate(-2deg);"><span class="stars">★★★★★</span><br>“…a store that takes orders while we sleep.”<div class="who">[Client Name] · [Fashion Retail Brand]</div></div>
+          <div class="qcard"><span class="stars">★★★★★</span><br>“…our biggest source of new enquiries is Google.”<div class="who">[Client Name] · [Services Company]</div></div>
+          <div class="qcard" style="transform:rotate(2deg);"><span class="stars">★★★★★</span><br>“…part of our team, not a vendor.”<div class="who">[Client Name] · [Home &amp; Living Brand]</div></div>
+        </div>
+        <div class="mk-foot" style="justify-content:center;"><span class="cta-chip">Become the next story →</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>24</span>Wall of Love</div>
+      <div class="tags"><span class="tag">1080×1350</span><span class="tag">Template D · Multi-quote</span><span class="tag plat">All platforms</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">Three businesses. Three different challenges. One thing in common: they stopped renting their growth and started owning it. 💬
+
+A fashion brand that escaped its DMs. A services firm that conquered page one. A home brand running store, search, and payments as one engine.
+
+Every one of these started the same way — with a free consultation and an honest conversation about goals.
+
+Yours can start today. Link in bio. 🚀
+
+<span class="ht">#Testimonials #CustomerSuccess #EcommercePakistan #DigitalPakistan #BusinessGrowth #WallOfLove</span></div></details>
+  </article>
+
+  </div>
+</section>
+<!-- ================= PILLAR 5 ================= -->
+<section class="pillar">
+  <div class="phead"><span class="pn">Pillar 5</span><h2>Call-to-Action Posts</h2></div>
+  <p class="pnote">Direct conversion: consultations, audits, seasonal urgency, engagement hooks, and a warm founder close — for audiences already primed by pillars 1–4.</p>
+  <div class="grid">
+
+  <article class="postcard">
+    <div class="mk bg-navy">
+      <div class="dots" style="bottom:0;right:0"></div>
+      <div style="position:absolute; left:0; top:0; bottom:0; width:7px; background:var(--b-amber);"></div>
+      <div class="pad" style="padding-left:26px;">
+        <span class="eb">Free Consultation</span>
+        <div class="h-lg cw">30 minutes. Zero jargon. A clear plan for your business online.</div>
+        <div class="ckl">
+          <div class="ck" style="color:rgba(255,255,255,.82); padding:2px 0;"><span class="ic">✓</span><span>Honest review of where you are now</span></div>
+          <div class="ck" style="color:rgba(255,255,255,.82); padding:2px 0;"><span class="ic">✓</span><span>The gaps costing you customers</span></div>
+          <div class="ck" style="color:rgba(255,255,255,.82); padding:2px 0;"><span class="ic">✓</span><span>A roadmap — whether you build with us or not</span></div>
+        </div>
+        <span class="cta-chip" style="font-size:11px; padding:9px 18px;">Book my free call</span>
+        <div class="mk-foot"><span class="tiny dim">Limited slots each week · shopeasepay.com</span><span class="wm"><span class="w">Shop</span><span class="e">Ease</span></span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>25</span>The Free Consultation</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Template H · CTA</span><span class="tag plat">All platforms</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">The most useful 30 minutes you'll spend on your business this month — and it costs nothing. 📞
+
+In one free consultation call, we'll look at your current online presence together and tell you honestly: what's working, what's leaking customers, and what we'd fix first. You leave with a clear roadmap either way — no obligation, no pressure, no jargon.
+
+Why free? Because every client we have started with this exact conversation. Good partnerships begin with honest advice, not sales scripts.
+
+Slots are limited each week. Book yours at the link in bio.
+
+<span class="ht">#FreeConsultation #DigitalPakistan #BusinessGrowth #WebDevelopment #SEO #PakistanBusiness</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk bg-mist">
+      <div style="position:absolute; left:0; top:0; bottom:0; width:7px; background:var(--b-amber);"></div>
+      <div class="pad" style="padding-left:26px;">
+        <span class="eb on-light">Free Audit</span>
+        <div class="h-lg cn">Find out what your website is really costing you.</div>
+        <span class="tiny cs">Speed, search visibility, security, and checkout — scored in plain language, free.</span>
+        <div style="background:#fff; border-radius:10px; padding:10px 12px; box-shadow:0 8px 22px rgba(10,31,68,.12); align-self:flex-start;">
+          <div class="ck" style="padding:2px 0;"><span class="ic">✓</span><span><b>Speed</b></span></div>
+          <div class="ck" style="padding:2px 0;"><span class="ic">✓</span><span><b>Google visibility</b></span></div>
+          <div class="ck" style="padding:2px 0;"><span class="ic">✓</span><span><b>Checkout</b></span></div>
+        </div>
+        <span class="cta-chip" style="font-size:11px; padding:9px 18px;">Request my free audit</span>
+        <div class="mk-foot"><span class="wm"><span class="wn">Shop</span><span class="e">Ease</span></span><span class="url on-light">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>26</span>The Free Website &amp; SEO Audit</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Template H · CTA</span><span class="tag plat">Facebook</span><span class="tag plat">Instagram</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">Your website might be quietly losing customers right now. Slow pages. Invisible on Google. A checkout that makes people give up. You'd never know — visitors don't file complaints, they just leave. 📋
+
+Our free audit checks the four places money leaks out of a website:
+
+⚡ Speed — do visitors wait or bounce?
+🔎 Visibility — can Google find and rank you?
+🔒 Security — would customers trust your checkout?
+🛒 Conversion — how many obstacles before payment?
+
+You get a plain-language scorecard and the three fixes we'd make first. Free, no strings — comment "AUDIT" or hit the link in bio.
+
+<span class="ht">#FreeAudit #WebsiteAudit #SEO #EcommercePakistan #DigitalPakistan #SmallBusinessPakistan</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk r45 bg-deep">
+      <div class="conf"></div>
+      <div class="pad" style="padding-top:34px;">
+        <span class="eb">Sale season is coming</span>
+        <div class="h-lg cw">11.11, Black Friday, winter weddings. Will your store be ready — or down?</div>
+        <div style="display:flex; gap:7px;">
+          <span class="ubox">Traffic spike</span><span class="ubox">Payment surge</span><span class="ubox">Order flood</span>
+        </div>
+        <p class="sub dim">Stores that prepare in August celebrate in November.</p>
+        <div class="mk-foot"><span class="cta-chip">Get sale-season ready</span><span class="url">shopeasepay.com</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>27</span>Ready for the Rush?</div>
+      <div class="tags"><span class="tag">1080×1350</span><span class="tag">Template A · Urgency</span><span class="tag plat">Instagram</span><span class="tag plat">Facebook</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">Every November, the same two stories. 🛍️
+
+Store A prepared: fast pages under heavy traffic, wallet payments flowing, orders auto-confirmed. Their best month ever.
+
+Store B "planned to fix things later": crashed on 11.11 morning, checkout failures all weekend, refund chaos into December.
+
+The difference wasn't luck — it was starting in August. Right now is exactly when smart stores get their speed, scale, and Easypaisa/JazzCash checkout battle-tested for the busiest quarter of the year.
+
+Sale season rewards the prepared. Which store will you be? Book a readiness call — link in bio.
+
+<span class="ht">#SaleSeason #1111Sale #BlackFriday #EcommercePakistan #Easypaisa #JazzCash #BusinessGrowth</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk bg-navy">
+      <div class="pad" style="align-items:center; justify-content:center; text-align:center; gap:12px;">
+        <div class="h-xl cw" style="font-size:30px;">Comment <span style="border-bottom:4px solid var(--b-amber); padding-bottom:2px;">“GROW”</span></div>
+        <p class="sub ct" style="max-width:26ch; font-weight:600;">and we'll send you our free checklist: 10 things every Pakistani business website needs in 2026.</p>
+        <span class="wm" style="margin-top:14px;"><span class="w">Shop</span><span class="e">Ease</span></span>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>28</span>Comment “GROW”</div>
+      <div class="tags"><span class="tag">1080×1080</span><span class="tag">Minimal hook</span><span class="tag plat">Instagram</span><span class="tag plat">Facebook</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">No long caption today. Just a gift. 🎁
+
+We've condensed everything we check before launching any client's website into one practical checklist: "10 Things Every Pakistani Business Website Needs in 2026." Speed, Google visibility, wallet payments, security, mobile experience — with simple yes/no checks you can run yourself.
+
+Comment "GROW" and we'll DM it to you, free.
+
+(And if your site fails more than three checks — you know where to find us. 😉)
+
+<span class="ht">#FreeResource #Checklist #DigitalPakistan #EcommercePakistan #SmallBusinessPakistan #GrowOnline</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk r45 bg-deep">
+      <div class="pad">
+        <span class="eb">ShopEase</span>
+        <div class="h-lg cw">Three services. One growth partner.</div>
+        <div class="icnrow"><span class="icn">⌨</span><span class="icn">⌕</span><span class="icn">💳</span></div>
+        <div class="mk-foot"><span class="wm"><span class="w">Shop</span><span class="e">Ease</span></span><span class="swipe">swipe →</span></div>
+      </div>
+    </div>
+    <div class="strip">
+      <div class="sl light"><span class="n">1</span><b>BUILD</b>Custom MERN stores — fast, secure, scalable</div>
+      <div class="sl light"><span class="n">2</span><b>BE FOUND</b>SEO &amp; content for ready-to-buy searchers</div>
+      <div class="sl dark"><span class="n">3</span><b>GET PAID</b>Easypaisa &amp; JazzCash seamless checkout</div>
+      <div class="sl cta-sl"><span class="n">→</span><b>Start free.</b>Book a consultation</div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>29</span>Three Services, One Partner</div>
+      <div class="tags"><span class="tag">1080×1350 · 4 slides</span><span class="tag">Template C · Carousel</span><span class="tag plat">All platforms · pin</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">A website nobody finds is a brochure. Traffic that can't pay you is a statistic. 🧩
+
+🛠️ BUILD — a fast, secure custom store on the MERN stack
+🔎 BE FOUND — SEO &amp; content that bring in ready-to-buy searchers
+💳 GET PAID — Easypaisa &amp; JazzCash checkout that converts them
+
+Most agencies sell you one piece. We build the engine — and stay to help you drive it. That's what a growth partner means.
+
+Start where every client starts: a free consultation. Link in bio.
+
+<span class="ht">#GrowthPartner #WebDevelopment #SEO #Easypaisa #JazzCash #EcommercePakistan #DigitalPakistan</span></div></details>
+  </article>
+
+  <article class="postcard">
+    <div class="mk r45 bg-mist">
+      <div class="pad">
+        <div class="photo"><span class="tape"></span>Founder / team photo — candid, natural light, real workspace or client's shop</div>
+        <div class="h-md cn" style="margin-top:6px;">We started ShopEase because great businesses were losing to bad websites.</div>
+        <span class="tiny cs">— [Founder Name], Founder</span>
+        <div class="mk-foot"><span class="cta-chip">Our story → shopeasepay.com</span><span class="wm"><span class="wn">Shop</span><span class="e">Ease</span></span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="pt"><span>30</span>Why We Built ShopEase</div>
+      <div class="tags"><span class="tag">1080×1350</span><span class="tag">Template G · Photo</span><span class="tag plat">LinkedIn · founder profile</span></div>
+    </div>
+    <details class="cap"><summary>Caption</summary><div class="ctext">A personal note, from our founder. 💚
+
+"Everywhere I looked, I saw brilliant Pakistani businesses — incredible products, loyal customers, real hustle — losing online to competitors with worse products and better websites. Slow sites. Invisible on Google. Checkouts that couldn't take an Easypaisa payment in a country that runs on it.
+
+That gap felt unfair. So we built ShopEase to close it: world-class web development, honest SEO, and payments that work the way Pakistan actually pays — delivered like a partner, not a vendor.
+
+Every client's growth chart is why we do this. If you're building something, we'd love to build with you."
+
+— [Founder Name], Founder, ShopEase
+
+Start the conversation: link in bio.
+
+<span class="ht">#FounderStory #ShopEase #DigitalPakistan #PakistanStartups #SmallBusinessPakistan #GrowthPartner</span></div></details>
+  </article>
+
+  </div>
+</section>
+
+<footer class="end">
+  <span>ShopEase Pay · 30-post campaign · shopeasepay.com · fb.com/Shopeasepay</span>
+  <span>Full specs &amp; captions: <code style="font-family:ui-monospace,monospace; font-size:11px;">marketing/shopease-social-posts/</code></span>
+</footer>
+
+</div>
