@@ -62,9 +62,12 @@ Three posts per week, rotating pillars so no week is all-sales and no week is al
 
 Rules of thumb: LinkedIn Tue–Thu 9–11 a.m. PKT · Instagram/Facebook 7–9 p.m. PKT · always reply to comments within the first hour · pin Post 29 on every profile.
 
-## Company Website
+## Company Links
 
-All designs and captions reference ShopEase's website: **https://shopeasepay.com/** — use it as the URL footer on every post and the destination for every "link in bio" CTA.
+- **Website:** https://shopeasepay.com/ — the URL footer on every post and the destination for every "link in bio" CTA.
+- **Facebook:** the ShopEase Pay page (findable via [Facebook search for "shopease pay"](https://www.facebook.com/search/top?q=shopease%20pay)) — publish the Facebook posts from this page, and swap in its direct page URL/handle once confirmed.
+
+Before producing final artwork, pull the logo, exact wordmark, and any established colors from the website and Facebook page so the set matches the live brand. If they differ from the palette in `brand-design-system.md`, the live brand wins — update the tokens there once, and every post spec follows.
 
 ## Notes Before Publishing
 
