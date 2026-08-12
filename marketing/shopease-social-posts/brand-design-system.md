@@ -33,7 +33,7 @@ This is the shared visual language for all 30 post designs in this package. Ever
 - **Wordmark:** "Shop" in Cloud White (or Midnight Navy on light backgrounds) + "Ease" in Growth Teal, Poppins SemiBold. Optional monogram: a rounded storefront awning whose right edge becomes an upward arrow, in Growth Teal.
 - **"ShopEase Pay" variant:** if the public brand name includes "Pay" (as on shopeasepay.com and the Facebook page), set "Pay" in Signal Amber after the teal "Ease" — same weight, no space: **Shop**(white/navy)**Ease**(teal)**Pay**(amber). Confirm against the live logo before production; if an official logo exists, it replaces this constructed wordmark everywhere.
 - **Placement:** wordmark top-left or bottom-left of every post, 48 px margin.
-- **URL footer:** `shopeasepay.com` in Inter Medium, bottom-right, Slate on light / 60%-white on dark.
+- **URL footer:** `shopeasepay.com` in Inter Medium, bottom-right, Slate on light / 60%-white on dark. On Facebook-native posts this may be swapped for the page handle `fb.com/Shopeasepay`.
 - **Safe margins:** 64 px on all sides of a 1080px canvas. Nothing but background bleeds past them.
 
 ## 4. Visual Motifs
