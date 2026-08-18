@@ -23,6 +23,49 @@ it onto your browser's bookmarks bar. Then it is one click away every morning.
 
 ---
 
+## Running it on localhost instead (optional)
+
+Opening the file directly is enough for one computer. Run it as a proper local
+website if you want a normal `http://localhost` address, or if you want to open
+it on your **phone or tablet over the same Wi-Fi**.
+
+You need **Node.js** installed once, free, from [nodejs.org](https://nodejs.org)
+(press the big **LTS** button).
+
+Then:
+
+- **Windows** — double-click **`start-windows.bat`**
+- **Mac / Linux** — double-click **`start-mac-linux.command`**
+
+A black window opens and prints something like:
+
+```
+  Brands Loop — Inventory Manager is running.
+
+  On this computer:   http://localhost:3000/
+  On your phone:      http://192.168.1.24:3000/   (same Wi-Fi)
+```
+
+Your browser opens by itself. Type the second address into your phone to use it
+there too.
+
+**Leave that black window open while you work** — closing it stops the site.
+Press `Ctrl + C` in it to stop on purpose.
+
+> **Each device still keeps its own separate stock numbers.** Serving it on
+> localhost shares the *screens*, not the *data* — your phone and your laptop
+> will each have their own inventory. For one shared set of numbers across
+> devices, the system needs a proper shared database; ask and it can be built.
+
+If you would rather not install Node.js and you already have Python, this works
+too, from inside the `inventory` folder:
+
+```bash
+python3 -m http.server 3000      # then open http://localhost:3000/
+```
+
+---
+
 ## How you use it every day
 
 | What happened | What you press |

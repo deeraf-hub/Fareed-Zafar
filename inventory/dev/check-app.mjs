@@ -7,13 +7,16 @@ import { existsSync } from 'node:fs';
 const exe = process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium';
 const executablePath = existsSync(exe) ? exe : undefined;
 
+/* Checks the file directly by default; set APP_URL to test it over a server. */
+const APP_URL = process.env.APP_URL || 'file:///home/user/Fareed-Zafar/inventory/index.html';
+
 const errors = [];
 const browser = await chromium.launch({ executablePath, args: ['--no-sandbox'] });
 const page = await browser.newPage();
 page.on('pageerror', e => errors.push('PAGEERROR: ' + e.message));
 page.on('console', m => { if (m.type() === 'error') errors.push('CONSOLE: ' + m.text()); });
 
-await page.goto('file:///home/user/Fareed-Zafar/inventory/index.html');
+await page.goto(APP_URL);
 await page.waitForTimeout(400);
 
 const step = async (label, fn) => {
