@@ -22,9 +22,10 @@ const step = async (label, fn) => {
 };
 
 // ---- Wizard step 1
-await step('wizard step 1 visible', async () => {
+await step('wizard step 1 visible, brand pre-filled', async () => {
   await page.waitForSelector('#wBrand');
-  await page.fill('#wBrand', 'Zafar Apparel');
+  if (await page.inputValue('#wBrand') !== 'Brands Loop') throw new Error('brand name not pre-filled');
+  await page.fill('#wBrand', 'Brands Loop');
   await page.selectOption('#wCurrency', 'PKR');
   await page.fill('#wLow', '5');
   await page.click('[data-w="next"]');
@@ -71,7 +72,7 @@ await step('dashboard shows stock', async () => {
   const body = await page.textContent('#root');
   // 7 sizes x 7 colours x 10 = 490
   if (!body.includes('490')) throw new Error('expected 490 pieces on dashboard');
-  if (!body.includes('Zafar Apparel')) throw new Error('brand name missing');
+  if (!body.includes('Brands Loop')) throw new Error('brand name missing');
 });
 
 await step('add second product', async () => {
@@ -161,14 +162,14 @@ await step('reports render', async () => {
 await step('settings save + persistence after reload', async () => {
   await page.click('[data-tab="settings"]');
   await page.waitForSelector('#setName');
-  await page.fill('#setName', 'Zafar Apparel Co');
+  await page.fill('#setName', 'Brands Loop');
   await page.selectOption('#setCurrency', 'USD');
   await page.click('[data-act="save-brand"]');
   await page.waitForTimeout(250);
   await page.reload();
   await page.waitForTimeout(600);
   const t = await page.textContent('#root');
-  if (!t.includes('Zafar Apparel Co')) throw new Error('brand name did not persist');
+  if (!t.includes('Brands Loop')) throw new Error('brand name did not persist');
   if (!t.includes('$')) throw new Error('currency did not persist');
 });
 

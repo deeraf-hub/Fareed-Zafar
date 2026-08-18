@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Inventory Manager</title>
+<title>Brands Loop — Inventory Manager</title>
 <!--
   All styling is built into this file (Tailwind CSS, compiled).
   Nothing is downloaded, so the page works with no internet connection.
@@ -52,6 +52,7 @@ const CURRENCIES = [
   { code:'INR', symbol:'₹' },  { code:'CAD', symbol:'C$' }, { code:'AUD', symbol:'A$' }
 ];
 
+const BRAND_NAME  = 'Brands Loop';
 const STORAGE_KEY = 'clothing-inventory-v1';
 
 /* ---------- 2. DATA ---------- */
@@ -62,7 +63,7 @@ function blankDb() {
   return {
     version: 1,
     onboarded: false,
-    brand: { name: '', currency: 'PKR', symbol: 'Rs', lowStock: 5 },
+    brand: { name: BRAND_NAME, currency: 'PKR', symbol: 'Rs', lowStock: 5 },
     categories: DEFAULT_CATEGORIES.slice(),
     sizes: DEFAULT_SIZES.slice(),
     colors: DEFAULT_COLORS.slice(),
@@ -305,7 +306,7 @@ function shell(inner) {
           ${esc(codeOf(db.brand.name, 2))}
         </div>
         <div class="mr-auto">
-          <div class="font-semibold leading-tight">${esc(db.brand.name || 'My Brand')}</div>
+          <div class="font-semibold leading-tight">${esc(db.brand.name || BRAND_NAME)}</div>
           <div class="text-xs text-ink-500">Inventory Manager</div>
         </div>
         <button data-act="quick-sale"
@@ -391,7 +392,7 @@ function emptyState(title, text, buttonLabel, action) {
 function startWizard() {
   ui.wizard = {
     step: 1,
-    brandName: db.brand.name || '',
+    brandName: db.brand.name || BRAND_NAME,
     currency: db.brand.currency || 'PKR',
     lowStock: db.brand.lowStock || 5,
     categories: db.categories.slice(),
@@ -438,7 +439,7 @@ function wizardStep(w) {
     <p class="text-sm text-ink-500 mb-5">This only shows on your screens and reports.</p>
 
     <label class="block text-sm font-medium mb-1">Brand name</label>
-    <input id="wBrand" value="${esc(w.brandName)}" placeholder="e.g. Zafar Apparel"
+    <input id="wBrand" value="${esc(w.brandName)}" placeholder="e.g. Brands Loop"
       class="w-full border border-ink-300 rounded-lg px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-brandc-400">
 
     <div class="grid sm:grid-cols-2 gap-4 mb-4">
@@ -698,7 +699,7 @@ function finishWizard() {
   const w = ui.wizard;
   const cur = CURRENCIES.find(c => c.code === w.currency) || CURRENCIES[0];
 
-  db.brand = { name: w.brandName || 'My Brand', currency: cur.code, symbol: cur.symbol, lowStock: Number(w.lowStock) || 0 };
+  db.brand = { name: w.brandName || BRAND_NAME, currency: cur.code, symbol: cur.symbol, lowStock: Number(w.lowStock) || 0 };
   db.categories = w.categories.slice();
   db.sizes  = w.sizes.slice();
   db.colors = w.colors.slice();
@@ -2085,7 +2086,7 @@ function deleteProduct(id) {
 
 function saveBrandSettings() {
   const cur = CURRENCIES.find(c => c.code === $('#setCurrency').value) || CURRENCIES[0];
-  db.brand.name     = $('#setName').value.trim() || 'My Brand';
+  db.brand.name     = $('#setName').value.trim() || BRAND_NAME;
   db.brand.currency = cur.code;
   db.brand.symbol   = cur.symbol;
   db.brand.lowStock = Math.max(0, Number($('#setLow').value || 0));

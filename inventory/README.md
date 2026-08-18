@@ -1,4 +1,4 @@
-# Inventory Manager — for your clothing brand
+# Brands Loop — Inventory Manager
 
 A complete stock-keeping system in **one file**. No installing, no monthly fee,
 no account, no internet needed. You double-click it and it opens like a website.
@@ -13,8 +13,9 @@ Sweat Shirts · Polo T-Shirts** — and anything else you add later.
 1. Open the `inventory` folder.
 2. Double-click **`index.html`**.
    It opens in Chrome / Edge / Safari — whatever browser you already use.
-3. A 5-step setup asks for your brand name, what you sell, and your sizes and
-   colours. Fill it in and press **Continue** each time.
+3. A 5-step setup runs. The brand name is already filled in as **Brands Loop** —
+   change it if you want, then answer what you sell and which sizes and colours
+   you carry, pressing **Continue** each time.
 4. That's it. You are looking at your inventory.
 
 **Tip:** right-click `index.html` → *Send to → Desktop (create shortcut)*, or drag
