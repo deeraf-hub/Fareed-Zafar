@@ -1,0 +1,18 @@
+@echo off
+title Brands Loop - Inventory Manager
+cd /d "%~dp0"
+
+where node >nul 2>nul
+if errorlevel 1 (
+  echo.
+  echo   Node.js is not installed on this computer.
+  echo.
+  echo   Install it once from https://nodejs.org  ^(pick the "LTS" button^),
+  echo   then double-click this file again.
+  echo.
+  pause
+  exit /b 1
+)
+
+node serve.mjs
+pause

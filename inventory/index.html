@@ -1,0 +1,2119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brands Loop — Inventory Manager</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%23006ac9%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2243%22%20font-family%3D%22Helvetica%2CArial%2Csans-serif%22%20font-size%3D%2230%22%20font-weight%3D%22bold%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EBL%3C%2Ftext%3E%3C%2Fsvg%3E">
+<!--
+  All styling is built into this file (Tailwind CSS, compiled).
+  Nothing is downloaded, so the page works with no internet connection.
+  If you ever change the design classes, rebuild the CSS with the files in ./dev/.
+-->
+<style>
+*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.sticky{position:sticky}.inset-0{inset:0}.bottom-4{bottom:1rem}.right-4{right:1rem}.top-0{top:0}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.my-4{margin-top:1rem;margin-bottom:1rem}.my-6{margin-top:1.5rem;margin-bottom:1.5rem}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-2\.5{margin-bottom:.625rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.ml-2{margin-left:.5rem}.ml-5{margin-left:1.25rem}.ml-auto{margin-left:auto}.mr-1{margin-right:.25rem}.mr-auto{margin-right:auto}.mt-1{margin-top:.25rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.grid{display:grid}.hidden{display:none}.h-1\.5{height:.375rem}.h-10{height:2.5rem}.h-2{height:.5rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-8{height:2rem}.h-full{height:100%}.max-h-56{max-height:14rem}.max-h-80{max-height:20rem}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-14{width:3.5rem}.w-20{width:5rem}.w-24{width:6rem}.w-32{width:8rem}.w-36{width:9rem}.w-4{width:1rem}.w-8{width:2rem}.w-full{width:100%}.min-w-0{min-width:0}.min-w-\[180px\]{min-width:180px}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-7xl{max-width:80rem}.max-w-lg{max-width:32rem}.max-w-md{max-width:28rem}.max-w-xs{max-width:20rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.cursor-pointer{cursor:pointer}.list-decimal{list-style-type:decimal}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.place-items-center{place-items:center}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem*var(--tw-space-y-reverse))}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.5rem*var(--tw-space-y-reverse))}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px*var(--tw-divide-y-reverse))}.divide-ink-100>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(236 238 242/var(--tw-divide-opacity,1))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-xl{border-radius:.75rem}.rounded-t-lg{border-top-left-radius:.5rem;border-top-right-radius:.5rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-300{--tw-border-opacity:1;border-color:rgb(252 211 77/var(--tw-border-opacity,1))}.border-brandc-200{--tw-border-opacity:1;border-color:rgb(185 221 254/var(--tw-border-opacity,1))}.border-brandc-600{--tw-border-opacity:1;border-color:rgb(0 106 201/var(--tw-border-opacity,1))}.border-ink-100{--tw-border-opacity:1;border-color:rgb(236 238 242/var(--tw-border-opacity,1))}.border-ink-200{--tw-border-opacity:1;border-color:rgb(213 217 226/var(--tw-border-opacity,1))}.border-ink-300{--tw-border-opacity:1;border-color:rgb(176 184 200/var(--tw-border-opacity,1))}.border-rose-200{--tw-border-opacity:1;border-color:rgb(254 205 211/var(--tw-border-opacity,1))}.border-rose-300{--tw-border-opacity:1;border-color:rgb(253 164 175/var(--tw-border-opacity,1))}.border-transparent{border-color:transparent}.bg-amber-100{--tw-bg-opacity:1;background-color:rgb(254 243 199/var(--tw-bg-opacity,1))}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235/var(--tw-bg-opacity,1))}.bg-black\/40{background-color:rgba(0,0,0,.4)}.bg-brandc-100{--tw-bg-opacity:1;background-color:rgb(224 238 254/var(--tw-bg-opacity,1))}.bg-brandc-400{--tw-bg-opacity:1;background-color:rgb(54 163 250/var(--tw-bg-opacity,1))}.bg-brandc-50{--tw-bg-opacity:1;background-color:rgb(240 247 255/var(--tw-bg-opacity,1))}.bg-brandc-500{--tw-bg-opacity:1;background-color:rgb(12 135 235/var(--tw-bg-opacity,1))}.bg-brandc-600{--tw-bg-opacity:1;background-color:rgb(0 106 201/var(--tw-bg-opacity,1))}.bg-emerald-100{--tw-bg-opacity:1;background-color:rgb(209 250 229/var(--tw-bg-opacity,1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105/var(--tw-bg-opacity,1))}.bg-ink-100{--tw-bg-opacity:1;background-color:rgb(236 238 242/var(--tw-bg-opacity,1))}.bg-ink-200{--tw-bg-opacity:1;background-color:rgb(213 217 226/var(--tw-bg-opacity,1))}.bg-ink-50{--tw-bg-opacity:1;background-color:rgb(246 247 249/var(--tw-bg-opacity,1))}.bg-ink-800{--tw-bg-opacity:1;background-color:rgb(58 65 80/var(--tw-bg-opacity,1))}.bg-rose-100{--tw-bg-opacity:1;background-color:rgb(255 228 230/var(--tw-bg-opacity,1))}.bg-rose-50{--tw-bg-opacity:1;background-color:rgb(255 241 242/var(--tw-bg-opacity,1))}.bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72/var(--tw-bg-opacity,1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-gradient-to-b{background-image:linear-gradient(to bottom,var(--tw-gradient-stops))}.from-brandc-50{--tw-gradient-from:#f0f7ff var(--tw-gradient-from-position);--tw-gradient-to:rgba(240,247,255,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.to-ink-50{--tw-gradient-to:#f6f7f9 var(--tw-gradient-to-position)}.p-10{padding:2.5rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pt-2{padding-top:.5rem}.pt-4{padding-top:1rem}.pt-6{padding-top:1.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.align-top{vertical-align:top}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-none{line-height:1}.leading-tight{line-height:1.25}.tracking-wide{letter-spacing:.025em}.text-amber-600{--tw-text-opacity:1;color:rgb(217 119 6/var(--tw-text-opacity,1))}.text-amber-800{--tw-text-opacity:1;color:rgb(146 64 14/var(--tw-text-opacity,1))}.text-brandc-700{--tw-text-opacity:1;color:rgb(1 85 163/var(--tw-text-opacity,1))}.text-brandc-800{--tw-text-opacity:1;color:rgb(6 73 134/var(--tw-text-opacity,1))}.text-brandc-900{--tw-text-opacity:1;color:rgb(11 61 111/var(--tw-text-opacity,1))}.text-emerald-600{--tw-text-opacity:1;color:rgb(5 150 105/var(--tw-text-opacity,1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87/var(--tw-text-opacity,1))}.text-emerald-800{--tw-text-opacity:1;color:rgb(6 95 70/var(--tw-text-opacity,1))}.text-ink-400{--tw-text-opacity:1;color:rgb(133 145 168/var(--tw-text-opacity,1))}.text-ink-500{--tw-text-opacity:1;color:rgb(102 115 140/var(--tw-text-opacity,1))}.text-ink-600{--tw-text-opacity:1;color:rgb(81 92 115/var(--tw-text-opacity,1))}.text-ink-700{--tw-text-opacity:1;color:rgb(66 75 94/var(--tw-text-opacity,1))}.text-ink-800{--tw-text-opacity:1;color:rgb(58 65 80/var(--tw-text-opacity,1))}.text-ink-900{--tw-text-opacity:1;color:rgb(52 57 69/var(--tw-text-opacity,1))}.text-rose-600{--tw-text-opacity:1;color:rgb(225 29 72/var(--tw-text-opacity,1))}.text-rose-700{--tw-text-opacity:1;color:rgb(190 18 60/var(--tw-text-opacity,1))}.text-rose-800{--tw-text-opacity:1;color:rgb(159 18 57/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color)}.shadow-lg,.shadow-sm{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color),0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.hover\:border-brandc-500:hover{--tw-border-opacity:1;border-color:rgb(12 135 235/var(--tw-border-opacity,1))}.hover\:border-rose-500:hover{--tw-border-opacity:1;border-color:rgb(244 63 94/var(--tw-border-opacity,1))}.hover\:bg-brandc-700:hover{--tw-bg-opacity:1;background-color:rgb(1 85 163/var(--tw-bg-opacity,1))}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87/var(--tw-bg-opacity,1))}.hover\:bg-ink-100:hover{--tw-bg-opacity:1;background-color:rgb(236 238 242/var(--tw-bg-opacity,1))}.hover\:bg-ink-50:hover{--tw-bg-opacity:1;background-color:rgb(246 247 249/var(--tw-bg-opacity,1))}.hover\:bg-rose-50:hover{--tw-bg-opacity:1;background-color:rgb(255 241 242/var(--tw-bg-opacity,1))}.hover\:bg-rose-700:hover{--tw-bg-opacity:1;background-color:rgb(190 18 60/var(--tw-bg-opacity,1))}.hover\:bg-white:hover{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.hover\:text-ink-800:hover{--tw-text-opacity:1;color:rgb(58 65 80/var(--tw-text-opacity,1))}.hover\:text-ink-900:hover{--tw-text-opacity:1;color:rgb(52 57 69/var(--tw-text-opacity,1))}.hover\:text-rose-600:hover{--tw-text-opacity:1;color:rgb(225 29 72/var(--tw-text-opacity,1))}.hover\:underline:hover{text-decoration-line:underline}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\:ring-brandc-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(54 163 250/var(--tw-ring-opacity,1))}@media (min-width:640px){.sm\:col-span-1{grid-column:span 1/span 1}.sm\:col-span-2{grid-column:span 2/span 2}.sm\:col-span-3{grid-column:span 3/span 3}.sm\:col-span-5{grid-column:span 5/span 5}.sm\:block{display:block}.sm\:grid-cols-12{grid-template-columns:repeat(12,minmax(0,1fr))}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}@media (min-width:1024px){.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+<style>
+  html { -webkit-text-size-adjust: 100%; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #c9cfda; border-radius: 8px; }
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button { opacity: 1; }
+  @media print {
+    .no-print { display: none !important; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body class="bg-ink-50 text-ink-900">
+
+<div id="root"></div>
+<div id="modalRoot"></div>
+<div id="toastRoot" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
+
+<script>
+/* ============================================================
+   INVENTORY MANAGER  —  single file, works offline, no install
+   Data is stored in this browser (localStorage) on this device.
+   ============================================================ */
+
+/* ---------- 1. DEFAULTS ---------- */
+
+const DEFAULT_CATEGORIES = [
+  'Hoodies', 'Jackets', 'Cotton Pants', 'T-Shirts',
+  'Bike Jackets', 'Sweat Shirts', 'Polo T-Shirts'
+];
+
+const DEFAULT_SIZES  = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+const DEFAULT_COLORS = ['Black', 'White', 'Navy', 'Grey', 'Olive', 'Maroon', 'Beige'];
+
+const CURRENCIES = [
+  { code:'PKR', symbol:'Rs' }, { code:'USD', symbol:'$' }, { code:'GBP', symbol:'£' },
+  { code:'EUR', symbol:'€' },  { code:'AED', symbol:'AED' }, { code:'SAR', symbol:'SAR' },
+  { code:'INR', symbol:'₹' },  { code:'CAD', symbol:'C$' }, { code:'AUD', symbol:'A$' }
+];
+
+const BRAND_NAME  = 'Brands Loop';
+const STORAGE_KEY = 'clothing-inventory-v1';
+
+/* ---------- 2. DATA ---------- */
+
+let db = null;
+
+function blankDb() {
+  return {
+    version: 1,
+    onboarded: false,
+    brand: { name: BRAND_NAME, currency: 'PKR', symbol: 'Rs', lowStock: 5 },
+    categories: DEFAULT_CATEGORIES.slice(),
+    sizes: DEFAULT_SIZES.slice(),
+    colors: DEFAULT_COLORS.slice(),
+    products: [],
+    movements: [],
+    sales: [],
+    counters: { sale: 0 }
+  };
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    db = raw ? JSON.parse(raw) : blankDb();
+  } catch (e) {
+    db = blankDb();
+  }
+  // make sure every key exists even if the file was saved by an older version
+  const base = blankDb();
+  for (const k in base) if (!(k in db)) db[k] = base[k];
+  for (const k in base.brand) if (!(k in db.brand)) db.brand[k] = base.brand[k];
+  return db;
+}
+
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+  } catch (e) {
+    toast('Could not save — browser storage is full or blocked.', 'error');
+  }
+}
+
+/* ---------- 3. SMALL HELPERS ---------- */
+
+const $  = (sel, el = document) => el.querySelector(sel);
+const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
+
+function uid(prefix = 'id') {
+  return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
+}
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function money(n) {
+  const v = Number(n || 0);
+  return db.brand.symbol + ' ' + v.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
+
+function num(n) { return Number(n || 0).toLocaleString(); }
+
+function pieces(n) { return num(n) + (Number(n) === 1 ? ' piece' : ' pieces'); }
+
+function todayISO() { return new Date().toISOString().slice(0, 10); }
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function fmtDateTime(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return iso || '';
+  return d.toLocaleDateString(undefined, { day:'2-digit', month:'short' }) + ' ' +
+         d.toLocaleTimeString(undefined, { hour:'2-digit', minute:'2-digit' });
+}
+
+function toast(msg, kind = 'ok') {
+  const colors = {
+    ok:    'bg-emerald-600',
+    error: 'bg-rose-600',
+    info:  'bg-brandc-600'
+  };
+  const el = document.createElement('div');
+  el.className = (colors[kind] || colors.ok) +
+    ' text-white px-4 py-3 rounded-lg shadow-lg text-sm max-w-xs animate-pulse-none';
+  el.textContent = msg;
+  $('#toastRoot').appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .4s'; }, 2600);
+  setTimeout(() => el.remove(), 3100);
+}
+
+/* ---------- 4. SKU + STOCK CALCULATIONS ---------- */
+
+function codeOf(text, len = 3) {
+  const clean = String(text || '').toUpperCase().replace(/[^A-Z0-9 ]/g, '').trim();
+  if (!clean) return 'XXX';
+  const words = clean.split(/\s+/);
+  if (words.length > 1) return words.map(w => w[0]).join('').slice(0, len).padEnd(len, 'X');
+  return clean.replace(/\s/g, '').slice(0, len).padEnd(len, 'X');
+}
+
+function makeSku(product, size, color) {
+  return [codeOf(product.category, 3), codeOf(product.name, 3), String(size).toUpperCase(), codeOf(color, 3)]
+    .join('-');
+}
+
+/* every size x color combination becomes one variant row */
+function buildVariants(product, existing = []) {
+  const map = {};
+  existing.forEach(v => { map[v.size + '||' + v.color] = v; });
+  const out = [];
+  (product.sizes.length ? product.sizes : ['ONE']).forEach(size => {
+    (product.colors.length ? product.colors : ['Default']).forEach(color => {
+      const key = size + '||' + color;
+      if (map[key]) {
+        map[key].sku = makeSku(product, size, color);
+        out.push(map[key]);
+      } else {
+        out.push({ id: uid('v'), size, color, qty: 0, sku: makeSku(product, size, color) });
+      }
+    });
+  });
+  return out;
+}
+
+function productStock(p)  { return p.variants.reduce((s, v) => s + Number(v.qty || 0), 0); }
+function productValue(p)  { return productStock(p) * Number(p.cost || 0); }
+function productRetail(p) { return productStock(p) * Number(p.price || 0); }
+function lowLimit(p)      { return Number(p.lowStock != null && p.lowStock !== '' ? p.lowStock : db.brand.lowStock || 0); }
+
+function stockState(p) {
+  const s = productStock(p);
+  if (s <= 0) return 'out';
+  if (s <= lowLimit(p)) return 'low';
+  return 'ok';
+}
+
+function findProduct(id)  { return db.products.find(p => p.id === id); }
+function findVariant(p, vid) { return p ? p.variants.find(v => v.id === vid) : null; }
+
+function totals() {
+  let units = 0, cost = 0, retail = 0, low = 0, out = 0;
+  db.products.forEach(p => {
+    units  += productStock(p);
+    cost   += productValue(p);
+    retail += productRetail(p);
+    const st = stockState(p);
+    if (st === 'low') low++;
+    if (st === 'out') out++;
+  });
+  return { units, cost, retail, low, out, products: db.products.length };
+}
+
+function salesBetween(fromISO, toISO) {
+  return db.sales.filter(s => {
+    const d = s.date.slice(0, 10);
+    return (!fromISO || d >= fromISO) && (!toISO || d <= toISO);
+  });
+}
+
+function saleTotals(list) {
+  let revenue = 0, profit = 0, units = 0;
+  list.forEach(s => {
+    revenue += Number(s.total || 0);
+    profit  += Number(s.profit || 0);
+    units   += s.lines.reduce((a, l) => a + Number(l.qty || 0), 0);
+  });
+  return { revenue, profit, units, count: list.length };
+}
+
+/* ---------- 5. STOCK MOVEMENTS ---------- */
+
+function recordMovement(productId, variantId, type, qty, reason, note, unitPrice) {
+  db.movements.unshift({
+    id: uid('mv'), at: new Date().toISOString(),
+    productId, variantId, type, qty: Number(qty),
+    reason: reason || '', note: note || '', unitPrice: Number(unitPrice || 0)
+  });
+  if (db.movements.length > 4000) db.movements.length = 4000;
+}
+
+/* type: 'in' adds stock, 'out' removes stock, 'set' overwrites the number */
+function changeStock(productId, variantId, type, qty, reason, note, unitPrice) {
+  const p = findProduct(productId);
+  const v = findVariant(p, variantId);
+  if (!p || !v) return false;
+  const q = Number(qty);
+  if (type === 'in')  v.qty = Number(v.qty || 0) + q;
+  if (type === 'out') v.qty = Math.max(0, Number(v.qty || 0) - q);
+  if (type === 'set') v.qty = Math.max(0, q);
+  recordMovement(productId, variantId, type, q, reason, note, unitPrice);
+  return true;
+}
+
+/* ============================================================
+   6. APP SHELL  (top bar + tabs)
+   ============================================================ */
+
+const TABS = [
+  { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+  { id: 'products',  label: 'Products',  icon: '👕' },
+  { id: 'stock',     label: 'Stock In / Out', icon: '📦' },
+  { id: 'sales',     label: 'Sales',     icon: '🧾' },
+  { id: 'reports',   label: 'Reports',   icon: '📈' },
+  { id: 'settings',  label: 'Settings',  icon: '⚙️' }
+];
+
+const ui = {
+  tab: 'dashboard',
+  productSearch: '',
+  productCategory: 'All',
+  productStatus: 'All',
+  stockSearch: '',
+  salesFrom: '',
+  salesTo: '',
+  wizard: null
+};
+
+function render() {
+  const root = $('#root');
+  if (!db.onboarded) { root.innerHTML = viewOnboarding(); wireOnboarding(); return; }
+  root.innerHTML = shell(viewFor(ui.tab));
+  wireShell();
+  wireTab();
+}
+
+function viewFor(tab) {
+  switch (tab) {
+    case 'products': return viewProducts();
+    case 'stock':    return viewStock();
+    case 'sales':    return viewSales();
+    case 'reports':  return viewReports();
+    case 'settings': return viewSettings();
+    default:         return viewDashboard();
+  }
+}
+
+function shell(inner) {
+  return `
+  <div class="min-h-screen flex flex-col">
+    <header class="bg-white border-b border-ink-200 sticky top-0 z-30 no-print">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3 flex-wrap">
+        <div class="w-10 h-10 rounded-xl bg-brandc-600 text-white grid place-items-center font-bold text-lg shrink-0">
+          ${esc(codeOf(db.brand.name, 2))}
+        </div>
+        <div class="mr-auto">
+          <div class="font-semibold leading-tight">${esc(db.brand.name || BRAND_NAME)}</div>
+          <div class="text-xs text-ink-500">Inventory Manager</div>
+        </div>
+        <button data-act="quick-sale"
+          class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium">
+          + Record Sale
+        </button>
+        <button data-act="quick-in"
+          class="px-3 py-2 rounded-lg bg-brandc-600 hover:bg-brandc-700 text-white text-sm font-medium">
+          + Add Stock
+        </button>
+      </div>
+      <nav class="max-w-7xl mx-auto px-2 flex gap-1 overflow-x-auto">
+        ${TABS.map(t => `
+          <button data-tab="${t.id}"
+            class="px-3 py-2 text-sm rounded-t-lg whitespace-nowrap border-b-2 ${
+              ui.tab === t.id
+                ? 'border-brandc-600 text-brandc-700 font-semibold bg-brandc-50'
+                : 'border-transparent text-ink-600 hover:text-ink-900 hover:bg-ink-100'}">
+            <span class="mr-1">${t.icon}</span>${t.label}
+          </button>`).join('')}
+      </nav>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4">${inner}</main>
+
+    <footer class="text-center text-xs text-ink-400 py-6 no-print">
+      Your data is saved in this browser on this device.
+      Use <b>Settings &rarr; Backup</b> regularly to keep a copy.
+    </footer>
+  </div>`;
+}
+
+function wireShell() {
+  $$('[data-tab]').forEach(b => b.onclick = () => { ui.tab = b.dataset.tab; render(); });
+  const qs = $('[data-act="quick-sale"]'); if (qs) qs.onclick = () => openSaleModal();
+  const qi = $('[data-act="quick-in"]');   if (qi) qi.onclick = () => openStockModal('in');
+}
+
+/* small reusable pieces */
+function card(title, value, sub, tone = 'ink') {
+  const tones = {
+    ink:     'text-ink-900',
+    good:    'text-emerald-600',
+    warn:    'text-amber-600',
+    bad:     'text-rose-600',
+    brand:   'text-brandc-700'
+  };
+  return `
+  <div class="bg-white rounded-xl border border-ink-200 p-4">
+    <div class="text-xs uppercase tracking-wide text-ink-500">${esc(title)}</div>
+    <div class="text-2xl font-bold mt-1 ${tones[tone] || tones.ink}">${value}</div>
+    ${sub ? `<div class="text-xs text-ink-500 mt-1">${sub}</div>` : ''}
+  </div>`;
+}
+
+function pill(text, tone) {
+  const tones = {
+    ok:   'bg-emerald-100 text-emerald-800',
+    low:  'bg-amber-100 text-amber-800',
+    out:  'bg-rose-100 text-rose-800',
+    grey: 'bg-ink-100 text-ink-700',
+    blue: 'bg-brandc-100 text-brandc-800'
+  };
+  return `<span class="px-2 py-0.5 rounded-full text-xs font-medium ${tones[tone] || tones.grey}">${esc(text)}</span>`;
+}
+
+function emptyState(title, text, buttonLabel, action) {
+  return `
+  <div class="bg-white rounded-xl border border-dashed border-ink-300 p-10 text-center">
+    <div class="text-4xl mb-2">📦</div>
+    <div class="font-semibold text-lg">${esc(title)}</div>
+    <div class="text-sm text-ink-500 mt-1 max-w-md mx-auto">${esc(text)}</div>
+    ${buttonLabel ? `<button data-act="${action}"
+      class="mt-4 px-4 py-2 rounded-lg bg-brandc-600 hover:bg-brandc-700 text-white text-sm font-medium">
+      ${esc(buttonLabel)}</button>` : ''}
+  </div>`;
+}
+
+/* ============================================================
+   7. ONBOARDING WIZARD  (first-time setup)
+   ============================================================ */
+
+function startWizard() {
+  ui.wizard = {
+    step: 1,
+    brandName: db.brand.name || BRAND_NAME,
+    currency: db.brand.currency || 'PKR',
+    lowStock: db.brand.lowStock || 5,
+    categories: db.categories.slice(),
+    sizes: db.sizes.slice(),
+    colors: db.colors.slice(),
+    products: []
+  };
+}
+
+const WIZARD_STEPS = ['Your brand', 'What you sell', 'Sizes & colours', 'First products', 'Done'];
+
+function viewOnboarding() {
+  if (!ui.wizard) startWizard();
+  const w = ui.wizard;
+  return `
+  <div class="min-h-screen bg-gradient-to-b from-brandc-50 to-ink-50 py-8 px-4">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-6">
+        <div class="text-3xl font-bold">Set up your inventory</div>
+        <div class="text-ink-500 mt-1">Five short steps. You can change everything later.</div>
+      </div>
+
+      <div class="flex items-center gap-1 mb-6">
+        ${WIZARD_STEPS.map((label, i) => {
+          const n = i + 1, done = w.step > n, now = w.step === n;
+          return `
+          <div class="flex-1">
+            <div class="h-1.5 rounded-full ${done ? 'bg-brandc-600' : now ? 'bg-brandc-400' : 'bg-ink-200'}"></div>
+            <div class="text-[11px] mt-1 text-center ${now ? 'text-brandc-700 font-semibold' : 'text-ink-500'}">${esc(label)}</div>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <div class="bg-white rounded-2xl border border-ink-200 shadow-sm p-6">
+        ${wizardStep(w)}
+      </div>
+    </div>
+  </div>`;
+}
+
+function wizardStep(w) {
+  if (w.step === 1) return `
+    <h2 class="text-xl font-semibold mb-1">Step 1 — Tell us about your brand</h2>
+    <p class="text-sm text-ink-500 mb-5">This only shows on your screens and reports.</p>
+
+    <label class="block text-sm font-medium mb-1">Brand name</label>
+    <input id="wBrand" value="${esc(w.brandName)}" placeholder="e.g. Brands Loop"
+      class="w-full border border-ink-300 rounded-lg px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-brandc-400">
+
+    <div class="grid sm:grid-cols-2 gap-4 mb-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Currency</label>
+        <select id="wCurrency" class="w-full border border-ink-300 rounded-lg px-3 py-2">
+          ${CURRENCIES.map(c => `<option value="${c.code}" ${c.code === w.currency ? 'selected' : ''}>${c.code} (${c.symbol})</option>`).join('')}
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Warn me when stock drops to</label>
+        <input id="wLow" type="number" min="0" value="${esc(w.lowStock)}"
+          class="w-full border border-ink-300 rounded-lg px-3 py-2">
+        <div class="text-xs text-ink-500 mt-1">Pieces left before a "low stock" warning.</div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 pt-2">
+      <button data-w="next" class="px-5 py-2 rounded-lg bg-brandc-600 hover:bg-brandc-700 text-white font-medium">Continue</button>
+    </div>`;
+
+  if (w.step === 2) return `
+    <h2 class="text-xl font-semibold mb-1">Step 2 — What do you sell?</h2>
+    <p class="text-sm text-ink-500 mb-5">Tick the product types you stock. Add your own if something is missing.</p>
+
+    <div class="grid sm:grid-cols-2 gap-2 mb-4">
+      ${DEFAULT_CATEGORIES.map(c => `
+        <label class="flex items-center gap-3 border border-ink-200 rounded-lg px-3 py-2.5 cursor-pointer hover:bg-ink-50">
+          <input type="checkbox" class="wCat w-4 h-4" value="${esc(c)}" ${w.categories.includes(c) ? 'checked' : ''}>
+          <span class="text-sm">${esc(c)}</span>
+        </label>`).join('')}
+    </div>
+
+    <div class="border-t border-ink-200 pt-4">
+      <label class="block text-sm font-medium mb-1">Anything else you sell?</label>
+      <div class="flex gap-2">
+        <input id="wNewCat" placeholder="e.g. Caps, Shorts, Track Suits"
+          class="flex-1 border border-ink-300 rounded-lg px-3 py-2">
+        <button data-w="addcat" class="px-4 py-2 rounded-lg bg-ink-800 text-white text-sm">Add</button>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-3">
+        ${w.categories.filter(c => !DEFAULT_CATEGORIES.includes(c)).map(c => `
+          <span class="inline-flex items-center gap-1 bg-brandc-100 text-brandc-800 text-sm px-2.5 py-1 rounded-full">
+            ${esc(c)}<button data-w="delcat" data-val="${esc(c)}" class="hover:text-rose-600 font-bold">&times;</button>
+          </span>`).join('') || '<span class="text-xs text-ink-400">No extra types added.</span>'}
+      </div>
+    </div>
+
+    <div class="flex justify-between gap-2 pt-6">
+      <button data-w="back" class="px-5 py-2 rounded-lg border border-ink-300 hover:bg-ink-50">Back</button>
+      <button data-w="next" class="px-5 py-2 rounded-lg bg-brandc-600 hover:bg-brandc-700 text-white font-medium">Continue</button>
+    </div>`;
+
+  if (w.step === 3) return `
+    <h2 class="text-xl font-semibold mb-1">Step 3 — Sizes and colours</h2>
+    <p class="text-sm text-ink-500 mb-5">
+      Every product gets one row per size &amp; colour, so you always know exactly what is left.
+    </p>
+
+    ${chipEditor('Sizes', w.sizes, 'size', 'e.g. 3XL, 32, 34')}
+    <div class="h-5"></div>
+    ${chipEditor('Colours', w.colors, 'color', 'e.g. Charcoal, Rust')}
+
+    <div class="flex justify-between gap-2 pt-6">
+      <button data-w="back" class="px-5 py-2 rounded-lg border border-ink-300 hover:bg-ink-50">Back</button>
+      <button data-w="next" class="px-5 py-2 rounded-lg bg-brandc-600 hover:bg-brandc-700 text-white font-medium">Continue</button>
+    </div>`;
+
+  if (w.step === 4) return `
+    <h2 class="text-xl font-semibold mb-1">Step 4 — Add your first products</h2>
+    <p class="text-sm text-ink-500 mb-5">Add a few now, or skip and add them later. Nothing is lost either way.</p>
+
+    <div class="border border-ink-200 rounded-xl p-4 bg-ink-50 mb-4">
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-medium mb-1">Product name</label>
+          <input id="wpName" placeholder="e.g. Classic Pullover Hoodie"
+            class="w-full border border-ink-300 rounded-lg px-3 py-2 bg-white">
+        </div>
+        <div>
+          <label class="block text-xs font-medium mb-1">Type</label>
+          <select id="wpCat" class="w-full border border-ink-300 rounded-lg px-3 py-2 bg-white">
+            ${w.categories.map(c => `<option>${esc(c)}</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium mb-1">Starting stock (per size &amp; colour)</label>
+          <input id="wpQty" type="number" min="0" value="0"
+            class="w-full border border-ink-300 rounded-lg px-3 py-2 bg-white">
+        </div>
+        <div>
+          <label class="block text-xs font-medium mb-1">Cost price (what you pay)</label>
+          <input id="wpCost" type="number" min="0" step="0.01" value="0"
+            class="w-full border border-ink-300 rounded-lg px-3 py-2 bg-white">
+        </div>
+        <div>
+          <label class="block text-xs font-medium mb-1">Selling price</label>
+          <input id="wpPrice" type="number" min="0" step="0.01" value="0"
+            class="w-full border border-ink-300 rounded-lg px-3 py-2 bg-white">
+        </div>
+      </div>
+      <button data-w="addprod" class="mt-3 px-4 py-2 rounded-lg bg-ink-800 text-white text-sm">Add this product</button>
+    </div>
+
+    ${w.products.length ? `
+      <div class="border border-ink-200 rounded-xl overflow-hidden mb-2">
+        <table class="w-full text-sm">
+          <thead class="bg-ink-100 text-ink-600 text-xs uppercase">
+            <tr><th class="text-left px-3 py-2">Product</th><th class="text-left px-3 py-2">Type</th>
+                <th class="text-right px-3 py-2">Stock</th><th class="px-3 py-2"></th></tr>
+          </thead>
+          <tbody>
+            ${w.products.map((p, i) => `
+              <tr class="border-t border-ink-200">
+                <td class="px-3 py-2">${esc(p.name)}</td>
+                <td class="px-3 py-2 text-ink-500">${esc(p.category)}</td>
+                <td class="px-3 py-2 text-right">${num(p.qty * w.sizes.length * w.colors.length)}</td>
+                <td class="px-3 py-2 text-right">
+                  <button data-w="delprod" data-val="${i}" class="text-rose-600 text-xs hover:underline">Remove</button>
+                </td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>` : `<div class="text-sm text-ink-400 mb-2">No products added yet — that is fine.</div>`}
+
+    <div class="flex justify-between gap-2 pt-4">
+      <button data-w="back" class="px-5 py-2 rounded-lg border border-ink-300 hover:bg-ink-50">Back</button>
+      <button data-w="next" class="px-5 py-2 rounded-lg bg-brandc-600 hover:bg-brandc-700 text-white font-medium">
+        ${w.products.length ? 'Continue' : 'Skip for now'}
+      </button>
+    </div>`;
+
+  /* step 5 */
+  const combos = w.sizes.length * w.colors.length;
+  return `
+    <div class="text-center py-4">
+      <div class="text-5xl mb-3">🎉</div>
+      <h2 class="text-2xl font-semibold">You are ready, ${esc(w.brandName || 'boss')}!</h2>
+      <p class="text-ink-500 mt-2 max-w-lg mx-auto">Here is what has been set up for you:</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-3 my-4">
+      ${card('Product types', num(w.categories.length), w.categories.slice(0, 4).map(esc).join(', ') + (w.categories.length > 4 ? '…' : ''))}
+      ${card('Sizes & colours', num(w.sizes.length) + ' × ' + num(w.colors.length), combos + ' rows per product')}
+      ${card('Products added', num(w.products.length), w.products.length ? 'You can add more any time' : 'Add them from the Products tab')}
+      ${card('Currency', esc(w.currency), 'Low-stock warning at ' + esc(w.lowStock) + ' pieces')}
+    </div>
+
+    <div class="bg-brandc-50 border border-brandc-200 rounded-xl p-4 text-sm text-brandc-900">
+      <b>How you will use it every day:</b>
+      <ol class="list-decimal ml-5 mt-2 space-y-1">
+        <li>New delivery arrives &rarr; press <b>+ Add Stock</b>.</li>
+        <li>You sell something &rarr; press <b>+ Record Sale</b> (stock goes down by itself).</li>
+        <li>Check the <b>Dashboard</b> each morning for low-stock warnings.</li>
+        <li>Once a week, go to <b>Settings &rarr; Backup</b> and save the file somewhere safe.</li>
+      </ol>
+    </div>
+
+    <div class="flex justify-between gap-2 pt-6">
+      <button data-w="back" class="px-5 py-2 rounded-lg border border-ink-300 hover:bg-ink-50">Back</button>
+      <button data-w="finish" class="px-6 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold">
+        Open my inventory
+      </button>
+    </div>`;
+}
+
+function chipEditor(title, list, kind, placeholder) {
+  return `
+  <div>
+    <label class="block text-sm font-medium mb-2">${esc(title)}</label>
+    <div class="flex flex-wrap gap-2 mb-2">
+      ${list.map(v => `
+        <span class="inline-flex items-center gap-1 bg-ink-100 text-ink-800 text-sm px-2.5 py-1 rounded-full">
+          ${esc(v)}<button data-w="del${kind}" data-val="${esc(v)}" class="hover:text-rose-600 font-bold">&times;</button>
+        </span>`).join('') || '<span class="text-xs text-ink-400">None yet</span>'}
+    </div>
+    <div class="flex gap-2">
+      <input id="wNew${kind}" placeholder="${esc(placeholder)}"
+        class="flex-1 border border-ink-300 rounded-lg px-3 py-2">
+      <button data-w="add${kind}" class="px-4 py-2 rounded-lg bg-ink-800 text-white text-sm">Add</button>
+    </div>
+  </div>`;
+}
+
+function wireOnboarding() {
+  const w = ui.wizard;
+
+  const readStep1 = () => {
+    if ($('#wBrand'))    w.brandName = $('#wBrand').value.trim();
+    if ($('#wCurrency')) w.currency  = $('#wCurrency').value;
+    if ($('#wLow'))      w.lowStock  = Math.max(0, Number($('#wLow').value || 0));
+  };
+  const readStep2 = () => {
+    if (!$$('.wCat').length) return;
+    const checked = $$('.wCat').filter(c => c.checked).map(c => c.value);
+    const custom  = w.categories.filter(c => !DEFAULT_CATEGORIES.includes(c));
+    w.categories = checked.concat(custom);
+  };
+
+  $$('[data-w]').forEach(btn => {
+    btn.onclick = () => {
+      const act = btn.dataset.w, val = btn.dataset.val;
+
+      if (act === 'next') {
+        if (w.step === 1) {
+          readStep1();
+          if (!w.brandName) { toast('Please type your brand name.', 'error'); return; }
+        }
+        if (w.step === 2) {
+          readStep2();
+          if (!w.categories.length) { toast('Pick at least one product type.', 'error'); return; }
+        }
+        if (w.step === 3 && (!w.sizes.length || !w.colors.length)) {
+          toast('Please keep at least one size and one colour.', 'error'); return;
+        }
+        w.step++;
+      }
+      else if (act === 'back') { if (w.step === 2) readStep2(); w.step--; }
+      else if (act === 'addcat') {
+        readStep2();
+        const v = $('#wNewCat').value.trim();
+        if (v && !w.categories.some(c => c.toLowerCase() === v.toLowerCase())) w.categories.push(v);
+      }
+      else if (act === 'delcat')  { readStep2(); w.categories = w.categories.filter(c => c !== val); }
+      else if (act === 'addsize') { const v = $('#wNewsize').value.trim().toUpperCase();
+                                    if (v && !w.sizes.includes(v)) w.sizes.push(v); }
+      else if (act === 'delsize') { w.sizes = w.sizes.filter(s => s !== val); }
+      else if (act === 'addcolor'){ const v = $('#wNewcolor').value.trim();
+                                    if (v && !w.colors.some(c => c.toLowerCase() === v.toLowerCase())) w.colors.push(v); }
+      else if (act === 'delcolor'){ w.colors = w.colors.filter(c => c !== val); }
+      else if (act === 'addprod') {
+        const name = $('#wpName').value.trim();
+        if (!name) { toast('Type a product name first.', 'error'); return; }
+        w.products.push({
+          name, category: $('#wpCat').value,
+          qty:   Math.max(0, Number($('#wpQty').value || 0)),
+          cost:  Math.max(0, Number($('#wpCost').value || 0)),
+          price: Math.max(0, Number($('#wpPrice').value || 0))
+        });
+        toast(name + ' added.');
+      }
+      else if (act === 'delprod') { w.products.splice(Number(val), 1); }
+      else if (act === 'finish')  { finishWizard(); return; }
+
+      render();
+    };
+  });
+
+  const enterAdds = { '#wNewCat': 'addcat', '#wNewsize': 'addsize', '#wNewcolor': 'addcolor', '#wpName': null };
+  Object.keys(enterAdds).forEach(sel => {
+    const el = $(sel); if (!el || !enterAdds[sel]) return;
+    el.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); $(`[data-w="${enterAdds[sel]}"]`).click(); } };
+  });
+}
+
+function finishWizard() {
+  const w = ui.wizard;
+  const cur = CURRENCIES.find(c => c.code === w.currency) || CURRENCIES[0];
+
+  db.brand = { name: w.brandName || BRAND_NAME, currency: cur.code, symbol: cur.symbol, lowStock: Number(w.lowStock) || 0 };
+  db.categories = w.categories.slice();
+  db.sizes  = w.sizes.slice();
+  db.colors = w.colors.slice();
+
+  w.products.forEach(wp => {
+    const p = {
+      id: uid('p'), name: wp.name, category: wp.category,
+      cost: wp.cost, price: wp.price, lowStock: '', supplier: '', notes: '',
+      sizes: db.sizes.slice(), colors: db.colors.slice(), variants: [], createdAt: new Date().toISOString()
+    };
+    p.variants = buildVariants(p);
+    if (wp.qty > 0) p.variants.forEach(v => {
+      v.qty = wp.qty;
+      recordMovement(p.id, v.id, 'in', wp.qty, 'Opening stock', 'Added during setup', wp.cost);
+    });
+    db.products.push(p);
+  });
+
+  db.onboarded = true;
+  ui.wizard = null;
+  ui.tab = 'dashboard';
+  save();
+  render();
+  toast('Setup complete. Welcome!', 'ok');
+}
+
+/* ============================================================
+   8. DASHBOARD
+   ============================================================ */
+
+function viewDashboard() {
+  const t = totals();
+  const today = todayISO();
+  const monthStart = today.slice(0, 8) + '01';
+  const todaySales = saleTotals(salesBetween(today, today));
+  const monthSales = saleTotals(salesBetween(monthStart, today));
+
+  const lowList = db.products
+    .map(p => ({ p, st: stockState(p) }))
+    .filter(x => x.st !== 'ok')
+    .sort((a, b) => productStock(a.p) - productStock(b.p));
+
+  const recent = db.movements.slice(0, 8);
+
+  const byCat = {};
+  db.products.forEach(p => {
+    byCat[p.category] = byCat[p.category] || { units: 0, value: 0 };
+    byCat[p.category].units += productStock(p);
+    byCat[p.category].value += productValue(p);
+  });
+  const catRows = Object.entries(byCat).sort((a, b) => b[1].units - a[1].units);
+  const maxUnits = Math.max(1, ...catRows.map(r => r[1].units));
+
+  if (!db.products.length) {
+    return emptyState('No products yet',
+      'Add your first product to start tracking stock. It takes about 30 seconds.',
+      'Add my first product', 'go-products');
+  }
+
+  return `
+  <div class="grid gap-4">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      ${card('Pieces in stock', num(t.units), num(t.products) + ' product' + (t.products === 1 ? '' : 's'))}
+      ${card('Stock value (cost)', money(t.cost), 'Worth ' + money(t.retail) + ' at retail', 'brand')}
+      ${card('Low stock', num(t.low), 'Products needing a re-order', t.low ? 'warn' : 'good')}
+      ${card('Out of stock', num(t.out), 'Products at zero', t.out ? 'bad' : 'good')}
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      ${card('Sales today', money(todaySales.revenue), pieces(todaySales.units) + ' · ' + num(todaySales.count) + ' order' + (todaySales.count === 1 ? '' : 's'), 'good')}
+      ${card('Profit today', money(todaySales.profit), 'Selling price minus cost', 'good')}
+      ${card('Sales this month', money(monthSales.revenue), pieces(monthSales.units) + ' sold')}
+      ${card('Profit this month', money(monthSales.profit), num(monthSales.count) + ' orders')}
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-4">
+      <div class="bg-white rounded-xl border border-ink-200 p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-semibold">Needs your attention</h3>
+          ${pill(lowList.length + ' item' + (lowList.length === 1 ? '' : 's'), lowList.length ? 'low' : 'ok')}
+        </div>
+        ${lowList.length ? `
+        <div class="divide-y divide-ink-100">
+          ${lowList.slice(0, 8).map(({ p, st }) => `
+            <div class="flex items-center gap-3 py-2">
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-medium truncate">${esc(p.name)}</div>
+                <div class="text-xs text-ink-500">${esc(p.category)}</div>
+              </div>
+              <div class="text-sm font-semibold ${st === 'out' ? 'text-rose-600' : 'text-amber-600'}">
+                ${num(productStock(p))} left
+              </div>
+              <button data-act="restock" data-id="${p.id}"
+                class="text-xs px-2.5 py-1.5 rounded-lg bg-brandc-600 text-white hover:bg-brandc-700">Re-stock</button>
+            </div>`).join('')}
+        </div>
+        ${lowList.length > 8 ? `<div class="text-xs text-ink-500 mt-2">+ ${lowList.length - 8} more in Reports.</div>` : ''}
+        ` : `<div class="text-sm text-ink-500 py-6 text-center">Everything is well stocked. 👍</div>`}
+      </div>
+
+      <div class="bg-white rounded-xl border border-ink-200 p-4">
+        <h3 class="font-semibold mb-3">Stock by product type</h3>
+        ${catRows.length ? catRows.map(([cat, v]) => `
+          <div class="mb-2.5">
+            <div class="flex justify-between text-sm mb-1">
+              <span>${esc(cat)}</span>
+              <span class="text-ink-500">${pieces(v.units)} · ${money(v.value)}</span>
+            </div>
+            <div class="h-2 bg-ink-100 rounded-full overflow-hidden">
+              <div class="h-full bg-brandc-500" style="width:${Math.round(v.units / maxUnits * 100)}%"></div>
+            </div>
+          </div>`).join('') : '<div class="text-sm text-ink-500">No stock yet.</div>'}
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl border border-ink-200 p-4">
+      <h3 class="font-semibold mb-3">Recent activity</h3>
+      ${recent.length ? `
+      <div class="divide-y divide-ink-100">
+        ${recent.map(m => {
+          const p = findProduct(m.productId);
+          const v = findVariant(p, m.variantId);
+          const label = m.type === 'in' ? 'Added' : m.type === 'out' ? 'Removed' : 'Set to';
+          const tone  = m.type === 'in' ? 'text-emerald-600' : m.type === 'out' ? 'text-rose-600' : 'text-ink-600';
+          return `
+          <div class="flex items-center gap-3 py-2 text-sm">
+            <span class="${tone} font-semibold w-24 shrink-0">${label} ${num(m.qty)}</span>
+            <span class="flex-1 min-w-0 truncate">${esc(p ? p.name : 'Deleted product')}
+              <span class="text-ink-400">${v ? esc(v.size + ' / ' + v.color) : ''}</span></span>
+            <span class="text-xs text-ink-500 hidden sm:block">${esc(m.reason || '')}</span>
+            <span class="text-xs text-ink-400 shrink-0">${fmtDateTime(m.at)}</span>
+          </div>`;
+        }).join('')}
+      </div>` : '<div class="text-sm text-ink-500">Nothing has moved yet.</div>'}
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   9. PRODUCTS
+   ============================================================ */
+
+function filteredProducts() {
+  const q = ui.productSearch.trim().toLowerCase();
+  return db.products.filter(p => {
+    if (ui.productCategory !== 'All' && p.category !== ui.productCategory) return false;
+    if (ui.productStatus !== 'All' && stockState(p) !== ui.productStatus) return false;
+    if (!q) return true;
+    return p.name.toLowerCase().includes(q)
+        || p.category.toLowerCase().includes(q)
+        || (p.supplier || '').toLowerCase().includes(q)
+        || p.variants.some(v => v.sku.toLowerCase().includes(q));
+  });
+}
+
+function viewProducts() {
+  const list = filteredProducts();
+  return `
+  <div class="grid gap-4">
+    <div class="bg-white rounded-xl border border-ink-200 p-3 flex flex-wrap gap-2 items-center no-print">
+      <input id="pSearch" value="${esc(ui.productSearch)}" placeholder="Search name, type or SKU…"
+        class="flex-1 min-w-[180px] border border-ink-300 rounded-lg px-3 py-2 text-sm">
+      <select id="pCat" class="border border-ink-300 rounded-lg px-3 py-2 text-sm">
+        <option>All</option>${db.categories.map(c => `<option ${ui.productCategory === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}
+      </select>
+      <select id="pStatus" class="border border-ink-300 rounded-lg px-3 py-2 text-sm">
+        <option value="All"  ${ui.productStatus === 'All' ? 'selected' : ''}>Any stock level</option>
+        <option value="ok"   ${ui.productStatus === 'ok'  ? 'selected' : ''}>In stock</option>
+        <option value="low"  ${ui.productStatus === 'low' ? 'selected' : ''}>Low stock</option>
+        <option value="out"  ${ui.productStatus === 'out' ? 'selected' : ''}>Out of stock</option>
+      </select>
+      <button data-act="new-product" class="px-4 py-2 rounded-lg bg-brandc-600 hover:bg-brandc-700 text-white text-sm font-medium">
+        + New product
+      </button>
+      <button data-act="export-products" class="px-3 py-2 rounded-lg border border-ink-300 text-sm hover:bg-ink-50">
+        Export CSV
+      </button>
+    </div>
+
+    ${list.length ? `
+    <div class="bg-white rounded-xl border border-ink-200 overflow-hidden">
+      <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-ink-100 text-ink-600 text-xs uppercase">
+          <tr>
+            <th class="text-left px-4 py-2.5">Product</th>
+            <th class="text-left px-4 py-2.5">Type</th>
+            <th class="text-right px-4 py-2.5">Cost</th>
+            <th class="text-right px-4 py-2.5">Price</th>
+            <th class="text-right px-4 py-2.5">In stock</th>
+            <th class="text-left px-4 py-2.5">Status</th>
+            <th class="px-4 py-2.5"></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.map(p => {
+            const st = stockState(p);
+            const label = st === 'ok' ? 'In stock' : st === 'low' ? 'Low' : 'Out';
+            return `
+            <tr class="border-t border-ink-100 hover:bg-ink-50">
+              <td class="px-4 py-2.5">
+                <button data-act="open-product" data-id="${p.id}" class="font-medium text-brandc-700 hover:underline text-left">
+                  ${esc(p.name)}
+                </button>
+                <div class="text-xs text-ink-400">${p.variants.length} size/colour rows</div>
+              </td>
+              <td class="px-4 py-2.5 text-ink-600">${esc(p.category)}</td>
+              <td class="px-4 py-2.5 text-right">${money(p.cost)}</td>
+              <td class="px-4 py-2.5 text-right font-medium">${money(p.price)}</td>
+              <td class="px-4 py-2.5 text-right font-semibold">${num(productStock(p))}</td>
+              <td class="px-4 py-2.5">${pill(label, st)}</td>
+              <td class="px-4 py-2.5 text-right whitespace-nowrap">
+                <button data-act="open-product" data-id="${p.id}" class="text-xs px-2 py-1 rounded border border-ink-300 hover:bg-white">Open</button>
+                <button data-act="edit-product" data-id="${p.id}" class="text-xs px-2 py-1 rounded border border-ink-300 hover:bg-white">Edit</button>
+                <button data-act="del-product"  data-id="${p.id}" class="text-xs px-2 py-1 rounded border border-rose-300 text-rose-600 hover:bg-rose-50">Delete</button>
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+        <tfoot class="bg-ink-50 font-semibold">
+          <tr class="border-t border-ink-200">
+            <td class="px-4 py-2.5" colspan="4">Total (${list.length} shown)</td>
+            <td class="px-4 py-2.5 text-right">${num(list.reduce((s, p) => s + productStock(p), 0))}</td>
+            <td colspan="2" class="px-4 py-2.5 text-ink-500 text-xs">
+              Stock value ${money(list.reduce((s, p) => s + productValue(p), 0))}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      </div>
+    </div>` :
+    emptyState('Nothing found',
+      db.products.length ? 'No product matches your search or filters.' : 'Add your first product to get started.',
+      'Add a product', 'new-product')}
+  </div>`;
+}
+
+/* ============================================================
+   10. STOCK IN / OUT
+   ============================================================ */
+
+function viewStock() {
+  const q = ui.stockSearch.trim().toLowerCase();
+  const rows = [];
+  db.products.forEach(p => p.variants.forEach(v => {
+    if (q && !(p.name.toLowerCase().includes(q) || v.sku.toLowerCase().includes(q) ||
+               v.color.toLowerCase().includes(q) || String(v.size).toLowerCase() === q ||
+               p.category.toLowerCase().includes(q))) return;
+    rows.push({ p, v });
+  }));
+  rows.sort((a, b) => Number(a.v.qty) - Number(b.v.qty));
+
+  return `
+  <div class="grid gap-4">
+    <div class="grid sm:grid-cols-2 gap-3 no-print">
+      <button data-act="quick-in2"
+        class="bg-white border-2 border-brandc-200 hover:border-brandc-500 rounded-xl p-5 text-left">
+        <div class="text-2xl">📥</div>
+        <div class="font-semibold mt-1">Stock In</div>
+        <div class="text-sm text-ink-500">New delivery from your tailor, factory or supplier.</div>
+      </button>
+      <button data-act="quick-out"
+        class="bg-white border-2 border-rose-200 hover:border-rose-500 rounded-xl p-5 text-left">
+        <div class="text-2xl">📤</div>
+        <div class="font-semibold mt-1">Stock Out</div>
+        <div class="text-sm text-ink-500">Damaged, returned to supplier, sample or gift.</div>
+      </button>
+    </div>
+
+    <div class="bg-white rounded-xl border border-ink-200 p-3 no-print">
+      <input id="sSearch" value="${esc(ui.stockSearch)}" placeholder="Search a product, colour, size or SKU…"
+        class="w-full border border-ink-300 rounded-lg px-3 py-2 text-sm">
+      <div class="text-xs text-ink-500 mt-1">Lowest stock is shown first. Type a number in the box to correct it.</div>
+    </div>
+
+    ${rows.length ? `
+    <div class="bg-white rounded-xl border border-ink-200 overflow-hidden">
+      <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-ink-100 text-ink-600 text-xs uppercase">
+          <tr>
+            <th class="text-left px-4 py-2.5">Product</th>
+            <th class="text-left px-4 py-2.5">Size</th>
+            <th class="text-left px-4 py-2.5">Colour</th>
+            <th class="text-left px-4 py-2.5">SKU</th>
+            <th class="text-center px-4 py-2.5">In stock</th>
+            <th class="text-center px-4 py-2.5 no-print">Quick change</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.slice(0, 300).map(({ p, v }) => `
+            <tr class="border-t border-ink-100 hover:bg-ink-50">
+              <td class="px-4 py-2">${esc(p.name)}<div class="text-xs text-ink-400">${esc(p.category)}</div></td>
+              <td class="px-4 py-2">${esc(v.size)}</td>
+              <td class="px-4 py-2">${esc(v.color)}</td>
+              <td class="px-4 py-2 text-xs text-ink-500 font-mono">${esc(v.sku)}</td>
+              <td class="px-4 py-2 text-center">
+                <input type="number" min="0" value="${Number(v.qty)}"
+                  data-setqty="${p.id}|${v.id}"
+                  class="${qtyCellClass(p, v)}">
+              </td>
+              <td class="px-4 py-2 text-center whitespace-nowrap no-print">
+                <button data-step="${p.id}|${v.id}|-1" class="w-8 h-8 rounded-lg border border-ink-300 hover:bg-white font-bold">−</button>
+                <button data-step="${p.id}|${v.id}|1"  class="w-8 h-8 rounded-lg border border-ink-300 hover:bg-white font-bold">+</button>
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+      </div>
+      ${rows.length > 300 ? `<div class="p-3 text-xs text-ink-500">Showing the first 300 rows — use search to narrow it down.</div>` : ''}
+    </div>` : emptyState('No stock rows', 'Add a product first, then its sizes and colours appear here.', 'Go to Products', 'go-products')}
+  </div>`;
+}
+
+/* ============================================================
+   11. SALES
+   ============================================================ */
+
+function viewSales() {
+  const from = ui.salesFrom || '';
+  const to   = ui.salesTo || '';
+  const list = salesBetween(from, to).slice().sort((a, b) => b.date.localeCompare(a.date));
+  const t = saleTotals(list);
+
+  return `
+  <div class="grid gap-4">
+    <div class="bg-white rounded-xl border border-ink-200 p-3 flex flex-wrap gap-2 items-end no-print">
+      <div>
+        <label class="block text-xs text-ink-500 mb-1">From</label>
+        <input id="sFrom" type="date" value="${esc(from)}" class="border border-ink-300 rounded-lg px-3 py-2 text-sm">
+      </div>
+      <div>
+        <label class="block text-xs text-ink-500 mb-1">To</label>
+        <input id="sTo" type="date" value="${esc(to)}" class="border border-ink-300 rounded-lg px-3 py-2 text-sm">
+      </div>
+      <button data-act="sales-clear" class="px-3 py-2 rounded-lg border border-ink-300 text-sm hover:bg-ink-50">All dates</button>
+      <button data-act="sales-today" class="px-3 py-2 rounded-lg border border-ink-300 text-sm hover:bg-ink-50">Today</button>
+      <button data-act="sales-month" class="px-3 py-2 rounded-lg border border-ink-300 text-sm hover:bg-ink-50">This month</button>
+      <div class="ml-auto flex gap-2">
+        <button data-act="export-sales" class="px-3 py-2 rounded-lg border border-ink-300 text-sm hover:bg-ink-50">Export CSV</button>
+        <button data-act="quick-sale2" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium">+ Record sale</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      ${card('Orders', num(t.count), from || to ? 'In selected dates' : 'All time')}
+      ${card('Pieces sold', num(t.units), t.count ? 'Across ' + num(t.count) + ' order' + (t.count === 1 ? '' : 's') : '')}
+      ${card('Revenue', money(t.revenue), '', 'brand')}
+      ${card('Profit', money(t.profit), 'After cost price', 'good')}
+    </div>
+
+    ${list.length ? `
+    <div class="bg-white rounded-xl border border-ink-200 overflow-hidden">
+      <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-ink-100 text-ink-600 text-xs uppercase">
+          <tr>
+            <th class="text-left px-4 py-2.5">Order</th>
+            <th class="text-left px-4 py-2.5">Date</th>
+            <th class="text-left px-4 py-2.5">Customer</th>
+            <th class="text-left px-4 py-2.5">Items</th>
+            <th class="text-right px-4 py-2.5">Total</th>
+            <th class="text-right px-4 py-2.5">Profit</th>
+            <th class="px-4 py-2.5 no-print"></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.map(s => `
+            <tr class="border-t border-ink-100 hover:bg-ink-50 align-top">
+              <td class="px-4 py-2.5 font-mono text-xs">${esc(s.ref)}</td>
+              <td class="px-4 py-2.5 whitespace-nowrap">${fmtDate(s.date)}</td>
+              <td class="px-4 py-2.5">${esc(s.customer || '—')}
+                ${s.channel ? `<div class="text-xs text-ink-400">${esc(s.channel)}</div>` : ''}</td>
+              <td class="px-4 py-2.5 text-xs text-ink-600">
+                ${s.lines.map(l => {
+                  const p = findProduct(l.productId); const v = findVariant(p, l.variantId);
+                  return `${l.qty} × ${esc(p ? p.name : 'Deleted')} ${v ? '(' + esc(v.size + '/' + v.color) + ')' : ''}`;
+                }).join('<br>')}
+              </td>
+              <td class="px-4 py-2.5 text-right font-semibold">${money(s.total)}</td>
+              <td class="px-4 py-2.5 text-right text-emerald-700">${money(s.profit)}</td>
+              <td class="px-4 py-2.5 text-right no-print">
+                <button data-act="undo-sale" data-id="${s.id}"
+                  class="text-xs px-2 py-1 rounded border border-rose-300 text-rose-600 hover:bg-rose-50">Undo</button>
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+      </div>
+    </div>` : emptyState('No sales recorded', 'Press "Record sale" whenever you sell something — stock is reduced automatically.', 'Record a sale', 'quick-sale2')}
+  </div>`;
+}
+
+/* ============================================================
+   12. REPORTS
+   ============================================================ */
+
+function viewReports() {
+  const t = totals();
+
+  const lowList = db.products.filter(p => stockState(p) !== 'ok')
+    .sort((a, b) => productStock(a) - productStock(b));
+
+  /* best sellers, all time */
+  const sold = {};
+  db.sales.forEach(s => s.lines.forEach(l => {
+    sold[l.productId] = sold[l.productId] || { qty: 0, revenue: 0, profit: 0 };
+    sold[l.productId].qty     += Number(l.qty || 0);
+    sold[l.productId].revenue += Number(l.qty || 0) * Number(l.price || 0);
+    sold[l.productId].profit  += Number(l.qty || 0) * (Number(l.price || 0) - Number(l.cost || 0));
+  }));
+  const best = Object.entries(sold)
+    .map(([id, v]) => ({ p: findProduct(id), ...v }))
+    .filter(x => x.p)
+    .sort((a, b) => b.qty - a.qty);
+
+  const byCat = {};
+  db.products.forEach(p => {
+    byCat[p.category] = byCat[p.category] || { products: 0, units: 0, cost: 0, retail: 0 };
+    byCat[p.category].products++;
+    byCat[p.category].units  += productStock(p);
+    byCat[p.category].cost   += productValue(p);
+    byCat[p.category].retail += productRetail(p);
+  });
+
+  return `
+  <div class="grid gap-4">
+    <div class="flex flex-wrap gap-2 no-print">
+      <button data-act="print" class="px-3 py-2 rounded-lg border border-ink-300 text-sm hover:bg-ink-50">🖨️ Print this page</button>
+      <button data-act="export-stock" class="px-3 py-2 rounded-lg border border-ink-300 text-sm hover:bg-ink-50">Export full stock list (CSV)</button>
+      <button data-act="export-low" class="px-3 py-2 rounded-lg border border-ink-300 text-sm hover:bg-ink-50">Export re-order list (CSV)</button>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      ${card('Products', num(t.products), '')}
+      ${card('Pieces in stock', num(t.units), '')}
+      ${card('Money tied up in stock', money(t.cost), 'At cost price', 'brand')}
+      ${card('Expected sales value', money(t.retail), 'If everything sells', 'good')}
+    </div>
+
+    <div class="bg-white rounded-xl border border-ink-200 p-4">
+      <h3 class="font-semibold mb-3">Re-order list (low &amp; out of stock)</h3>
+      ${lowList.length ? `
+      <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-ink-100 text-ink-600 text-xs uppercase">
+          <tr><th class="text-left px-3 py-2">Product</th><th class="text-left px-3 py-2">Type</th>
+              <th class="text-right px-3 py-2">Left</th><th class="text-right px-3 py-2">Warn at</th>
+              <th class="text-left px-3 py-2">Supplier</th><th class="text-left px-3 py-2">Status</th></tr>
+        </thead>
+        <tbody>
+          ${lowList.map(p => `
+            <tr class="border-t border-ink-100">
+              <td class="px-3 py-2">${esc(p.name)}</td>
+              <td class="px-3 py-2 text-ink-500">${esc(p.category)}</td>
+              <td class="px-3 py-2 text-right font-semibold">${num(productStock(p))}</td>
+              <td class="px-3 py-2 text-right text-ink-500">${num(lowLimit(p))}</td>
+              <td class="px-3 py-2 text-ink-500">${esc(p.supplier || '—')}</td>
+              <td class="px-3 py-2">${pill(stockState(p) === 'out' ? 'Out' : 'Low', stockState(p))}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+      </div>` : '<div class="text-sm text-ink-500">Nothing needs re-ordering right now. 👍</div>'}
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-4">
+      <div class="bg-white rounded-xl border border-ink-200 p-4">
+        <h3 class="font-semibold mb-3">Best sellers (all time)</h3>
+        ${best.length ? `
+        <table class="w-full text-sm">
+          <thead class="text-ink-500 text-xs uppercase">
+            <tr><th class="text-left py-1">Product</th><th class="text-right py-1">Sold</th>
+                <th class="text-right py-1">Revenue</th><th class="text-right py-1">Profit</th></tr>
+          </thead>
+          <tbody>
+            ${best.slice(0, 12).map(b => `
+              <tr class="border-t border-ink-100">
+                <td class="py-1.5">${esc(b.p.name)}</td>
+                <td class="py-1.5 text-right font-medium">${num(b.qty)}</td>
+                <td class="py-1.5 text-right">${money(b.revenue)}</td>
+                <td class="py-1.5 text-right text-emerald-700">${money(b.profit)}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>` : '<div class="text-sm text-ink-500">No sales recorded yet.</div>'}
+      </div>
+
+      <div class="bg-white rounded-xl border border-ink-200 p-4">
+        <h3 class="font-semibold mb-3">Stock value by product type</h3>
+        <table class="w-full text-sm">
+          <thead class="text-ink-500 text-xs uppercase">
+            <tr><th class="text-left py-1">Type</th><th class="text-right py-1">Products</th>
+                <th class="text-right py-1">Pieces</th><th class="text-right py-1">Cost value</th></tr>
+          </thead>
+          <tbody>
+            ${Object.entries(byCat).sort((a, b) => b[1].cost - a[1].cost).map(([c, v]) => `
+              <tr class="border-t border-ink-100">
+                <td class="py-1.5">${esc(c)}</td>
+                <td class="py-1.5 text-right">${num(v.products)}</td>
+                <td class="py-1.5 text-right">${num(v.units)}</td>
+                <td class="py-1.5 text-right">${money(v.cost)}</td>
+              </tr>`).join('') || '<tr><td class="py-2 text-ink-500">No products yet.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   13. SETTINGS
+   ============================================================ */
+
+function viewSettings() {
+  return `
+  <div class="grid lg:grid-cols-2 gap-4">
+    <div class="bg-white rounded-xl border border-ink-200 p-4">
+      <h3 class="font-semibold mb-3">Brand details</h3>
+      <label class="block text-sm font-medium mb-1">Brand name</label>
+      <input id="setName" value="${esc(db.brand.name)}" class="w-full border border-ink-300 rounded-lg px-3 py-2 mb-3">
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Currency</label>
+          <select id="setCurrency" class="w-full border border-ink-300 rounded-lg px-3 py-2">
+            ${CURRENCIES.map(c => `<option value="${c.code}" ${c.code === db.brand.currency ? 'selected' : ''}>${c.code} (${c.symbol})</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Low-stock warning at</label>
+          <input id="setLow" type="number" min="0" value="${esc(db.brand.lowStock)}" class="w-full border border-ink-300 rounded-lg px-3 py-2">
+        </div>
+      </div>
+      <button data-act="save-brand" class="mt-3 px-4 py-2 rounded-lg bg-brandc-600 hover:bg-brandc-700 text-white text-sm font-medium">Save</button>
+    </div>
+
+    <div class="bg-white rounded-xl border border-ink-200 p-4">
+      <h3 class="font-semibold mb-1">Backup &amp; restore</h3>
+      <p class="text-sm text-ink-500 mb-3">
+        Your data lives in this browser only. Download a backup weekly and keep it in Google Drive or email it to yourself.
+      </p>
+      <div class="flex flex-wrap gap-2">
+        <button data-act="backup" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium">⬇️ Download backup</button>
+        <button data-act="restore" class="px-4 py-2 rounded-lg border border-ink-300 text-sm hover:bg-ink-50">⬆️ Restore from backup</button>
+        <input id="restoreFile" type="file" accept="application/json,.json" class="hidden">
+      </div>
+      <div class="border-t border-ink-200 mt-4 pt-4">
+        <button data-act="wipe" class="px-4 py-2 rounded-lg border border-rose-300 text-rose-600 text-sm hover:bg-rose-50">
+          Erase everything and start again
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl border border-ink-200 p-4">
+      <h3 class="font-semibold mb-3">Product types</h3>
+      ${settingsChips(db.categories, 'cat', 'e.g. Shorts')}
+    </div>
+
+    <div class="bg-white rounded-xl border border-ink-200 p-4">
+      <h3 class="font-semibold mb-3">Sizes</h3>
+      ${settingsChips(db.sizes, 'size', 'e.g. 3XL')}
+      <div class="h-5"></div>
+      <h3 class="font-semibold mb-3">Colours</h3>
+      ${settingsChips(db.colors, 'color', 'e.g. Charcoal')}
+      <p class="text-xs text-ink-500 mt-3">
+        Changing these only affects products you create from now on. To change an existing product,
+        open it in <b>Products &rarr; Edit</b>.
+      </p>
+    </div>
+  </div>`;
+}
+
+function settingsChips(list, kind, placeholder) {
+  return `
+  <div class="flex flex-wrap gap-2 mb-3">
+    ${list.map(v => `
+      <span class="inline-flex items-center gap-1 bg-ink-100 text-ink-800 text-sm px-2.5 py-1 rounded-full">
+        ${esc(v)}<button data-set="del-${kind}" data-val="${esc(v)}" class="hover:text-rose-600 font-bold">&times;</button>
+      </span>`).join('') || '<span class="text-xs text-ink-400">None</span>'}
+  </div>
+  <div class="flex gap-2">
+    <input id="set-new-${kind}" placeholder="${esc(placeholder)}" class="flex-1 border border-ink-300 rounded-lg px-3 py-2 text-sm">
+    <button data-set="add-${kind}" class="px-4 py-2 rounded-lg bg-ink-800 text-white text-sm">Add</button>
+  </div>`;
+}
+
+/* ============================================================
+   14. MODALS
+   ============================================================ */
+
+function openModal(html, wire, size = 'max-w-2xl') {
+  $('#modalRoot').innerHTML = `
+    <div class="fixed inset-0 bg-black/40 z-40 flex items-start justify-center p-4 overflow-y-auto" data-modal-bg>
+      <div class="bg-white rounded-2xl shadow-xl w-full ${size} my-6">${html}</div>
+    </div>`;
+  const bg = $('[data-modal-bg]');
+  bg.onclick = e => { if (e.target === bg) closeModal(); };
+  document.onkeydown = e => { if (e.key === 'Escape') closeModal(); };
+  $$('[data-close]').forEach(b => b.onclick = closeModal);
+  if (wire) wire();
+}
+
+function closeModal() {
+  $('#modalRoot').innerHTML = '';
+  document.onkeydown = null;
+}
+
+function modalHead(title, subtitle) {
+  return `
+  <div class="flex items-start gap-3 border-b border-ink-200 px-5 py-4">
+    <div class="flex-1">
+      <h3 class="text-lg font-semibold">${esc(title)}</h3>
+      ${subtitle ? `<p class="text-sm text-ink-500">${esc(subtitle)}</p>` : ''}
+    </div>
+    <button data-close class="text-ink-400 hover:text-ink-800 text-2xl leading-none">&times;</button>
+  </div>`;
+}
+
+/* ---------- 14a. Add / edit product ---------- */
+
+function openProductModal(id) {
+  const editing = !!id;
+  const p = editing ? findProduct(id) : {
+    id: '', name: '', category: db.categories[0] || '', cost: 0, price: 0,
+    lowStock: '', supplier: '', notes: '',
+    sizes: db.sizes.slice(), colors: db.colors.slice(), variants: []
+  };
+  if (!p) return;
+
+  openModal(`
+    ${modalHead(editing ? 'Edit product' : 'New product',
+                'Every size and colour you tick becomes its own stock row.')}
+    <div class="p-5 grid gap-4">
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div class="sm:col-span-2">
+          <label class="block text-sm font-medium mb-1">Product name *</label>
+          <input id="mName" value="${esc(p.name)}" placeholder="e.g. Winter Bike Jacket"
+            class="w-full border border-ink-300 rounded-lg px-3 py-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Product type</label>
+          <select id="mCat" class="w-full border border-ink-300 rounded-lg px-3 py-2">
+            ${db.categories.map(c => `<option ${c === p.category ? 'selected' : ''}>${esc(c)}</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Supplier / tailor (optional)</label>
+          <input id="mSupplier" value="${esc(p.supplier || '')}" class="w-full border border-ink-300 rounded-lg px-3 py-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Cost price (${esc(db.brand.symbol)})</label>
+          <input id="mCost" type="number" min="0" step="0.01" value="${Number(p.cost || 0)}"
+            class="w-full border border-ink-300 rounded-lg px-3 py-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Selling price (${esc(db.brand.symbol)})</label>
+          <input id="mPrice" type="number" min="0" step="0.01" value="${Number(p.price || 0)}"
+            class="w-full border border-ink-300 rounded-lg px-3 py-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Low-stock warning (optional)</label>
+          <input id="mLow" type="number" min="0" value="${esc(p.lowStock)}" placeholder="Default: ${esc(db.brand.lowStock)}"
+            class="w-full border border-ink-300 rounded-lg px-3 py-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Notes (optional)</label>
+          <input id="mNotes" value="${esc(p.notes || '')}" class="w-full border border-ink-300 rounded-lg px-3 py-2">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Sizes for this product</label>
+        <div class="flex flex-wrap gap-2">
+          ${db.sizes.map(s => `
+            <label class="inline-flex items-center gap-2 border border-ink-300 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-ink-50">
+              <input type="checkbox" class="mSize" value="${esc(s)}" ${p.sizes.includes(s) ? 'checked' : ''}>
+              <span class="text-sm">${esc(s)}</span>
+            </label>`).join('')}
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Colours for this product</label>
+        <div class="flex flex-wrap gap-2">
+          ${db.colors.map(c => `
+            <label class="inline-flex items-center gap-2 border border-ink-300 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-ink-50">
+              <input type="checkbox" class="mColor" value="${esc(c)}" ${p.colors.includes(c) ? 'checked' : ''}>
+              <span class="text-sm">${esc(c)}</span>
+            </label>`).join('')}
+        </div>
+      </div>
+
+      ${editing ? '' : `
+      <div class="bg-ink-50 border border-ink-200 rounded-lg p-3">
+        <label class="block text-sm font-medium mb-1">Starting stock for each size &amp; colour</label>
+        <input id="mStart" type="number" min="0" value="0" class="w-32 border border-ink-300 rounded-lg px-3 py-2">
+        <span class="text-xs text-ink-500 ml-2">Leave 0 if you will add stock later.</span>
+      </div>`}
+    </div>
+
+    <div class="flex justify-end gap-2 border-t border-ink-200 px-5 py-4">
+      <button data-close class="px-4 py-2 rounded-lg border border-ink-300 hover:bg-ink-50">Cancel</button>
+      <button id="mSave" class="px-5 py-2 rounded-lg bg-brandc-600 hover:bg-brandc-700 text-white font-medium">
+        ${editing ? 'Save changes' : 'Create product'}
+      </button>
+    </div>`, () => {
+
+    $('#mSave').onclick = () => {
+      const name = $('#mName').value.trim();
+      if (!name) { toast('Please type a product name.', 'error'); return; }
+      const sizes  = $$('.mSize').filter(c => c.checked).map(c => c.value);
+      const colors = $$('.mColor').filter(c => c.checked).map(c => c.value);
+      if (!sizes.length)  { toast('Pick at least one size.', 'error'); return; }
+      if (!colors.length) { toast('Pick at least one colour.', 'error'); return; }
+
+      const data = {
+        name,
+        category: $('#mCat').value,
+        supplier: $('#mSupplier').value.trim(),
+        notes:    $('#mNotes').value.trim(),
+        cost:     Math.max(0, Number($('#mCost').value || 0)),
+        price:    Math.max(0, Number($('#mPrice').value || 0)),
+        lowStock: $('#mLow').value === '' ? '' : Math.max(0, Number($('#mLow').value)),
+        sizes, colors
+      };
+
+      if (editing) {
+        const target = findProduct(id);
+
+        /* Warn before dropping a size or colour that still holds stock. */
+        const keeping = new Set();
+        sizes.forEach(sz => colors.forEach(cl => keeping.add(sz + '||' + cl)));
+        const losing = target.variants.filter(v => !keeping.has(v.size + '||' + v.color) && Number(v.qty) > 0);
+        if (losing.length) {
+          const lost = losing.reduce((a, v) => a + Number(v.qty), 0);
+          const list = losing.map(v => `${v.size}/${v.color} (${v.qty})`).join(', ');
+          if (!confirm(`You unticked sizes or colours that still hold ${lost} piece${lost === 1 ? '' : 's'}:\n\n${list}\n\nSaving removes them from stock. Continue?`)) return;
+          losing.forEach(v => recordMovement(target.id, v.id, 'out', v.qty,
+            'Size/colour removed', `${v.size} / ${v.color} deleted from this product`, 0));
+        }
+
+        Object.assign(target, data);
+        target.variants = buildVariants(target, target.variants);
+        toast('Product updated.');
+      } else {
+        const np = Object.assign({ id: uid('p'), variants: [], createdAt: new Date().toISOString() }, data);
+        np.variants = buildVariants(np);
+        const start = Math.max(0, Number(($('#mStart') || {}).value || 0));
+        if (start > 0) np.variants.forEach(v => {
+          v.qty = start;
+          recordMovement(np.id, v.id, 'in', start, 'Opening stock', '', np.cost);
+        });
+        db.products.push(np);
+        toast(name + ' created.');
+      }
+      save(); closeModal(); render();
+    };
+  });
+}
+
+/* ---------- 14b. Product detail ---------- */
+
+function openProductDetail(id) {
+  const p = findProduct(id);
+  if (!p) return;
+  const history = db.movements.filter(m => m.productId === id).slice(0, 25);
+  const margin = Number(p.price || 0) - Number(p.cost || 0);
+  const marginPct = p.price ? Math.round(margin / p.price * 100) : 0;
+
+  openModal(`
+    ${modalHead(p.name, p.category + (p.supplier ? ' · ' + p.supplier : ''))}
+    <div class="p-5 grid gap-4">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        ${card('In stock', num(productStock(p)), '')}
+        ${card('Stock value', money(productValue(p)), 'At cost')}
+        ${card('Profit per piece', money(margin), marginPct + '% margin', margin > 0 ? 'good' : 'bad')}
+        ${card('Warn at', num(lowLimit(p)), 'pieces left')}
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-2">Stock by size &amp; colour</h4>
+        <div class="overflow-x-auto border border-ink-200 rounded-lg">
+          <table class="w-full text-sm">
+            <thead class="bg-ink-100 text-ink-600 text-xs uppercase">
+              <tr><th class="text-left px-3 py-2">Size</th><th class="text-left px-3 py-2">Colour</th>
+                  <th class="text-left px-3 py-2">SKU</th><th class="text-center px-3 py-2">Qty</th></tr>
+            </thead>
+            <tbody>
+              ${p.variants.map(v => `
+                <tr class="border-t border-ink-100">
+                  <td class="px-3 py-1.5">${esc(v.size)}</td>
+                  <td class="px-3 py-1.5">${esc(v.color)}</td>
+                  <td class="px-3 py-1.5 font-mono text-xs text-ink-500">${esc(v.sku)}</td>
+                  <td class="px-3 py-1.5 text-center">
+                    <input type="number" min="0" value="${Number(v.qty)}" data-setqty="${p.id}|${v.id}"
+                      class="${qtyCellClass(p, v)}">
+                  </td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-2">Recent movements</h4>
+        ${history.length ? `
+        <div class="max-h-56 overflow-y-auto border border-ink-200 rounded-lg divide-y divide-ink-100">
+          ${history.map(m => {
+            const v = findVariant(p, m.variantId);
+            const label = m.type === 'in' ? '+' + num(m.qty) : m.type === 'out' ? '−' + num(m.qty) : '=' + num(m.qty);
+            const tone  = m.type === 'in' ? 'text-emerald-600' : m.type === 'out' ? 'text-rose-600' : 'text-ink-600';
+            return `<div class="flex gap-3 px-3 py-1.5 text-sm">
+              <span class="${tone} font-semibold w-14">${label}</span>
+              <span class="flex-1 truncate">${v ? esc(v.size + ' / ' + v.color) : ''} <span class="text-ink-400">${esc(m.reason || '')}</span></span>
+              <span class="text-xs text-ink-400">${fmtDateTime(m.at)}</span>
+            </div>`;
+          }).join('')}
+        </div>` : '<div class="text-sm text-ink-500">No movements yet.</div>'}
+      </div>
+    </div>
+
+    <div class="flex flex-wrap justify-end gap-2 border-t border-ink-200 px-5 py-4">
+      <button data-close class="px-4 py-2 rounded-lg border border-ink-300 hover:bg-ink-50">Close</button>
+      <button data-act2="edit" class="px-4 py-2 rounded-lg border border-ink-300 hover:bg-ink-50">Edit details</button>
+      <button data-act2="out" class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-sm">Stock out</button>
+      <button data-act2="in"  class="px-4 py-2 rounded-lg bg-brandc-600 hover:bg-brandc-700 text-white text-sm">Stock in</button>
+    </div>`, () => {
+    wireQtyInputs();
+    $('[data-act2="edit"]').onclick = () => { closeModal(); openProductModal(id); };
+    $('[data-act2="in"]').onclick   = () => { closeModal(); openStockModal('in', id); };
+    $('[data-act2="out"]').onclick  = () => { closeModal(); openStockModal('out', id); };
+  }, 'max-w-3xl');
+}
+
+/* ---------- 14c. Stock in / out ---------- */
+
+const IN_REASONS  = ['New delivery', 'Production received', 'Customer return', 'Stock correction'];
+const OUT_REASONS = ['Damaged', 'Returned to supplier', 'Sample / gift', 'Lost', 'Stock correction'];
+
+function openStockModal(type, productId) {
+  if (!db.products.length) { toast('Add a product first.', 'error'); return; }
+  const pid = productId || db.products[0].id;
+  const isIn = type === 'in';
+
+  const body = () => {
+    const p = findProduct($('#stProduct') ? $('#stProduct').value : pid) || db.products[0];
+    return p.variants.map(v => `
+      <tr class="border-t border-ink-100">
+        <td class="px-3 py-1.5">${esc(v.size)}</td>
+        <td class="px-3 py-1.5">${esc(v.color)}</td>
+        <td class="px-3 py-1.5 text-right text-ink-500">${num(v.qty)}</td>
+        <td class="px-3 py-1.5 text-center">
+          <input type="number" min="0" value="" placeholder="0" data-mv="${v.id}"
+            class="w-24 text-center border border-ink-300 rounded-lg px-2 py-1">
+        </td>
+      </tr>`).join('');
+  };
+
+  openModal(`
+    ${modalHead(isIn ? 'Stock In — add pieces' : 'Stock Out — remove pieces',
+                isIn ? 'Type how many pieces arrived for each size and colour.'
+                     : 'Type how many pieces are leaving (not a sale — use Record Sale for that).')}
+    <div class="p-5 grid gap-3">
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Product</label>
+          <select id="stProduct" class="w-full border border-ink-300 rounded-lg px-3 py-2">
+            ${db.products.map(p => `<option value="${p.id}" ${p.id === pid ? 'selected' : ''}>${esc(p.name)} — ${esc(p.category)}</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Reason</label>
+          <select id="stReason" class="w-full border border-ink-300 rounded-lg px-3 py-2">
+            ${(isIn ? IN_REASONS : OUT_REASONS).map(r => `<option>${esc(r)}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Note (optional)</label>
+        <input id="stNote" placeholder="e.g. Invoice 1043 from Al-Karam" class="w-full border border-ink-300 rounded-lg px-3 py-2">
+      </div>
+
+      <div class="flex items-center gap-2">
+        <input id="stAll" type="number" min="0" placeholder="Same for all" class="w-36 border border-ink-300 rounded-lg px-3 py-2 text-sm">
+        <button id="stFill" class="px-3 py-2 rounded-lg bg-ink-800 text-white text-sm">Apply to every row</button>
+      </div>
+
+      <div class="overflow-x-auto border border-ink-200 rounded-lg max-h-80 overflow-y-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-ink-100 text-ink-600 text-xs uppercase sticky top-0">
+            <tr><th class="text-left px-3 py-2">Size</th><th class="text-left px-3 py-2">Colour</th>
+                <th class="text-right px-3 py-2">Now</th>
+                <th class="text-center px-3 py-2">${isIn ? 'Add' : 'Remove'}</th></tr>
+          </thead>
+          <tbody id="stBody">${body()}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 border-t border-ink-200 px-5 py-4">
+      <button data-close class="px-4 py-2 rounded-lg border border-ink-300 hover:bg-ink-50">Cancel</button>
+      <button id="stSave" class="px-5 py-2 rounded-lg ${isIn ? 'bg-brandc-600 hover:bg-brandc-700' : 'bg-rose-600 hover:bg-rose-700'} text-white font-medium">
+        ${isIn ? 'Add to stock' : 'Remove from stock'}
+      </button>
+    </div>`, () => {
+
+    $('#stProduct').onchange = () => { $('#stBody').innerHTML = body(); };
+    $('#stFill').onclick = () => {
+      const v = $('#stAll').value;
+      $$('[data-mv]').forEach(i => i.value = v);
+    };
+    $('#stSave').onclick = () => {
+      const p = findProduct($('#stProduct').value);
+      const reason = $('#stReason').value, note = $('#stNote').value.trim();
+      let touched = 0, pieces = 0;
+      $$('[data-mv]').forEach(i => {
+        const q = Number(i.value || 0);
+        if (q > 0) {
+          changeStock(p.id, i.dataset.mv, isIn ? 'in' : 'out', q, reason, note, isIn ? p.cost : 0);
+          touched++; pieces += q;
+        }
+      });
+      if (!touched) { toast('Type at least one quantity.', 'error'); return; }
+      save(); closeModal(); render();
+      toast(`${isIn ? 'Added' : 'Removed'} ${pieces} piece${pieces === 1 ? '' : 's'} across ${touched} row${touched === 1 ? '' : 's'}.`);
+    };
+  }, 'max-w-2xl');
+}
+
+/* ---------- 14d. Record a sale ---------- */
+
+let saleDraft = null;
+
+function openSaleModal() {
+  if (!db.products.length) { toast('Add a product first.', 'error'); return; }
+  saleDraft = { date: todayISO(), customer: '', channel: 'Shop', discount: 0, lines: [] };
+  renderSaleModal();
+}
+
+function saleLineTotals() {
+  let total = 0, cost = 0;
+  saleDraft.lines.forEach(l => {
+    total += Number(l.qty) * Number(l.price);
+    cost  += Number(l.qty) * Number(l.cost);
+  });
+  const discount = Math.max(0, Number(saleDraft.discount || 0));
+  const net = Math.max(0, total - discount);
+  return { gross: total, discount, net, cost, profit: net - cost };
+}
+
+function saleTotalsHtml() {
+  const t = saleLineTotals();
+  return `
+    <div class="flex justify-between py-0.5"><span>Items total</span><span>${money(t.gross)}</span></div>
+    <div class="flex justify-between py-0.5"><span>Discount</span><span>&minus; ${money(t.discount)}</span></div>
+    <div class="flex justify-between py-1 border-t border-ink-200 font-semibold text-base">
+      <span>To pay</span><span>${money(t.net)}</span></div>
+    <div class="flex justify-between py-0.5 text-emerald-700"><span>Your profit</span><span>${money(t.profit)}</span></div>`;
+}
+
+function renderSaleModal() {
+  const firstProduct = db.products[0];
+
+  openModal(`
+    ${modalHead('Record a sale', 'Stock is reduced automatically when you save.')}
+    <div class="p-5 grid gap-4">
+      <div class="grid sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Date</label>
+          <input id="slDate" type="date" value="${esc(saleDraft.date)}" class="w-full border border-ink-300 rounded-lg px-3 py-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Customer (optional)</label>
+          <input id="slCustomer" value="${esc(saleDraft.customer)}" placeholder="Walk-in" class="w-full border border-ink-300 rounded-lg px-3 py-2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Where</label>
+          <select id="slChannel" class="w-full border border-ink-300 rounded-lg px-3 py-2">
+            ${['Shop', 'Instagram', 'WhatsApp', 'Website', 'Exhibition', 'Wholesale', 'Other']
+              .map(c => `<option ${c === saleDraft.channel ? 'selected' : ''}>${esc(c)}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+
+      <div class="border border-ink-200 rounded-lg p-3 bg-ink-50">
+        <div class="grid sm:grid-cols-12 gap-2 items-end">
+          <div class="sm:col-span-5">
+            <label class="block text-xs font-medium mb-1">Product</label>
+            <select id="slProduct" class="w-full border border-ink-300 rounded-lg px-2 py-2 bg-white text-sm">
+              ${db.products.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('')}
+            </select>
+          </div>
+          <div class="sm:col-span-3">
+            <label class="block text-xs font-medium mb-1">Size / colour</label>
+            <select id="slVariant" class="w-full border border-ink-300 rounded-lg px-2 py-2 bg-white text-sm">
+              ${variantOptions(firstProduct)}
+            </select>
+          </div>
+          <div class="sm:col-span-1">
+            <label class="block text-xs font-medium mb-1">Qty</label>
+            <input id="slQty" type="number" min="1" value="1" class="w-full border border-ink-300 rounded-lg px-2 py-2 bg-white text-sm">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-medium mb-1">Price each</label>
+            <input id="slPrice" type="number" min="0" step="0.01" value="${Number(firstProduct.price || 0)}"
+              class="w-full border border-ink-300 rounded-lg px-2 py-2 bg-white text-sm">
+          </div>
+          <div class="sm:col-span-1">
+            <button id="slAdd" class="w-full px-3 py-2 rounded-lg bg-ink-800 text-white text-sm">Add</button>
+          </div>
+        </div>
+      </div>
+
+      ${saleDraft.lines.length ? `
+      <div class="border border-ink-200 rounded-lg overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-ink-100 text-ink-600 text-xs uppercase">
+            <tr><th class="text-left px-3 py-2">Item</th><th class="text-right px-3 py-2">Qty</th>
+                <th class="text-right px-3 py-2">Price</th><th class="text-right px-3 py-2">Line total</th><th></th></tr>
+          </thead>
+          <tbody>
+            ${saleDraft.lines.map((l, i) => {
+              const p = findProduct(l.productId), v = findVariant(p, l.variantId);
+              return `
+              <tr class="border-t border-ink-100">
+                <td class="px-3 py-2">${esc(p ? p.name : '?')}
+                  <span class="text-ink-400 text-xs">${v ? esc(v.size + ' / ' + v.color) : ''}</span></td>
+                <td class="px-3 py-2 text-right">${num(l.qty)}</td>
+                <td class="px-3 py-2 text-right">${money(l.price)}</td>
+                <td class="px-3 py-2 text-right font-medium">${money(l.qty * l.price)}</td>
+                <td class="px-3 py-2 text-right">
+                  <button data-delline="${i}" class="text-rose-600 text-xs hover:underline">Remove</button></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>` : '<div class="text-sm text-ink-400 text-center py-4 border border-dashed border-ink-300 rounded-lg">No items added yet.</div>'}
+
+      <div class="grid sm:grid-cols-2 gap-3 items-start">
+        <div>
+          <label class="block text-sm font-medium mb-1">Discount (optional)</label>
+          <input id="slDiscount" type="number" min="0" step="0.01" value="${Number(saleDraft.discount || 0)}"
+            class="w-full border border-ink-300 rounded-lg px-3 py-2">
+        </div>
+        <div id="slTotals" class="bg-ink-50 border border-ink-200 rounded-lg p-3 text-sm">${saleTotalsHtml()}</div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 border-t border-ink-200 px-5 py-4">
+      <button data-close class="px-4 py-2 rounded-lg border border-ink-300 hover:bg-ink-50">Cancel</button>
+      <button id="slSave" class="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium">Save sale</button>
+    </div>`, wireSaleModal, 'max-w-3xl');
+}
+
+function variantOptions(p) {
+  if (!p) return '';
+  return p.variants.map(v =>
+    `<option value="${v.id}">${esc(v.size + ' / ' + v.color)} (${num(v.qty)} left)</option>`).join('');
+}
+
+function keepSaleHeader() {
+  if (!$('#slDate')) return;
+  saleDraft.date     = $('#slDate').value || todayISO();
+  saleDraft.customer = $('#slCustomer').value.trim();
+  saleDraft.channel  = $('#slChannel').value;
+  saleDraft.discount = Math.max(0, Number($('#slDiscount').value || 0));
+}
+
+function wireSaleModal() {
+  const prodSel = $('#slProduct');
+
+  prodSel.onchange = () => {
+    const p = findProduct(prodSel.value);
+    $('#slVariant').innerHTML = variantOptions(p);
+    $('#slPrice').value = Number(p.price || 0);
+  };
+
+  $('#slAdd').onclick = () => {
+    keepSaleHeader();
+    const p = findProduct(prodSel.value);
+    const v = findVariant(p, $('#slVariant').value);
+    const qty = Math.max(1, Number($('#slQty').value || 1));
+    const price = Math.max(0, Number($('#slPrice').value || 0));
+    if (!p || !v) return;
+
+    const already = saleDraft.lines
+      .filter(l => l.variantId === v.id)
+      .reduce((a, l) => a + Number(l.qty), 0);
+    if (qty + already > Number(v.qty)) {
+      toast(`Only ${v.qty} left of ${p.name} ${v.size}/${v.color}.`, 'error');
+      return;
+    }
+
+    const existing = saleDraft.lines.find(l => l.variantId === v.id && Number(l.price) === price);
+    if (existing) existing.qty = Number(existing.qty) + qty;
+    else saleDraft.lines.push({ productId: p.id, variantId: v.id, qty, price, cost: Number(p.cost || 0) });
+    renderSaleModal();
+  };
+
+  $$('[data-delline]').forEach(b => b.onclick = () => {
+    keepSaleHeader();
+    saleDraft.lines.splice(Number(b.dataset.delline), 1);
+    renderSaleModal();
+  });
+
+  /* update the totals as they type — rebuilding the whole modal here would
+     swallow the very next click on "Save sale" */
+  $('#slDiscount').oninput = () => {
+    saleDraft.discount = Math.max(0, Number($('#slDiscount').value || 0));
+    $('#slTotals').innerHTML = saleTotalsHtml();
+  };
+
+  $('#slSave').onclick = () => {
+    keepSaleHeader();
+    if (!saleDraft.lines.length) { toast('Add at least one item.', 'error'); return; }
+    const t = saleLineTotals();
+
+    db.counters.sale = (db.counters.sale || 0) + 1;
+    const ref = 'S-' + String(db.counters.sale).padStart(4, '0');
+
+    saleDraft.lines.forEach(l => {
+      changeStock(l.productId, l.variantId, 'out', l.qty, 'Sale ' + ref, saleDraft.customer, l.price);
+    });
+
+    db.sales.unshift({
+      id: uid('s'), ref,
+      date: saleDraft.date + 'T' + new Date().toTimeString().slice(0, 8),
+      customer: saleDraft.customer, channel: saleDraft.channel,
+      lines: saleDraft.lines.slice(), discount: t.discount,
+      total: t.net, cost: t.cost, profit: t.profit
+    });
+
+    save(); closeModal(); saleDraft = null;
+    ui.tab = 'sales'; render();
+    toast('Sale ' + ref + ' saved — ' + money(t.net));
+  };
+}
+
+function undoSale(id) {
+  const i = db.sales.findIndex(s => s.id === id);
+  if (i < 0) return;
+  const s = db.sales[i];
+  if (!confirm(`Undo sale ${s.ref} (${money(s.total)})?\nThe pieces go back into stock.`)) return;
+  s.lines.forEach(l => changeStock(l.productId, l.variantId, 'in', l.qty, 'Sale undone ' + s.ref, '', l.cost));
+  db.sales.splice(i, 1);
+  save(); render();
+  toast('Sale ' + s.ref + ' undone.');
+}
+
+/* ============================================================
+   15. CSV EXPORT + BACKUP
+   ============================================================ */
+
+function csvCell(v) {
+  const s = String(v == null ? '' : v);
+  return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
+function downloadFile(name, text, mime = 'text/csv;charset=utf-8') {
+  const blob = new Blob(['﻿' + text], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+
+function stamp() { return new Date().toISOString().slice(0, 10); }
+
+function exportProductsCsv() {
+  const rows = [['Product', 'Type', 'Supplier', 'Cost', 'Price', 'In stock', 'Stock value', 'Status']];
+  filteredProducts().forEach(p => rows.push([
+    p.name, p.category, p.supplier || '', p.cost, p.price,
+    productStock(p), productValue(p),
+    stockState(p) === 'ok' ? 'In stock' : stockState(p) === 'low' ? 'Low' : 'Out of stock'
+  ]));
+  downloadFile('products-' + stamp() + '.csv', rows.map(r => r.map(csvCell).join(',')).join('\n'));
+  toast('Products exported.');
+}
+
+function exportStockCsv() {
+  const rows = [['Product', 'Type', 'Size', 'Colour', 'SKU', 'Qty', 'Cost', 'Price', 'Stock value']];
+  db.products.forEach(p => p.variants.forEach(v => rows.push([
+    p.name, p.category, v.size, v.color, v.sku, v.qty, p.cost, p.price, Number(v.qty) * Number(p.cost || 0)
+  ])));
+  downloadFile('stock-list-' + stamp() + '.csv', rows.map(r => r.map(csvCell).join(',')).join('\n'));
+  toast('Stock list exported.');
+}
+
+function exportLowCsv() {
+  const rows = [['Product', 'Type', 'Supplier', 'Pieces left', 'Warn at', 'Status']];
+  db.products.filter(p => stockState(p) !== 'ok')
+    .sort((a, b) => productStock(a) - productStock(b))
+    .forEach(p => rows.push([p.name, p.category, p.supplier || '', productStock(p), lowLimit(p),
+      stockState(p) === 'out' ? 'Out of stock' : 'Low']));
+  downloadFile('reorder-list-' + stamp() + '.csv', rows.map(r => r.map(csvCell).join(',')).join('\n'));
+  toast('Re-order list exported.');
+}
+
+function exportSalesCsv() {
+  const rows = [['Order', 'Date', 'Customer', 'Where', 'Product', 'Size', 'Colour', 'Qty', 'Price each', 'Line total']];
+  salesBetween(ui.salesFrom, ui.salesTo).forEach(s => s.lines.forEach(l => {
+    const p = findProduct(l.productId), v = findVariant(p, l.variantId);
+    rows.push([s.ref, s.date.slice(0, 10), s.customer || '', s.channel || '',
+      p ? p.name : '', v ? v.size : '', v ? v.color : '', l.qty, l.price, Number(l.qty) * Number(l.price)]);
+  }));
+  downloadFile('sales-' + stamp() + '.csv', rows.map(r => r.map(csvCell).join(',')).join('\n'));
+  toast('Sales exported.');
+}
+
+function backup() {
+  downloadFile('inventory-backup-' + stamp() + '.json', JSON.stringify(db, null, 2), 'application/json');
+  toast('Backup downloaded. Keep it somewhere safe.');
+}
+
+function restoreFrom(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!data || !Array.isArray(data.products)) throw new Error('not an inventory backup');
+      if (!confirm('This replaces everything currently on this screen with the backup file. Continue?')) return;
+      db = data;
+      const base = blankDb();                       // fill in anything an older backup is missing
+      for (const k in base)       if (!(k in db))       db[k] = base[k];
+      for (const k in base.brand) if (!(k in db.brand)) db.brand[k] = base.brand[k];
+      save();
+      ui.tab = 'dashboard';
+      render();
+      toast('Backup restored.');
+    } catch (e) {
+      toast('That file is not a valid inventory backup.', 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+/* ============================================================
+   16. WIRING THE BUTTONS ON EACH TAB
+   ============================================================ */
+
+function qtyCellClass(p, v) {
+  const q = Number(v.qty || 0);
+  const base = 'w-20 text-center border rounded-lg px-2 py-1 ';
+  if (q <= 0) return base + 'border-rose-300 bg-rose-50 text-rose-700';
+  if (q <= lowLimit(p)) return base + 'border-amber-300 bg-amber-50 text-amber-800';
+  return base + 'border-ink-300';
+}
+
+/* Update one quantity box where it stands. Re-drawing the whole page here would
+   re-sort the rows under the user's finger and swallow their next click. */
+function refreshQtyCell(pid, vid) {
+  const p = findProduct(pid), v = findVariant(p, vid);
+  const inp = document.querySelector(`[data-setqty="${pid}|${vid}"]`);
+  if (!p || !v || !inp) return;
+  inp.value = Number(v.qty);
+  inp.className = qtyCellClass(p, v);
+}
+
+function wireQtyInputs() {
+  $$('[data-setqty]').forEach(inp => {
+    inp.onchange = () => {
+      const [pid, vid] = inp.dataset.setqty.split('|');
+      const p = findProduct(pid), v = findVariant(p, vid);
+      if (!p || !v) return;
+      const before = Number(v.qty || 0);
+      const after  = Math.max(0, Number(inp.value || 0));
+      if (before === after) { inp.value = before; return; }
+      changeStock(pid, vid, 'set', after, 'Manual correction', `Changed from ${before} to ${after}`, 0);
+      save();
+      refreshQtyCell(pid, vid);
+      toast(`${p.name} ${v.size}/${v.color} set to ${after}.`);
+    };
+  });
+
+  $$('[data-step]').forEach(btn => {
+    btn.onclick = () => {
+      const [pid, vid, delta] = btn.dataset.step.split('|');
+      const d = Number(delta);
+      const v = findVariant(findProduct(pid), vid);
+      if (!v) return;
+      if (d < 0 && Number(v.qty) <= 0) return;
+      changeStock(pid, vid, d > 0 ? 'in' : 'out', Math.abs(d), 'Quick change', '', 0);
+      save();
+      refreshQtyCell(pid, vid);
+    };
+  });
+}
+
+function wireTab() {
+  wireQtyInputs();
+
+  /* generic buttons that exist on several tabs */
+  const acts = {
+    'go-products':      () => { ui.tab = 'products'; render(); },
+    'new-product':      () => openProductModal(),
+    'quick-sale2':      () => openSaleModal(),
+    'quick-in2':        () => openStockModal('in'),
+    'quick-out':        () => openStockModal('out'),
+    'export-products':  exportProductsCsv,
+    'export-stock':     exportStockCsv,
+    'export-low':       exportLowCsv,
+    'export-sales':     exportSalesCsv,
+    'print':            () => window.print(),
+    'backup':           backup,
+    'restore':          () => $('#restoreFile').click(),
+    'sales-clear':      () => { ui.salesFrom = ''; ui.salesTo = ''; render(); },
+    'sales-today':      () => { ui.salesFrom = ui.salesTo = todayISO(); render(); },
+    'sales-month':      () => { ui.salesFrom = todayISO().slice(0, 8) + '01'; ui.salesTo = todayISO(); render(); },
+    'wipe':             wipeEverything,
+    'save-brand':       saveBrandSettings
+  };
+  $$('[data-act]').forEach(btn => {
+    const fn = acts[btn.dataset.act];
+    if (fn) { btn.onclick = fn; return; }
+    if (btn.dataset.act === 'open-product') btn.onclick = () => openProductDetail(btn.dataset.id);
+    if (btn.dataset.act === 'edit-product') btn.onclick = () => openProductModal(btn.dataset.id);
+    if (btn.dataset.act === 'del-product')  btn.onclick = () => deleteProduct(btn.dataset.id);
+    if (btn.dataset.act === 'restock')      btn.onclick = () => openStockModal('in', btn.dataset.id);
+    if (btn.dataset.act === 'undo-sale')    btn.onclick = () => undoSale(btn.dataset.id);
+  });
+
+  /* search + filter boxes keep the cursor where it was */
+  keepTyping($('#pSearch'), v => { ui.productSearch = v; });
+  if ($('#pCat'))    $('#pCat').onchange    = e => { ui.productCategory = e.target.value; render(); };
+  if ($('#pStatus')) $('#pStatus').onchange = e => { ui.productStatus = e.target.value; render(); };
+
+  keepTyping($('#sSearch'), v => { ui.stockSearch = v; });
+  if ($('#sFrom')) $('#sFrom').onchange = e => { ui.salesFrom = e.target.value; render(); };
+  if ($('#sTo'))   $('#sTo').onchange   = e => { ui.salesTo   = e.target.value; render(); };
+
+  const rf = $('#restoreFile');
+  if (rf) rf.onchange = () => { if (rf.files[0]) restoreFrom(rf.files[0]); };
+
+  /* settings chips */
+  $$('[data-set]').forEach(btn => {
+    btn.onclick = () => {
+      const [action, kind] = btn.dataset.set.split('-');
+      const listName = kind === 'cat' ? 'categories' : kind === 'size' ? 'sizes' : 'colors';
+      if (action === 'add') {
+        const input = $('#set-new-' + kind);
+        let v = input.value.trim();
+        if (kind === 'size') v = v.toUpperCase();
+        if (!v) return;
+        if (db[listName].some(x => String(x).toLowerCase() === v.toLowerCase())) { toast('That is already in the list.', 'error'); return; }
+        db[listName].push(v);
+      } else {
+        const val = btn.dataset.val;
+        if (kind === 'cat' && db.products.some(p => p.category === val)) {
+          toast('Some products still use this type. Change them first.', 'error'); return;
+        }
+        db[listName] = db[listName].filter(x => x !== val);
+      }
+      save(); render();
+    };
+  });
+}
+
+/* Re-drawing the page while someone types would move their cursor to the end,
+   so put it back exactly where it was. */
+function keepTyping(input, apply) {
+  if (!input) return;
+  const id = '#' + input.id;
+  input.oninput = debounce(() => {
+    const caret = input.selectionStart;
+    apply(input.value);
+    render();
+    const again = $(id);
+    if (again) { again.focus(); try { again.setSelectionRange(caret, caret); } catch (e) {} }
+  }, 250);
+}
+
+function debounce(fn, ms) {
+  let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+}
+
+function deleteProduct(id) {
+  const p = findProduct(id);
+  if (!p) return;
+  if (!confirm(`Delete "${p.name}"?\n\nIts ${num(productStock(p))} pieces in stock and its history will be removed.\nThis cannot be undone.`)) return;
+  db.products = db.products.filter(x => x.id !== id);
+  db.movements = db.movements.filter(m => m.productId !== id);
+  save(); render();
+  toast(p.name + ' deleted.');
+}
+
+function saveBrandSettings() {
+  const cur = CURRENCIES.find(c => c.code === $('#setCurrency').value) || CURRENCIES[0];
+  db.brand.name     = $('#setName').value.trim() || BRAND_NAME;
+  db.brand.currency = cur.code;
+  db.brand.symbol   = cur.symbol;
+  db.brand.lowStock = Math.max(0, Number($('#setLow').value || 0));
+  save(); render();
+  toast('Settings saved.');
+}
+
+function wipeEverything() {
+  if (!confirm('This deletes ALL products, stock and sales on this device.\n\nAre you sure?')) return;
+  if (!confirm('Really erase everything? Download a backup first if you are not sure.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  db = blankDb();
+  ui.tab = 'dashboard';
+  ui.wizard = null;
+  render();
+  toast('Everything erased. Setup starts again.');
+}
+
+/* ============================================================
+   17. START
+   ============================================================ */
+
+window.addEventListener('DOMContentLoaded', () => {
+  load();
+  render();
+});
+</script>
+</body>
+</html>

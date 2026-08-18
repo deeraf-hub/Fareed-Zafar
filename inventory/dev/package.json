@@ -1,0 +1,13 @@
+{
+  "name": "inventory-css-build",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build-css.mjs",
+    "test": "node check-app.mjs"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17",
+    "playwright-core": "^1.49.0"
+  }
+}
