@@ -1,4 +1,9 @@
-# Brandsloop Inventory — single image running the API and serving the built UI.
+# Brandsloop Inventory — one image running the API and serving the built UI.
+#
+# `prisma` and `tsx` are runtime dependencies, not dev ones: the container
+# applies migrations and seeds itself on boot, so both must survive the
+# production install.
+
 FROM node:20-alpine AS build
 WORKDIR /app
 
@@ -22,11 +27,17 @@ COPY server/package.json ./server/
 COPY client/package.json ./client/
 RUN npm ci --omit=dev
 
+# The schema is needed at runtime for `migrate deploy`; the seed scripts and
+# the compiled sources they import come across too.
 COPY server/prisma ./server/prisma
+COPY server/src ./server/src
+COPY server/tsconfig.json ./server/
 RUN npx prisma generate --schema server/prisma/schema.prisma
+
 COPY --from=build /app/server/dist ./server/dist
 COPY --from=build /app/client/dist ./client/dist
+COPY docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
 
 EXPOSE 4000
-# Migrations are applied on boot so a fresh database is ready to use.
-CMD ["sh", "-c", "npx prisma migrate deploy --schema server/prisma/schema.prisma && node server/dist/index.js"]
+CMD ["./docker-entrypoint.sh"]

@@ -18,10 +18,12 @@ echo "• Installing dependencies…"
 npm install
 
 echo "• Applying database migrations…"
+# Run Prisma from the server workspace: that is where .env lives, and Prisma
+# only reads it from the current directory.
 if [ "${1:-}" = "--clean" ]; then
-  npm run db:reset --workspace=@brandsloop/server -- --force --skip-seed
+  npm run db:reset --workspace=@brandsloop/server -- --skip-seed
 else
-  npx prisma migrate deploy --schema server/prisma/schema.prisma
+  npm run db:deploy --workspace=@brandsloop/server
 fi
 
 echo "• Seeding…"

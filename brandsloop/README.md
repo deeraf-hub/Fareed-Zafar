@@ -20,12 +20,11 @@ cd brandsloop
 docker compose up --build
 ```
 
-Open **http://localhost:4000**. Postgres, migrations and the app all come up
-together. Seed the demo catalogue once the containers are running:
-
-```bash
-docker compose exec app npx tsx server/prisma/seed.ts
-```
+Open **http://localhost:4000**. That is the whole thing: Postgres starts, the
+container applies migrations, seeds the admin account and demo catalogue, then
+serves the app. The seed skips anything that already exists, so restarting is
+safe. Watch the container output for the admin password — it is printed once,
+when the account is created.
 
 ### Option B — Node + your own Postgres
 
@@ -235,3 +234,13 @@ Secrets stay server-side. Nothing in the client bundle touches the database.
 | `npm run db:migrate` | Create and apply a migration |
 | `npm run db:seed` | Seed the admin account and demo data |
 | `npm run db:reset` | Drop, re-migrate and re-seed |
+
+## Notes
+
+`prisma` and `tsx` sit in the server's **dependencies**, not devDependencies:
+the container applies migrations and seeds itself on start, so both have to
+survive a production install.
+
+The test suite shares one database and truncates between tests, so
+`vitest.config.ts` disables file parallelism. Removing that makes the suite
+deadlock on `TRUNCATE` rather than fail cleanly.
