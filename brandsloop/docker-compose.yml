@@ -1,0 +1,39 @@
+# Runs Brandsloop and its database with one command:
+#   docker compose up --build
+# Then open http://localhost:4000
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: brandsloop
+      POSTGRES_PASSWORD: brandsloop
+      POSTGRES_DB: brandsloop
+    ports:
+      - '5432:5432'
+    volumes:
+      - brandsloop-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U brandsloop -d brandsloop']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://brandsloop:brandsloop@db:5432/brandsloop?schema=public
+      # Override these before exposing the app to anyone else.
+      JWT_SECRET: ${JWT_SECRET:-please_change_this_to_a_long_random_value_32chars_min}
+      PORT: 4000
+      NODE_ENV: production
+      CORS_ORIGINS: http://localhost:4000
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@brandsloop.pk}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-}
+    ports:
+      - '4000:4000'
+
+volumes:
+  brandsloop-db:
