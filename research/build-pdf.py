@@ -766,6 +766,120 @@ A(callout("Where to start on Monday",
           "It is the one prospect here you can approach through a stated, open front door rather than "
           "cold. Send that one first."))
 
+# ============================================ PART 4 - THE MESSAGES
+import re as _re
+
+def parse_messages(path):
+    """Parse 04-outreach-messages.md into per-prospect message blocks."""
+    txt = open(path).read().split("\n")
+    items, cur = [], None
+    i = 0
+    while i < len(txt):
+        l = txt[i]
+        if l.startswith("### "):
+            if cur: items.append(cur)
+            head = l[4:].strip()
+            cur = {"head": head, "reach": "", "pain": "", "note": "", "follow": []}
+        elif cur is not None and l.startswith("**Reach:**"):
+            cur["reach"] = l.replace("**Reach:**", "").strip()
+        elif cur is not None and l.startswith("**Their pain:**"):
+            cur["pain"] = l.replace("**Their pain:**", "").strip()
+        elif cur is not None and l.strip() == "**Note**":
+            j = i + 1
+            while j < len(txt) and not txt[j].startswith(">"): j += 1
+            cur["note"] = txt[j][1:].strip()
+            i = j
+        elif cur is not None and l.strip() == "**Follow-up**":
+            j, body = i + 1, []
+            while j < len(txt) and (txt[j].startswith(">") or not txt[j].strip()):
+                if txt[j].startswith(">"):
+                    body.append(txt[j][1:].strip())
+                elif body and body[-1] != "":
+                    body.append("")
+                j += 1
+            cur["follow"] = [b for b in body]
+            i = j - 1
+        i += 1
+    if cur: items.append(cur)
+    return items
+
+def strip_md(s_):
+    """Drop markdown links and emphasis for PDF rendering."""
+    s_ = _re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s_)
+    s_ = s_.replace("**", "").replace("`", "")
+    return s_
+
+MSGS = parse_messages(os.path.join(SRC, "04-outreach-messages.md"))
+
+A(NextPageTemplate("portrait"))
+for e in new_page("Part 4 - The 27 Messages"):
+    A(e)
+for e in section_head("PART 4", "The 27 Messages",
+                      "One tailored message set per high-priority prospect, in send order: "
+                      "agencies first, then hiring signals, funded startups, accelerators, "
+                      "events and esports."):
+    A(e)
+A(Paragraph("Reading each entry", st["h3"]))
+A(Paragraph("<b>Reach</b> is where to find them - verified emails and pages where they exist, "
+            "otherwise a LinkedIn people-search that runs the query for you. <b>Pain</b> is the one "
+            "thing actually broken for them; everything in the message serves it. <b>Note</b> is the "
+            "LinkedIn connection request, hard-capped at 300 characters. <b>Follow-up</b> goes on day "
+            "+3, as email or DM.",
+            S("m0", fontSize=9, leading=12.8, textColor=INK_SOFT, spaceAfter=8)))
+A(callout("Two rules that decide whether these work",
+          "**Never invent urgency.** Every deadline below is their calendar - a demo day, a "
+          "conference date, a sponsorship cycle. Adding fake scarcity marks you as someone with no "
+          "work. **Never offer a pitch deck to Segment C.** They just finished raising; that job is "
+          "done for 12-18 months. Sell what breaks after the round."))
+A(Spacer(1, 6))
+
+st["m_head"]  = S("mh", fontName="Helvetica-Bold", fontSize=12, leading=15, textColor=INK, spaceAfter=3)
+st["m_meta"]  = S("mm", fontSize=7.8, leading=10.8, textColor=MUTED, spaceAfter=5)
+st["m_pain"]  = S("mp", fontSize=8.6, leading=12, textColor=INK_SOFT)
+st["m_note"]  = S("mn2", fontSize=8.8, leading=12.4, textColor=INK_SOFT)
+st["m_fol"]   = S("mf", fontSize=8.6, leading=12.2, textColor=INK_SOFT)
+st["m_lbl"]   = S("ml", fontName="Helvetica-Bold", fontSize=7.2, leading=9.6, textColor=ACCENT)
+
+W = 6.3*inch
+
+def labelled_box(label, flows, bg, bar):
+    inner = [Paragraph(esc(label), st["m_lbl"]), Spacer(1, 3)] + flows
+    t = Table([[inner]], colWidths=[W], hAlign="LEFT")
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,-1), bg),
+        ("LINEBEFORE", (0,0), (0,-1), 2.2, bar),
+        ("LEFTPADDING", (0,0), (-1,-1), 9), ("RIGHTPADDING", (0,0), (-1,-1), 9),
+        ("TOPPADDING", (0,0), (-1,-1), 7), ("BOTTOMPADDING", (0,0), (-1,-1), 7),
+    ]))
+    return t
+
+for m in MSGS:
+    block = []
+    block.append(Paragraph(esc(strip_md(m["head"])), st["m_head"]))
+    if m["reach"]:
+        block.append(Paragraph("<b>Reach</b>  " + esc(strip_md(m["reach"])), st["m_meta"]))
+    if m["pain"]:
+        block.append(labelled_box("THE PAIN",
+                                  [Paragraph(rich(strip_md(m["pain"])), st["m_pain"])],
+                                  BAND, INK_SOFT))
+        block.append(Spacer(1, 6))
+    if m["note"]:
+        n = strip_md(m["note"])
+        block.append(labelled_box("LINKEDIN NOTE  (%d / 300 characters)" % len(m["note"]),
+                                  [Paragraph('"' + esc(n) + '"', st["m_note"])],
+                                  ACCENT_L, ACCENT))
+        block.append(Spacer(1, 6))
+    if m["follow"]:
+        paras = []
+        for line in m["follow"]:
+            if line:
+                paras.append(Paragraph(rich(strip_md(line)), st["m_fol"]))
+                paras.append(Spacer(1, 4))
+        if paras: paras.pop()
+        block.append(labelled_box("FOLLOW-UP  (day +3, email or DM)", paras, BAND_2, FAINT))
+    block.append(Spacer(1, 16))
+    A(KeepTogether(block))
+
 # ------------------------------------------------------------- build
 Doc(OUT).build(story)
 print("built:", OUT, os.path.getsize(OUT), "bytes")

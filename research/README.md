@@ -11,6 +11,7 @@
 | **[01-outreach-playbook.md](01-outreach-playbook.md)** | Read this first. Segment logic, what each type of prospect actually buys, message angles, LinkedIn + email templates, sequencing, pricing anchors, objection handling. |
 | **[02-prospect-list.md](02-prospect-list.md)** | The 100 prospects, grouped into 7 segments. Each one has a **buying trigger with a date and a source**, what to sell, and who to contact. |
 | **[prospects.csv](prospects.csv)** | The same 100, CRM-ready. Import into a sheet or CRM and work it top-down. |
+| **[04-outreach-messages.md](04-outreach-messages.md)** | A tailored message set for each of the 27 high-priority prospects: where to reach them, the pain to hit, a LinkedIn connection note under 300 characters, and the day-+3 follow-up. |
 | **[03-sources.md](03-sources.md)** | Every source URL used, grouped by segment, so you can re-verify before you send. |
 | **[Prospect-Outreach-Pack.pdf](Prospect-Outreach-Pack.pdf)** | The playbook and the full prospect directory as one designed, print-ready 28-page PDF. Ends with a tick-box worksheet of the 27 prospects to contact this week. |
 | **[build-pdf.py](build-pdf.py)** | Regenerates the PDF from `prospects.csv`. Edit the CSV, run `python3 build-pdf.py`, and the PDF rebuilds. |
