@@ -782,8 +782,8 @@ def parse_messages(path):
             cur = {"head": head, "reach": "", "pain": "", "note": "", "follow": []}
         elif cur is not None and l.startswith("**Reach:**"):
             cur["reach"] = l.replace("**Reach:**", "").strip()
-        elif cur is not None and l.startswith("**Their pain:**"):
-            cur["pain"] = l.replace("**Their pain:**", "").strip()
+        elif cur is not None and (l.startswith("**The pain:**") or l.startswith("**Their pain:**")):
+            cur["pain"] = l.split(":**", 1)[1].strip()
         elif cur is not None and l.strip() == "**Note**":
             j = i + 1
             while j < len(txt) and not txt[j].startswith(">"): j += 1
@@ -810,6 +810,13 @@ def strip_md(s_):
     return s_
 
 MSGS = parse_messages(os.path.join(SRC, "04-outreach-messages.md"))
+_missing = [m["head"] for m in MSGS if not (m["pain"] and m["note"] and m["follow"])]
+assert MSGS and not _missing, (
+    "message parse incomplete for %d entries (label drift in the markdown?): %s"
+    % (len(_missing), _missing[:5]))
+_long = [(m["head"], len(m["note"])) for m in MSGS if len(m["note"]) > 300]
+assert not _long, "LinkedIn notes over 300 chars: %s" % _long
+print("parsed %d message sets, all complete, all notes within 300 chars" % len(MSGS))
 
 A(NextPageTemplate("portrait"))
 for e in new_page("Part 4 - The 27 Messages"):
@@ -865,8 +872,9 @@ for m in MSGS:
         block.append(Spacer(1, 6))
     if m["note"]:
         n = strip_md(m["note"])
+        quoted = n if n.startswith('"') else '"' + n + '"'
         block.append(labelled_box("LINKEDIN NOTE  (%d / 300 characters)" % len(m["note"]),
-                                  [Paragraph('"' + esc(n) + '"', st["m_note"])],
+                                  [Paragraph(esc(quoted), st["m_note"])],
                                   ACCENT_L, ACCENT))
         block.append(Spacer(1, 6))
     if m["follow"]:

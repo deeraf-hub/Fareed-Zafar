@@ -1,332 +1,387 @@
 # The 27 Messages
 
-**One tailored message set per HIGH-priority prospect**, in the order the playbook says to send them: agencies first, then hiring signals, then funded startups, accelerators, events, and esports.
+One message set per high-priority prospect, in the order you should send them. Agencies first, then the companies hiring, then the freshly funded, then accelerators, events and esports.
 
 ---
 
 ## How to use this
 
-Each prospect gives you three things:
+Each prospect gives you four things.
 
-| | |
-|---|---|
-| **Reach** | Where to find them. Verified emails and company pages where they exist; otherwise a LinkedIn people-search link that runs the search for you. |
-| **Their pain** | The single thing that is actually broken for them. Everything in the message serves this. |
-| **Note** | LinkedIn connection request. Hard-capped at 300 characters — counts are given. |
-| **Follow-up** | Day +3. Send as email, or as a LinkedIn DM once they accept. |
+**Reach.** Where to find them. Real emails and pages where they exist. Where they don't, a LinkedIn search link that runs the query and puts the right people in front of you.
 
-**A note on the contact links.** I have not verified any individual's LinkedIn profile. Where I give a `linkedin.com/search/...` link, that is a constructed search — it runs the query and puts the right people in front of you in one click. Where I name a person, a public source named them. Where I give an email, it came from the company's own page.
+**The pain.** The one thing that's actually broken for them. Every word of the message is there to poke at it.
 
-**A note on FOMO.** Every piece of time pressure below is *their* calendar — a demo day, a conference date, a sponsorship cycle, a funding window. None of it is invented scarcity on your side. Do not add any. These buyers have seen "only 2 slots left this month" a thousand times and it reads as a tell that you have no work.
+**Note.** The LinkedIn connection request. LinkedIn cuts you off at 300 characters, so the count is printed on each one.
 
-**Before you send any of these:** swap `[name]` for a real first name, `[link]` for your portfolio, and re-check the trigger is still true. A message that opens with a stale fact is worse than no message.
+**Follow-up.** Send it three days later, by email or as a DM once they've accepted.
+
+---
+
+## Four things before you send anything
+
+**Swap the placeholders.** `[name]` and `[link]`. Obvious, but people forget and it's a very public way to look careless.
+
+**Check the trigger still holds.** Opening on a job ad that closed last week is worse than not writing at all.
+
+**Don't add urgency that isn't theirs.** Every deadline in here belongs to them. A demo day, a conference, a booth sale, a funding window. The second you add "only two slots left this month," you've told them you have no work. They've seen it a thousand times.
+
+**Don't offer a pitch deck to anyone in Segment C.** They just finished raising. That job is done for the next year or so. Every message in that section sells the thing that breaks *after* the money lands.
 
 ---
 ---
 
-# Segment B — Agencies (send these first)
+# Segment B: the agencies
 
-These five are the highest-ROI messages in the pack. You are not selling a service; you are applying to be capacity. Tone is peer-to-peer, low-drama, zero salesmanship. Every one of them ends with a small, cheap, easy yes.
+Send these five first. You're not selling a service here, you're offering to be capacity, which is a much easier yes. Keep it peer to peer. No enthusiasm, no adjectives, nothing that sounds like a pitch. Every one of these ends with the cheapest possible yes.
 
 ---
 
 ### 15 · SlideGenius
-**Reach:** `resumes@slidegenius.com` — their own stated route for designers · [Company page](https://www.linkedin.com/company/slidegenius) · Target: Creative Director / Talent
-**Their pain:** 5,000+ decks shipped is a throughput problem wearing a design problem's clothes. The bad weeks aren't empty ones — they're the Thursdays when three enterprise decks land at once and everyone is already booked.
+**Reach:** `resumes@slidegenius.com`, which is their own stated route for designers · [Company page](https://www.linkedin.com/company/slidegenius) · San Diego · Ask for the Creative Director
+
+**The pain:** Five thousand decks out the door is a traffic problem wearing a design problem's clothes. The weeks that hurt aren't the quiet ones. They're the Thursdays when three enterprise decks land at once and everyone is already buried.
 
 **Note**
-> You're hiring PowerPoint designers and open to remote, which usually means the queue is winning. I'm the freelance version of that hire: production-grade decks inside your templates and your client's brand, no hand-holding. Worth a test project?
+> You're hiring PowerPoint designers and you'll take remote. Which usually means the queue is winning. I'm the freelance version of that hire. Your templates, your client's brand, no hand holding. Give me one deck to prove it?
 
 **Follow-up**
 > Hi [name],
 >
-> 5,000 decks is a throughput problem disguised as a design problem.
+> Five thousand decks. That's not a design problem, that's a traffic problem.
 >
-> The weeks that hurt aren't the quiet ones. They're the ones where three enterprise decks land on the same Thursday and every designer is already committed.
+> And I'd bet the weeks that actually hurt aren't the slow ones. They're the Thursdays when three enterprise decks land together and every designer is already spoken for.
 >
-> I'm not pitching to replace anybody. I'm the person you call on that Thursday. I work inside someone else's template and someone else's brand without needing either explained, and I don't return files that need a second pass.
+> I'm not after anyone's job. I'm the person you call on that Thursday.
 >
-> [link] — give me one real deck as a test. If it isn't clean, you've lost nothing.
+> I've spent years working inside other people's templates and other people's brand rules, so nobody has to teach me either one. And you won't get files back that need a second pass, which I know is the real fear with freelancers.
+>
+> [link]
+>
+> Throw me one live deck. If it isn't clean, you've lost a day and I've lost the argument.
 
 ---
 
 ### 16 · Buffalo 7
-**Reach:** [buffalo7.co.uk/join-us/](https://buffalo7.co.uk/join-us/) — their careers page · [Company page](https://www.linkedin.com/company/buffalo7) · Manchester, UK · Target: Design Director / Studio Manager
-**Their pain:** With Facebook, UEFA and the BBC on the other side of the table, one loose slide is the only thing anyone remembers. That bar is easy at normal load and brutal in overlap weeks.
+**Reach:** [buffalo7.co.uk/join-us/](https://buffalo7.co.uk/join-us/) · [Company page](https://www.linkedin.com/company/buffalo7) · Manchester · Ask for the Design Director
+
+**The pain:** With Facebook, UEFA and the BBC on the other side of the table, nobody notices the forty seven good slides. They notice the one that's slightly off. Easy standard to hold most weeks. Not the week three projects collide.
 
 **Note**
-> Facebook, UEFA, the BBC — clients where one loose slide is the whole conversation. That bar is easy to hold at normal load and brutal when three projects overlap. I'm freelance overflow that holds it. Do you keep a bench?
+> Facebook, UEFA, the BBC. Clients where one wonky slide is the only thing anyone remembers. Easy bar to hold on a normal week. Less easy when three projects land together. That's the week I'm useful. Do you keep a freelance bench?
 
 **Follow-up**
 > Hi [name],
 >
-> Your client list sets a bar most studios never have to hold. With UEFA or the BBC on the other side of the table, one misaligned slide is the thing that gets remembered.
+> Your client list does something unusual. It deletes your margin for error.
 >
-> Holding it is straightforward at normal load. It gets hard the week three projects overlap and the real choice is late or looser.
+> When UEFA is on the other side of the table, nobody notices the forty seven good slides. They notice the one that's slightly off.
 >
-> I'm the third option. I work to a studio's existing system rather than importing my own taste, and I've built decks for exactly that level of audience.
+> Holding that standard is fine most weeks. It gets ugly the week three projects collide and the honest choice is late or sloppy.
 >
-> [link] — one paid test deck and you'll know inside a day.
+> I'd like to be the third option.
+>
+> I don't turn up with my own taste and try to sell it to you. I work to whatever system you've already built, and I've made decks for exactly that kind of room.
+>
+> [link]
+>
+> One paid test and you'll know by the end of the day.
 
 ---
 
 ### 17 · 24Slides
-**Reach:** [24slides.com](https://24slides.com) · [LinkedIn search: 24Slides production lead](https://www.linkedin.com/search/results/people/?keywords=24Slides%20production%20lead) · Denmark + Indonesia · Target: Production Lead
-**Their pain:** 200+ designers across two continents solves capacity. It does not solve variance — the deck that technically shipped but came back needing a rebuild, which is always the high-stakes one.
+**Reach:** [24slides.com](https://24slides.com) · [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=24Slides%20production%20lead) · Denmark and Indonesia · Ask for the Production Lead
+
+**The pain:** Two hundred designers across two continents solves capacity. It doesn't solve the deck that technically shipped and then landed back on someone's desk needing a rebuild. And it's never the routine one.
 
 **Note**
-> 200+ designers across two continents is a volume machine, and volume's real risk isn't capacity — it's the one deck that comes back needing a rebuild. I'm senior freelance cover for the work you can't afford to send back. Any bench space?
+> 200 designers across two continents solves capacity. It doesn't solve the one deck that comes back needing a rebuild, and it's always the important one. I'd like to be where those get sent. Any room on the bench?
 
 **Follow-up**
 > Hi [name],
 >
-> A distributed model solves capacity. What it can't fully solve is variance — the deck that technically shipped but came back needing to be redone.
+> Distributed design solves capacity. It doesn't quite solve variance.
 >
-> It's never the routine one. It's the client's board deck, the investor deck, the one the account is resting on.
+> You know the one I mean. The deck that technically shipped, then came back needing to be rebuilt. And it's never the routine job. It's the client's board deck, or the investor deck, or the one holding up the account.
 >
-> I'd like to be where those get routed. Senior, works inside your process and your templates, returns files that don't need a second pass.
+> I'd like to be where those get routed.
 >
-> [link] — happy to start with one and let it speak.
+> Senior, works inside your process instead of around it, sends back files nobody has to fix.
+>
+> [link]
+>
+> Start me on one and let it argue for itself.
 
 ---
 
 ### 18 · Ink Narrates
-**Reach:** [inknarrates.com](https://www.inknarrates.com/) · [Company page](https://www.linkedin.com/company/inknarrates) · Mumbai · Target: Founder / Design Lead
-**Their pain:** Outsourced presentation design is their actual product, so their ceiling is senior capacity, not demand. Junior capacity can be hired. Senior capacity has to be found.
+**Reach:** [inknarrates.com](https://www.inknarrates.com/) · [Company page](https://www.linkedin.com/company/inknarrates) · Mumbai · Ask for the founder
+
+**The pain:** They've built a business being someone else's design team, which grows exactly as fast as they can find people who are already good. Juniors you can train. Seniors you have to go looking for, and the good ones are busy.
 
 **Note**
-> Outsourced presentation design is your product, which means your ceiling is senior capacity, not demand. I'd like to be capacity you don't have to train — investor and sales decks, in your system, right the first time.
+> Outsourced deck design is your actual product, so demand isn't your ceiling. Finding seniors who are already good is. I'd like to be one you don't have to train. Investor and sales decks, in your system, right first time.
 
 **Follow-up**
 > Hi [name],
 >
-> Your model is being someone else's design team. Good business, one hard constraint: it scales exactly as fast as you can add people who are already good.
+> You've built a business being somebody else's design team. Good business. One annoying constraint.
 >
-> Junior capacity you can hire and train. Senior capacity you have to find, and it's usually already busy.
+> It grows exactly as fast as you can find people who are already good.
 >
-> I do investor and sales decks at that level, I work inside an agency's system rather than around it, and I don't need a brief explained twice.
+> Juniors you can hire and shape. Seniors you have to go hunting for, and the decent ones are usually busy.
 >
-> [link]. One project, then you decide.
+> I do investor and sales decks at that level. I work inside an agency's system rather than fighting it, and I've never needed a brief explained twice.
+>
+> [link]
+>
+> One project. Then you decide whether there's a second.
 
 ---
 
 ### 19 · Superside
-**Reach:** [careers.superside.com/jobs/creative-presentation-design](https://careers.superside.com/jobs/creative-presentation-design) — a live Creative (Presentation Design) opening · Remote · Target: Talent / Creative Ops
-**Their pain:** An open presentation-design role alongside 450+ brands means demand is ahead of supply. Enterprise deck work isn't a creativity problem — it's a discipline problem across time zones.
+**Reach:** [careers.superside.com/jobs/creative-presentation-design](https://careers.superside.com/jobs/creative-presentation-design), a live opening · Remote · Ask for Talent or Creative Ops
+
+**The pain:** An open presentation design role sitting next to 450 brands means demand got ahead of supply. And the hard part of enterprise deck work isn't creativity. It's restraint.
 
 **Note**
-> You have a Creative (Presentation Design) role open and 450+ brands to serve — that maths rarely resolves with one hire. I work inside enterprise brand systems remotely, at that bar. Worth a conversation while the role's still open?
+> You've a presentation design role open and 450 brands to look after. That maths doesn't usually resolve with one hire. I do enterprise brand systems, remotely, at that standard. Worth a chat while the role's still open?
 
 **Follow-up**
 > Hi [name],
 >
-> An open presentation-design role next to 450+ brands tells me demand is running ahead of supply. Good problem, still a problem.
+> An open presentation design role sitting next to 450 brands tells me demand got ahead of supply. Nice problem. Still a problem.
 >
-> Enterprise presentation work is unusual in that the constraint isn't creativity. It's discipline — staying inside a brand system you didn't build, across time zones, without a review loop to catch you.
+> The hard part of enterprise deck work isn't creativity. It's restraint. Staying inside a brand system somebody else built, across time zones, with nobody around to catch the moment you decide your idea is better than theirs.
 >
-> That's the part I'm good at. Remote, senior, doesn't need the guardrails explained.
+> That's the bit I'm good at.
 >
-> [link] — happy to go through your normal process rather than around it.
+> [link]
+>
+> Happy to go through your normal process rather than round the side of it.
 
 ---
 ---
 
-# Segment A — Active hiring signal
+# Segment A: the ones already hiring
 
-**The rule for all five:** never position yourself against the hire. The person reading owns that requisition, and a message that reads as "you don't need them, you need me" gets deleted. You are cover *until* the hire lands, and overflow *after* it does.
+One rule across all five. Never position yourself against the hire. The person reading owns that job ad, and anything that reads as "you don't need them, you need me" gets deleted in about a second. You're cover until their person starts, and overflow after.
 
 ---
 
 ### 1 · Suffolk
-**Reach:** [LinkedIn search: Suffolk Creative Director](https://www.linkedin.com/search/results/people/?keywords=Suffolk%20Construction%20Creative%20Director) · Boston · Target: Creative Director / Marketing Director / Proposal Manager
-**Their pain:** The brief asks for someone to *think and structure content, not format slides* — the right ask, and exactly why it'll take months to fill. Four days on-site in Boston narrows the pool further. Meanwhile pursuit deadlines don't move.
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Suffolk%20Construction%20Creative%20Director) · Boston · Creative Director, Marketing Director or Proposal Manager
+
+**The pain:** The ad asks for someone who can think and structure content, not just format slides. Right ask, and exactly why it'll sit open for months. Four days on site in Boston shrinks the pool further. Pursuit deadlines don't care.
 
 **Note**
-> Saw the Presentation Designer role — four days on-site, for work that spikes around pursuit deadlines. Narrow pool, wide problem. I'm remote cover for peak pursuit weeks until the hire lands. No pitch, just leaving it here.
+> Saw the Presentation Designer role. Four days on site in Boston, for work that spikes whenever a pursuit deadline lands. Small pool, big problem. I can cover the spikes remotely until you fill it. No pitch, just leaving my card.
 
 **Follow-up**
 > Hi [name],
 >
-> Your posting says the job is to think and structure content, not format slides. That's the right ask — and it's also why the role will take months to fill.
+> Your ad says you want someone to think and structure content, not just format slides.
 >
-> Pursuits don't wait for hiring. Across 17 offices there's a deadline most weeks, and the ones that hurt are where two majors land together.
+> Good ad. Also the reason it'll sit open for months. People who can do that are rare, and asking them for four days a week on site in Boston makes them rarer.
 >
-> That's where I'd be useful: remote, fast, and used to turning technical content into something a selection panel can follow in ten minutes.
+> Meanwhile the pursuits keep coming. Seventeen offices means a deadline most weeks, and the ones that really hurt are when two big ones land together.
 >
-> Not a substitute for the hire. Cover until it lands, overflow afterwards.
+> That's where I'd be useful. Remote, quick, and used to turning dense technical content into something a selection panel can follow while half of them are checking their phones.
+>
+> I'm not applying. I'm cover until your person starts, and overflow after they do.
 >
 > [link]
 
 ---
 
 ### 2 · Allied Sports
-**Reach:** [alliedsports.com/careers](https://www.alliedsports.com/careers/) · [Company page](https://www.linkedin.com/company/alliedsports) · New York · Target: Creative Director / VP Partnership Marketing
-**Their pain:** "Sponsor to Storyteller" puts the entire weight on the story, which makes the sponsorship deck the product demo rather than collateral. New business is lumpy and doesn't pause for hiring.
+**Reach:** [alliedsports.com/careers](https://www.alliedsports.com/careers/) · [Company page](https://www.linkedin.com/company/alliedsports) · New York · Creative Director or VP Partnership Marketing
+
+**The pain:** "Sponsor to Storyteller" puts the whole bet on the story, and the deck is the only thing in the room actually doing the storytelling. New business doesn't arrive on a schedule and won't wait for a hire.
 
 **Note**
-> "Sponsor to Storyteller" puts the whole weight on the story — and the deck is where it lands or doesn't. You're hiring for that seat. Pitches won't pause while you fill it. I'm remote cover for the ones you can't lose.
+> "Sponsor to Storyteller" puts the whole bet on the story. Which makes the deck the thing that wins or loses it. You're hiring for that seat, but pitches don't wait for hiring. I can cover the ones you can't afford to lose.
 
 **Follow-up**
 > Hi [name],
 >
-> Your positioning puts everything on the story, which means the sponsorship deck isn't collateral. It's the product demo.
+> If your promise is turning sponsors into storytellers, the deck has to carry that. It's the only thing in the room actually doing the storytelling.
 >
-> You're hiring a Presentation & Brand Designer for exactly that. Sensible. But new business is lumpy, and the pitches that arrive between now and the hire are the ones that shape the year.
+> You're hiring a Presentation and Brand Designer to own it, which makes sense. But new business doesn't arrive on a schedule, and the pitches that show up between now and your new hire's start date are the ones that shape the year.
 >
-> I build sponsorship and partnership decks — the kind where a brand marketer has to see their own campaign inside your idea within three slides.
+> I build sponsorship and partnership decks. The kind where a brand marketer has to see their own campaign inside your idea by slide three or you've lost them.
 >
-> [link]. Happy to start on a single pitch and let it prove itself.
+> [link]
+>
+> Give me one pitch and let it speak for itself.
 
 ---
 
 ### 3 · Oracle
-**Reach:** [LinkedIn search: Oracle Consumer Insights Analytics director](https://www.linkedin.com/search/results/people/?keywords=Oracle%20Consumer%20Insights%20Analytics%20director) · Denver + remote · Target: Director, Consumer Insights & Analytics / Creative Lead
-**Their pain:** Two presentation openings on the insights side says analysis is outrunning the ability to present it. Their own brief names *scalable PowerPoint template systems* — the part everyone underestimates, because a template either survives its first hundred users or quietly falls apart.
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Oracle%20Consumer%20Insights%20Analytics%20director) · Denver and remote · Director, Consumer Insights and Analytics
+
+**The pain:** Two presentation openings on the insights side says the analysis is arriving faster than anyone can present it. Their own brief mentions scalable template systems, which is the part everyone underestimates.
 
 **Note**
-> Your brief asks for scalable PowerPoint template systems — the part everyone underestimates. A template either survives its first hundred users or quietly falls apart, and most fall apart. That's the work I'd want. Worth a conversation?
+> Your brief mentions scalable PowerPoint template systems, which everyone underestimates. A template either survives its first hundred users or quietly falls to bits. Most fall to bits. That's the job I'd actually want. Free to chat?
 
 **Follow-up**
 > Hi [name],
 >
-> Two openings for presentation design on the insights side tells the same story twice: the analysis is outrunning the ability to present it.
+> Two presentation openings on the insights side. Feels like the analysis is arriving faster than anyone can present it.
 >
-> The line in your brief about scalable template systems is the interesting one. Most decks don't fail at the design stage. They fail the day a hundred people start using the template and it quietly comes apart.
+> The line in your brief about scalable template systems is the one that caught me though.
 >
-> Building one that survives that is a different discipline from making slides look good, and it's the piece I'd want to work on with you.
+> Most decks don't fail at the design stage. They fail six months later, once a hundred people have been using the template and it's quietly come apart. Someone's dragged a logo two pixels. Someone's picked a blue that isn't in the palette. Nobody can find the right chart layout so they've built their own.
+>
+> Making one that survives that is a completely different skill from making slides look nice. It's also the more interesting problem.
 >
 > [link]
 
 ---
 
 ### 4 · Momentum Worldwide
-**Reach:** [LinkedIn search: Momentum Worldwide new business creative director](https://www.linkedin.com/search/results/people/?keywords=Momentum%20Worldwide%20new%20business%20creative%20director) · New York · Target: Creative Director / Head of New Business
-**Their pain:** In experiential the idea is rarely the problem. The problem is that the pitch deck gets built at 11pm by people already running live accounts — and clients don't grade on a curve for that.
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Momentum%20Worldwide%20new%20business%20creative%20director) · New York · Creative Director or Head of New Business
+
+**The pain:** The idea is almost never what loses. What loses is the deck getting made at 11pm by people who spent the day running live accounts, and clients don't mark you against how busy you were.
 
 **Note**
-> In experiential the idea is rarely the problem. The problem is the pitch deck gets built at 11pm by people already running live accounts. That's how good ideas lose to better-presented ones. I'm freelance pitch cover.
+> In experiential the idea is rarely what loses. What loses is the deck getting built at 11pm by people already running live accounts. Clients don't mark you on effort. I do pitch overflow. Say the word before the next one.
 
 **Follow-up**
 > Hi [name],
 >
-> In experiential, the idea is usually not what loses. What loses is that the pitch deck gets built at 11pm by the people already running live work.
+> In this business the idea is almost never the thing that loses.
 >
-> Clients don't grade for that. They compare your deck to the one from the agency that happened to have capacity that week.
+> What loses is that the pitch deck got made at 11pm by the same people who spent the day running live accounts. You can see it in the deck. So can the client.
 >
-> I do new-business decks as overflow. You keep the thinking; I make sure the document doesn't lose it on the way to the room.
+> And they're not marking you against how busy you were. They're marking you against the agency that happened to have a quiet week.
 >
-> [link]. One pitch is enough to see whether it helps.
+> I do new business decks as overflow. You keep the thinking. I make sure it survives the trip to the room.
+>
+> [link]
+>
+> One pitch is enough to tell whether it helps.
 
 ---
 
 ### 5 · Prophet
-**Reach:** [LinkedIn search: Prophet design director studio](https://www.linkedin.com/search/results/people/?keywords=Prophet%20brand%20strategy%20design%20director) · SF / NYC / Chicago / London · Target: Design Director / Studio Manager
-**Their pain:** Consulting has an unfair mechanic — the client can't see the thinking, only the document. So slide quality becomes perceived strategy quality, and the slide is usually made by a strategist after midnight.
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Prophet%20brand%20strategy%20design%20director) · SF, NYC, Chicago, London · Design Director or Studio Manager
+
+**The pain:** Clients can't see the thinking, only the document. So how good the slide looks becomes how good the strategy seems, and the slide usually gets made by a strategist at 2am.
 
 **Note**
-> Clients can't see the thinking, only the document — so slide quality becomes perceived strategy quality. Bad trade when the slide gets made by a strategist at 2am. Freelance deck support, in your system, at your standard.
+> Clients never see the thinking. They see the document. So slide quality quietly becomes strategy quality, which is a rough deal when the slide got made by a strategist at 2am. I can take that layer off your hands.
 
 **Follow-up**
 > Hi [name],
 >
-> Consulting has an unfair mechanic built into it: the client can't see the thinking, only the document. So the quality of the slide becomes the perceived quality of the strategy.
+> Consulting has an unfair rule baked into it.
 >
-> Which is a poor trade when the person making the slide is a strategist doing it after midnight because there was nobody else.
+> The client can't see the thinking. They can only see the document. So how good the slide looks becomes how good the strategy seems.
 >
-> I do that layer as freelance capacity — inside your templates, at your standard, so the recommendation lands the way it deserves to.
+> Rough deal, particularly when the person making that slide is a strategist doing it at 2am because there was nobody else left in the building.
+>
+> I take that layer off. Inside your templates, at your standard, so the recommendation lands the way it should have in the first place.
 >
 > [link]
 
 ---
 ---
 
-# Segment C — Recently funded
+# Segment C: the freshly funded
 
-**The rule for all nine:** do not offer a pitch deck. They just finished raising; that job is done for 12–18 months. Every message below sells the thing that breaks *after* the round. Getting this wrong is the fastest way to be ignored by this segment.
+Nine messages, one rule. Do not offer them a pitch deck. They finished that job last month and won't need another for a year. Everything below sells what breaks once the money's in.
 
 ---
 
 ### 36 · Bespoke Labs
-**Reach:** Co-founders **Alex Dimakis** and **Mahesh Sathiamoorthy** · [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Bespoke%20Labs%20founder) · San Francisco · $40M Series A, 6 Jul 2026, Wing VC
-**Their pain:** The deck that raised the round is now being asked to sell. Different reader, different job — investors buy a future, ML teams buy evidence. And their evidence is benchmarks, which is where technical decks fall apart visually.
+**Reach:** Co-founders **Alex Dimakis** and **Mahesh Sathiamoorthy** · [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Bespoke%20Labs%20founder) · San Francisco · $40M Series A, 6 July 2026, led by Wing VC
+
+**The pain:** The deck that raised the round is about to be asked to sell, and the two audiences want opposite things. Investors buy what might happen. ML engineers want the numbers and to be left alone. Their numbers are benchmarks, which is exactly where technical decks fall apart.
 
 **Note**
-> Congrats on the $40M. The deck that raised it is now being asked to sell — different job, different reader. Investors buy a future; ML teams buy the benchmark. Worth a look at what you're sending out now?
+> Congrats on the $40M. Now the deck that raised it has to go and sell, and those two audiences want opposite things. Investors bought the future. ML teams just want the numbers. Want me to look at what's going out?
 
 **Follow-up**
-> Hi Alex / Mahesh,
+> Hi Alex, hi Mahesh,
 >
-> Congratulations on the $40M with Wing in July.
+> Congratulations on the $40M with Wing.
 >
-> The pattern after a Series A is fairly consistent: the fundraising deck gets the ask slide deleted and quietly becomes the sales deck. It rarely works, because investors are buying a future and ML teams are buying evidence.
+> There's a thing that happens after a Series A that I see constantly. Somebody deletes the ask slide off the fundraising deck and it quietly becomes the sales deck. It almost never works, because the two audiences want opposite things. Investors are buying what might happen. ML engineers want to see the numbers and then be left alone.
 >
-> For what you're building, the evidence is the benchmark — and benchmark slides are where most technical decks come apart.
+> For what you're building, the numbers are the benchmarks. And benchmark slides are where most technical decks fall over. Too much data, no argument, and the one result that matters sitting in row four.
 >
-> That's the piece I'd rebuild first. Small scope, fixed price, no commitment beyond it.
+> That's the bit I'd fix first. Small job, fixed price, nothing owed after it.
 >
 > [link]
 
 ---
 
 ### 38 · Maximum
-**Reach:** CEO **Randy Fernando** · [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Randy%20Fernando%20Maximum%20banking) · Miami · $30M Seed, 3 Aug 2026, CRV
-**Their pain:** Replacing a bank core means the buyer is the most risk-averse person in financial services, reading the deck for the reason this becomes their fault. That makes the deck a risk document before it's a product document — and startup decks bury exactly that.
+**Reach:** CEO **Randy Fernando** · [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Randy%20Fernando%20Maximum%20banking) · Miami · $30M Seed, 3 August 2026, led by CRV
+
+**The pain:** Banks aren't asking whether the product is better. They're asking what happens to them personally if it goes wrong. That makes the sales deck a risk document, and most startup decks bury exactly that at the back in small type.
 
 **Note**
-> $30M to replace bank cores — congratulations. The hard part isn't the technology, it's that your buyer reads a deck looking for the reason this becomes their fault. Worth pressure-testing yours against that?
+> $30M to rip out bank cores. Congratulations, and good luck, because your buyer is the most cautious human in financial services and reads decks hunting for the reason this becomes their fault. Want yours stress tested?
 
 **Follow-up**
 > Hi Randy,
 >
-> Congratulations on the $30M with CRV — and on doing this a third time.
+> Congratulations on the $30M with CRV, and on doing this a third time.
 >
-> You'll already know the part that makes this different. A bank buyer isn't really evaluating whether your product is better. They're looking for the reason this becomes their fault.
+> You'll know the bit that makes banks different better than I do. They're not really asking whether your product is better. They're asking what happens to them personally if it goes wrong.
 >
-> That makes the sales deck a risk document more than a product document: security, compliance and migration have to be answered before the roadmap gets a hearing.
+> Which turns your sales deck into a risk document. Security, compliance and migration have to be settled before anyone will look at the roadmap with a straight face.
 >
-> Most startup decks put those at the back, if at all. I'd start there.
+> Most startup decks put all of that at the back in small type, if at all. I'd move it to the front and make it the reason to trust you rather than the fine print.
 >
 > [link]
 
 ---
 
 ### 47 · Edgify
-**Reach:** [LinkedIn search: Edgify head of marketing](https://www.linkedin.com/search/results/people/?keywords=Edgify%20edge%20AI%20marketing) · UK / Israel · $9M Series A+, 10 Aug 2026
-**Their pain:** Expanding beyond retail is a narrative problem before it's a product problem. Retail case studies read to a new-sector buyer as proof you were built for someone else.
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Edgify%20edge%20AI%20marketing) · UK and Israel · $9M Series A+, 10 August 2026
+
+**The pain:** Retail proof reads to a buyer in another sector as evidence you were built for retail and they'll be the awkward experiment. Nobody says that out loud. They just go quiet.
 
 **Note**
-> $9M to take edge AI beyond retail — congrats. The product travels; the deck usually doesn't. Retail proof read by a new sector says "built for someone else." Worth fixing before the first ten meetings, not after?
+> $9M to take edge AI past retail. Congrats. The tech travels fine. The deck usually doesn't. Retail case studies read to a new sector as proof you were built for somebody else. Better fixed before the first ten meetings than after.
 
 **Follow-up**
 > Hi [name],
 >
 > Congratulations on the $9M.
 >
-> Moving into a new vertical is a narrative problem before it's a product one. Your retail proof is real — but a buyer in a different sector reads retail case studies as evidence you were built for someone else.
+> Moving into a new industry is a story problem before it's a product problem.
 >
-> The fix isn't a new deck per industry. It's one architecture where the proof stays put and the framing moves.
+> Your retail proof is real. But a buyer in a different sector reads retail case studies as evidence you were built for retail, and that they'll be the awkward experiment. Nobody ever says that out loud. They just go quiet.
 >
-> That's about two weeks of work, and it is considerably cheaper now than after the first ten conversations go quiet.
+> You don't need a deck per industry, which becomes a maintenance nightmare by industry four. You need one structure where the proof stays put and the framing moves.
+>
+> Two weeks of work, and a lot cheaper now than after ten meetings have gone cold.
 >
 > [link]
 
 ---
 
 ### 48 · Cytix
-**Reach:** CEO **Ben Armstrong** · [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Ben%20Armstrong%20Cytix) · Manchester, UK · $7M Series A, 12 Aug 2026, Northern Gritstone
-**Their pain:** The round is explicitly for moving upmarket. A CISO and a procurement team read a deck completely differently from a mid-market buyer — scanning for risk, evidence and precedent. Decks built for the earlier motion answer the wrong questions in the wrong order.
+**Reach:** CEO **Ben Armstrong** · [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Ben%20Armstrong%20Cytix) · Manchester · $7M Series A, 12 August 2026, led by Northern Gritstone
+
+**The pain:** A CISO and a procurement team aren't looking for what it does. They're looking for what could go wrong, who else has already done it, and whether anyone gets fired. Mid-market decks answer the right questions in the wrong order.
 
 **Note**
-> Congrats on the round — and on saying plainly that it's for moving upmarket. A CISO reads a deck for procurement risk, not features. Mid-market decks rarely survive that jump. Worth a look at what you're sending?
+> Congrats on the round, and on saying plainly it's for moving upmarket. Worth knowing: a CISO reads a deck for procurement risk, not features. Mid market decks rarely survive that jump. Want a second pair of eyes on yours?
 
 **Follow-up**
 > Hi Ben,
 >
 > Congratulations on the round with Northern Gritstone.
 >
-> Moving upmarket is the stated plan, so you may already be feeling the shift. A CISO and a procurement team read a deck completely differently from a mid-market buyer — scanning for risk, for evidence, and for who else has already done this.
+> You've said the money is for moving upmarket, so you may already be bumping into this. A CISO and a procurement team read a deck completely differently from a mid market buyer. They're not looking for what it does. They're looking for what could go wrong, who else has already done it, and whether anybody gets fired.
 >
-> Decks built for the earlier motion rarely survive that transition. Not because they're bad, but because they answer the right questions in the wrong order.
+> Decks built for the earlier motion tend not to survive that jump. Not because they're bad. They answer the right questions in the wrong order, and enterprise buyers stop reading before you get to the good part.
 >
 > Worth fifteen minutes on what's going out at the moment?
 >
@@ -335,179 +390,205 @@ These five are the highest-ROI messages in the pack. You are not selling a servi
 ---
 
 ### 51 · June AI
-**Reach:** [LinkedIn search: June AI founder](https://www.linkedin.com/search/results/people/?keywords=June%20AI%20founder%20enterprise%20agents) · New York · $20M Pre-seed, Aug 2026, TIME Ventures / Michael Dell / Diane Greene / Aaron Levie
-**Their pain:** Out of stealth with a cap table people screenshot. Every enterprise buyer who hears the name goes looking within the week, and whatever exists at that moment becomes their read on how serious this is. That window doesn't reopen.
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=June%20AI%20founder%20enterprise%20agents) · New York · $20M Pre-seed, August 2026, led by TIME Ventures, with Michael Dell, Diane Greene and Aaron Levie
+
+**The pain:** They came out of stealth with a cap table people screenshot. Every enterprise buyer who hears the name goes looking within the week, and whatever they find becomes the answer to how serious this is. That window opens once.
 
 **Note**
-> Out of stealth with $20M and a cap table people will screenshot. Every enterprise buyer will now go looking — and find whatever's there today. First impressions like that happen once. Worth getting it right this month?
+> Out of stealth with $20M and a cap table people screenshot. Every enterprise buyer is about to go looking, and they'll find whatever's up there today. That first look only happens once. It's a this month job.
 
 **Follow-up**
 > Hi [name],
 >
-> Congratulations on coming out of stealth. TIME Ventures, Michael Dell, Diane Greene and Aaron Levie is a cap table that does a lot of work for you before you say anything.
+> Congratulations on coming out of stealth. TIME Ventures, Michael Dell, Diane Greene, Aaron Levie. That list does a lot of talking before you open your mouth.
 >
-> It also sets an expectation. Enterprise buyers who hear the name will go looking within the week, and whatever exists at that moment becomes their read on how serious this is.
+> It also sets a bar. Anyone in enterprise who hears the name is going looking within the week, and whatever they find becomes their answer to how serious this is.
 >
-> That window is short and it doesn't reopen. I'd rather help you use it than watch it pass.
+> You get one shot at that, and it's happening right now rather than next quarter.
 >
-> [link] — happy to start with the single asset you'll end up sending most often.
+> I'd rather help you use the window than watch it close.
+>
+> [link]
+>
+> Start me on the one thing you'll end up sending most often.
 
 ---
 
 ### 52 · Alloy Robotics
-**Reach:** [LinkedIn search: Alloy Robotics founder](https://www.linkedin.com/search/results/people/?keywords=Alloy%20Robotics%20founder) · Sydney → US · $8M Seed, 11 Aug 2026, Square Peg
-**Their pain:** Everything that carried them in Australia — reputation, warm intros, people knowing the founders — resets to zero at the US border. What travels is the document. And their buyer is a robotics engineer, the least marketing-tolerant reader there is.
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Alloy%20Robotics%20founder) · Sydney, moving into the US · $8M Seed, 11 August 2026, led by Square Peg
+
+**The pain:** Everything that carried them in Australia resets at the border. Nobody's heard of them, nobody owes them an intro. What crosses over is the document, and their reader is a robotics engineer, roughly the least marketing tolerant audience alive.
 
 **Note**
-> $8M and a move from Sydney to the US — congrats. Reputation and warm intros don't cross the border; the document does. And robotics engineers close anything that reads like marketing. Worth solving before you land?
+> $8M and a move from Sydney to the States. Congrats. Reputation and warm intros don't clear customs. The document does. And robotics engineers shut anything that smells like a brochure. Worth sorting before you land?
 
 **Follow-up**
 > Hi [name],
 >
 > Congratulations on the $8M with Square Peg.
 >
-> US expansion out of Australia has a specific problem attached. Everything that carried you at home — reputation, warm intros, people already knowing the founders — resets to zero at the border.
+> Expanding out of Australia has one brutal quirk. Everything that carried you at home resets at the border. Nobody's heard of you, nobody owes you an intro, nobody knows the founders.
 >
-> What travels is the document. And your reader is a robotics engineer, which means anything that smells like marketing gets closed in about four seconds.
+> What crosses over is the document.
 >
-> The version that works for them looks closer to a technical brief with real telemetry in it than a startup pitch. That's what I'd build.
+> And your reader is a robotics engineer, which is about the least marketing tolerant audience on earth. Anything that sounds like a brochure gets closed in four seconds.
+>
+> What works on them looks closer to a technical brief with real telemetry in it than a startup pitch. Fewer adjectives, more logs.
+>
+> That's the version I'd build.
 >
 > [link]
 
 ---
 
 ### 53 · Reservoir
-**Reach:** CEO **Luke Winston-Almanzar** (co-founders Gabriel Parisi-Amon, Jake Felser) · [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Luke%20Winston-Almanzar%20Reservoir) · Charlestown, MA · $8M Seed, 12 Aug 2026, Asymmetric Capital Partners
-**Their pain:** Around 100 units installed in the Boston area — most of those conversations still had a founder near them. The next thousand run through installers, utility partners and homeowners, each needing a different version of the same argument. That's three documents, not one.
+**Reach:** CEO **Luke Winston-Almanzar**, with co-founders Gabriel Parisi-Amon and Jake Felser · [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Luke%20Winston-Almanzar%20Reservoir) · Charlestown, MA · $8M Seed, 12 August 2026, led by Asymmetric Capital Partners
+
+**The pain:** A hundred units in Boston means a founder was probably standing near most of those conversations. The next thousand go through installers, utilities and homeowners, who all want completely different things.
 
 **Note**
-> ~100 units around Boston, then $8M to go much wider. The next thousand get sold by installers and utility partners, not by you — and they need something to leave behind. Cheaper to build before the scale-up than during.
+> Roughly 100 units around Boston, then $8M to go much wider. The next thousand get sold by installers and utility folks, not by you. They'll need something to hand over. Easier to build now than mid scale up.
 
 **Follow-up**
 > Hi Luke,
 >
 > Congratulations on the $8M with Asymmetric.
 >
-> Around a hundred units in the Boston area means most of those conversations still had a founder or an early employee somewhere near them. The next thousand won't. They'll run through installers, utility partners and homeowners who each need a different version of the same argument.
+> A hundred units around Boston probably means you or someone early was still standing fairly close to most of those conversations.
 >
-> That's three documents, not one: a utility partner deck, an installer leave-behind, and something a homeowner will actually read.
+> The next thousand won't be. They go through installers, utility partners and homeowners, and those three want completely different things. The utility cares about grid load. The installer cares how long it takes to fit. The homeowner cares about the bill and whether their shower goes cold.
 >
-> Much cheaper to build now than to retrofit once the crews are already in the field.
+> That's three documents, not one deck doing an impression of three.
+>
+> Much easier to build now than to retrofit once the crews are already out there improvising.
 >
 > [link]
 
 ---
 
 ### 56 · Inevitable AI Group
-**Reach:** [LinkedIn search: Inevitable AI Group venture studio](https://www.linkedin.com/search/results/people/?keywords=Inevitable%20AI%20Group%20venture%20studio) · Tel Aviv · $6M Pre-seed, Aug 2026
-**Their pain:** A studio doesn't have a deck problem — it has the same deck problem on repeat, forever. The cost isn't any single deck; it's rebuilding the wheel with every solo founder they back. **This is your highest repeat-value prospect in the segment.**
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Inevitable%20AI%20Group%20venture%20studio) · Tel Aviv · $6M Pre-seed, August 2026
+
+**The pain:** Most companies need a deck twice a year. A studio needs one every time it launches, which means the deck isn't the expensive part. Rebuilding the same wheel with every founder they back is, slightly worse each time because everyone's in a rush. **Your best repeat customer on the whole list.**
 
 **Note**
-> A studio doesn't have a deck problem — it has the same one on repeat, with every founder, forever. Solving it once as a system beats solving it eleven times. Worth a conversation about how you'd want that built?
+> Most companies need a deck twice a year. A studio needs one every time it launches, forever. Solving that once as a kit beats solving it eleven separate times. How would you want it built?
 
 **Follow-up**
 > Hi [name],
 >
 > Congratulations on the $6M.
 >
-> Most companies need a deck once or twice a year. A studio needs one every time it launches — so the real cost isn't any single deck, it's rebuilding the wheel with every solo founder you back.
+> Most companies need a deck once or twice a year. You need one every time you launch something. So the deck isn't really the cost. Rebuilding the same wheel with every solo founder you back is, slightly worse each time because everybody's in a hurry.
 >
-> The version that scales is a system: a narrative structure and a design kit each new company inherits on day one, so their first deck starts at good instead of blank.
+> The version that scales is a kit. A narrative structure and a design system every new company inherits on day one, so their first deck starts at decent instead of blank.
 >
-> Built once, used indefinitely. That's the conversation I'd like to have.
+> Build it once. Use it for years.
+>
+> That's the conversation I'd like to have.
 >
 > [link]
 
 ---
 
 ### 57 · BioScout
-**Reach:** Founder & CEO **Dr. Lewis Collins** · [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Lewis%20Collins%20BioScout) · Sydney · A$6.75M Seed, Aug 2026 · Scaling 250 → 1,000 sensors, entering Europe and Brazil
-**Their pain:** Scaling sensors is an operations problem. Entering Europe and Brazil is a communication problem. Growers are practical buyers who want the yield case in their own crop, language and units — and Australian proof, however strong, reads as someone else's farm.
+**Reach:** Founder and CEO **Dr. Lewis Collins** · [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Lewis%20Collins%20BioScout) · Sydney · A$6.75M Seed, August 2026 · Going from 250 sensors to 1,000, and into Europe and Brazil
+
+**The pain:** Scaling sensors is an operations job. Getting into Europe and Brazil is a communication job. Growers want the yield case in their crop, their language and their units, and an Australian case study reads as somebody else's farm in somebody else's weather.
 
 **Note**
-> Congrats on the raise — 250 sensors to 1,000, plus Europe and Brazil. A grower in Bahia won't read a Sydney deck: different crop, different units, someone else's farm. That translation is the unglamorous half of expansion.
+> Congrats on the raise. 250 sensors to 1,000, plus Europe and Brazil. A grower in Bahia isn't going to read a Sydney deck. Different crop, different units, someone else's weather. That translation is the boring half of expansion.
 
 **Follow-up**
 > Hi Lewis,
 >
-> Congratulations on the round, and on the Hort Innovation and GrainCorp backing — that's hard-won credibility in agriculture.
+> Congratulations on the round, and on getting Hort Innovation and GrainCorp behind you. That's credibility you can't buy in agriculture.
 >
-> Two things about the next phase are worth separating. Scaling from 250 sensors to 1,000 is an operations problem. Entering Europe and Brazil is a communication one.
+> Two very different things are about to happen though, and it's worth keeping them apart.
 >
-> Growers are practical buyers. They want the yield case in their own crop, their own language and their own units — and the Australian proof, however strong, reads as someone else's farm.
+> Going from 250 sensors to 1,000 is an operations job.
 >
-> That's a specific piece of work, and far easier before a season than in the middle of one.
+> Getting into Europe and Brazil is a communication job.
+>
+> Growers are practical people. They want the yield case in their crop, their language and their units. An Australian case study reads to them as somebody else's farm in somebody else's weather, and it doesn't matter how good the science underneath it is.
+>
+> That's a specific piece of work, and far easier before a season than halfway through one.
 >
 > [link]
 
 ---
 ---
 
-# Segment D — Accelerators & fund managers
+# Segment D: accelerators and fund managers
 
-**The rule for all three:** lead by giving. Two of these three end with an offer of free work, because the referral is worth vastly more than the first project.
+Three messages. Two of them end by offering free work, on purpose. The referral is worth far more than the first project, and giving first is the only thing that reliably earns it.
 
 ---
 
-### 67 · Y Combinator — *target the S26 batch founders, not YC*
-**Reach:** [LinkedIn search: Y Combinator S26 founder](https://www.linkedin.com/search/results/people/?keywords=Y%20Combinator%20S26%20founder) · Also the public YC S26 company directory · **Demo Day: 10 September 2026**
-**Their pain:** One to two minutes in front of ~1,000 investors. At that length nobody follows an argument — they read three slides while half-listening and decide whether to take the meeting. The deck isn't support material, it's most of the available bandwidth.
+### 67 · Y Combinator, aimed at the S26 founders rather than YC
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Y%20Combinator%20S26%20founder), plus the public S26 company directory · **Demo Day is 10 September 2026**
+
+**The pain:** One to two minutes in front of a thousand investors. Nobody follows an argument at that speed. They skim three slides while half listening and decide whether to take the meeting.
 
 **Note**
-> Demo Day is 10 September. One to two minutes, a thousand investors, and your slides carry more of the message than you do. Three weeks is enough to fix a deck properly. It isn't enough to fix one late.
+> Demo Day is 10 September. One or two minutes, a thousand investors, and your slides do more talking than you do. Three weeks is plenty of time to fix a deck. Three days isn't.
 
 **Follow-up**
 > Hi [name],
 >
-> Demo Day is 10 September and you get one to two minutes.
+> Demo Day is 10 September and you get somewhere between one and two minutes.
 >
-> At that length nobody is following an argument. They're reading three slides while half-listening, deciding whether to take the meeting.
+> Nobody is following an argument at that speed. They're skim reading three slides while half listening to you, deciding whether to take the meeting. Your slides are carrying most of the message whether you like it or not.
 >
-> The failure mode is almost always identical: too much on the slide, and the one number that matters buried in the middle of it.
+> The failure is almost always identical. Too much on the slide, and the one number that would have got you the meeting sitting in the middle of a paragraph.
 >
-> That's a fixable problem and a short one. Fixed price, done well before the day rather than the night before.
+> Fixable, and quick. Fixed price, and done well before the day rather than the night before while you're also trying to rehearse.
 >
 > [link]
 
 ---
 
 ### 68 · Techstars
-**Reach:** [LinkedIn search: Techstars Managing Director](https://www.linkedin.com/search/results/people/?keywords=Techstars%20Managing%20Director) · Per-city programme · **Tokyo kicked off 17 Aug 2026, Demo Day 10 Nov 2026**
-**Their pain:** Around week eight, founders stop talking to customers and start fighting with slides. It costs them the most valuable weeks of the programme, and the deck usually still isn't good.
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Techstars%20Managing%20Director), by city programme · **Tokyo kicked off 17 August 2026, Demo Day 10 November**
+
+**The pain:** Around week eight the founders stop talking to customers and start fighting with slides. It eats the most valuable weeks of the programme and the deck usually still isn't good at the end.
 
 **Note**
-> Tokyo kicked off on the 17th; Demo Day is 10 November. Somewhere around week eight founders stop talking to customers and start fighting with slides. I'd rather they didn't. Worth being a name you hand them?
+> Tokyo kicked off on the 17th, Demo Day is 10 November. Somewhere around week eight founders stop talking to customers and start fighting PowerPoint. Seems a waste of a good programme. Want a name you can hand them?
 
 **Follow-up**
 > Hi [name],
 >
-> Tokyo started on the 17th and Demo Day is 10 November — and you've watched this pattern more times than I have.
+> Tokyo started on the 17th, Demo Day is 10 November, and you've watched this film more times than I have.
 >
-> Somewhere around week eight, founders stop talking to customers and start fighting with slides. It costs them the most valuable weeks of the programme, and the deck usually still isn't good at the end of it.
+> Around week eight the founders stop talking to customers and start fighting with slides. It eats the most valuable weeks of the whole programme, and the deck usually still isn't good at the end of it.
 >
-> I'd like to be the name you hand them when that starts. Fast, founder-priced, and I don't take over the story — I make theirs legible.
+> I'd like to be the name you hand them when that starts. Quick, priced for founders, and I don't hijack the story. I just make theirs readable.
 >
-> Happy to do one cohort deck free so you can judge it properly rather than take my word for it.
+> Happy to do one cohort deck free so you can judge it properly instead of taking my word for it.
 >
 > [link]
 
 ---
 
-### 69 · Decile Group / VC Lab
-**Reach:** [LinkedIn search: VC Lab Decile Group programme](https://www.linkedin.com/search/results/people/?keywords=VC%20Lab%20Decile%20Group) · Remote · 34 active Fund I/II/III vehicles, $280M+ combined AUM
-**Their pain:** Their cohort is raising into the tightest LP market in a decade. First-time GPs build the LP deck like a startup deck — vision first, proof later. Institutional LPs read in the opposite order. That's a structural fix, and it applies to every manager in the programme at once.
+### 69 · Decile Group and VC Lab
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=VC%20Lab%20Decile%20Group) · Remote · 34 active Fund I, II and III vehicles, $280M+ between them
+
+**The pain:** Their whole cohort is raising into the tightest LP market in a decade, and most first time GPs build the LP deck like a startup deck. Vision up front, proof later. LPs read in the opposite order and have usually decided by slide four.
 
 **Note**
-> 177 emerging-manager funds closed this year, the fewest since 2015. First-time GPs pitch LPs with startup-shaped decks — vision first, proof later. LPs read the other way round. Worth talking about what your cohort is sending?
+> 177 emerging manager funds closed this year, fewest since 2015. Most first time GPs build the LP deck like a startup deck. Vision first, proof later. LPs read it the other way round. Curious what your cohort is sending.
 
 **Follow-up**
 > Hi [name],
 >
-> 177 emerging-manager funds closed in the year to 2026, the fewest since 2015, and the median US fund is down around $15M. Your cohort is raising into the tightest LP market in a decade.
+> 177 emerging manager funds closed in the year to 2026. Fewest since 2015. Median US fund down to around $15M.
 >
-> Most first-time GPs build the LP deck the way they'd build a startup deck: vision first, proof later. Institutional LPs read in the opposite order — track record, thesis discipline, why you, then everything else.
+> Your cohort is raising into the tightest LP market in a decade, which means the deck is doing more work than it has in years.
 >
-> That's a structural fix rather than a design one, and it applies to every manager in the programme.
+> Most first time GPs build it like a startup deck. Vision up front, proof somewhere later. Institutional LPs read in the opposite order. Track record, thesis discipline, why you specifically, then everything else. If those aren't in the first few slides they've already made up their mind.
+>
+> That's a structural fix rather than a design one, and it applies to every manager in your programme at once.
 >
 > Happy to do one teardown free so you can see whether it's worth putting in front of them.
 >
@@ -516,132 +597,147 @@ These five are the highest-ROI messages in the pack. You are not selling a servi
 ---
 ---
 
-# Segment E — Events
+# Segment E: events
 
-**Timing note:** both of these are live *now* because sponsorship budgets are being allocated for 2027. Six weeks before either event, nobody will read you.
+Both are live right now because 2027 budgets are being carved up. Six weeks before either event, nobody will read a word you send.
 
 ---
 
 ### 77 · RSAC Conference
-**Reach:** [rsaconference.com/about/sponsorship-opportunities](https://www.rsaconference.com/about/sponsorship-opportunities) — reps assigned by company-name range (A–F, G–R, S–Z) · [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=RSAC%20Conference%20sponsorship%20sales) · **RSAC 2027: 5–8 April 2027, Moscone Center**
-**Their pain:** The prospectus isn't describing an event — it's competing for the same budget line as four other security conferences. The ones that win read like a business case, not a rate card with tiers. And almost nobody builds the post-event recap that actually decides renewal.
+**Reach:** [rsaconference.com/about/sponsorship-opportunities](https://www.rsaconference.com/about/sponsorship-opportunities), where reps are split by company name, A to F, G to R, S to Z · [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=RSAC%20Conference%20sponsorship%20sales) · **RSAC 2027 runs 5 to 8 April at Moscone**
+
+**The pain:** The prospectus has a harder job than it looks. It's competing for the same budget line as four other security conferences, all claiming great audiences. And almost nobody builds the post event recap that decides renewal.
 
 **Note**
-> RSAC 2027 sponsorship is open, which means vendors are allocating now and closed for the year after. A prospectus isn't describing an event — it's competing for one budget line against four other shows. Worth strengthening while they're deciding?
+> RSAC 2027 sponsorship is open, so vendors are allocating now and locked for the year after. That prospectus is fighting four other security shows for one budget line. Worth strengthening while they're still deciding?
 
 **Follow-up**
 > Hi [name],
 >
-> Sponsorship for April 2027 is open now, which means vendors are allocating over the next few months and will be closed for the year after that.
+> Sponsorship for April 2027 is open, which means vendors are carving up budget over the next few months and then shut for the year.
 >
-> A prospectus is doing something harder than it looks. It isn't describing the event — it's competing for the same budget line as four other security conferences.
+> A prospectus has a harder job than it looks. It isn't really describing your event. It's competing for the same budget line as four other security conferences, most of which will also promise a great audience and great visibility.
 >
-> The ones that win read like a business case: audience, proof, and precisely what the sponsor walks away with. The ones that don't read like a rate card with tiers on it.
+> The ones that win read like a business case. Who's actually in the room, what proof you've got, and what the sponsor walks away holding. The ones that don't read like a menu with tiers on it.
 >
-> There's also the piece almost nobody builds — the post-event recap that decides whether they come back. Happy to talk about either.
+> There's also the thing almost nobody bothers building. The post event recap that decides whether they come back next year. That one is usually a screenshot of a dashboard and an apology.
+>
+> Either of those is worth a conversation.
 >
 > [link]
 
 ---
 
-### 78 · NHIA — National Home Infusion Association
-**Reach:** **Andrea Schermerhorn**, Sr. Sales Manager — `nhia@discoversb.com` · (301) 658-2042 · [Conference site](https://conference.nhia.org/) · **2026 exhibit hall sold out; 2027 booths not yet on sale**
-**Their pain:** Selling out is a demand signal, and it usually means the floor was underpriced or under-packaged. The standard response is to reprint last year's prospectus with new dates — which leaves the upside on the table for another twelve months.
+### 78 · NHIA, the National Home Infusion Association
+**Reach:** **Andrea Schermerhorn**, Sr. Sales Manager, `nhia@discoversb.com`, (301) 658-2042 · [Conference site](https://conference.nhia.org/) · **2026 hall sold out, 2027 booths not on sale yet**
+
+**The pain:** Selling out usually means the floor was priced or packaged below what the market would pay. The standard reaction is to change the dates on last year's prospectus and run it again, which leaves that money sitting there for another year.
 
 **Note**
-> Congratulations on selling out the 2026 hall. Sold out is usually a pricing signal, not just a good year — and most shows answer it by reprinting last year's prospectus. Worth doing something better before 2027 booths go on sale?
+> Congratulations on selling out the 2026 hall. Selling out is usually a pricing signal, not just a good year. Most shows answer it by reprinting last year's prospectus with new dates. Worth doing better before 2027 booths open?
 
 **Follow-up**
 > Hi Andrea,
 >
-> Congratulations on selling out the 2026 exhibit hall.
+> Congratulations on selling out the 2026 exhibit hall. Good problem, and a rare one.
 >
-> Selling out is a demand signal, and it usually means the floor was underpriced or under-packaged. The common response is to reprint last year's prospectus with new dates — which quietly leaves that upside on the table for another year.
+> It's also a signal. Selling out usually means the floor was priced or packaged below what the market would happily pay. The standard reaction is to change the dates on last year's prospectus and run it again, which quietly leaves that money on the table for another twelve months.
 >
-> The alternative is a 2027 prospectus built to sell up: clearer tiers, a genuine premium option, and the sold-out story used as proof rather than a footnote.
+> The other option is a 2027 prospectus built to sell up. Clearer tiers, a genuine premium option at the top, and the sold out story used as proof rather than a line in the intro.
 >
-> Small project, fairly direct revenue answer. Worth fifteen minutes before booths go on sale?
+> Small project, fairly direct answer in revenue.
+>
+> Worth fifteen minutes before booths go on sale?
 >
 > [link]
 
 ---
 ---
 
-# Segment F — Esports
+# Segment F: esports
 
-**Handle these three carefully.** Losing a partner programme is a sore subject and everyone in the org knows it. Never frame it as their failure or imply they're struggling. Frame it as *the market moved* — which is true, and is the actual insight: non-endemic brands now dominate esports spend, and they read a deck like marketers, not fans.
+Handle these three gently. Losing a partner programme stings and everyone inside the org knows it. Never frame it as their failure and never hint that they're struggling. Frame it as the market moving, which is true, and is the actual insight. Non-endemic brands hold the budget now, and they read a deck like marketers, not like fans.
 
 ---
 
 ### 87 · FaZe Clan
-**Reach:** [LinkedIn search: FaZe Clan partnerships](https://www.linkedin.com/search/results/people/?keywords=FaZe%20Clan%20head%20of%20partnerships) · Target: Head of Partnerships / CRO · Out of the EWC 2026 Club Partner Programme (~Apr 2026)
-**Their pain:** A guaranteed line became a commercial one, and the brands with budget now are largely non-endemic. A brand marketer doesn't buy trophies or roster history — they buy a defined audience and a campaign they can explain to their own CMO. Most esports decks are still written for fans.
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=FaZe%20Clan%20head%20of%20partnerships) · Head of Partnerships or CRO · Out of the EWC 2026 Club Partner Programme since around April
+
+**The pain:** A brand marketer isn't buying trophies or roster history. They have a campaign to run and a CMO to explain it to. Most esports decks are still written for fans and now sit in the same inbox as decks from traditional sports properties chasing the same money.
 
 **Note**
-> The 2026 partner programme reshuffled and the budget now sits with non-endemic brands — who read a deck like marketers, not fans. Most esports sales decks still talk to fans. Worth a look at what yours is doing?
+> The 2026 partner programme reshuffled and the money now sits with non endemic brands, who read a deck like marketers rather than fans. Most esports decks still talk to fans. Curious what yours currently says.
 
 **Follow-up**
 > Hi [name],
 >
-> The 2026 partner-programme changes moved a guaranteed line into a commercial one, and the brands holding budget now are largely non-endemic.
+> With the 2026 partner programme changes, more of the revenue has to come straight from brands now. And the brands holding budget in esports these days are mostly non endemic.
 >
-> That changes what the deck has to do. A brand marketer isn't buying trophies or roster history. They're buying a defined audience, attention they can't get cheaper elsewhere, and a campaign they can explain to their own CMO without translating it.
+> That changes the job of the deck completely.
 >
-> Most esports sales decks are still written for fans. Yours is competing with traditional sports properties for the same money and should read like one.
+> A brand marketer isn't buying trophies or roster history. They've got a campaign to run and a CMO to explain it to. They want a defined audience, attention they can't buy cheaper somewhere else, and a mechanic they can describe internally in one sentence.
 >
-> Happy to rebuild a single section and show you the difference before you commit to anything.
+> Most esports sales decks are still written for fans. Loud, beautiful, full of moments. And they're now landing in the same inbox as decks from traditional sports properties going after the same money.
+>
+> I'll rebuild one section and show you the difference, before you commit to anything.
 >
 > [link]
 
 ---
 
 ### 88 · Karmine Corp
-**Reach:** [LinkedIn search: Karmine Corp partnerships](https://www.linkedin.com/search/results/people/?keywords=Karmine%20Corp%20partnerships) · France · Target: Head of Partnerships · Out of the EWC 2026 Club Partner Programme
-**Their pain:** They have the rare asset — a fanbase most properties would pay for. The gap is translation: an audience everyone inside esports understands, presented to a brand marketer in Paris or Munich who needs it in their own terms, in their own language.
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=Karmine%20Corp%20partnerships) · France · Head of Partnerships · Out of the EWC 2026 Club Partner Programme
+
+**The pain:** They have the thing most properties would pay to borrow, a fanbase that genuinely turns up. The gap is translation. Everyone inside esports understands what KC means. A brand marketer in Paris or Munich doesn't, and needs it in their own terms before it reaches a budget holder.
 
 **Note**
-> One of the biggest fanbases in European esports, now needing to convert directly into brand revenue. Non-endemic marketers buy audience data, not passion — and they buy it in their own language. Worth a look at what you're sending?
+> One of the biggest fanbases in European esports, now having to convert straight into brand money. Non endemic marketers buy audience data, not passion, and they buy it in their own language. Curious what's in yours right now.
 
 **Follow-up**
 > Hi [name],
 >
 > With the 2026 programme changes, more of the revenue now has to come directly from brand partners.
 >
-> You have the rare thing: a fanbase most properties would pay to borrow. The gap is usually translation — an audience everyone inside esports already understands, presented to a brand marketer in Paris or Munich who needs it in their terms.
+> You've got the thing most properties would pay to borrow. A fanbase that genuinely turns up.
 >
-> In practice that means audience data before roster, campaign mechanics before culture, and a version in each language that reads natively rather than translated.
+> The gap is usually translation. Everyone inside esports understands what KC means. A brand marketer in Paris or Munich doesn't, and they need it in their terms before they'll take it anywhere near a budget holder.
 >
-> I'd start with one deck and one one-pager.
+> In practice that means audience data before roster, campaign mechanics before culture, and a version in each language that reads like it was written there rather than run through a translator.
+>
+> I'd start with one deck and one pager and see how it lands.
 >
 > [link]
 
 ---
 
 ### 89 · LOUD
-**Reach:** [LinkedIn search: LOUD esports partnerships](https://www.linkedin.com/search/results/people/?keywords=LOUD%20esports%20partnerships) · Brazil · Target: Head of Partnerships · Out of the EWC 2026 Club Partner Programme
-**Their pain:** Their real asset is a creator-led audience with reach most Brazilian media properties can't match — exactly what non-endemic brands are buying. But creator reach is fragmented across people and platforms, and most decks show it as a logo wall instead of an audience.
+**Reach:** [LinkedIn search](https://www.linkedin.com/search/results/people/?keywords=LOUD%20esports%20partnerships) · Brazil · Head of Partnerships · Out of the EWC 2026 Club Partner Programme
+
+**The pain:** Creator reach is genuinely hard to show. It's spread across a lot of people and a lot of platforms, and most decks give up and put a wall of logos on a slide, which proves nothing to a brand.
 
 **Note**
-> Brazil's biggest esports audience is creator-led — exactly what non-endemic brands are buying, and exactly what most esports decks fail to prove. Fragmented reach shown as a logo wall isn't an audience. Worth a look at yours?
+> Brazil's biggest esports audience is creator led, which is exactly what non endemic brands want and exactly what most decks fail to prove. A wall of logos isn't an audience. I could show you the difference on one section.
 
 **Follow-up**
 > Hi [name],
 >
-> With the 2026 partner programme reshuffled, the commercial deck is doing more of the work.
+> With the partner programme reshuffled for 2026, the commercial deck has to work harder than it used to.
 >
-> LOUD's real asset isn't the roster. It's a creator-led audience with reach most Brazilian media properties can't match — which is precisely what non-endemic brands are buying right now.
+> LOUD's real asset was never the roster. It's a creator led audience with reach most Brazilian media companies would struggle to match, which happens to be exactly what non endemic brands are shopping for right now.
 >
-> The problem is that creator reach is hard to present. It's fragmented across people and platforms, and most decks end up showing it as a logo wall instead of an audience.
+> The trouble is that creator reach is genuinely hard to show. It's spread across a lot of people and a lot of platforms, and most decks give up and put a wall of logos on a slide, which proves nothing.
 >
-> Turning that into one clear picture, in Portuguese and English, is the job. Happy to do a section as proof.
+> Turning that into one clear picture, in Portuguese and English, is the actual job.
+>
+> I'll do a section as proof first, so you're not committing to anything.
 >
 > [link]
 
 ---
 ---
 
-## Sequencing reminder
+## Order of play
 
-Send in the order above. Weeks 1–2 are Segments B and A — ten messages, the two segments where nobody needs convincing that presentation design is worth paying for. Segment C is time-sensitive and should go out inside six weeks of each announcement. Segments D, E and F are calendar-driven; diary them.
+Send in the order above. Weeks one and two are Segments B and A, ten messages, the two groups where nobody needs persuading that this work is worth paying for. Segment C is perishable, so get those out inside six weeks of each announcement. D, E and F run on calendars, so diary them rather than blitzing them.
 
-Follow-up cadence, pricing anchors and objection handling are in [01-outreach-playbook.md](01-outreach-playbook.md).
+Follow-up timings, pricing and what to say when they push back are all in [01-outreach-playbook.md](01-outreach-playbook.md).
