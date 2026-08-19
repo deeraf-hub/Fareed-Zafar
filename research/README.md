@@ -12,6 +12,8 @@
 | **[02-prospect-list.md](02-prospect-list.md)** | The 100 prospects, grouped into 7 segments. Each one has a **buying trigger with a date and a source**, what to sell, and who to contact. |
 | **[prospects.csv](prospects.csv)** | The same 100, CRM-ready. Import into a sheet or CRM and work it top-down. |
 | **[04-outreach-messages.md](04-outreach-messages.md)** | A tailored message set for each of the 27 high-priority prospects: where to reach them, the pain to hit, a LinkedIn connection note under 300 characters, and the day-+3 follow-up. |
+| **[05-email-campaign.md](05-email-campaign.md)** | Email outreach for the 105-company list you supplied. Tiered by whether cold email can actually reach a buyer, with 16 per-company emails, subject lines, real published addresses, and the compliance rules for emailing US, UK and EU organisations. |
+| **[top-100-leads-scored.xlsx](top-100-leads-scored.xlsx)** | Your original spreadsheet with six columns added: verdict, published emails found, in-house team evidence, 2026 trigger, evidence quality, and the action to take. Colour coded. |
 | **[03-sources.md](03-sources.md)** | Every source URL used, grouped by segment, so you can re-verify before you send. |
 | **[Prospect-Outreach-Pack.pdf](Prospect-Outreach-Pack.pdf)** | The playbook and the full prospect directory as one designed, print-ready 28-page PDF. Ends with a tick-box worksheet of the 27 prospects to contact this week. |
 | **[build-pdf.py](build-pdf.py)** | Regenerates the PDF from `prospects.csv`. Edit the CSV, run `python3 build-pdf.py`, and the PDF rebuilds. |
