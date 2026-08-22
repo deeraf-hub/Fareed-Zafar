@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Post Planner - Social Media Scheduler</title>
+<!-- Tailwind styles are built into this file, so it works even without internet -->
+<style>*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.sticky{position:sticky}.inset-0{inset:0}.top-0{top:0}.top-\[104px\]{top:104px}.z-30{z-index:30}.z-50{z-index:50}.mx-1{margin-left:.25rem;margin-right:.25rem}.mx-auto{margin-left:auto;margin-right:auto}.my-4{margin-top:1rem;margin-bottom:1rem}.my-8{margin-top:2rem;margin-bottom:2rem}.mb-0\.5{margin-bottom:.125rem}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.ml-1{margin-left:.25rem}.ml-auto{margin-left:auto}.mr-2{margin-right:.5rem}.mt-2{margin-top:.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.grid{display:grid}.hidden{display:none}.h-1\.5{height:.375rem}.h-10{height:2.5rem}.h-2{height:.5rem}.h-2\.5{height:.625rem}.h-3{height:.75rem}.h-6{height:1.5rem}.h-8{height:2rem}.h-9{height:2.25rem}.max-h-\[45vh\]{max-height:45vh}.min-h-\[120px\]{min-height:120px}.w-1\.5{width:.375rem}.w-2{width:.5rem}.w-2\.5{width:.625rem}.w-3{width:.75rem}.w-48{width:12rem}.w-64{width:16rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-full{width:100%}.w-px{width:1px}.min-w-0{min-width:0}.min-w-\[170px\]{min-width:170px}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-\[120px\]{max-width:120px}.max-w-\[160px\]{max-width:160px}.max-w-\[320px\]{max-width:320px}.max-w-lg{max-width:32rem}.max-w-xl{max-width:36rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.cursor-pointer{cursor:pointer}.resize{resize:both}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-7{grid-template-columns:repeat(7,minmax(0,1fr))}.flex-wrap{flex-wrap:wrap}.place-items-center{place-items:center}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-0\.5{gap:.125rem}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem*var(--tw-space-y-reverse))}.space-y-1\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.375rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.375rem*var(--tw-space-y-reverse))}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.overflow-auto{overflow:auto}.overflow-hidden,.truncate{overflow:hidden}.truncate{text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-sm{border-radius:.125rem}.rounded-xl{border-radius:.75rem}.rounded-b-2xl{border-bottom-right-radius:1rem;border-bottom-left-radius:1rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-l{border-left-width:1px}.border-r{border-right-width:1px}.border-t{border-top-width:1px}.border-red-300{--tw-border-opacity:1;border-color:rgb(252 165 165/var(--tw-border-opacity,1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249/var(--tw-border-opacity,1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240/var(--tw-border-opacity,1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225/var(--tw-border-opacity,1))}.border-slate-400{--tw-border-opacity:1;border-color:rgb(148 163 184/var(--tw-border-opacity,1))}.bg-amber-100{--tw-bg-opacity:1;background-color:rgb(254 243 199/var(--tw-bg-opacity,1))}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11/var(--tw-bg-opacity,1))}.bg-black\/50{background-color:rgba(0,0,0,.5)}.bg-emerald-100{--tw-bg-opacity:1;background-color:rgb(209 250 229/var(--tw-bg-opacity,1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255/var(--tw-bg-opacity,1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229/var(--tw-bg-opacity,1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249/var(--tw-bg-opacity,1))}.bg-slate-200{--tw-bg-opacity:1;background-color:rgb(226 232 240/var(--tw-bg-opacity,1))}.bg-slate-300{--tw-bg-opacity:1;background-color:rgb(203 213 225/var(--tw-bg-opacity,1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252/var(--tw-bg-opacity,1))}.bg-slate-50\/60{background-color:rgba(248,250,252,.6)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.p-1\.5{padding:.375rem}.p-2{padding:.5rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-8{padding:2rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-1\.5{padding-left:.375rem;padding-right:.375rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.pr-1{padding-right:.25rem}.pt-2{padding-top:.5rem}.pt-3{padding-top:.75rem}.text-left{text-align:left}.text-center{text-align:center}.align-top{vertical-align:top}.text-\[11px\]{font-size:11px}.text-\[9px\]{font-size:9px}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.tabular-nums{--tw-numeric-spacing:tabular-nums;font-variant-numeric:var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)}.leading-\[14px\]{line-height:14px}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.tracking-wide{letter-spacing:.025em}.text-amber-800{--tw-text-opacity:1;color:rgb(146 64 14/var(--tw-text-opacity,1))}.text-emerald-800{--tw-text-opacity:1;color:rgb(6 95 70/var(--tw-text-opacity,1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229/var(--tw-text-opacity,1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202/var(--tw-text-opacity,1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38/var(--tw-text-opacity,1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225/var(--tw-text-opacity,1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85/var(--tw-text-opacity,1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59/var(--tw-text-opacity,1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgba(0,0,0,.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color)}.shadow-2xl,.shadow-sm{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.outline{outline-style:solid}.ring-1{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.ring-1,.ring-2{box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.ring-2{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.ring-indigo-200{--tw-ring-opacity:1;--tw-ring-color:rgb(199 210 254/var(--tw-ring-opacity,1))}.ring-slate-800{--tw-ring-opacity:1;--tw-ring-color:rgb(30 41 59/var(--tw-ring-opacity,1))}.ring-offset-2{--tw-ring-offset-width:2px}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.hover\:bg-amber-600:hover{--tw-bg-opacity:1;background-color:rgb(217 119 6/var(--tw-bg-opacity,1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202/var(--tw-bg-opacity,1))}.hover\:bg-red-50:hover{--tw-bg-opacity:1;background-color:rgb(254 242 242/var(--tw-bg-opacity,1))}.hover\:bg-slate-100:hover{--tw-bg-opacity:1;background-color:rgb(241 245 249/var(--tw-bg-opacity,1))}.hover\:bg-slate-50:hover{--tw-bg-opacity:1;background-color:rgb(248 250 252/var(--tw-bg-opacity,1))}.hover\:text-indigo-600:hover{--tw-text-opacity:1;color:rgb(79 70 229/var(--tw-text-opacity,1))}@media (min-width:640px){.sm\:col-span-2{grid-column:span 2/span 2}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}</style>
+<style>
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  .chip { cursor: pointer; }
+  .chip:hover { filter: brightness(0.97); }
+  .day-cell.drag-over { outline: 2px dashed #6366f1; outline-offset: -2px; background: #eef2ff; }
+  .print-only { display: none; }
+  textarea { resize: vertical; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+  @media print {
+    .no-print { display: none !important; }
+    .print-only { display: block !important; }
+    body { background: #fff !important; }
+    .day-cell { break-inside: avoid; }
+    .chip { break-inside: avoid; box-shadow: none !important; }
+    main { display: block !important; }
+    @page { size: A4 landscape; margin: 10mm; }
+    .print-full { width: 100% !important; max-width: 100% !important; }
+    table { font-size: 10px; }
+  }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+<!-- ============ TOP BAR ============ -->
+<header class="no-print sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
+  <div class="px-4 py-2.5 flex flex-wrap items-center gap-3">
+    <div class="flex items-center gap-2 mr-2">
+      <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white grid place-items-center font-bold text-lg">P</div>
+      <div>
+        <div class="font-bold leading-tight text-slate-900">Post Planner</div>
+        <div class="text-[11px] text-slate-500 leading-tight" id="savedNote">Everything saves by itself</div>
+      </div>
+    </div>
+
+    <div class="flex-1"></div>
+
+    <button onclick="openBulk()" class="px-3 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold">Fill Whole Month</button>
+    <button onclick="openPost(null)" class="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold">+ New Post</button>
+    <div class="h-6 w-px bg-slate-200"></div>
+    <button onclick="window.print()" class="px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 text-sm font-medium">Print / PDF</button>
+    <button onclick="exportCSV()" class="px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 text-sm font-medium">Excel</button>
+    <button onclick="backup()" class="px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 text-sm font-medium">Save Backup</button>
+    <label class="px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 text-sm font-medium cursor-pointer">
+      Open Backup<input type="file" accept=".json" class="hidden" onchange="restore(this)">
+    </label>
+    <button onclick="show('helpModal')" class="w-9 h-9 rounded-lg border border-slate-300 hover:bg-slate-50 font-bold text-slate-600">?</button>
+  </div>
+
+  <!-- second row: month + filters -->
+  <div class="px-4 py-2 flex flex-wrap items-center gap-2 bg-slate-50 border-t border-slate-200">
+    <div class="flex items-center gap-1">
+      <button onclick="moveMonth(-1)" class="w-8 h-8 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 font-bold">&lsaquo;</button>
+      <div id="monthLabel" class="px-3 font-bold text-slate-900 min-w-[170px] text-center"></div>
+      <button onclick="moveMonth(1)" class="w-8 h-8 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 font-bold">&rsaquo;</button>
+      <button onclick="goToday()" class="ml-1 px-2.5 h-8 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-sm">Today</button>
+    </div>
+
+    <div class="h-6 w-px bg-slate-300 mx-1"></div>
+
+    <select id="fClient" onchange="setFilter('client', this.value)" class="h-8 rounded-lg border border-slate-300 bg-white px-2 text-sm"></select>
+    <select id="fPlatform" onchange="setFilter('platform', this.value)" class="h-8 rounded-lg border border-slate-300 bg-white px-2 text-sm">
+      <option value="all">All platforms</option>
+      <option value="facebook">Facebook</option>
+      <option value="instagram">Instagram</option>
+      <option value="linkedin">LinkedIn</option>
+    </select>
+    <select id="fStatus" onchange="setFilter('status', this.value)" class="h-8 rounded-lg border border-slate-300 bg-white px-2 text-sm">
+      <option value="all">All status</option>
+      <option value="Draft">Draft</option>
+      <option value="Approved">Approved</option>
+      <option value="Posted">Posted</option>
+    </select>
+    <input id="fSearch" oninput="setFilter('q', this.value)" placeholder="Search caption..." class="h-8 rounded-lg border border-slate-300 bg-white px-3 text-sm w-48">
+
+    <div class="flex-1"></div>
+
+    <div class="inline-flex rounded-lg border border-slate-300 overflow-hidden bg-white">
+      <button id="tabCal" onclick="setView('calendar')" class="px-3 h-8 text-sm font-medium">Calendar</button>
+      <button id="tabList" onclick="setView('list')" class="px-3 h-8 text-sm font-medium border-l border-slate-300">List</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ BODY ============ -->
+<main class="flex items-start gap-4 p-4">
+
+  <!-- SIDEBAR -->
+  <aside class="no-print w-64 shrink-0 space-y-4 sticky top-[104px]">
+    <div class="bg-white rounded-xl border border-slate-200 p-3">
+      <div class="flex items-center justify-between mb-2">
+        <div class="font-bold text-slate-900 text-sm">My Clients</div>
+        <button onclick="openClient(null)" class="text-xs px-2 py-1 rounded-md bg-indigo-600 text-white font-semibold hover:bg-indigo-700">+ Add</button>
+      </div>
+      <input id="clientSearch" oninput="renderClients()" placeholder="Search client..." class="w-full h-8 rounded-lg border border-slate-300 px-2 text-sm mb-2">
+      <div id="clientList" class="space-y-1 max-h-[45vh] overflow-auto pr-1"></div>
+    </div>
+
+    <div class="bg-white rounded-xl border border-slate-200 p-3">
+      <div class="font-bold text-slate-900 text-sm mb-2">This Month</div>
+      <div id="summary" class="space-y-1.5 text-sm"></div>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <section class="flex-1 min-w-0 print-full">
+    <div id="printHeader" class="print-only mb-3"></div>
+    <div id="calendarWrap" class="bg-white rounded-xl border border-slate-200 overflow-hidden"></div>
+    <div id="listWrap" class="hidden bg-white rounded-xl border border-slate-200 overflow-auto"></div>
+  </section>
+</main>
+
+<!-- ============ POST MODAL ============ -->
+<div id="postModal" class="no-print hidden fixed inset-0 bg-black/50 z-50 p-4 overflow-auto">
+  <div class="bg-white rounded-2xl max-w-3xl mx-auto my-4 shadow-2xl">
+    <div class="flex items-center justify-between px-5 py-3 border-b border-slate-200">
+      <div class="font-bold text-lg" id="postModalTitle">New Post</div>
+      <button onclick="hide('postModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-xl leading-none">&times;</button>
+    </div>
+    <div class="p-5 space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Client</label>
+          <select id="pClient" class="w-full h-10 rounded-lg border border-slate-300 px-2"></select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Date</label>
+          <input id="pDate" type="date" class="w-full h-10 rounded-lg border border-slate-300 px-2">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Time</label>
+          <input id="pTime" type="time" class="w-full h-10 rounded-lg border border-slate-300 px-2">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Where to post (tick one or more)</label>
+          <div id="pPlatforms" class="flex flex-wrap gap-2"></div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Post type</label>
+          <select id="pType" class="w-full h-10 rounded-lg border border-slate-300 px-2"></select>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <label class="block text-xs font-semibold text-slate-600">Caption</label>
+          <span id="capCount" class="text-[11px] text-slate-400">0 letters</span>
+        </div>
+        <textarea id="pCaption" rows="5" oninput="countCap()" class="w-full rounded-lg border border-slate-300 p-3" placeholder="Write the post text here..."></textarea>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Hashtags</label>
+        <textarea id="pTags" rows="2" class="w-full rounded-lg border border-slate-300 p-3" placeholder="#brand #sale #karachi"></textarea>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Picture / Video link (Drive, Canva, Dropbox)</label>
+          <input id="pLink" class="w-full h-10 rounded-lg border border-slate-300 px-3" placeholder="Paste link here">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Status</label>
+          <select id="pStatus" class="w-full h-10 rounded-lg border border-slate-300 px-2">
+            <option>Draft</option><option>Approved</option><option>Posted</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Note for designer / team</label>
+        <textarea id="pNote" rows="2" class="w-full rounded-lg border border-slate-300 p-3" placeholder="e.g. use red theme, add logo bottom right"></textarea>
+      </div>
+
+      <div class="rounded-xl bg-slate-50 border border-slate-200 p-3">
+        <label class="block text-xs font-semibold text-slate-600 mb-2">Repeat this post (optional)</label>
+        <div class="flex flex-wrap items-center gap-2 text-sm">
+          <span>Copy it</span>
+          <select id="pRepeatCount" class="h-9 rounded-lg border border-slate-300 px-2">
+            <option value="0">no copy</option><option value="1">1</option><option value="2">2</option>
+            <option value="3">3</option><option value="4">4</option><option value="5">5</option>
+            <option value="7">7</option><option value="11">11</option>
+          </select>
+          <span>more time(s), every</span>
+          <select id="pRepeatEvery" class="h-9 rounded-lg border border-slate-300 px-2">
+            <option value="7">week</option><option value="1">day</option><option value="14">2 weeks</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2 px-5 py-3 border-t border-slate-200 bg-slate-50 rounded-b-2xl">
+      <button onclick="savePost()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold">Save Post</button>
+      <button onclick="copyCaption()" class="px-3 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-sm">Copy caption</button>
+      <button id="btnDuplicate" onclick="duplicatePost()" class="px-3 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-sm">Make a copy</button>
+      <div class="flex-1"></div>
+      <button id="btnDelete" onclick="deletePost()" class="px-3 py-2 rounded-lg border border-red-300 text-red-600 bg-white hover:bg-red-50 text-sm">Delete</button>
+      <button onclick="hide('postModal')" class="px-3 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-sm">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CLIENT MODAL ============ -->
+<div id="clientModal" class="no-print hidden fixed inset-0 bg-black/50 z-50 p-4 overflow-auto">
+  <div class="bg-white rounded-2xl max-w-lg mx-auto my-8 shadow-2xl">
+    <div class="flex items-center justify-between px-5 py-3 border-b border-slate-200">
+      <div class="font-bold text-lg" id="clientModalTitle">Add Client</div>
+      <button onclick="hide('clientModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-xl leading-none">&times;</button>
+    </div>
+    <div class="p-5 space-y-4">
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Client / Brand name</label>
+        <input id="cName" class="w-full h-10 rounded-lg border border-slate-300 px-3" placeholder="e.g. Al-Noor Restaurant">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Colour (to see them apart on calendar)</label>
+        <div id="cColors" class="flex flex-wrap gap-2"></div>
+      </div>
+      <div class="grid grid-cols-1 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Facebook page / handle</label>
+          <input id="cFb" class="w-full h-10 rounded-lg border border-slate-300 px-3" placeholder="facebook.com/alnoor">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Instagram handle</label>
+          <input id="cIg" class="w-full h-10 rounded-lg border border-slate-300 px-3" placeholder="@alnoor.official">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">LinkedIn page</label>
+          <input id="cLi" class="w-full h-10 rounded-lg border border-slate-300 px-3" placeholder="linkedin.com/company/alnoor">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Notes (posting days, tone, contact person)</label>
+          <textarea id="cNotes" rows="3" class="w-full rounded-lg border border-slate-300 p-3" placeholder="e.g. 3 posts a week, Mon/Wed/Fri 7pm. Contact: Ali 0300-1234567"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 px-5 py-3 border-t border-slate-200 bg-slate-50 rounded-b-2xl">
+      <button onclick="saveClient()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold">Save Client</button>
+      <div class="flex-1"></div>
+      <button id="btnDeleteClient" onclick="deleteClient()" class="px-3 py-2 rounded-lg border border-red-300 text-red-600 bg-white hover:bg-red-50 text-sm">Delete</button>
+      <button onclick="hide('clientModal')" class="px-3 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-sm">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BULK MODAL ============ -->
+<div id="bulkModal" class="no-print hidden fixed inset-0 bg-black/50 z-50 p-4 overflow-auto">
+  <div class="bg-white rounded-2xl max-w-xl mx-auto my-8 shadow-2xl">
+    <div class="flex items-center justify-between px-5 py-3 border-b border-slate-200">
+      <div class="font-bold text-lg">Fill the whole month in one go</div>
+      <button onclick="hide('bulkModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-xl leading-none">&times;</button>
+    </div>
+    <div class="p-5 space-y-4">
+      <p class="text-sm text-slate-600">Choose a client, pick the days they post on, and empty posts will be made for the full month. Then you just open each one and write the caption.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Client</label>
+          <select id="bClient" class="w-full h-10 rounded-lg border border-slate-300 px-2"></select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Time</label>
+          <input id="bTime" type="time" value="19:00" class="w-full h-10 rounded-lg border border-slate-300 px-2">
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Which days of the week?</label>
+        <div id="bDays" class="flex flex-wrap gap-2"></div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Where to post</label>
+          <div id="bPlatforms" class="flex flex-wrap gap-2"></div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Post type</label>
+          <select id="bType" class="w-full h-10 rounded-lg border border-slate-300 px-2"></select>
+        </div>
+      </div>
+      <div id="bPreview" class="text-sm font-semibold text-indigo-700"></div>
+    </div>
+    <div class="flex items-center gap-2 px-5 py-3 border-t border-slate-200 bg-slate-50 rounded-b-2xl">
+      <button onclick="runBulk()" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-semibold">Make These Posts</button>
+      <div class="flex-1"></div>
+      <button onclick="hide('bulkModal')" class="px-3 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-sm">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HELP MODAL ============ -->
+<div id="helpModal" class="no-print hidden fixed inset-0 bg-black/50 z-50 p-4 overflow-auto">
+  <div class="bg-white rounded-2xl max-w-2xl mx-auto my-8 shadow-2xl">
+    <div class="flex items-center justify-between px-5 py-3 border-b border-slate-200">
+      <div class="font-bold text-lg">How to use this (2 minutes)</div>
+      <button onclick="hide('helpModal')" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-xl leading-none">&times;</button>
+    </div>
+    <div class="p-5 space-y-3 text-sm leading-relaxed text-slate-700">
+      <p><b>1. Add your clients.</b> Left side, click <b>+ Add</b>. Give the name, pick a colour, paste their Facebook / Instagram / LinkedIn handles.</p>
+      <p><b>2. Plan the month fast.</b> Click <b>Fill Whole Month</b> at the top. Pick the client, tick the days (like Mon, Wed, Fri), choose the time. It creates all the posts for that month at once.</p>
+      <p><b>3. Write the posts.</b> Click any post on the calendar to open it. Write caption, hashtags, paste the design link, add a note for your designer. Save.</p>
+      <p><b>4. Move a post.</b> Just drag it from one date and drop it on another date.</p>
+      <p><b>5. Mark progress.</b> Every post is <b>Draft</b> → then <b>Approved</b> (client said yes) → then <b>Posted</b> (it is live). Colours on the calendar show you where things stand.</p>
+      <p><b>6. Send to client.</b> Click <b>Print / PDF</b> and choose "Save as PDF" — one clean page you can email or WhatsApp. Or click <b>Excel</b> to get a sheet.</p>
+      <p><b>7. Keep it safe.</b> Your work saves by itself in this browser. Click <b>Save Backup</b> once a week to keep a file on your computer. On a new laptop, click <b>Open Backup</b> and everything comes back.</p>
+      <p class="text-slate-500 border-t pt-3">Note: this is a planner, not an auto-poster. It tells you exactly what to post and when — you still post it from the client's own account (or paste it into Meta Business Suite).</p>
+    </div>
+    <div class="px-5 py-3 border-t border-slate-200 bg-slate-50 rounded-b-2xl">
+      <button onclick="hide('helpModal')" class="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold">Got it</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   Post Planner - simple social media planner
+   Everything is saved inside your own browser. No account needed.
+   ============================================================ */
+
+var KEY = 'postPlanner_v1';
+
+var PLATFORMS = [
+  { id:'facebook',  name:'Facebook',  short:'FB', color:'#1877F2' },
+  { id:'instagram', name:'Instagram', short:'IG', color:'#E1306C' },
+  { id:'linkedin',  name:'LinkedIn',  short:'IN', color:'#0A66C2' }
+];
+var TYPES = ['Post','Reel','Story','Carousel','Video','Live'];
+var STATUS_STYLE = {
+  'Draft':    { bg:'bg-slate-100',   text:'text-slate-700',   dot:'#94a3b8' },
+  'Approved': { bg:'bg-amber-100',   text:'text-amber-800',   dot:'#f59e0b' },
+  'Posted':   { bg:'bg-emerald-100', text:'text-emerald-800', dot:'#10b981' }
+};
+var COLORS = ['#4f46e5','#0ea5e9','#10b981','#f59e0b','#ef4444','#ec4899','#8b5cf6','#14b8a6','#f97316','#64748b'];
+var DAYNAMES = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+var state = { clients: [], posts: [] };
+var today = new Date();
+var ui = {
+  year: today.getFullYear(), month: today.getMonth(),
+  client: 'all', platform: 'all', status: 'all', q: '',
+  view: 'calendar', editingPost: null, editingClient: null,
+  pickedColor: COLORS[0]
+};
+
+/* ---------- tiny helpers ---------- */
+function $(id){ return document.getElementById(id); }
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function pad(n){ return n < 10 ? '0'+n : ''+n; }
+function ymd(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function fromYmd(s){ var p = String(s).split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+function nice12(t){
+  if(!t) return '';
+  var p = t.split(':'); var h = +p[0]; var m = p[1] || '00';
+  var ap = h >= 12 ? 'PM' : 'AM'; h = h % 12; if(h === 0) h = 12;
+  return h + ':' + m + ' ' + ap;
+}
+function show(id){ $(id).classList.remove('hidden'); }
+function hide(id){ $(id).classList.add('hidden'); }
+function clientById(id){ for(var i=0;i<state.clients.length;i++){ if(state.clients[i].id===id) return state.clients[i]; } return null; }
+function clientName(id){ var c = clientById(id); return c ? c.name : 'No client'; }
+function clientColor(id){ var c = clientById(id); return c ? c.color : '#94a3b8'; }
+function platformById(id){ for(var i=0;i<PLATFORMS.length;i++){ if(PLATFORMS[i].id===id) return PLATFORMS[i]; } return null; }
+
+/* ---------- save / load ---------- */
+function save(){
+  try {
+    localStorage.setItem(KEY, JSON.stringify(state));
+    flashSaved('Saved just now');
+  } catch(e){
+    flashSaved('Could not save - please take a backup');
+  }
+}
+function load(){
+  try {
+    var raw = localStorage.getItem(KEY);
+    if(raw){
+      var d = JSON.parse(raw);
+      state.clients = d.clients || [];
+      state.posts = d.posts || [];
+    }
+  } catch(e){ /* start empty */ }
+}
+var flashTimer = null;
+function flashSaved(msg){
+  var el = $('savedNote'); if(!el) return;
+  el.textContent = msg;
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(function(){ el.textContent = 'Everything saves by itself'; }, 2500);
+}
+
+/* ---------- filters / view ---------- */
+function setFilter(what, val){ ui[what] = val; renderAll(); }
+function setView(v){
+  ui.view = v;
+  $('calendarWrap').classList.toggle('hidden', v !== 'calendar');
+  $('listWrap').classList.toggle('hidden', v !== 'list');
+  $('tabCal').className = 'px-3 h-8 text-sm font-medium ' + (v==='calendar' ? 'bg-indigo-600 text-white' : 'hover:bg-slate-100');
+  $('tabList').className = 'px-3 h-8 text-sm font-medium border-l border-slate-300 ' + (v==='list' ? 'bg-indigo-600 text-white' : 'hover:bg-slate-100');
+  renderAll();
+}
+function moveMonth(step){
+  ui.month += step;
+  if(ui.month < 0){ ui.month = 11; ui.year--; }
+  if(ui.month > 11){ ui.month = 0; ui.year++; }
+  renderAll();
+}
+function goToday(){ var n = new Date(); ui.year = n.getFullYear(); ui.month = n.getMonth(); renderAll(); }
+
+function monthPosts(){
+  var pre = pad(ui.month+1);
+  var out = [];
+  for(var i=0;i<state.posts.length;i++){
+    var p = state.posts[i];
+    if(!p.date) continue;
+    if(p.date.slice(0,7) !== ui.year + '-' + pre) continue;
+    if(ui.client !== 'all' && p.clientId !== ui.client) continue;
+    if(ui.status !== 'all' && p.status !== ui.status) continue;
+    if(ui.platform !== 'all' && (p.platforms||[]).indexOf(ui.platform) === -1) continue;
+    if(ui.q){
+      var hay = ((p.caption||'') + ' ' + (p.hashtags||'') + ' ' + clientName(p.clientId) + ' ' + (p.note||'')).toLowerCase();
+      if(hay.indexOf(ui.q.toLowerCase()) === -1) continue;
+    }
+    out.push(p);
+  }
+  out.sort(function(a,b){
+    if(a.date !== b.date) return a.date < b.date ? -1 : 1;
+    return (a.time||'') < (b.time||'') ? -1 : 1;
+  });
+  return out;
+}
+
+/* ---------- render everything ---------- */
+function renderAll(){
+  $('monthLabel').textContent = MONTHS[ui.month] + ' ' + ui.year;
+  renderClientFilter();
+  renderClients();
+  renderSummary();
+  renderPrintHeader();
+  if(ui.view === 'calendar') renderCalendar(); else renderList();
+}
+
+function renderClientFilter(){
+  var sel = $('fClient');
+  var html = '<option value="all">All clients</option>';
+  for(var i=0;i<state.clients.length;i++){
+    html += '<option value="'+state.clients[i].id+'">'+esc(state.clients[i].name)+'</option>';
+  }
+  sel.innerHTML = html;
+  sel.value = ui.client;
+}
+
+function renderClients(){
+  var box = $('clientList');
+  var term = ($('clientSearch').value || '').toLowerCase();
+  if(state.clients.length === 0){
+    box.innerHTML = '<div class="text-sm text-slate-500 py-3">No clients yet.<br>Click <b>+ Add</b> to add your first client.</div>';
+    return;
+  }
+  var html = '';
+  var pre = ui.year + '-' + pad(ui.month+1);
+  for(var i=0;i<state.clients.length;i++){
+    var c = state.clients[i];
+    if(term && c.name.toLowerCase().indexOf(term) === -1) continue;
+    var count = 0;
+    for(var j=0;j<state.posts.length;j++){
+      if(state.posts[j].clientId === c.id && (state.posts[j].date||'').slice(0,7) === pre) count++;
+    }
+    var active = ui.client === c.id;
+    html += '<div class="flex items-center gap-2 rounded-lg px-2 py-1.5 '+(active?'bg-indigo-50 ring-1 ring-indigo-200':'hover:bg-slate-50')+'">'
+      + '<span class="w-3 h-3 rounded-full shrink-0" style="background:'+c.color+'"></span>'
+      + '<button onclick="setFilter(\'client\', \''+(active?'all':c.id)+'\')" class="flex-1 text-left text-sm truncate" title="'+esc(c.name)+'">'+esc(c.name)+'</button>'
+      + '<span class="text-[11px] text-slate-500 tabular-nums">'+count+'</span>'
+      + '<button onclick="openClient(\''+c.id+'\')" class="text-[11px] text-slate-400 hover:text-indigo-600" title="Edit client">edit</button>'
+      + '</div>';
+  }
+  box.innerHTML = html || '<div class="text-sm text-slate-500 py-2">No client found.</div>';
+}
+
+function renderSummary(){
+  var list = monthPosts();
+  var counts = { Draft:0, Approved:0, Posted:0 };
+  var plat = { facebook:0, instagram:0, linkedin:0 };
+  for(var i=0;i<list.length;i++){
+    counts[list[i].status] = (counts[list[i].status]||0) + 1;
+    var ps = list[i].platforms || [];
+    for(var j=0;j<ps.length;j++){ if(plat[ps[j]] != null) plat[ps[j]]++; }
+  }
+  var html = '<div class="flex items-center justify-between"><span class="text-slate-600">Total posts</span><b class="text-lg">'+list.length+'</b></div>';
+  ['Draft','Approved','Posted'].forEach(function(s){
+    html += '<div class="flex items-center justify-between">'
+      + '<span class="flex items-center gap-2 text-slate-600"><span class="w-2.5 h-2.5 rounded-full" style="background:'+STATUS_STYLE[s].dot+'"></span>'+s+'</span>'
+      + '<b>'+(counts[s]||0)+'</b></div>';
+  });
+  html += '<div class="border-t border-slate-200 pt-2 mt-2 space-y-1.5">';
+  PLATFORMS.forEach(function(p){
+    html += '<div class="flex items-center justify-between">'
+      + '<span class="flex items-center gap-2 text-slate-600"><span class="w-2.5 h-2.5 rounded-sm" style="background:'+p.color+'"></span>'+p.name+'</span>'
+      + '<b>'+plat[p.id]+'</b></div>';
+  });
+  html += '</div>';
+  $('summary').innerHTML = html;
+}
+
+function renderPrintHeader(){
+  var who = ui.client === 'all' ? 'All Clients' : clientName(ui.client);
+  var list = monthPosts();
+  $('printHeader').innerHTML =
+    '<div style="border-bottom:2px solid #111;padding-bottom:6px;margin-bottom:8px">'
+    + '<div style="font-size:18px;font-weight:800">' + esc(who) + ' - Social Media Plan</div>'
+    + '<div style="font-size:12px">' + MONTHS[ui.month] + ' ' + ui.year + ' &nbsp;|&nbsp; ' + list.length + ' posts</div>'
+    + '</div>';
+}
+
+/* ---------- calendar ---------- */
+function renderCalendar(){
+  var first = new Date(ui.year, ui.month, 1);
+  var startOffset = (first.getDay() + 6) % 7;      /* week starts Monday */
+  var daysInMonth = new Date(ui.year, ui.month+1, 0).getDate();
+  var cells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
+
+  var byDate = {};
+  var list = monthPosts();
+  for(var i=0;i<list.length;i++){
+    (byDate[list[i].date] = byDate[list[i].date] || []).push(list[i]);
+  }
+
+  var html = '<div class="grid grid-cols-7 bg-slate-50 border-b border-slate-200">';
+  for(var d=0; d<7; d++){
+    html += '<div class="px-2 py-2 text-[11px] font-bold uppercase tracking-wide text-slate-500 text-center">'+DAYNAMES[d].slice(0,3)+'</div>';
+  }
+  html += '</div><div class="grid grid-cols-7">';
+
+  var todayStr = ymd(new Date());
+  for(var i=0;i<cells;i++){
+    var dayNum = i - startOffset + 1;
+    if(dayNum < 1 || dayNum > daysInMonth){
+      html += '<div class="min-h-[120px] border-b border-r border-slate-100 bg-slate-50/60"></div>';
+      continue;
+    }
+    var ds = ui.year + '-' + pad(ui.month+1) + '-' + pad(dayNum);
+    var isToday = ds === todayStr;
+    var posts = byDate[ds] || [];
+    html += '<div class="day-cell min-h-[120px] border-b border-r border-slate-100 p-1.5 align-top" data-date="'+ds+'"'
+      + ' ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropOn(event)">'
+      + '<div class="flex items-center justify-between mb-1">'
+      + '<span class="text-xs font-bold '+(isToday?'bg-indigo-600 text-white rounded-md px-1.5 py-0.5':'text-slate-500')+'">'+dayNum+'</span>'
+      + '<button onclick="openPost(null,\''+ds+'\')" class="no-print text-slate-300 hover:text-indigo-600 text-lg leading-none px-1" title="Add post">+</button>'
+      + '</div>';
+    for(var k=0;k<posts.length;k++){ html += chipHTML(posts[k]); }
+    html += '</div>';
+  }
+  html += '</div>';
+  $('calendarWrap').innerHTML = html;
+}
+
+function chipHTML(p){
+  var col = clientColor(p.clientId);
+  var st = STATUS_STYLE[p.status] || STATUS_STYLE.Draft;
+  var badges = '';
+  (p.platforms||[]).forEach(function(pid){
+    var pl = platformById(pid);
+    if(pl) badges += '<span class="inline-block text-[9px] font-bold text-white rounded px-1 leading-[14px]" style="background:'+pl.color+'">'+pl.short+'</span>';
+  });
+  var text = p.caption ? p.caption.replace(/\s+/g,' ').slice(0, 42) : '(caption not written yet)';
+  return '<div class="chip mb-1 rounded-md border border-slate-200 '+st.bg+' px-1.5 py-1 text-[11px] shadow-sm" '
+    + 'style="border-left:4px solid '+col+'" draggable="true" data-id="'+p.id+'" '
+    + 'ondragstart="dragStart(event)" onclick="openPost(\''+p.id+'\')">'
+    + '<div class="flex items-center gap-1 mb-0.5">'
+    + '<span class="w-1.5 h-1.5 rounded-full shrink-0" style="background:'+st.dot+'"></span>'
+    + '<span class="font-semibold text-slate-700">'+esc(nice12(p.time))+'</span>'
+    + '<span class="flex gap-0.5 ml-auto">'+badges+'</span></div>'
+    + '<div class="text-slate-600 leading-snug">'+esc(text)+'</div>'
+    + '<div class="text-[9px] text-slate-400 truncate">'+esc(clientName(p.clientId))+(p.type?' &middot; '+esc(p.type):'')+'</div>'
+    + '</div>';
+}
+
+/* ---------- drag and drop to move a post ---------- */
+var draggingId = null;
+function dragStart(e){ draggingId = e.currentTarget.getAttribute('data-id'); e.dataTransfer.effectAllowed = 'move'; }
+function dragOver(e){ e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function dragLeave(e){ e.currentTarget.classList.remove('drag-over'); }
+function dropOn(e){
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  var newDate = e.currentTarget.getAttribute('data-date');
+  if(!draggingId || !newDate) return;
+  for(var i=0;i<state.posts.length;i++){
+    if(state.posts[i].id === draggingId){ state.posts[i].date = newDate; break; }
+  }
+  draggingId = null;
+  save(); renderAll();
+}
+
+/* ---------- list view ---------- */
+function renderList(){
+  var list = monthPosts();
+  if(list.length === 0){
+    $('listWrap').innerHTML = '<div class="p-8 text-center text-slate-500">No posts this month. Click <b>+ New Post</b> or <b>Fill Whole Month</b>.</div>';
+    return;
+  }
+  var html = '<table class="w-full text-sm"><thead class="bg-slate-50 text-left text-[11px] uppercase text-slate-500">'
+    + '<tr><th class="p-2">Date</th><th class="p-2">Day</th><th class="p-2">Time</th><th class="p-2">Client</th>'
+    + '<th class="p-2">Where</th><th class="p-2">Type</th><th class="p-2">Caption</th><th class="p-2">Hashtags</th>'
+    + '<th class="p-2">Link</th><th class="p-2">Status</th></tr></thead><tbody>';
+  for(var i=0;i<list.length;i++){
+    var p = list[i];
+    var dt = fromYmd(p.date);
+    var st = STATUS_STYLE[p.status] || STATUS_STYLE.Draft;
+    var where = (p.platforms||[]).map(function(id){ var x = platformById(id); return x ? x.name : id; }).join(', ');
+    html += '<tr class="border-t border-slate-100 hover:bg-slate-50 cursor-pointer align-top" onclick="openPost(\''+p.id+'\')">'
+      + '<td class="p-2 whitespace-nowrap font-medium">'+dt.getDate()+' '+MONTHS[dt.getMonth()].slice(0,3)+'</td>'
+      + '<td class="p-2 whitespace-nowrap text-slate-500">'+DAYNAMES[(dt.getDay()+6)%7].slice(0,3)+'</td>'
+      + '<td class="p-2 whitespace-nowrap">'+esc(nice12(p.time))+'</td>'
+      + '<td class="p-2 whitespace-nowrap"><span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full" style="background:'+clientColor(p.clientId)+'"></span>'+esc(clientName(p.clientId))+'</span></td>'
+      + '<td class="p-2 whitespace-nowrap text-slate-600">'+esc(where)+'</td>'
+      + '<td class="p-2 whitespace-nowrap text-slate-600">'+esc(p.type||'')+'</td>'
+      + '<td class="p-2 max-w-[320px]">'+esc((p.caption||'').slice(0,160))+'</td>'
+      + '<td class="p-2 max-w-[160px] text-slate-500">'+esc((p.hashtags||'').slice(0,80))+'</td>'
+      + '<td class="p-2 max-w-[120px] text-indigo-600 truncate">'+esc(p.link||'')+'</td>'
+      + '<td class="p-2 whitespace-nowrap"><span class="px-2 py-0.5 rounded-full text-[11px] font-semibold '+st.bg+' '+st.text+'">'+esc(p.status)+'</span></td>'
+      + '</tr>';
+  }
+  html += '</tbody></table>';
+  $('listWrap').innerHTML = html;
+}
+
+/* ---------- post add / edit ---------- */
+function openPost(id, dateStr){
+  if(state.clients.length === 0){
+    alert('Please add a client first (left side, + Add button).');
+    openClient(null);
+    return;
+  }
+  ui.editingPost = id || null;
+  var p = null;
+  if(id){ for(var i=0;i<state.posts.length;i++){ if(state.posts[i].id === id){ p = state.posts[i]; break; } } }
+
+  $('postModalTitle').textContent = p ? 'Edit Post' : 'New Post';
+  $('btnDelete').style.display = p ? '' : 'none';
+  $('btnDuplicate').style.display = p ? '' : 'none';
+
+  var opts = '';
+  for(var i=0;i<state.clients.length;i++){ opts += '<option value="'+state.clients[i].id+'">'+esc(state.clients[i].name)+'</option>'; }
+  $('pClient').innerHTML = opts;
+  $('pType').innerHTML = TYPES.map(function(t){ return '<option>'+t+'</option>'; }).join('');
+
+  var defClient = (ui.client !== 'all') ? ui.client : state.clients[0].id;
+  $('pClient').value = p ? p.clientId : defClient;
+  $('pDate').value   = p ? p.date : (dateStr || ymd(new Date()));
+  $('pTime').value   = p ? p.time : '19:00';
+  $('pType').value   = p ? (p.type || 'Post') : 'Post';
+  $('pCaption').value= p ? (p.caption||'') : '';
+  $('pTags').value   = p ? (p.hashtags||'') : '';
+  $('pLink').value   = p ? (p.link||'') : '';
+  $('pNote').value   = p ? (p.note||'') : '';
+  $('pStatus').value = p ? (p.status||'Draft') : 'Draft';
+  $('pRepeatCount').value = '0';
+
+  var picked = p ? (p.platforms||[]) : ['facebook','instagram'];
+  $('pPlatforms').innerHTML = PLATFORMS.map(function(pl){
+    var on = picked.indexOf(pl.id) !== -1;
+    return '<label class="inline-flex items-center gap-1.5 px-2.5 h-10 rounded-lg border cursor-pointer '
+      + (on ? 'border-slate-400 bg-slate-50' : 'border-slate-300') + '">'
+      + '<input type="checkbox" class="pf" value="'+pl.id+'" '+(on?'checked':'')+'>'
+      + '<span class="w-2.5 h-2.5 rounded-sm" style="background:'+pl.color+'"></span>'
+      + '<span class="text-sm">'+pl.name+'</span></label>';
+  }).join('');
+
+  countCap();
+  show('postModal');
+  setTimeout(function(){ $('pCaption').focus(); }, 50);
+}
+
+function readPlatforms(sel){
+  var boxes = document.querySelectorAll(sel);
+  var out = [];
+  for(var i=0;i<boxes.length;i++){ if(boxes[i].checked) out.push(boxes[i].value); }
+  return out;
+}
+function countCap(){
+  var n = ($('pCaption').value || '').length;
+  $('capCount').textContent = n + ' letters';
+}
+
+function savePost(){
+  var plats = readPlatforms('.pf');
+  if(plats.length === 0){ alert('Please tick at least one place to post (Facebook / Instagram / LinkedIn).'); return; }
+  if(!$('pDate').value){ alert('Please choose a date.'); return; }
+
+  var data = {
+    clientId: $('pClient').value,
+    date: $('pDate').value,
+    time: $('pTime').value || '09:00',
+    platforms: plats,
+    type: $('pType').value,
+    caption: $('pCaption').value,
+    hashtags: $('pTags').value,
+    link: $('pLink').value,
+    note: $('pNote').value,
+    status: $('pStatus').value
+  };
+
+  if(ui.editingPost){
+    for(var i=0;i<state.posts.length;i++){
+      if(state.posts[i].id === ui.editingPost){
+        for(var k in data){ state.posts[i][k] = data[k]; }
+        break;
+      }
+    }
+  } else {
+    data.id = uid();
+    state.posts.push(data);
+  }
+
+  /* optional repeats */
+  var times = parseInt($('pRepeatCount').value, 10) || 0;
+  var every = parseInt($('pRepeatEvery').value, 10) || 7;
+  for(var r=1; r<=times; r++){
+    var d = fromYmd(data.date);
+    d.setDate(d.getDate() + every*r);
+    var copy = JSON.parse(JSON.stringify(data));
+    copy.id = uid();
+    copy.date = ymd(d);
+    copy.status = 'Draft';
+    state.posts.push(copy);
+  }
+
+  save(); hide('postModal'); renderAll();
+}
+
+function deletePost(){
+  if(!ui.editingPost) return;
+  if(!confirm('Delete this post?')) return;
+  state.posts = state.posts.filter(function(p){ return p.id !== ui.editingPost; });
+  save(); hide('postModal'); renderAll();
+}
+
+function duplicatePost(){
+  if(!ui.editingPost) return;
+  var src = null;
+  for(var i=0;i<state.posts.length;i++){ if(state.posts[i].id === ui.editingPost){ src = state.posts[i]; break; } }
+  if(!src) return;
+  var copy = JSON.parse(JSON.stringify(src));
+  copy.id = uid();
+  copy.status = 'Draft';
+  state.posts.push(copy);
+  save(); hide('postModal'); renderAll();
+  flashSaved('Copy made on the same date');
+}
+
+function copyCaption(){
+  var text = ($('pCaption').value || '') + '\n\n' + ($('pTags').value || '');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text.trim()).then(function(){ flashSaved('Caption copied'); });
+  } else {
+    var t = document.createElement('textarea');
+    t.value = text.trim(); document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); flashSaved('Caption copied'); } catch(e){}
+    document.body.removeChild(t);
+  }
+}
+
+/* ---------- clients ---------- */
+function openClient(id){
+  ui.editingClient = id || null;
+  var c = id ? clientById(id) : null;
+  $('clientModalTitle').textContent = c ? 'Edit Client' : 'Add Client';
+  $('btnDeleteClient').style.display = c ? '' : 'none';
+  $('cName').value  = c ? c.name : '';
+  $('cFb').value    = c ? (c.fb||'') : '';
+  $('cIg').value    = c ? (c.ig||'') : '';
+  $('cLi').value    = c ? (c.li||'') : '';
+  $('cNotes').value = c ? (c.notes||'') : '';
+  ui.pickedColor = c ? c.color : COLORS[state.clients.length % COLORS.length];
+  renderColorPicker();
+  show('clientModal');
+  setTimeout(function(){ $('cName').focus(); }, 50);
+}
+function renderColorPicker(){
+  $('cColors').innerHTML = COLORS.map(function(col){
+    var on = col === ui.pickedColor;
+    return '<button onclick="pickColor(\''+col+'\')" class="w-8 h-8 rounded-lg '+(on?'ring-2 ring-offset-2 ring-slate-800':'')+'" style="background:'+col+'"></button>';
+  }).join('');
+}
+function pickColor(c){ ui.pickedColor = c; renderColorPicker(); }
+
+function saveClient(){
+  var name = $('cName').value.trim();
+  if(!name){ alert('Please write the client name.'); return; }
+  var data = { name:name, color:ui.pickedColor, fb:$('cFb').value.trim(), ig:$('cIg').value.trim(), li:$('cLi').value.trim(), notes:$('cNotes').value.trim() };
+  if(ui.editingClient){
+    var c = clientById(ui.editingClient);
+    if(c){ for(var k in data){ c[k] = data[k]; } }
+  } else {
+    data.id = uid();
+    state.clients.push(data);
+  }
+  save(); hide('clientModal'); renderAll();
+}
+
+function deleteClient(){
+  if(!ui.editingClient) return;
+  var n = state.posts.filter(function(p){ return p.clientId === ui.editingClient; }).length;
+  var msg = n > 0
+    ? 'This client has ' + n + ' post(s). Deleting the client will also delete those posts. Are you sure?'
+    : 'Delete this client?';
+  if(!confirm(msg)) return;
+  state.posts = state.posts.filter(function(p){ return p.clientId !== ui.editingClient; });
+  state.clients = state.clients.filter(function(c){ return c.id !== ui.editingClient; });
+  if(ui.client === ui.editingClient) ui.client = 'all';
+  save(); hide('clientModal'); renderAll();
+}
+
+/* ---------- fill whole month ---------- */
+function openBulk(){
+  if(state.clients.length === 0){ alert('Please add a client first.'); openClient(null); return; }
+  $('bClient').innerHTML = state.clients.map(function(c){ return '<option value="'+c.id+'">'+esc(c.name)+'</option>'; }).join('');
+  if(ui.client !== 'all') $('bClient').value = ui.client;
+  $('bType').innerHTML = TYPES.map(function(t){ return '<option>'+t+'</option>'; }).join('');
+  $('bDays').innerHTML = DAYNAMES.map(function(d, i){
+    var on = (i === 0 || i === 2 || i === 4);
+    return '<label class="inline-flex items-center gap-1.5 px-2.5 h-9 rounded-lg border border-slate-300 cursor-pointer">'
+      + '<input type="checkbox" class="bd" value="'+i+'" '+(on?'checked':'')+' onchange="previewBulk()">'
+      + '<span class="text-sm">'+d.slice(0,3)+'</span></label>';
+  }).join('');
+  $('bPlatforms').innerHTML = PLATFORMS.map(function(pl){
+    var on = pl.id !== 'linkedin';
+    return '<label class="inline-flex items-center gap-1.5 px-2.5 h-10 rounded-lg border border-slate-300 cursor-pointer">'
+      + '<input type="checkbox" class="bp" value="'+pl.id+'" '+(on?'checked':'')+'>'
+      + '<span class="w-2.5 h-2.5 rounded-sm" style="background:'+pl.color+'"></span>'
+      + '<span class="text-sm">'+pl.name+'</span></label>';
+  }).join('');
+  previewBulk();
+  show('bulkModal');
+}
+function bulkDates(){
+  var picked = [];
+  var boxes = document.querySelectorAll('.bd');
+  for(var i=0;i<boxes.length;i++){ if(boxes[i].checked) picked.push(+boxes[i].value); }
+  var days = new Date(ui.year, ui.month+1, 0).getDate();
+  var out = [];
+  for(var d=1; d<=days; d++){
+    var dt = new Date(ui.year, ui.month, d);
+    var idx = (dt.getDay() + 6) % 7;
+    if(picked.indexOf(idx) !== -1) out.push(ymd(dt));
+  }
+  return out;
+}
+function previewBulk(){
+  var n = bulkDates().length;
+  $('bPreview').textContent = n + ' post(s) will be created in ' + MONTHS[ui.month] + ' ' + ui.year + '.';
+}
+function runBulk(){
+  var dates = bulkDates();
+  if(dates.length === 0){ alert('Please tick at least one day of the week.'); return; }
+  var plats = readPlatforms('.bp');
+  if(plats.length === 0){ alert('Please tick at least one place to post.'); return; }
+  var cid = $('bClient').value, time = $('bTime').value || '19:00', type = $('bType').value;
+  for(var i=0;i<dates.length;i++){
+    state.posts.push({
+      id: uid(), clientId: cid, date: dates[i], time: time, platforms: plats.slice(),
+      type: type, caption: '', hashtags: '', link: '', note: '', status: 'Draft'
+    });
+  }
+  save(); hide('bulkModal'); renderAll();
+  flashSaved(dates.length + ' posts created');
+}
+
+/* ---------- excel (csv) ---------- */
+function csvCell(v){ return '"' + String(v == null ? '' : v).replace(/"/g,'""') + '"'; }
+function exportCSV(){
+  var list = monthPosts();
+  if(list.length === 0){ alert('No posts to download for this month.'); return; }
+  var head = ['Date','Day','Time','Client','Facebook','Instagram','LinkedIn','Post Type','Caption','Hashtags','Picture/Video Link','Note','Status'];
+  var rows = [head.map(csvCell).join(',')];
+  for(var i=0;i<list.length;i++){
+    var p = list[i], dt = fromYmd(p.date), ps = p.platforms || [];
+    rows.push([
+      p.date, DAYNAMES[(dt.getDay()+6)%7], nice12(p.time), clientName(p.clientId),
+      ps.indexOf('facebook')!==-1 ? 'Yes':'', ps.indexOf('instagram')!==-1 ? 'Yes':'', ps.indexOf('linkedin')!==-1 ? 'Yes':'',
+      p.type||'', p.caption||'', p.hashtags||'', p.link||'', p.note||'', p.status||''
+    ].map(csvCell).join(','));
+  }
+  var who = ui.client === 'all' ? 'All-Clients' : clientName(ui.client).replace(/[^a-z0-9]+/gi,'-');
+  download('﻿' + rows.join('\r\n'), who + '-' + MONTHS[ui.month] + '-' + ui.year + '.csv', 'text/csv;charset=utf-8;');
+}
+
+/* ---------- backup / restore ---------- */
+function backup(){
+  download(JSON.stringify(state, null, 2), 'Post-Planner-Backup-' + ymd(new Date()) + '.json', 'application/json');
+  flashSaved('Backup file downloaded');
+}
+function restore(input){
+  var file = input.files && input.files[0];
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(){
+    try {
+      var d = JSON.parse(reader.result);
+      if(!d.clients || !d.posts) throw new Error('bad file');
+      if(!confirm('This will replace everything on screen with the backup file. Continue?')){ input.value=''; return; }
+      state.clients = d.clients; state.posts = d.posts;
+      save(); renderAll();
+      flashSaved('Backup loaded');
+    } catch(e){
+      alert('That file did not look like a Post Planner backup.');
+    }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+function download(text, filename, type){
+  var blob = new Blob([text], { type: type });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+
+/* ---------- start ---------- */
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){ hide('postModal'); hide('clientModal'); hide('bulkModal'); hide('helpModal'); }
+});
+
+load();
+setView('calendar');
+if(state.clients.length === 0) show('helpModal');
+</script>
+</body>
+</html>
