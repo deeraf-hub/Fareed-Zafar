@@ -420,6 +420,19 @@ var DAYNAMES = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','S
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 var state = { clients: [], posts: [] };
+var firstRun = false;
+
+/* Your 7 client pages. These are added automatically the very first time
+   this planner is opened on a computer. */
+var STARTER_CLIENTS = [
+  { name: 'Coresight Digital', color: '#E8443A', fb: 'https://www.facebook.com/coresightdigital' },
+  { name: 'Digitalis.pk', color: '#4f46e5', fb: 'https://www.facebook.com/Digitalis.pk' },
+  { name: 'Mangolink', color: '#0ea5e9', fb: 'https://www.facebook.com/mangolinkoffical' },
+  { name: 'ShopEasePay', color: '#10b981', fb: 'https://www.facebook.com/Shopeasepay' },
+  { name: 'Facebook Page 61590150699623', color: '#f59e0b', fb: 'https://www.facebook.com/profile.php?id=61590150699623', rename: true },
+  { name: 'Facebook Page 61591827688868', color: '#ec4899', fb: 'https://www.facebook.com/profile.php?id=61591827688868', rename: true },
+  { name: 'Facebook Page 61590465221113', color: '#8b5cf6', fb: 'https://www.facebook.com/profile.php?id=61590465221113', rename: true }
+];
 var today = new Date();
 var ui = {
   year: today.getFullYear(), month: today.getMonth(),
@@ -697,6 +710,16 @@ function load(){
       state.posts = d.posts || [];
     }
   } catch(e){ /* start empty */ }
+  if(state.clients.length === 0 && state.posts.length === 0){
+    firstRun = true;
+    state.clients = STARTER_CLIENTS.map(function(c){
+      return {
+        id: uid(), name: c.name, color: c.color, fb: c.fb, ig: '', li: '',
+        notes: (c.rename ? 'Please rename this to the real brand name. ' : '') + 'Posting days and times not set yet.'
+      };
+    });
+    save();
+  }
 }
 var flashTimer = null;
 function flashSaved(msg){
@@ -1397,7 +1420,7 @@ document.addEventListener('keydown', function(e){
 
 load();
 setView('calendar');
-if(state.clients.length === 0) show('helpModal');
+if(firstRun) show('helpModal');
 loadThumbs().then(function(){ renderAll(); tidyFiles(); });
 </script>
 </body>
