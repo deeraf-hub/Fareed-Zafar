@@ -1,0 +1,13 @@
+# RepCoach — pinned dependencies (Phase 0)
+#
+# Python 3.11 or 3.12 only.
+#   - mediapipe 0.10.21 ships cp39/cp310/cp311/cp312 wheels for Windows/macOS/Linux.
+#   - mediapipe 1.0.x REMOVED the classic `mp.solutions.pose` API, so we stay on 0.10.x.
+#
+# Note: mediapipe depends on opencv-contrib-python (not opencv-python). Both packages
+# provide the same `import cv2` module and installing both shadows each other, so we
+# pin the contrib build only — it is a strict superset of opencv-python.
+
+mediapipe==0.10.21
+opencv-contrib-python==4.11.0.86
+numpy==1.26.4
