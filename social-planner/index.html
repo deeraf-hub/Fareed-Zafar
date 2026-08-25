@@ -1,0 +1,1457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Social Media Planner</title>
+<!-- Tailwind styles, built in and stored right here, so this page works with no internet at all. -->
+<style>*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.sticky{position:sticky}.inset-0{inset:0}.bottom-5{bottom:1.25rem}.left-1\/2{left:50%}.top-0{top:0}.z-30{z-index:30}.z-50{z-index:50}.z-\[60\]{z-index:60}.mx-auto{margin-left:auto;margin-right:auto}.my-6{margin-top:1.5rem;margin-bottom:1.5rem}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.ml-2{margin-left:.5rem}.ml-auto{margin-left:auto}.mr-1{margin-right:.25rem}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-px{margin-top:1px}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-2{height:.5rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-7{height:1.75rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-fit{height:-moz-fit-content;height:fit-content}.w-10{width:2.5rem}.w-2{width:.5rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-full{width:100%}.min-w-0{min-width:0}.min-w-\[220px\]{min-width:220px}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-\[1500px\]{max-width:1500px}.max-w-\[420px\]{max-width:420px}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.-translate-x-1\/2{--tw-translate-x:-50%}.-translate-x-1\/2,.scale-110{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scale-110{--tw-scale-x:1.1;--tw-scale-y:1.1}.cursor-pointer{cursor:pointer}.list-disc{list-style-type:disc}.grid-cols-7{grid-template-columns:repeat(7,minmax(0,1fr))}.flex-wrap{flex-wrap:wrap}.place-items-center{place-items:center}.items-start{align-items:flex-start}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-px{gap:1px}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.space-y-5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem*var(--tw-space-y-reverse))}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px*var(--tw-divide-y-reverse))}.divide-slate-100>:not([hidden])~:not([hidden]){--tw-divide-opacity:1;border-color:rgb(241 245 249/var(--tw-divide-opacity,1))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.whitespace-pre-wrap{white-space:pre-wrap}.break-words{overflow-wrap:break-word}.rounded{border-radius:.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-xl{border-radius:.75rem}.rounded-b-lg{border-bottom-right-radius:.5rem;border-bottom-left-radius:.5rem}.rounded-b-xl{border-bottom-right-radius:.75rem;border-bottom-left-radius:.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-l-\[3px\]{border-left-width:3px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-300{--tw-border-opacity:1;border-color:rgb(252 211 77/var(--tw-border-opacity,1))}.border-emerald-300{--tw-border-opacity:1;border-color:rgb(110 231 183/var(--tw-border-opacity,1))}.border-indigo-600{--tw-border-opacity:1;border-color:rgb(79 70 229/var(--tw-border-opacity,1))}.border-red-200{--tw-border-opacity:1;border-color:rgb(254 202 202/var(--tw-border-opacity,1))}.border-red-300{--tw-border-opacity:1;border-color:rgb(252 165 165/var(--tw-border-opacity,1))}.border-sky-300{--tw-border-opacity:1;border-color:rgb(125 211 252/var(--tw-border-opacity,1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249/var(--tw-border-opacity,1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240/var(--tw-border-opacity,1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225/var(--tw-border-opacity,1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59/var(--tw-border-opacity,1))}.border-transparent{border-color:transparent}.bg-\[\#0A66C2\]{--tw-bg-opacity:1;background-color:rgb(10 102 194/var(--tw-bg-opacity,1))}.bg-\[\#1877F2\]{--tw-bg-opacity:1;background-color:rgb(24 119 242/var(--tw-bg-opacity,1))}.bg-\[\#DD2A7B\]{--tw-bg-opacity:1;background-color:rgb(221 42 123/var(--tw-bg-opacity,1))}.bg-amber-200{--tw-bg-opacity:1;background-color:rgb(253 230 138/var(--tw-bg-opacity,1))}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235/var(--tw-bg-opacity,1))}.bg-black\/50{background-color:rgba(0,0,0,.5)}.bg-emerald-200{--tw-bg-opacity:1;background-color:rgb(167 243 208/var(--tw-bg-opacity,1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245/var(--tw-bg-opacity,1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105/var(--tw-bg-opacity,1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255/var(--tw-bg-opacity,1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229/var(--tw-bg-opacity,1))}.bg-sky-200{--tw-bg-opacity:1;background-color:rgb(186 230 253/var(--tw-bg-opacity,1))}.bg-sky-50{--tw-bg-opacity:1;background-color:rgb(240 249 255/var(--tw-bg-opacity,1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249/var(--tw-bg-opacity,1))}.bg-slate-200{--tw-bg-opacity:1;background-color:rgb(226 232 240/var(--tw-bg-opacity,1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252/var(--tw-bg-opacity,1))}.bg-slate-50\/60{background-color:rgba(248,250,252,.6)}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59/var(--tw-bg-opacity,1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-gradient-to-tr{background-image:linear-gradient(to top right,var(--tw-gradient-stops))}.from-\[\#F58529\]{--tw-gradient-from:#f58529 var(--tw-gradient-from-position);--tw-gradient-to:rgba(245,133,41,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.via-\[\#DD2A7B\]{--tw-gradient-to:rgba(221,42,123,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#dd2a7b var(--tw-gradient-via-position),var(--tw-gradient-to)}.to-\[\#8134AF\]{--tw-gradient-to:#8134af var(--tw-gradient-to-position)}.p-1\.5{padding:.375rem}.p-2{padding:.5rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-1\.5{padding-left:.375rem;padding-right:.375rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.pl-5{padding-left:1.25rem}.pt-1{padding-top:.25rem}.pt-3{padding-top:.75rem}.pt-4{padding-top:1rem}.text-left{text-align:left}.text-center{text-align:center}.align-top{vertical-align:top}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[9px\]{font-size:9px}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9/var(--tw-text-opacity,1))}.text-amber-900{--tw-text-opacity:1;color:rgb(120 53 15/var(--tw-text-opacity,1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87/var(--tw-text-opacity,1))}.text-emerald-900{--tw-text-opacity:1;color:rgb(6 78 59/var(--tw-text-opacity,1))}.text-emerald-900\/80{color:rgba(6,78,59,.8)}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229/var(--tw-text-opacity,1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202/var(--tw-text-opacity,1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38/var(--tw-text-opacity,1))}.text-red-700{--tw-text-opacity:1;color:rgb(185 28 28/var(--tw-text-opacity,1))}.text-sky-900{--tw-text-opacity:1;color:rgb(12 74 110/var(--tw-text-opacity,1))}.text-sky-900\/80{color:rgba(12,74,110,.8)}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85/var(--tw-text-opacity,1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59/var(--tw-text-opacity,1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.opacity-0{opacity:0}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color)}.shadow-lg,.shadow-sm{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color),0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.outline{outline-style:solid}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.hover\:bg-amber-100:hover{--tw-bg-opacity:1;background-color:rgb(254 243 199/var(--tw-bg-opacity,1))}.hover\:bg-emerald-50:hover{--tw-bg-opacity:1;background-color:rgb(236 253 245/var(--tw-bg-opacity,1))}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87/var(--tw-bg-opacity,1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202/var(--tw-bg-opacity,1))}.hover\:bg-red-50:hover{--tw-bg-opacity:1;background-color:rgb(254 242 242/var(--tw-bg-opacity,1))}.hover\:bg-sky-100:hover{--tw-bg-opacity:1;background-color:rgb(224 242 254/var(--tw-bg-opacity,1))}.hover\:bg-slate-100:hover{--tw-bg-opacity:1;background-color:rgb(241 245 249/var(--tw-bg-opacity,1))}.hover\:bg-slate-50:hover{--tw-bg-opacity:1;background-color:rgb(248 250 252/var(--tw-bg-opacity,1))}.hover\:bg-slate-900:hover{--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.hover\:bg-white:hover{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.hover\:opacity-90:hover{opacity:.9}.hover\:shadow-sm:hover{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.group:hover .group-hover\:opacity-100{opacity:1}@media (min-width:640px){.sm\:col-span-1{grid-column:span 1/span 1}.sm\:col-span-2{grid-column:span 2/span 2}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (min-width:1024px){.lg\:col-span-1{grid-column:span 1/span 1}.lg\:col-span-2{grid-column:span 2/span 2}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}</style>
+<style>
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  .chip { font-size: 11px; line-height: 1.1; }
+  .daycell { min-height: 118px; }
+  .drag-over { outline: 2px dashed #6366f1; outline-offset: -3px; background: #eef2ff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+  @media print {
+    .no-print { display: none !important; }
+    body { background: #fff !important; }
+    .printable { box-shadow: none !important; border: 1px solid #ddd !important; }
+    @page { size: A4 landscape; margin: 12mm; }
+  }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+<!-- ============ TOP BAR ============ -->
+<header class="no-print bg-white border-b border-slate-200 sticky top-0 z-30">
+  <div class="max-w-[1500px] mx-auto px-4 py-3 flex flex-wrap items-center gap-3">
+    <div class="flex items-center gap-2">
+      <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white grid place-items-center font-bold">SP</div>
+      <div>
+        <div class="font-bold leading-tight">Social Media Planner</div>
+        <div class="text-xs text-slate-500" id="agencyLabel">My Agency</div>
+      </div>
+    </div>
+
+    <nav class="flex gap-1 ml-2 flex-wrap" id="tabs">
+      <button data-tab="calendar" class="tabbtn px-3 py-2 rounded-lg text-sm font-medium">📅 Calendar</button>
+      <button data-tab="list"     class="tabbtn px-3 py-2 rounded-lg text-sm font-medium">📋 All Posts</button>
+      <button data-tab="clients"  class="tabbtn px-3 py-2 rounded-lg text-sm font-medium">👥 Clients</button>
+      <button data-tab="connect"  class="tabbtn px-3 py-2 rounded-lg text-sm font-medium">🔌 Connections</button>
+      <button data-tab="backup"   class="tabbtn px-3 py-2 rounded-lg text-sm font-medium">💾 Backup</button>
+      <button data-tab="help"     class="tabbtn px-3 py-2 rounded-lg text-sm font-medium">❓ How to use</button>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-2">
+      <button id="btnBulk" class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold">✨ Plan Whole Month</button>
+      <button id="btnNewPost" class="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold">+ New Post</button>
+    </div>
+  </div>
+</header>
+
+<!-- Today reminder strip -->
+<div id="todayStrip" class="no-print hidden max-w-[1500px] mx-auto px-4 pt-4"></div>
+
+<main class="max-w-[1500px] mx-auto px-4 py-5">
+
+<!-- ============ CALENDAR TAB ============ -->
+<section id="pane-calendar" class="pane">
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 printable">
+
+    <div class="flex flex-wrap items-center gap-3 mb-4">
+      <div class="flex items-center gap-1">
+        <button id="prevMonth" class="no-print w-9 h-9 rounded-lg border border-slate-300 hover:bg-slate-50">‹</button>
+        <button id="nextMonth" class="no-print w-9 h-9 rounded-lg border border-slate-300 hover:bg-slate-50">›</button>
+      </div>
+      <h2 id="monthTitle" class="text-xl font-bold"></h2>
+      <button id="todayBtn" class="no-print text-xs px-2 py-1 rounded border border-slate-300 hover:bg-slate-50">Today</button>
+
+      <div class="ml-auto flex flex-wrap items-center gap-2 no-print">
+        <select id="filterClient" class="text-sm border border-slate-300 rounded-lg px-2 py-2 bg-white">
+          <option value="">All clients</option>
+        </select>
+        <select id="filterPlatform" class="text-sm border border-slate-300 rounded-lg px-2 py-2 bg-white">
+          <option value="">All platforms</option>
+          <option value="fb">Facebook</option>
+          <option value="ig">Instagram</option>
+          <option value="li">LinkedIn</option>
+        </select>
+        <select id="filterStatus" class="text-sm border border-slate-300 rounded-lg px-2 py-2 bg-white">
+          <option value="">All status</option>
+          <option value="idea">Idea</option>
+          <option value="ready">Ready</option>
+          <option value="approved">Approved</option>
+          <option value="posted">Posted</option>
+        </select>
+        <button id="btnPrint" class="text-sm px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50">🖨️ Print / PDF</button>
+      </div>
+    </div>
+
+    <div id="monthStats" class="flex flex-wrap gap-2 mb-3 text-xs"></div>
+
+    <div class="grid grid-cols-7 gap-px bg-slate-200 rounded-lg overflow-hidden text-xs font-semibold text-slate-600">
+      <div class="bg-slate-50 py-2 text-center">Mon</div>
+      <div class="bg-slate-50 py-2 text-center">Tue</div>
+      <div class="bg-slate-50 py-2 text-center">Wed</div>
+      <div class="bg-slate-50 py-2 text-center">Thu</div>
+      <div class="bg-slate-50 py-2 text-center">Fri</div>
+      <div class="bg-slate-50 py-2 text-center">Sat</div>
+      <div class="bg-slate-50 py-2 text-center">Sun</div>
+    </div>
+    <div id="calGrid" class="grid grid-cols-7 gap-px bg-slate-200 rounded-b-lg overflow-hidden mt-px"></div>
+
+    <p class="no-print text-xs text-slate-500 mt-3">Tip: click any empty day to add a post. Drag a post to another day to move it.</p>
+  </div>
+</section>
+
+<!-- ============ LIST TAB ============ -->
+<section id="pane-list" class="pane hidden">
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 printable">
+    <div class="flex flex-wrap items-center gap-2 mb-4">
+      <h2 class="text-xl font-bold">All Posts</h2>
+      <input id="searchBox" placeholder="Search caption, client, hashtag..." class="no-print flex-1 min-w-[220px] text-sm border border-slate-300 rounded-lg px-3 py-2">
+      <select id="listMonth" class="no-print text-sm border border-slate-300 rounded-lg px-2 py-2 bg-white"></select>
+      <button id="btnCsv" class="no-print text-sm px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50">⬇️ Excel (CSV)</button>
+      <button id="btnPrint2" class="no-print text-sm px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50">🖨️ Print / PDF</button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-slate-600 text-left">
+          <tr>
+            <th class="p-2 font-semibold">Date</th>
+            <th class="p-2 font-semibold">Time</th>
+            <th class="p-2 font-semibold">Client</th>
+            <th class="p-2 font-semibold">Where</th>
+            <th class="p-2 font-semibold">Caption</th>
+            <th class="p-2 font-semibold">Status</th>
+            <th class="p-2 font-semibold no-print">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="listBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLIENTS TAB ============ -->
+<section id="pane-clients" class="pane hidden">
+  <div class="grid lg:grid-cols-3 gap-5">
+    <div class="lg:col-span-1 bg-white rounded-xl shadow-sm border border-slate-200 p-4 h-fit">
+      <h2 class="text-lg font-bold mb-1" id="clientFormTitle">Add a Client</h2>
+      <p class="text-xs text-slate-500 mb-3">Fill in what you know. You can leave things empty and add them later.</p>
+      <input type="hidden" id="cId">
+      <label class="block text-sm font-medium mb-1">Client / Business name *</label>
+      <input id="cName" class="w-full border border-slate-300 rounded-lg px-3 py-2 mb-3 text-sm" placeholder="e.g. Al-Noor Textiles">
+
+      <label class="block text-sm font-medium mb-1">Colour tag</label>
+      <div class="flex gap-2 mb-3 flex-wrap" id="colorPicker"></div>
+
+      <label class="block text-sm font-medium mb-1">Facebook Page (name or link)</label>
+      <input id="cFb" class="w-full border border-slate-300 rounded-lg px-3 py-2 mb-3 text-sm" placeholder="https://facebook.com/alnoortextiles">
+
+      <label class="block text-sm font-medium mb-1">Instagram handle or link</label>
+      <input id="cIg" class="w-full border border-slate-300 rounded-lg px-3 py-2 mb-3 text-sm" placeholder="@alnoortextiles">
+
+      <label class="block text-sm font-medium mb-1">LinkedIn Page link</label>
+      <input id="cLi" class="w-full border border-slate-300 rounded-lg px-3 py-2 mb-3 text-sm" placeholder="https://linkedin.com/company/...">
+
+      <label class="block text-sm font-medium mb-1">Usual hashtags</label>
+      <input id="cTags" class="w-full border border-slate-300 rounded-lg px-3 py-2 mb-3 text-sm" placeholder="#textile #lahore #fabric">
+
+      <label class="block text-sm font-medium mb-1">Notes (tone, do's & don'ts, contact person)</label>
+      <textarea id="cNotes" rows="3" class="w-full border border-slate-300 rounded-lg px-3 py-2 mb-3 text-sm" placeholder="Friendly tone. Always tag the owner. Approval from Mr. Khan on WhatsApp."></textarea>
+
+      <div class="flex gap-2">
+        <button id="btnSaveClient" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-2 text-sm font-semibold">Save Client</button>
+        <button id="btnCancelClient" class="hidden px-3 rounded-lg border border-slate-300 text-sm">Cancel</button>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2">
+      <div id="clientList" class="grid sm:grid-cols-2 gap-4"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONNECTIONS TAB ============ -->
+<section id="pane-connect" class="pane hidden">
+  <div class="max-w-4xl space-y-5">
+
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+      <h2 class="text-xl font-bold mb-2">🔌 Connecting Facebook, Instagram &amp; LinkedIn</h2>
+      <p class="text-sm text-slate-600 mb-4">Let me be straight with you, so you don't waste money or time. There are <b>three</b> honest ways to get posts onto the accounts. Pick one.</p>
+
+      <div class="space-y-4">
+        <div class="border border-emerald-300 bg-emerald-50 rounded-lg p-4">
+          <div class="font-bold text-emerald-900">Way 1 — Plan here, post with one click (works today, free)</div>
+          <p class="text-sm text-emerald-900/80 mt-1">You plan the full month in this planner. On the day, open the post, press <b>Copy</b> — the caption and hashtags go to your clipboard — then press the Facebook / Instagram / LinkedIn button and paste. Takes about 20 seconds per post. Nothing to set up, nothing to pay, no account can get blocked.</p>
+        </div>
+
+        <div class="border border-sky-300 bg-sky-50 rounded-lg p-4">
+          <div class="font-bold text-sky-900">Way 2 — Plan here, schedule free in Meta Business Suite (recommended)</div>
+          <p class="text-sm text-sky-900/80 mt-1">Facebook and Instagram give you a <b>free</b> official scheduler. You plan and get approval here, then once a month you paste the approved captions into Meta Business Suite and it posts automatically at the right time. LinkedIn also has a built-in scheduler (the little clock icon under the post box) — also free.</p>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <a target="_blank" href="https://business.facebook.com/latest/posts/scheduled_posts" class="text-xs px-3 py-2 rounded-lg bg-white border border-sky-300 hover:bg-sky-100 font-medium">Open Meta Business Suite ↗</a>
+            <a target="_blank" href="https://www.linkedin.com/feed/" class="text-xs px-3 py-2 rounded-lg bg-white border border-sky-300 hover:bg-sky-100 font-medium">Open LinkedIn ↗</a>
+          </div>
+        </div>
+
+        <div class="border border-slate-300 bg-slate-50 rounded-lg p-4">
+          <div class="font-bold text-slate-900">Way 3 — Fully automatic posting (needs a server, one-time setup)</div>
+          <p class="text-sm text-slate-700 mt-1">For the planner to post <b>by itself</b> while your laptop is closed, something must stay switched on 24/7. A single HTML file cannot do that — the browser is not allowed to talk to Facebook or LinkedIn directly, and even if it were, it would need secret keys that must never sit inside a file people can open.</p>
+          <p class="text-sm text-slate-700 mt-2">So the planner has a <b>hand-over point</b> instead: give it one web address (a "webhook") and it will send the approved posts there. That address can be an automation tool you already know — n8n, Make, or Zapier — which then does the actual posting. You do this setup once, and it also happens to be exactly what the Messenger→WhatsApp service in this same repository already does, so the hard part is a road you have walked before.</p>
+
+          <label class="block text-sm font-medium mt-4 mb-1">Webhook address (leave empty if you are not using this)</label>
+          <input id="webhookUrl" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" placeholder="https://your-automation.example.com/new-post">
+          <div class="flex flex-wrap gap-2 mt-3">
+            <button id="btnSaveWebhook" class="text-sm px-3 py-2 rounded-lg bg-slate-800 text-white hover:bg-slate-900">Save address</button>
+            <button id="btnTestWebhook" class="text-sm px-3 py-2 rounded-lg border border-slate-300 hover:bg-white">Send a test post</button>
+            <button id="btnSendMonth" class="text-sm px-3 py-2 rounded-lg border border-slate-300 hover:bg-white">Send this month's approved posts</button>
+          </div>
+          <div id="webhookMsg" class="text-xs mt-2"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+      <h3 class="font-bold mb-2">What each platform actually allows</h3>
+      <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-left text-slate-600">
+          <tr><th class="p-2">Platform</th><th class="p-2">Free official scheduling?</th><th class="p-2">Automatic posting by code?</th><th class="p-2">Watch out for</th></tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr><td class="p-2 font-medium">Facebook Page</td><td class="p-2 text-emerald-700">Yes — Meta Business Suite</td><td class="p-2">Yes, with a Page access token</td><td class="p-2 text-slate-600">Only Pages. Personal profiles are not allowed.</td></tr>
+          <tr><td class="p-2 font-medium">Instagram</td><td class="p-2 text-emerald-700">Yes — Meta Business Suite</td><td class="p-2">Yes, but only Business/Creator accounts linked to a Facebook Page</td><td class="p-2 text-slate-600">Photo must already be online at a public link. Stories &amp; Reels have extra rules.</td></tr>
+          <tr><td class="p-2 font-medium">LinkedIn</td><td class="p-2 text-emerald-700">Yes — clock icon on the post box</td><td class="p-2">Yes, but LinkedIn must approve your app first</td><td class="p-2 text-slate-600">Approval can take a few weeks. Company Pages are easier than personal profiles.</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="text-xs text-slate-500 mt-3">My honest advice: start with Way 2 today, and only build Way 3 once you have enough clients that the manual step actually hurts.</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+      <h3 class="font-bold mb-2">Your agency name (shown on printed plans)</h3>
+      <div class="flex gap-2">
+        <input id="agencyName" class="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm" placeholder="My Agency">
+        <button id="btnSaveAgency" class="px-4 rounded-lg bg-indigo-600 text-white text-sm font-semibold">Save</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BACKUP TAB ============ -->
+<section id="pane-backup" class="pane hidden">
+  <div class="max-w-3xl bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+    <h2 class="text-xl font-bold">💾 Backup &amp; Restore</h2>
+    <p class="text-sm text-slate-600">Everything you type is saved inside this browser on this computer. It does not go to the internet and nobody else can see it. But if you clear your browser data or change computer, it is gone — so <b>download a backup once a week</b>. It takes one click.</p>
+
+    <div class="flex flex-wrap gap-2">
+      <button id="btnExport" class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-semibold">⬇️ Download backup file</button>
+      <label class="px-4 py-2 rounded-lg border border-slate-300 text-sm font-semibold cursor-pointer hover:bg-slate-50">
+        ⬆️ Restore from backup
+        <input type="file" id="importFile" accept="application/json" class="hidden">
+      </label>
+      <button id="btnCsv2" class="px-4 py-2 rounded-lg border border-slate-300 text-sm font-semibold hover:bg-slate-50">⬇️ Export all posts to Excel (CSV)</button>
+      <button id="btnDemo" class="px-4 py-2 rounded-lg border border-slate-300 text-sm font-semibold hover:bg-slate-50">🎬 Load sample data</button>
+      <button id="btnWipe" class="px-4 py-2 rounded-lg border border-red-300 text-red-700 text-sm font-semibold hover:bg-red-50">🗑️ Delete everything</button>
+    </div>
+
+    <div id="storageInfo" class="text-xs text-slate-500"></div>
+    <div class="text-xs text-slate-500 border-t border-slate-200 pt-3">
+      Want the same plan on your phone and laptop? Put this file in your Google Drive or Dropbox folder and download the backup file into the same folder — then restore it on the other device.
+    </div>
+  </div>
+</section>
+
+<!-- ============ HELP TAB ============ -->
+<section id="pane-help" class="pane hidden">
+  <div class="max-w-3xl bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-5 text-sm leading-relaxed">
+    <h2 class="text-xl font-bold">❓ How to use this — in 5 minutes</h2>
+
+    <div>
+      <div class="font-bold text-slate-900">Step 1 — Add your clients</div>
+      <p class="text-slate-600">Go to <b>Clients</b> and add each client once: their name, their Facebook page, Instagram handle and LinkedIn page. Give each one a colour so you can spot them on the calendar instantly.</p>
+    </div>
+    <div>
+      <div class="font-bold text-slate-900">Step 2 — Plan the whole month at once</div>
+      <p class="text-slate-600">Press the green <b>Plan Whole Month</b> button. Choose the client, tick which days of the week you post on, set the time, and paste all your captions — one caption per line. Press Create, and your entire month appears on the calendar in one go.</p>
+    </div>
+    <div>
+      <div class="font-bold text-slate-900">Step 3 — Get client approval</div>
+      <p class="text-slate-600">Press <b>Print / PDF</b> and send the clean month sheet to your client on WhatsApp or email. When they say yes, mark the posts <b>Approved</b> (green).</p>
+    </div>
+    <div>
+      <div class="font-bold text-slate-900">Step 4 — Post</div>
+      <p class="text-slate-600">On the day, open the post, press <b>Copy</b>, then press the Facebook / Instagram / LinkedIn button, and paste. Then mark it <b>Posted</b>. Or schedule them all in Meta Business Suite in one sitting — see the <b>Connections</b> tab.</p>
+    </div>
+    <div>
+      <div class="font-bold text-slate-900">Step 5 — Back it up</div>
+      <p class="text-slate-600">Once a week, go to <b>Backup</b> and press Download. That's your safety net.</p>
+    </div>
+
+    <div class="border-t border-slate-200 pt-4">
+      <div class="font-bold text-slate-900 mb-2">Small things that save you time</div>
+      <ul class="list-disc pl-5 text-slate-600 space-y-1">
+        <li>Click any empty day on the calendar to add a post straight to that day.</li>
+        <li>Drag a post from one day to another to move it.</li>
+        <li>Press <b>Copy this post</b> on any post to duplicate it for a different client.</li>
+        <li>The colour bars at the top of the calendar tell you how many posts each client has this month.</li>
+        <li>Nothing is uploaded anywhere. Your clients' data stays on your computer.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ POST MODAL ============ -->
+<div id="postModal" class="no-print hidden fixed inset-0 z-50 bg-black/50 overflow-y-auto p-4">
+  <div class="bg-white rounded-xl max-w-2xl mx-auto my-6 shadow-xl">
+    <div class="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+      <h3 class="font-bold text-lg" id="postModalTitle">New Post</h3>
+      <button id="closeModal" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-xl leading-none">×</button>
+    </div>
+    <div class="p-5 space-y-4">
+      <input type="hidden" id="pId">
+      <div class="grid sm:grid-cols-3 gap-3">
+        <div class="sm:col-span-1">
+          <label class="block text-sm font-medium mb-1">Client</label>
+          <select id="pClient" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white"></select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Date</label>
+          <input type="date" id="pDate" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Time</label>
+          <input type="time" id="pTime" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Post on</label>
+        <div class="flex gap-2 flex-wrap">
+          <label class="flex items-center gap-2 border border-slate-300 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-slate-50"><input type="checkbox" class="pf" value="fb"> <span class="w-5 h-5 rounded bg-[#1877F2] text-white grid place-items-center text-[10px] font-bold">f</span> Facebook</label>
+          <label class="flex items-center gap-2 border border-slate-300 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-slate-50"><input type="checkbox" class="pf" value="ig"> <span class="w-5 h-5 rounded bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] text-white grid place-items-center text-[10px] font-bold">ig</span> Instagram</label>
+          <label class="flex items-center gap-2 border border-slate-300 rounded-lg px-3 py-2 text-sm cursor-pointer hover:bg-slate-50"><input type="checkbox" class="pf" value="li"> <span class="w-5 h-5 rounded bg-[#0A66C2] text-white grid place-items-center text-[10px] font-bold">in</span> LinkedIn</label>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Short title (only for you)</label>
+        <input id="pTitle" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" placeholder="e.g. Friday offer post">
+      </div>
+
+      <div>
+        <div class="flex items-baseline justify-between mb-1">
+          <label class="block text-sm font-medium">Caption</label>
+          <span id="capCount" class="text-xs text-slate-500"></span>
+        </div>
+        <textarea id="pCaption" rows="6" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" placeholder="Write the post text here..."></textarea>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Hashtags</label>
+          <input id="pTags" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" placeholder="#sale #lahore">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Picture / video link or file name</label>
+          <input id="pImage" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" placeholder="drive link, or 'poster-3.jpg'">
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Status</label>
+          <select id="pStatus" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white">
+            <option value="idea">💭 Idea</option>
+            <option value="ready">✏️ Ready — waiting for client</option>
+            <option value="approved">✅ Approved</option>
+            <option value="posted">🚀 Posted</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Note to yourself</label>
+          <input id="pNote" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" placeholder="ask client for new photos">
+        </div>
+      </div>
+
+      <div id="quickActions" class="border-t border-slate-200 pt-4 hidden">
+        <div class="text-xs font-semibold text-slate-500 mb-2">WHEN IT'S TIME TO POST</div>
+        <div class="flex flex-wrap gap-2" id="quickBtns"></div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-2 px-5 py-4 border-t border-slate-200 bg-slate-50 rounded-b-xl">
+      <button id="btnSavePost" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold">Save Post</button>
+      <button id="btnDupPost" class="hidden px-4 py-2 rounded-lg border border-slate-300 text-sm font-semibold hover:bg-white">Copy this post</button>
+      <button id="btnDelPost" class="hidden px-4 py-2 rounded-lg border border-red-300 text-red-700 text-sm font-semibold hover:bg-red-50">Delete</button>
+      <button id="btnCancelPost" class="ml-auto px-4 py-2 rounded-lg border border-slate-300 text-sm hover:bg-white">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BULK MODAL ============ -->
+<div id="bulkModal" class="no-print hidden fixed inset-0 z-50 bg-black/50 overflow-y-auto p-4">
+  <div class="bg-white rounded-xl max-w-2xl mx-auto my-6 shadow-xl">
+    <div class="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+      <h3 class="font-bold text-lg">✨ Plan the whole month at once</h3>
+      <button id="closeBulk" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-xl leading-none">×</button>
+    </div>
+    <div class="p-5 space-y-4">
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Client</label>
+          <select id="bClient" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white"></select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Which month</label>
+          <input type="month" id="bMonth" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Which days of the week?</label>
+        <div class="flex gap-1 flex-wrap" id="bDays"></div>
+        <div class="flex gap-2 mt-2">
+          <button type="button" data-preset="all" class="bpreset text-xs px-2 py-1 rounded border border-slate-300 hover:bg-slate-50">Every day</button>
+          <button type="button" data-preset="week" class="bpreset text-xs px-2 py-1 rounded border border-slate-300 hover:bg-slate-50">Mon–Fri</button>
+          <button type="button" data-preset="mwf" class="bpreset text-xs px-2 py-1 rounded border border-slate-300 hover:bg-slate-50">Mon / Wed / Fri</button>
+          <button type="button" data-preset="none" class="bpreset text-xs px-2 py-1 rounded border border-slate-300 hover:bg-slate-50">Clear</button>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-medium mb-1">Posting time</label>
+          <input type="time" id="bTime" value="11:00" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Post on</label>
+          <div class="flex gap-2 flex-wrap pt-1">
+            <label class="flex items-center gap-1 text-sm"><input type="checkbox" class="bf" value="fb" checked> FB</label>
+            <label class="flex items-center gap-1 text-sm"><input type="checkbox" class="bf" value="ig" checked> IG</label>
+            <label class="flex items-center gap-1 text-sm"><input type="checkbox" class="bf" value="li"> LinkedIn</label>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-baseline justify-between mb-1">
+          <label class="block text-sm font-medium">Captions — one post per line</label>
+          <span id="bCount" class="text-xs text-slate-500"></span>
+        </div>
+        <textarea id="bCaptions" rows="8" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm font-mono" placeholder="New winter collection is here! Visit our store today.&#10;Behind the scenes at our workshop this week.&#10;Customer review of the week — thank you Ayesha!&#10;&#10;(Leave this empty to create blank slots you can fill later.)"></textarea>
+        <p class="text-xs text-slate-500 mt-1">Each line becomes one post. If you have fewer lines than days, the rest are created as empty slots.</p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Hashtags to add to every post</label>
+        <input id="bTags" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" placeholder="leave empty to use the client's usual hashtags">
+      </div>
+
+      <div id="bPreview" class="text-sm bg-slate-50 border border-slate-200 rounded-lg p-3"></div>
+    </div>
+    <div class="flex gap-2 px-5 py-4 border-t border-slate-200 bg-slate-50 rounded-b-xl">
+      <button id="btnBulkCreate" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold">Create the posts</button>
+      <button id="btnBulkCancel" class="ml-auto px-4 py-2 rounded-lg border border-slate-300 text-sm hover:bg-white">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="no-print fixed bottom-5 left-1/2 -translate-x-1/2 z-[60] hidden px-4 py-2 rounded-lg bg-slate-900 text-white text-sm shadow-lg"></div>
+
+<script>
+/* =========================================================================
+   Social Media Planner — plain JavaScript, no libraries, nothing to install.
+   Everything is saved in this browser (localStorage) under the key below.
+   ========================================================================= */
+
+var STORE_KEY = 'social_planner_v1';
+
+var PLATFORMS = {
+  fb: { name: 'Facebook',  short: 'FB', cls: 'bg-[#1877F2]',        limit: 63206, url: 'https://www.facebook.com/' },
+  ig: { name: 'Instagram', short: 'IG', cls: 'bg-[#DD2A7B]',        limit: 2200,  url: 'https://www.instagram.com/' },
+  li: { name: 'LinkedIn',  short: 'IN', cls: 'bg-[#0A66C2]',        limit: 3000,  url: 'https://www.linkedin.com/feed/' }
+};
+
+var STATUSES = {
+  idea:     { label: 'Idea',     emoji: '💭', pill: 'bg-slate-200 text-slate-700' },
+  ready:    { label: 'Ready',    emoji: '✏️', pill: 'bg-amber-200 text-amber-900' },
+  approved: { label: 'Approved', emoji: '✅', pill: 'bg-emerald-200 text-emerald-900' },
+  posted:   { label: 'Posted',   emoji: '🚀', pill: 'bg-sky-200 text-sky-900' }
+};
+
+var COLORS = ['#6366f1','#ec4899','#10b981','#f59e0b','#ef4444','#0ea5e9','#8b5cf6','#14b8a6','#f97316','#64748b'];
+
+var state = { clients: [], posts: [], settings: { agencyName: 'My Agency', webhookUrl: '' } };
+var viewYear, viewMonth;          // month currently shown on the calendar
+var pickedColor = COLORS[0];
+
+/* ---------- tiny helpers ---------- */
+function $(id){ return document.getElementById(id); }
+function all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+function uid(){ return 'x' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4); }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+  return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+function pad(n){ return (n < 10 ? '0' : '') + n; }
+function ymd(d){ return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+function todayStr(){ return ymd(new Date()); }
+function parseYmd(s){ var p = String(s).split('-'); return new Date(+p[0], (+p[1])-1, +p[2]); }
+function monthName(y, m){
+  return new Date(y, m, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+}
+function prettyDate(s){
+  if (!s) return '';
+  return parseYmd(s).toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' });
+}
+function pretty12(t){
+  if (!t) return '';
+  var p = t.split(':'), h = +p[0], m = p[1];
+  var ap = h >= 12 ? 'PM' : 'AM'; var hh = h % 12; if (hh === 0) hh = 12;
+  return hh + ':' + m + ' ' + ap;
+}
+function toast(msg){
+  var t = $('toast'); t.textContent = msg; t.classList.remove('hidden');
+  clearTimeout(t._timer); t._timer = setTimeout(function(){ t.classList.add('hidden'); }, 2600);
+}
+
+/* ---------- saving & loading ---------- */
+function save(){
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+  catch(e){ toast('Could not save — browser storage may be full.'); }
+}
+function load(){
+  try {
+    var raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return;
+    var d = JSON.parse(raw);
+    state.clients  = Array.isArray(d.clients) ? d.clients : [];
+    state.posts    = Array.isArray(d.posts)   ? d.posts   : [];
+    state.settings = Object.assign({ agencyName: 'My Agency', webhookUrl: '' }, d.settings || {});
+  } catch(e){ console.warn('Saved data could not be read', e); }
+}
+function clientById(id){
+  for (var i = 0; i < state.clients.length; i++) if (state.clients[i].id === id) return state.clients[i];
+  return null;
+}
+function postById(id){
+  for (var i = 0; i < state.posts.length; i++) if (state.posts[i].id === id) return state.posts[i];
+  return null;
+}
+
+/* =========================================================================
+   TABS
+   ========================================================================= */
+function showTab(name){
+  all('.pane').forEach(function(p){ p.classList.add('hidden'); });
+  var pane = $('pane-' + name); if (pane) pane.classList.remove('hidden');
+  all('.tabbtn').forEach(function(b){
+    var on = b.dataset.tab === name;
+    b.className = 'tabbtn px-3 py-2 rounded-lg text-sm font-medium ' +
+      (on ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-100');
+  });
+  if (name === 'list') renderList();
+  if (name === 'backup') renderStorageInfo();
+}
+
+/* =========================================================================
+   CALENDAR
+   ========================================================================= */
+function filteredPosts(){
+  var c = $('filterClient').value, p = $('filterPlatform').value, s = $('filterStatus').value;
+  return state.posts.filter(function(post){
+    if (c && post.clientId !== c) return false;
+    if (p && (post.platforms || []).indexOf(p) === -1) return false;
+    if (s && post.status !== s) return false;
+    return true;
+  });
+}
+
+function renderCalendar(){
+  $('monthTitle').textContent = monthName(viewYear, viewMonth);
+
+  var first = new Date(viewYear, viewMonth, 1);
+  var startOffset = (first.getDay() + 6) % 7;              // make Monday = 0
+  var daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+  var cells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
+
+  var byDate = {};
+  filteredPosts().forEach(function(p){ (byDate[p.date] = byDate[p.date] || []).push(p); });
+  Object.keys(byDate).forEach(function(k){
+    byDate[k].sort(function(a,b){ return (a.time || '').localeCompare(b.time || ''); });
+  });
+
+  var today = todayStr();
+  var html = '';
+
+  for (var i = 0; i < cells; i++){
+    var dayNum = i - startOffset + 1;
+    var inMonth = dayNum >= 1 && dayNum <= daysInMonth;
+    if (!inMonth){
+      html += '<div class="daycell bg-slate-50/60"></div>';
+      continue;
+    }
+    var date = viewYear + '-' + pad(viewMonth + 1) + '-' + pad(dayNum);
+    var isToday = date === today;
+    var list = byDate[date] || [];
+
+    html += '<div class="daycell bg-white p-1.5 hover:bg-slate-50 cursor-pointer group" ' +
+            'data-date="' + date + '" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">';
+    html += '<div class="flex items-center justify-between mb-1">' +
+              '<span class="' + (isToday
+                  ? 'bg-indigo-600 text-white w-6 h-6 grid place-items-center rounded-full text-xs font-bold'
+                  : 'text-xs font-semibold text-slate-500 px-1') + '">' + dayNum + '</span>' +
+              '<span class="no-print opacity-0 group-hover:opacity-100 text-slate-400 text-sm font-bold px-1">+</span>' +
+            '</div>';
+
+    for (var j = 0; j < list.length; j++){
+      var post = list[j];
+      var cl = clientById(post.clientId);
+      var color = cl ? cl.color : '#94a3b8';
+      var st = STATUSES[post.status] || STATUSES.idea;
+      var label = post.title || (post.caption || '').slice(0, 40) || 'Untitled post';
+      var badges = (post.platforms || []).map(function(k){
+        return '<span class="' + PLATFORMS[k].cls + ' text-white rounded px-1 text-[9px] font-bold">' + PLATFORMS[k].short + '</span>';
+      }).join('');
+
+      html += '<div draggable="true" ondragstart="onDragStart(event)" data-id="' + post.id + '" ' +
+              'class="chip mb-1 rounded px-1.5 py-1 border-l-[3px] bg-slate-50 hover:bg-white hover:shadow-sm" ' +
+              'style="border-color:' + color + '" title="' + esc(post.caption || '') + '">' +
+                '<div class="flex items-center gap-1">' +
+                  '<span class="text-[10px] text-slate-500 font-medium">' + esc(pretty12(post.time)) + '</span>' +
+                  badges +
+                  '<span class="ml-auto">' + st.emoji + '</span>' +
+                '</div>' +
+                '<div class="truncate text-slate-700 mt-0.5">' + esc(label) + '</div>' +
+              '</div>';
+    }
+    html += '</div>';
+  }
+  $('calGrid').innerHTML = html;
+  renderMonthStats();
+  renderTodayStrip();
+}
+
+function renderMonthStats(){
+  var prefix = viewYear + '-' + pad(viewMonth + 1);
+  var monthPosts = state.posts.filter(function(p){ return String(p.date).indexOf(prefix) === 0; });
+  var counts = {};
+  monthPosts.forEach(function(p){ counts[p.clientId] = (counts[p.clientId] || 0) + 1; });
+
+  var chips = state.clients.filter(function(c){ return counts[c.id]; }).map(function(c){
+    return '<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white border border-slate-200">' +
+             '<span class="w-2 h-2 rounded-full" style="background:' + c.color + '"></span>' +
+             esc(c.name) + ' <b>' + counts[c.id] + '</b></span>';
+  });
+
+  var byStatus = {};
+  monthPosts.forEach(function(p){ byStatus[p.status] = (byStatus[p.status] || 0) + 1; });
+  Object.keys(STATUSES).forEach(function(k){
+    if (byStatus[k]) chips.push('<span class="px-2 py-1 rounded-full ' + STATUSES[k].pill + '">' +
+      STATUSES[k].emoji + ' ' + STATUSES[k].label + ' ' + byStatus[k] + '</span>');
+  });
+
+  chips.unshift('<span class="px-2 py-1 rounded-full bg-slate-800 text-white">' + monthPosts.length + ' posts this month</span>');
+  $('monthStats').innerHTML = chips.join(' ');
+}
+
+function renderTodayStrip(){
+  var t = todayStr();
+  var due = state.posts.filter(function(p){ return p.date === t && p.status !== 'posted'; })
+                       .sort(function(a,b){ return (a.time||'').localeCompare(b.time||''); });
+  var strip = $('todayStrip');
+  if (!due.length){ strip.classList.add('hidden'); strip.innerHTML = ''; return; }
+  strip.classList.remove('hidden');
+  strip.innerHTML =
+    '<div class="bg-amber-50 border border-amber-300 rounded-xl p-3 flex flex-wrap items-center gap-2">' +
+      '<span class="font-semibold text-amber-900 text-sm">🔔 Due today (' + due.length + '):</span>' +
+      due.map(function(p){
+        var c = clientById(p.clientId);
+        return '<button onclick="openPost(\'' + p.id + '\')" class="text-xs bg-white border border-amber-300 rounded-lg px-2 py-1 hover:bg-amber-100">' +
+               esc(pretty12(p.time)) + ' · ' + esc(c ? c.name : 'No client') + ' · ' +
+               esc((p.title || p.caption || 'Untitled').slice(0, 34)) + '</button>';
+      }).join('') +
+    '</div>';
+}
+
+/* drag & drop between days */
+var dragId = null;
+function onDragStart(e){ dragId = e.target.dataset.id; e.dataTransfer.effectAllowed = 'move'; }
+function onDragOver(e){ e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function onDragLeave(e){ e.currentTarget.classList.remove('drag-over'); }
+function onDrop(e){
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  var newDate = e.currentTarget.dataset.date;
+  var p = postById(dragId);
+  if (p && newDate && p.date !== newDate){
+    p.date = newDate; save(); renderCalendar();
+    toast('Moved to ' + prettyDate(newDate));
+  }
+  dragId = null;
+}
+
+/* =========================================================================
+   LIST OF ALL POSTS
+   ========================================================================= */
+function renderMonthDropdown(){
+  var sel = $('listMonth');
+  var months = {};
+  state.posts.forEach(function(p){ months[String(p.date).slice(0, 7)] = true; });
+  var keys = Object.keys(months).sort().reverse();
+  var cur = sel.value;
+  sel.innerHTML = '<option value="">All months</option>' + keys.map(function(k){
+    var parts = k.split('-');
+    return '<option value="' + k + '">' + monthName(+parts[0], (+parts[1]) - 1) + '</option>';
+  }).join('');
+  if (cur) sel.value = cur;
+}
+
+function renderList(){
+  renderMonthDropdown();
+  var q = ($('searchBox').value || '').toLowerCase().trim();
+  var m = $('listMonth').value;
+
+  var rows = state.posts.filter(function(p){
+    if (m && String(p.date).slice(0, 7) !== m) return false;
+    if (!q) return true;
+    var c = clientById(p.clientId);
+    var hay = [p.title, p.caption, p.hashtags, p.note, c ? c.name : ''].join(' ').toLowerCase();
+    return hay.indexOf(q) !== -1;
+  }).sort(function(a, b){
+    return (a.date + a.time).localeCompare(b.date + b.time);
+  });
+
+  if (!rows.length){
+    $('listBody').innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-400">No posts yet. Press “Plan Whole Month” or “+ New Post” to start.</td></tr>';
+    return;
+  }
+
+  $('listBody').innerHTML = rows.map(function(p){
+    var c = clientById(p.clientId);
+    var st = STATUSES[p.status] || STATUSES.idea;
+    var badges = (p.platforms || []).map(function(k){
+      return '<span class="' + PLATFORMS[k].cls + ' text-white rounded px-1.5 py-0.5 text-[10px] font-bold mr-1">' + PLATFORMS[k].short + '</span>';
+    }).join('');
+    return '<tr class="border-b border-slate-100 hover:bg-slate-50 align-top">' +
+      '<td class="p-2 whitespace-nowrap">' + esc(prettyDate(p.date)) + '</td>' +
+      '<td class="p-2 whitespace-nowrap text-slate-500">' + esc(pretty12(p.time)) + '</td>' +
+      '<td class="p-2 whitespace-nowrap"><span class="inline-flex items-center gap-1">' +
+        '<span class="w-2 h-2 rounded-full" style="background:' + (c ? c.color : '#94a3b8') + '"></span>' +
+        esc(c ? c.name : '—') + '</span></td>' +
+      '<td class="p-2 whitespace-nowrap">' + badges + '</td>' +
+      '<td class="p-2 max-w-[420px]"><div class="font-medium">' + esc(p.title || '') + '</div>' +
+        '<div class="text-slate-500 text-xs whitespace-pre-wrap">' + esc((p.caption || '').slice(0, 180)) +
+        ((p.caption || '').length > 180 ? '…' : '') + '</div>' +
+        (p.hashtags ? '<div class="text-indigo-600 text-xs mt-1">' + esc(p.hashtags) + '</div>' : '') + '</td>' +
+      '<td class="p-2 whitespace-nowrap"><span class="px-2 py-1 rounded-full text-xs ' + st.pill + '">' + st.emoji + ' ' + st.label + '</span></td>' +
+      '<td class="p-2 whitespace-nowrap no-print">' +
+        '<button onclick="openPost(\'' + p.id + '\')" class="text-xs px-2 py-1 rounded border border-slate-300 hover:bg-white">Open</button> ' +
+        '<button onclick="copyPost(\'' + p.id + '\')" class="text-xs px-2 py-1 rounded border border-slate-300 hover:bg-white">Copy</button>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+/* =========================================================================
+   CLIENTS
+   ========================================================================= */
+function renderColorPicker(){
+  $('colorPicker').innerHTML = COLORS.map(function(c){
+    return '<button type="button" data-color="' + c + '" class="colorswatch w-7 h-7 rounded-full border-2 ' +
+      (c === pickedColor ? 'border-slate-800 scale-110' : 'border-transparent') + '" style="background:' + c + '"></button>';
+  }).join('');
+  all('.colorswatch').forEach(function(b){
+    b.onclick = function(){ pickedColor = b.dataset.color; renderColorPicker(); };
+  });
+}
+
+function renderClients(){
+  var box = $('clientList');
+  if (!state.clients.length){
+    box.innerHTML = '<div class="sm:col-span-2 bg-white border border-dashed border-slate-300 rounded-xl p-8 text-center text-slate-500">' +
+      '<div class="text-3xl mb-2">👥</div><div class="font-semibold text-slate-700">No clients yet</div>' +
+      '<div class="text-sm mt-1">Add your first client on the left. You only do this once per client.</div></div>';
+    return;
+  }
+  box.innerHTML = state.clients.map(function(c){
+    var count = state.posts.filter(function(p){ return p.clientId === c.id; }).length;
+    var links = '';
+    if (c.fb) links += linkBtn(normFb(c.fb), 'Facebook', 'bg-[#1877F2]');
+    if (c.ig) links += linkBtn(normIg(c.ig), 'Instagram', 'bg-[#DD2A7B]');
+    if (c.li) links += linkBtn(normLi(c.li), 'LinkedIn', 'bg-[#0A66C2]');
+    return '<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">' +
+      '<div class="flex items-start gap-3">' +
+        '<div class="w-10 h-10 rounded-lg grid place-items-center text-white font-bold shrink-0" style="background:' + c.color + '">' +
+          esc(c.name.slice(0, 2).toUpperCase()) + '</div>' +
+        '<div class="min-w-0 flex-1">' +
+          '<div class="font-bold truncate">' + esc(c.name) + '</div>' +
+          '<div class="text-xs text-slate-500">' + count + ' post' + (count === 1 ? '' : 's') + ' planned</div>' +
+        '</div>' +
+      '</div>' +
+      (links ? '<div class="flex flex-wrap gap-1.5 mt-3">' + links + '</div>' : '<div class="text-xs text-amber-700 mt-3">⚠️ No social links saved yet</div>') +
+      (c.tags ? '<div class="text-xs text-indigo-600 mt-2 break-words">' + esc(c.tags) + '</div>' : '') +
+      (c.notes ? '<div class="text-xs text-slate-500 mt-2 whitespace-pre-wrap">' + esc(c.notes) + '</div>' : '') +
+      '<div class="flex gap-2 mt-3 pt-3 border-t border-slate-100">' +
+        '<button onclick="editClient(\'' + c.id + '\')" class="text-xs px-2 py-1 rounded border border-slate-300 hover:bg-slate-50">Edit</button>' +
+        '<button onclick="planFor(\'' + c.id + '\')" class="text-xs px-2 py-1 rounded border border-emerald-300 text-emerald-700 hover:bg-emerald-50">Plan month</button>' +
+        '<button onclick="deleteClient(\'' + c.id + '\')" class="ml-auto text-xs px-2 py-1 rounded border border-red-200 text-red-600 hover:bg-red-50">Delete</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function linkBtn(url, label, cls){
+  return '<a href="' + esc(url) + '" target="_blank" rel="noopener" class="' + cls +
+         ' text-white text-[11px] font-semibold rounded px-2 py-1 hover:opacity-90">' + label + ' ↗</a>';
+}
+function normFb(v){
+  v = String(v).trim();
+  if (/^https?:\/\//i.test(v)) return v;
+  return 'https://www.facebook.com/' + v.replace(/^@/, '');
+}
+function normIg(v){
+  v = String(v).trim();
+  if (/^https?:\/\//i.test(v)) return v;
+  return 'https://www.instagram.com/' + v.replace(/^@/, '');
+}
+function normLi(v){
+  v = String(v).trim();
+  if (/^https?:\/\//i.test(v)) return v;
+  return 'https://www.linkedin.com/company/' + v.replace(/^@/, '');
+}
+
+function resetClientForm(){
+  $('cId').value = ''; $('cName').value = ''; $('cFb').value = ''; $('cIg').value = '';
+  $('cLi').value = ''; $('cTags').value = ''; $('cNotes').value = '';
+  pickedColor = COLORS[state.clients.length % COLORS.length];
+  renderColorPicker();
+  $('clientFormTitle').textContent = 'Add a Client';
+  $('btnSaveClient').textContent = 'Save Client';
+  $('btnCancelClient').classList.add('hidden');
+}
+
+function editClient(id){
+  var c = clientById(id); if (!c) return;
+  showTab('clients');
+  $('cId').value = c.id; $('cName').value = c.name || ''; $('cFb').value = c.fb || '';
+  $('cIg').value = c.ig || ''; $('cLi').value = c.li || ''; $('cTags').value = c.tags || '';
+  $('cNotes').value = c.notes || '';
+  pickedColor = c.color || COLORS[0];
+  renderColorPicker();
+  $('clientFormTitle').textContent = 'Edit Client';
+  $('btnSaveClient').textContent = 'Update Client';
+  $('btnCancelClient').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function saveClient(){
+  var name = $('cName').value.trim();
+  if (!name){ toast('Please type the client name.'); $('cName').focus(); return; }
+  var id = $('cId').value;
+  var data = {
+    name: name, color: pickedColor,
+    fb: $('cFb').value.trim(), ig: $('cIg').value.trim(), li: $('cLi').value.trim(),
+    tags: $('cTags').value.trim(), notes: $('cNotes').value.trim()
+  };
+  if (id){
+    Object.assign(clientById(id), data);
+    toast('Client updated.');
+  } else {
+    data.id = uid();
+    state.clients.push(data);
+    toast('Client added.');
+  }
+  save(); resetClientForm(); renderClients(); refreshClientDropdowns(); renderCalendar();
+}
+
+function deleteClient(id){
+  var c = clientById(id); if (!c) return;
+  var n = state.posts.filter(function(p){ return p.clientId === id; }).length;
+  var msg = 'Delete "' + c.name + '"?';
+  if (n) msg += '\n\nThis will also delete their ' + n + ' planned post' + (n === 1 ? '' : 's') + '.';
+  if (!confirm(msg)) return;
+  state.clients = state.clients.filter(function(x){ return x.id !== id; });
+  state.posts   = state.posts.filter(function(p){ return p.clientId !== id; });
+  save(); renderClients(); refreshClientDropdowns(); renderCalendar(); renderList();
+  toast('Client deleted.');
+}
+
+function refreshClientDropdowns(){
+  var opts = state.clients.map(function(c){
+    return '<option value="' + c.id + '">' + esc(c.name) + '</option>';
+  }).join('');
+  $('pClient').innerHTML = opts || '<option value="">— add a client first —</option>';
+  $('bClient').innerHTML = opts || '<option value="">— add a client first —</option>';
+  var keep = $('filterClient').value;
+  $('filterClient').innerHTML = '<option value="">All clients</option>' + opts;
+  $('filterClient').value = keep;
+}
+
+/* =========================================================================
+   POST MODAL
+   ========================================================================= */
+function openPost(id, presetDate){
+  if (!state.clients.length){
+    toast('Add a client first — go to the Clients tab.');
+    showTab('clients'); $('cName').focus();
+    return;
+  }
+  refreshClientDropdowns();
+  var p = id ? postById(id) : null;
+
+  $('postModalTitle').textContent = p ? 'Edit Post' : 'New Post';
+  $('pId').value       = p ? p.id : '';
+  $('pClient').value   = p ? p.clientId : ($('filterClient').value || state.clients[0].id);
+  $('pDate').value     = p ? p.date : (presetDate || todayStr());
+  $('pTime').value     = p ? (p.time || '11:00') : '11:00';
+  $('pTitle').value    = p ? (p.title || '') : '';
+  $('pCaption').value  = p ? (p.caption || '') : '';
+  $('pTags').value     = p ? (p.hashtags || '') : (clientById($('pClient').value) || {}).tags || '';
+  $('pImage').value    = p ? (p.image || '') : '';
+  $('pStatus').value   = p ? (p.status || 'idea') : 'idea';
+  $('pNote').value     = p ? (p.note || '') : '';
+
+  var checked = p ? (p.platforms || []) : ['fb', 'ig'];
+  all('.pf').forEach(function(cb){ cb.checked = checked.indexOf(cb.value) !== -1; });
+
+  $('btnDelPost').classList.toggle('hidden', !p);
+  $('btnDupPost').classList.toggle('hidden', !p);
+  $('quickActions').classList.toggle('hidden', !p);
+  if (p) renderQuickActions(p);
+
+  updateCapCount();
+  $('postModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePost(){
+  $('postModal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function renderQuickActions(p){
+  var c = clientById(p.clientId) || {};
+  var btns = '<button onclick="copyPost(\'' + p.id + '\')" class="px-3 py-2 rounded-lg bg-slate-800 text-white text-sm font-semibold">📋 Copy caption + hashtags</button>';
+  (p.platforms || []).forEach(function(k){
+    var url = PLATFORMS[k].url;
+    if (k === 'fb' && c.fb) url = normFb(c.fb);
+    if (k === 'ig' && c.ig) url = normIg(c.ig);
+    if (k === 'li' && c.li) url = normLi(c.li);
+    btns += '<a href="' + esc(url) + '" target="_blank" rel="noopener" class="' + PLATFORMS[k].cls +
+            ' text-white px-3 py-2 rounded-lg text-sm font-semibold">Open ' + PLATFORMS[k].name + ' ↗</a>';
+  });
+  btns += '<button onclick="markPosted(\'' + p.id + '\')" class="px-3 py-2 rounded-lg border border-emerald-300 text-emerald-700 text-sm font-semibold hover:bg-emerald-50">🚀 Mark as posted</button>';
+  $('quickBtns').innerHTML = btns;
+}
+
+function updateCapCount(){
+  var text = $('pCaption').value || '';
+  var picked = all('.pf').filter(function(cb){ return cb.checked; }).map(function(cb){ return cb.value; });
+  var parts = [text.length + ' characters'];
+  picked.forEach(function(k){
+    var lim = PLATFORMS[k].limit;
+    if (text.length > lim) parts.push('⚠️ too long for ' + PLATFORMS[k].name);
+    else if (k !== 'fb') parts.push(PLATFORMS[k].name + ': ' + (lim - text.length) + ' left');
+  });
+  $('capCount').textContent = parts.join('  ·  ');
+}
+
+function savePost(){
+  var clientId = $('pClient').value;
+  if (!clientId){ toast('Choose a client.'); return; }
+  var platforms = all('.pf').filter(function(cb){ return cb.checked; }).map(function(cb){ return cb.value; });
+  if (!platforms.length){ toast('Tick at least one platform.'); return; }
+  if (!$('pDate').value){ toast('Choose a date.'); return; }
+
+  var data = {
+    clientId: clientId,
+    date: $('pDate').value,
+    time: $('pTime').value || '11:00',
+    platforms: platforms,
+    title: $('pTitle').value.trim(),
+    caption: $('pCaption').value,
+    hashtags: $('pTags').value.trim(),
+    image: $('pImage').value.trim(),
+    status: $('pStatus').value,
+    note: $('pNote').value.trim()
+  };
+  var id = $('pId').value;
+  if (id) Object.assign(postById(id), data);
+  else { data.id = uid(); state.posts.push(data); }
+
+  save(); closePost(); renderCalendar(); renderList();
+  toast(id ? 'Post updated.' : 'Post added to ' + prettyDate(data.date) + '.');
+}
+
+function deletePost(){
+  var id = $('pId').value; if (!id) return;
+  if (!confirm('Delete this post?')) return;
+  state.posts = state.posts.filter(function(p){ return p.id !== id; });
+  save(); closePost(); renderCalendar(); renderList();
+  toast('Post deleted.');
+}
+
+function duplicatePost(){
+  var id = $('pId').value; var p = postById(id); if (!p) return;
+  var copy = JSON.parse(JSON.stringify(p));
+  copy.id = uid();
+  copy.status = 'idea';
+  var d = parseYmd(copy.date); d.setDate(d.getDate() + 1);
+  copy.date = ymd(d);
+  state.posts.push(copy);
+  save(); closePost(); renderCalendar(); renderList();
+  toast('Copied to ' + prettyDate(copy.date) + '. Open it to change the client or date.');
+}
+
+function markPosted(id){
+  var p = postById(id); if (!p) return;
+  p.status = 'posted'; save();
+  if ($('pId').value === id) $('pStatus').value = 'posted';
+  renderCalendar(); renderList();
+  toast('Marked as posted. 🚀');
+}
+
+function postText(p){
+  var t = (p.caption || '').trim();
+  if (p.hashtags) t += (t ? '\n\n' : '') + p.hashtags.trim();
+  return t;
+}
+
+function copyPost(id){
+  var p = postById(id); if (!p) return;
+  var text = postText(p);
+  if (!text){ toast('This post has no caption yet.'); return; }
+  copyText(text);
+}
+
+function copyText(text){
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(
+      function(){ toast('Copied! Now paste it on the platform.'); },
+      function(){ fallbackCopy(text); }
+    );
+  } else fallbackCopy(text);
+}
+function fallbackCopy(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); toast('Copied! Now paste it on the platform.'); }
+  catch(e){ toast('Could not copy — please select the text and copy by hand.'); }
+  document.body.removeChild(ta);
+}
+
+/* =========================================================================
+   PLAN THE WHOLE MONTH
+   ========================================================================= */
+var DAY_LABELS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];   // index 0 = Monday
+var bulkDays = [0, 2, 4];
+
+function renderBulkDays(){
+  $('bDays').innerHTML = DAY_LABELS.map(function(d, i){
+    var on = bulkDays.indexOf(i) !== -1;
+    return '<button type="button" data-i="' + i + '" class="bday px-3 py-2 rounded-lg text-sm font-medium border ' +
+      (on ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white border-slate-300 hover:bg-slate-50') + '">' + d + '</button>';
+  }).join('');
+  all('.bday').forEach(function(b){
+    b.onclick = function(){
+      var i = +b.dataset.i;
+      var at = bulkDays.indexOf(i);
+      if (at === -1) bulkDays.push(i); else bulkDays.splice(at, 1);
+      renderBulkDays(); updateBulkPreview();
+    };
+  });
+}
+
+function bulkDates(){
+  var v = $('bMonth').value;
+  if (!v) return [];
+  var parts = v.split('-'), y = +parts[0], m = (+parts[1]) - 1;
+  var days = new Date(y, m + 1, 0).getDate();
+  var out = [];
+  for (var d = 1; d <= days; d++){
+    var wd = (new Date(y, m, d).getDay() + 6) % 7;      // Monday = 0
+    if (bulkDays.indexOf(wd) !== -1) out.push(y + '-' + pad(m + 1) + '-' + pad(d));
+  }
+  return out;
+}
+
+function captionLines(){
+  return ($('bCaptions').value || '').split('\n')
+    .map(function(s){ return s.trim(); })
+    .filter(function(s){ return s.length > 0; });
+}
+
+function updateBulkPreview(){
+  var dates = bulkDates();
+  var lines = captionLines();
+  $('bCount').textContent = lines.length ? lines.length + ' caption' + (lines.length === 1 ? '' : 's') + ' typed' : '';
+  var pf = all('.bf').filter(function(c){ return c.checked; }).map(function(c){ return PLATFORMS[c.value].name; });
+
+  if (!dates.length){
+    $('bPreview').innerHTML = '<span class="text-amber-700">Pick at least one day of the week above.</span>';
+    return;
+  }
+  var filled = Math.min(lines.length, dates.length);
+  var blank = dates.length - filled;
+  $('bPreview').innerHTML =
+    '<b>' + dates.length + ' posts</b> will be created on ' + esc(pf.join(' + ') || 'no platform yet') + '.<br>' +
+    (lines.length ? filled + ' will have your captions ready' + (blank ? ', and ' + blank + ' will be empty slots you can fill later' : '') + '.'
+                  : 'All of them will be empty slots for you to fill in.') +
+    '<div class="text-xs text-slate-500 mt-2">First few dates: ' +
+      esc(dates.slice(0, 6).map(prettyDate).join(' · ')) + (dates.length > 6 ? ' …' : '') + '</div>' +
+    (lines.length > dates.length ? '<div class="text-xs text-amber-700 mt-1">⚠️ You typed ' + lines.length +
+      ' captions but only ' + dates.length + ' days are selected — the extra ' + (lines.length - dates.length) +
+      ' will not be used. Tick more days.</div>' : '');
+}
+
+function openBulk(clientId){
+  if (!state.clients.length){
+    toast('Add a client first — go to the Clients tab.');
+    showTab('clients'); $('cName').focus();
+    return;
+  }
+  refreshClientDropdowns();
+  if (clientId) $('bClient').value = clientId;
+  $('bMonth').value = viewYear + '-' + pad(viewMonth + 1);
+  $('bTags').value = '';
+  $('bCaptions').value = '';
+  renderBulkDays(); updateBulkPreview();
+  $('bulkModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeBulk(){
+  $('bulkModal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+function planFor(clientId){ openBulk(clientId); }
+
+function bulkCreate(){
+  var clientId = $('bClient').value;
+  if (!clientId){ toast('Choose a client.'); return; }
+  var dates = bulkDates();
+  if (!dates.length){ toast('Pick at least one day of the week.'); return; }
+  var platforms = all('.bf').filter(function(c){ return c.checked; }).map(function(c){ return c.value; });
+  if (!platforms.length){ toast('Tick at least one platform.'); return; }
+
+  var client = clientById(clientId);
+  var tags = $('bTags').value.trim() || (client && client.tags) || '';
+  var time = $('bTime').value || '11:00';
+  var lines = captionLines();
+
+  dates.forEach(function(date, i){
+    state.posts.push({
+      id: uid(), clientId: clientId, date: date, time: time,
+      platforms: platforms.slice(),
+      title: lines[i] ? lines[i].slice(0, 40) : ('Post ' + (i + 1)),
+      caption: lines[i] || '',
+      hashtags: tags, image: '',
+      status: lines[i] ? 'ready' : 'idea',
+      note: ''
+    });
+  });
+
+  save(); closeBulk();
+  var parts = $('bMonth').value.split('-');
+  viewYear = +parts[0]; viewMonth = (+parts[1]) - 1;
+  showTab('calendar'); renderCalendar(); renderList();
+  toast(dates.length + ' posts created for ' + (client ? client.name : '') + '. 🎉');
+}
+
+/* =========================================================================
+   EXPORT / IMPORT / WEBHOOK
+   ========================================================================= */
+function download(filename, text, type){
+  var blob = new Blob([text], { type: type || 'text/plain;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+}
+
+function exportBackup(){
+  var name = 'social-planner-backup-' + todayStr() + '.json';
+  download(name, JSON.stringify(state, null, 2), 'application/json');
+  toast('Backup downloaded. Keep it safe.');
+}
+
+function csvCell(v){
+  v = String(v == null ? '' : v);
+  return '"' + v.replace(/"/g, '""') + '"';
+}
+function exportCsv(){
+  if (!state.posts.length){ toast('Nothing to export yet.'); return; }
+  var head = ['Date','Time','Client','Facebook','Instagram','LinkedIn','Platforms','Title','Caption','Hashtags','Image','Status','Note'];
+  var rows = state.posts.slice().sort(function(a,b){ return (a.date+a.time).localeCompare(b.date+b.time); })
+    .map(function(p){
+      var c = clientById(p.clientId) || {};
+      return [
+        p.date, p.time, c.name || '', c.fb || '', c.ig || '', c.li || '',
+        (p.platforms || []).map(function(k){ return PLATFORMS[k].name; }).join(' + '),
+        p.title || '', p.caption || '', p.hashtags || '', p.image || '',
+        (STATUSES[p.status] || STATUSES.idea).label, p.note || ''
+      ].map(csvCell).join(',');
+    });
+  // BOM so Excel opens Urdu/English text correctly
+  download('social-posts-' + todayStr() + '.csv', '﻿' + head.map(csvCell).join(',') + '\n' + rows.join('\n'), 'text/csv;charset=utf-8');
+  toast('CSV downloaded — open it in Excel.');
+}
+
+function importBackup(file){
+  var reader = new FileReader();
+  reader.onload = function(){
+    try {
+      var d = JSON.parse(reader.result);
+      if (!d || !Array.isArray(d.posts) || !Array.isArray(d.clients)) throw new Error('bad file');
+      if (!confirm('This will replace everything currently in the planner with the backup file.\n\nContinue?')) return;
+      state.clients = d.clients;
+      state.posts = d.posts;
+      state.settings = Object.assign({ agencyName: 'My Agency', webhookUrl: '' }, d.settings || {});
+      save(); boot(); toast('Backup restored. ✅');
+    } catch(e){
+      alert('That file could not be read. Please choose a backup file that this planner created.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function webhookPayload(p){
+  var c = clientById(p.clientId) || {};
+  return {
+    id: p.id,
+    scheduled_for: p.date + 'T' + (p.time || '11:00'),
+    client: { name: c.name || '', facebook: c.fb || '', instagram: c.ig || '', linkedin: c.li || '' },
+    platforms: p.platforms || [],
+    message: postText(p),
+    caption: p.caption || '',
+    hashtags: p.hashtags || '',
+    media: p.image || '',
+    status: p.status
+  };
+}
+
+function sendToWebhook(items, label){
+  var url = ($('webhookUrl').value || '').trim();
+  var msg = $('webhookMsg');
+  if (!url){ msg.className = 'text-xs mt-2 text-amber-700'; msg.textContent = 'Please type a webhook address first.'; return; }
+  if (!/^https:\/\//i.test(url)){ msg.className = 'text-xs mt-2 text-amber-700'; msg.textContent = 'The address must start with https:// so your clients’ content is not sent in the open.'; return; }
+  if (!items.length){ msg.className = 'text-xs mt-2 text-amber-700'; msg.textContent = 'There is nothing to send.'; return; }
+
+  msg.className = 'text-xs mt-2 text-slate-500';
+  msg.textContent = 'Sending ' + items.length + ' ' + label + '…';
+
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ source: 'social-planner', sent_at: new Date().toISOString(), posts: items })
+  }).then(function(r){
+    if (r.ok){
+      msg.className = 'text-xs mt-2 text-emerald-700';
+      msg.textContent = '✅ Sent ' + items.length + ' ' + label + '. Check your automation tool to confirm it arrived.';
+    } else {
+      msg.className = 'text-xs mt-2 text-red-700';
+      msg.textContent = 'The address answered with an error (' + r.status + '). Check the link is correct and switched on.';
+    }
+  }).catch(function(){
+    msg.className = 'text-xs mt-2 text-red-700';
+    msg.textContent = 'Could not reach that address. Common reasons: the link is wrong, the tool is switched off, or it is not allowing requests from a file opened on your computer.';
+  });
+}
+
+/* =========================================================================
+   SAMPLE DATA / WIPE / STORAGE INFO
+   ========================================================================= */
+function loadDemo(){
+  if (state.clients.length || state.posts.length){
+    if (!confirm('This will add sample clients and posts on top of what you already have.\n\nContinue?')) return;
+  }
+  var c1 = { id: uid(), name: 'Al-Noor Textiles', color: '#6366f1',
+    fb: 'https://facebook.com/alnoortextiles', ig: '@alnoortextiles', li: 'al-noor-textiles',
+    tags: '#AlNoorTextiles #Lahore #Fabric', notes: 'Warm, family tone. Approval from Mr. Khan before posting.' };
+  var c2 = { id: uid(), name: 'Cafe Zaiqa', color: '#ec4899',
+    fb: 'https://facebook.com/cafezaiqa', ig: '@cafezaiqa', li: '',
+    tags: '#CafeZaiqa #Foodie #Karachi', notes: 'Fun and short captions. Food photos every Friday.' };
+  state.clients.push(c1, c2);
+
+  var samples = [
+    ['New winter collection has arrived in store. Come and feel the fabric yourself.', 'ready'],
+    ['Behind the scenes at our weaving unit this morning. 🧵', 'approved'],
+    ['Thank you Ayesha for this lovely review! ⭐⭐⭐⭐⭐', 'idea'],
+    ['Friday special: 20% off on all lawn suits, today only.', 'approved'],
+    ['Meet Bilal, who has been with us for 14 years.', 'ready'],
+    ['Which colour should we make next? Tell us in the comments 👇', 'idea']
+  ];
+  var d = new Date(viewYear, viewMonth, 2);
+  samples.forEach(function(s, i){
+    var day = new Date(viewYear, viewMonth, 2 + i * 3);
+    state.posts.push({
+      id: uid(), clientId: (i % 2 ? c2.id : c1.id), date: ymd(day),
+      time: i % 2 ? '18:30' : '11:00',
+      platforms: i % 3 === 0 ? ['fb','ig','li'] : ['fb','ig'],
+      title: s[0].slice(0, 34), caption: s[0],
+      hashtags: (i % 2 ? c2.tags : c1.tags), image: '', status: s[1], note: ''
+    });
+  });
+  save(); boot(); toast('Sample data loaded — click around and try it.');
+}
+
+function wipeAll(){
+  if (!confirm('This deletes ALL clients and ALL posts from this browser.\n\nAre you sure?')) return;
+  if (!confirm('Last check — this cannot be undone unless you have a backup file.\n\nDelete everything?')) return;
+  state = { clients: [], posts: [], settings: { agencyName: 'My Agency', webhookUrl: '' } };
+  save(); boot(); toast('Everything deleted.');
+}
+
+function renderStorageInfo(){
+  var bytes = 0;
+  try { bytes = new Blob([localStorage.getItem(STORE_KEY) || '']).size; } catch(e){}
+  var kb = (bytes / 1024).toFixed(1);
+  $('storageInfo').textContent =
+    state.clients.length + ' clients · ' + state.posts.length + ' posts · about ' + kb + ' KB used in this browser.';
+}
+
+/* =========================================================================
+   START UP + EVENT WIRING
+   ========================================================================= */
+function boot(){
+  $('agencyLabel').textContent = state.settings.agencyName || 'My Agency';
+  $('agencyName').value = state.settings.agencyName || '';
+  $('webhookUrl').value = state.settings.webhookUrl || '';
+  refreshClientDropdowns();
+  renderColorPicker();
+  renderClients();
+  renderCalendar();
+  renderList();
+  renderStorageInfo();
+}
+
+(function init(){
+  load();
+  var now = new Date();
+  viewYear = now.getFullYear();
+  viewMonth = now.getMonth();
+
+  /* tabs */
+  all('.tabbtn').forEach(function(b){ b.onclick = function(){ showTab(b.dataset.tab); }; });
+
+  /* calendar */
+  $('prevMonth').onclick = function(){
+    viewMonth--; if (viewMonth < 0){ viewMonth = 11; viewYear--; } renderCalendar();
+  };
+  $('nextMonth').onclick = function(){
+    viewMonth++; if (viewMonth > 11){ viewMonth = 0; viewYear++; } renderCalendar();
+  };
+  $('todayBtn').onclick = function(){
+    var n = new Date(); viewYear = n.getFullYear(); viewMonth = n.getMonth(); renderCalendar();
+  };
+  ['filterClient','filterPlatform','filterStatus'].forEach(function(id){
+    $(id).onchange = renderCalendar;
+  });
+  $('btnPrint').onclick = function(){ window.print(); };
+  $('btnPrint2').onclick = function(){ window.print(); };
+
+  $('calGrid').addEventListener('click', function(e){
+    var chip = e.target.closest('[data-id]');
+    if (chip){ openPost(chip.dataset.id); return; }
+    var cell = e.target.closest('[data-date]');
+    if (cell) openPost(null, cell.dataset.date);
+  });
+
+  /* list */
+  $('searchBox').oninput = renderList;
+  $('listMonth').onchange = renderList;
+  $('btnCsv').onclick = exportCsv;
+  $('btnCsv2').onclick = exportCsv;
+
+  /* clients */
+  $('btnSaveClient').onclick = saveClient;
+  $('btnCancelClient').onclick = resetClientForm;
+  $('cName').addEventListener('keydown', function(e){ if (e.key === 'Enter') saveClient(); });
+
+  /* post modal */
+  $('btnNewPost').onclick = function(){ openPost(null, null); };
+  $('closeModal').onclick = closePost;
+  $('btnCancelPost').onclick = closePost;
+  $('btnSavePost').onclick = savePost;
+  $('btnDelPost').onclick = deletePost;
+  $('btnDupPost').onclick = duplicatePost;
+  $('pCaption').oninput = updateCapCount;
+  all('.pf').forEach(function(cb){ cb.onchange = updateCapCount; });
+  $('pClient').onchange = function(){
+    if (!$('pId').value && !$('pTags').value){
+      var c = clientById($('pClient').value);
+      if (c && c.tags) $('pTags').value = c.tags;
+    }
+  };
+  $('postModal').addEventListener('mousedown', function(e){ if (e.target === $('postModal')) closePost(); });
+
+  /* bulk modal */
+  $('btnBulk').onclick = function(){ openBulk(null); };
+  $('closeBulk').onclick = closeBulk;
+  $('btnBulkCancel').onclick = closeBulk;
+  $('btnBulkCreate').onclick = bulkCreate;
+  $('bCaptions').oninput = updateBulkPreview;
+  $('bMonth').onchange = updateBulkPreview;
+  all('.bf').forEach(function(c){ c.onchange = updateBulkPreview; });
+  all('.bpreset').forEach(function(b){
+    b.onclick = function(){
+      var p = b.dataset.preset;
+      if (p === 'all')  bulkDays = [0,1,2,3,4,5,6];
+      if (p === 'week') bulkDays = [0,1,2,3,4];
+      if (p === 'mwf')  bulkDays = [0,2,4];
+      if (p === 'none') bulkDays = [];
+      renderBulkDays(); updateBulkPreview();
+    };
+  });
+  $('bulkModal').addEventListener('mousedown', function(e){ if (e.target === $('bulkModal')) closeBulk(); });
+
+  /* connections */
+  $('btnSaveWebhook').onclick = function(){
+    state.settings.webhookUrl = $('webhookUrl').value.trim(); save();
+    $('webhookMsg').className = 'text-xs mt-2 text-emerald-700';
+    $('webhookMsg').textContent = 'Saved.';
+  };
+  $('btnTestWebhook').onclick = function(){
+    sendToWebhook([{ id: 'test', scheduled_for: new Date().toISOString(),
+      client: { name: 'Test Client' }, platforms: ['fb'],
+      message: 'This is a test from the Social Media Planner.', status: 'test' }], 'test post');
+  };
+  $('btnSendMonth').onclick = function(){
+    var prefix = viewYear + '-' + pad(viewMonth + 1);
+    var items = state.posts
+      .filter(function(p){ return String(p.date).indexOf(prefix) === 0 && p.status === 'approved'; })
+      .map(webhookPayload);
+    sendToWebhook(items, 'approved posts');
+  };
+  $('btnSaveAgency').onclick = function(){
+    state.settings.agencyName = $('agencyName').value.trim() || 'My Agency';
+    save(); $('agencyLabel').textContent = state.settings.agencyName;
+    toast('Saved.');
+  };
+
+  /* backup */
+  $('btnExport').onclick = exportBackup;
+  $('importFile').onchange = function(e){ if (e.target.files[0]) importBackup(e.target.files[0]); e.target.value = ''; };
+  $('btnDemo').onclick = loadDemo;
+  $('btnWipe').onclick = wipeAll;
+
+  /* keyboard shortcuts */
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape'){ closePost(); closeBulk(); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 's'){ e.preventDefault(); save(); toast('Saved.'); }
+  });
+
+  showTab('calendar');
+  boot();
+})();
+</script>
+</body>
+</html>
