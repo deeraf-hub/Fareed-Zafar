@@ -1,4 +1,4 @@
-import { Clock, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
+import { Clock, ExternalLink, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { useState } from 'react';
 import { Breadcrumbs } from '../components/ui/Breadcrumbs';
 import { siteConfig } from '../config/site';
@@ -110,13 +110,27 @@ const Contact = () => {
           </div>
 
           <div className="card overflow-hidden">
+            {/* Some hosts block third-party frames, so the address link below always works. */}
             <iframe
               title={`Map showing ${siteConfig.name}`}
               src={`https://maps.google.com/maps?q=${encodeURIComponent(siteConfig.mapsEmbedQuery)}&output=embed`}
-              className="h-72 w-full border-0"
+              className="h-72 w-full border-0 bg-ink-100"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteConfig.mapsEmbedQuery)}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex items-center justify-between gap-3 border-t border-ink-200 px-4 py-3 text-sm font-medium text-ink-800 transition-colors hover:text-brand-600"
+            >
+              <span>
+                {siteConfig.address.line1}, {siteConfig.address.city}
+              </span>
+              <span className="inline-flex items-center gap-1 text-brand-600">
+                Open in Google Maps <ExternalLink className="size-4" aria-hidden="true" />
+              </span>
+            </a>
           </div>
         </div>
 

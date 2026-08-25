@@ -16,11 +16,29 @@ cd web
 npm install
 npm run dev      # development server (http://localhost:5173)
 npm run build    # type-check + production build into dist/
-npm run preview  # serve the production build
+npm run preview  # serve the production build (http://localhost:4173)
 npm run lint     # TypeScript check only
 ```
 
 Node 18+ is required.
+
+### Deploying
+
+`npm run build` writes a static site to `web/dist/` that any static host serves.
+Clean URLs need unknown paths rewritten to `index.html`; `public/_redirects` handles
+that on Netlify, and the `netlify.toml` at the repository root sets `base = "web"`
+for a git-connected deploy. On a host with no rewrite support, build with
+`VITE_ROUTER=hash` so routes become `/#/shop`.
+
+### One-file preview
+
+```bash
+npm run build:single   # dist-single/qalandari-autos.html
+```
+
+Bundles the whole storefront — JavaScript, CSS and every product illustration as a
+data URI — into a single HTML file that opens straight from disk. Useful for sending
+someone a preview; it uses the hash router and is not what you deploy.
 
 ## Tech stack
 
