@@ -13,9 +13,9 @@ export const siteConfig = {
   description:
     'Motorcycle spare parts and accessories for Honda, Yamaha, Suzuki, United, Road Prince and Super Power bikes. Engine, electrical, brake, suspension and chain parts with cash on delivery across Pakistan.',
 
-  /** Contact details — PLACEHOLDER values until confirmed by the business. */
-  phone: '+92 300 0000000', // PLACEHOLDER
-  phoneHref: 'tel:+923000000000', // PLACEHOLDER
+  /** Contact details — the ones marked PLACEHOLDER still need confirming. */
+  phone: '0300-2389772',
+  phoneHref: 'tel:+923002389772',
   email: 'info@qalandariautos.pk', // PLACEHOLDER
   address: {
     line1: 'Shop # 00, Auto Parts Market', // PLACEHOLDER

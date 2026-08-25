@@ -92,9 +92,9 @@ const Contact = () => {
               </li>
             </ul>
             <p className="mt-5 rounded-lg bg-ink-50 p-3 text-xs text-ink-500">
-              Contact details shown here are placeholders held in one configuration file
-              (<code className="font-mono">src/config/site.ts</code>) — update them there and they change across the
-              whole site.
+              The email address, shop address and map location above are still placeholders. All contact details live
+              in one configuration file (<code className="font-mono">src/config/site.ts</code>) — update them there and
+              they change across the whole site.
             </p>
           </div>
 
