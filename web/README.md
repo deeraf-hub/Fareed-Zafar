@@ -25,6 +25,13 @@ npm run build:single   # one self-contained HTML file (see below)
 
 Node 18+ is required.
 
+### Live preview
+
+A copy of this store runs on Lovable at **https://qalandari-autos.lovable.app** — the same
+catalogue, filters, cart, checkout, order tracking and admin dashboard, ported into a
+TanStack Start project. This repository stays the source of truth; the Lovable project is a
+hosted preview.
+
 ### Deploying
 
 `npm run build` writes a static site to `web/dist/` that any static host serves.
