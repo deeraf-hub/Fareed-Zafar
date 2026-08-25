@@ -1,4 +1,4 @@
-import { Bike, BadgeCheck, MessageCircle, Tag } from 'lucide-react';
+import { Bike, BadgeCheck, Phone, Tag } from 'lucide-react';
 
 const benefits = [
   {
@@ -17,9 +17,9 @@ const benefits = [
     description: 'Parts for popular motorcycle models in Pakistan.',
   },
   {
-    icon: MessageCircle,
+    icon: Phone,
     title: 'Easy Ordering',
-    description: 'Order online or contact us through WhatsApp.',
+    description: 'Order online, or call the shop and we will take it over the phone.',
   },
 ];
 

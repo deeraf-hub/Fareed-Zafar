@@ -2,7 +2,6 @@ import { Outlet } from 'react-router-dom';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { MobileCartBar } from './MobileCartBar';
-import { WhatsAppFab } from './WhatsAppFab';
 
 export const StoreLayout = () => (
   <div className="flex min-h-screen flex-col">
@@ -17,7 +16,6 @@ export const StoreLayout = () => (
       <Outlet />
     </main>
     <Footer />
-    <WhatsAppFab />
     <MobileCartBar />
   </div>
 );

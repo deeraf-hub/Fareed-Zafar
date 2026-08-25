@@ -1,11 +1,10 @@
-import { ArrowLeft, MessageCircle, Phone } from 'lucide-react';
+import { ArrowLeft, Mail, Phone } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { OrderStatusBadge, orderStatuses } from '../../components/admin/OrderStatusBadge';
 import { OrderStatusTracker } from '../../components/order/OrderStatusTracker';
 import { siteConfig } from '../../config/site';
 import { formatDateTime, formatPKR } from '../../lib/format';
 import { useSeo } from '../../lib/seo';
-import { whatsappLink } from '../../lib/whatsapp';
 import { useOrders } from '../../store/OrdersContext';
 import type { OrderStatus } from '../../types';
 import { ProductImage } from '../../components/product/ProductImage';
@@ -151,20 +150,18 @@ const AdminOrderDetail = () => {
             <a href={`tel:${order.customer.phone.replace(/\s/g, '')}`} className="btn-outline w-full">
               <Phone className="size-4" aria-hidden="true" /> Call customer
             </a>
-            <a
-              href={whatsappLink(
-                `Hello ${order.customer.name}, this is ${siteConfig.name} regarding your order ${order.orderNumber}.`,
-              )}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="btn-whatsapp w-full"
-            >
-              <MessageCircle className="size-4" aria-hidden="true" /> Message on WhatsApp
-            </a>
+            {order.customer.email && (
+              <a
+                href={`mailto:${order.customer.email}?subject=${encodeURIComponent(
+                  `${siteConfig.name} — order ${order.orderNumber}`,
+                )}`}
+                className="btn-outline w-full"
+              >
+                <Mail className="size-4" aria-hidden="true" /> Email customer
+              </a>
+            )}
             <p className="text-xs text-ink-500">
-              WhatsApp opens a chat from the business number configured in{' '}
-              <code className="font-mono">site.ts</code>. Customer notifications are sent manually until a notification
-              service is connected.
+              Customer notifications are sent manually until a notification service is connected.
             </p>
           </div>
         </section>

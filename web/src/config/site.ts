@@ -3,11 +3,8 @@
  *
  * Every value marked PLACEHOLDER must be replaced with the real business
  * detail before going live. Nothing else in the codebase hardcodes a phone
- * number, address or WhatsApp number — change it here and it changes everywhere.
+ * number or address — change it here and it changes everywhere.
  */
-
-/** WhatsApp number in international format, digits only (no +, spaces or dashes). */
-export const WHATSAPP_NUMBER = '923000000000'; // PLACEHOLDER
 
 export const siteConfig = {
   name: 'Qalandari Autos & Spare Parts',
@@ -19,7 +16,6 @@ export const siteConfig = {
   /** Contact details — PLACEHOLDER values until confirmed by the business. */
   phone: '+92 300 0000000', // PLACEHOLDER
   phoneHref: 'tel:+923000000000', // PLACEHOLDER
-  whatsapp: WHATSAPP_NUMBER,
   email: 'info@qalandariautos.pk', // PLACEHOLDER
   address: {
     line1: 'Shop # 00, Auto Parts Market', // PLACEHOLDER

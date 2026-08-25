@@ -1,7 +1,6 @@
-import { ArrowRight, MessageCircle, ShieldCheck, Truck, Wrench } from 'lucide-react';
+import { ArrowRight, Phone, ShieldCheck, Truck, Wrench } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { siteConfig } from '../../config/site';
-import { generalInquiryLink } from '../../lib/whatsapp';
 import { photoAlt, photoUrl } from '../../data/photos';
 import { ProductImage } from '../product/ProductImage';
 import { SearchBar } from '../shop/SearchBar';
@@ -30,8 +29,8 @@ export const Hero = () => (
           <Link to="/contact" className="btn px-6 bg-white/10 text-white hover:bg-white/20">
             Contact Us
           </Link>
-          <a href={generalInquiryLink()} target="_blank" rel="noreferrer noopener" className="btn-whatsapp px-6">
-            <MessageCircle className="size-4" aria-hidden="true" /> WhatsApp
+          <a href={siteConfig.phoneHref} className="btn px-6 bg-white/10 text-white hover:bg-white/20">
+            <Phone className="size-4" aria-hidden="true" /> {siteConfig.phone}
           </a>
         </div>
 

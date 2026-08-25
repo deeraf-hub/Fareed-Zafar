@@ -92,7 +92,7 @@ const CategoryPage = () => {
         <EmptyState
           icon={PackageSearch}
           title="No products in this category yet"
-          description="We are adding stock to this category. Message us on WhatsApp and we will tell you what is available."
+          description="We are adding stock to this category. Contact us and we will tell you what is available."
           action={
             <Link to="/shop" className="btn-primary">
               Browse all parts

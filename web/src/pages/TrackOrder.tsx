@@ -1,4 +1,4 @@
-import { CircleAlert, MessageCircle, PackageSearch, Search } from 'lucide-react';
+import { CircleAlert, PackageSearch, Phone, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { OrderStatusTracker } from '../components/order/OrderStatusTracker';
@@ -6,7 +6,6 @@ import { Breadcrumbs } from '../components/ui/Breadcrumbs';
 import { siteConfig } from '../config/site';
 import { formatDateTime, formatPKR } from '../lib/format';
 import { useSeo } from '../lib/seo';
-import { generalInquiryLink } from '../lib/whatsapp';
 import { useOrders } from '../store/OrdersContext';
 import type { Order } from '../types';
 import { ProductImage } from '../components/product/ProductImage';
@@ -49,7 +48,7 @@ const TrackOrder = () => {
       const found = findOrder(orderNumber, phone);
       if (!found) {
         setError(
-          'No order matches that order number and mobile number. Check both, or contact us on WhatsApp and we will look it up.',
+          'No order matches that order number and mobile number. Check both, or call the shop and we will look it up.',
         );
       } else {
         setResult(found);
@@ -165,10 +164,10 @@ const TrackOrder = () => {
           <div className="mt-8 flex flex-col items-start gap-3 rounded-xl border border-ink-200 bg-ink-50 p-5 sm:flex-row sm:items-center">
             <PackageSearch className="size-6 shrink-0 text-ink-400" aria-hidden="true" />
             <p className="flex-1 text-sm text-ink-600">
-              Lost your order number? Message us on WhatsApp with the mobile number you ordered from and we will find it.
+              Lost your order number? Call the shop with the mobile number you ordered from and we will find it.
             </p>
-            <a href={generalInquiryLink()} target="_blank" rel="noreferrer noopener" className="btn-whatsapp">
-              <MessageCircle className="size-4" aria-hidden="true" /> WhatsApp
+            <a href={siteConfig.phoneHref} className="btn-primary">
+              <Phone className="size-4" aria-hidden="true" /> {siteConfig.phone}
             </a>
           </div>
         )}

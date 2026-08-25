@@ -1,9 +1,9 @@
-import { ArrowRight, MessageCircle, ShoppingCart } from 'lucide-react';
+import { ArrowRight, Phone, ShoppingCart } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { siteConfig } from '../../config/site';
 import { categoryBySlug } from '../../data/categories';
 import { formatPKR } from '../../lib/format';
-import { productInquiryLink } from '../../lib/whatsapp';
 import { useCart } from '../../store/CartContext';
 import type { Product } from '../../types';
 import { Modal } from '../ui/Modal';
@@ -83,13 +83,8 @@ export const ProductQuickView = ({ product, onClose }: ProductQuickViewProps) =>
           </div>
 
           <div className="mt-3 flex flex-wrap gap-3">
-            <a
-              href={productInquiryLink(product)}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="btn-whatsapp flex-1"
-            >
-              <MessageCircle className="size-4" aria-hidden="true" /> Ask on WhatsApp
+            <a href={siteConfig.phoneHref} className="btn-outline flex-1">
+              <Phone className="size-4" aria-hidden="true" /> Call to ask
             </a>
             <Link to={`/shop/${product.slug}`} className="btn-outline flex-1" onClick={onClose}>
               Full details <ArrowRight className="size-4" aria-hidden="true" />

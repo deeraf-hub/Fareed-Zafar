@@ -45,7 +45,7 @@ const Checkout = () => {
       clearCart();
       navigate(`/order-confirmation/${order.orderNumber}`, { replace: true });
     } catch {
-      setError('We could not place the order. Please try again, or send us the order on WhatsApp.');
+      setError('We could not place the order. Please try again, or call the shop and we will take it over the phone.');
       setSubmitting(false);
     }
   };

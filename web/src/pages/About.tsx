@@ -1,17 +1,16 @@
-import { BadgeCheck, Bike, MessageCircle, Tag, Users, Wrench } from 'lucide-react';
+import { BadgeCheck, Bike, Mail, Phone, Tag, Users, Wrench } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Breadcrumbs } from '../components/ui/Breadcrumbs';
 import { siteConfig } from '../config/site';
 import { useSeo } from '../lib/seo';
-import { generalInquiryLink } from '../lib/whatsapp';
 
 const values = [
   { icon: BadgeCheck, title: 'Quality products', text: 'Parts are checked before they are packed and dispatched.' },
   { icon: Tag, title: 'Competitive prices', text: 'Options across budgets, with prices listed openly on every product.' },
   { icon: Bike, title: 'Popular bike compatibility', text: 'Fitment is listed on every part, from CD 70 to GS 150.' },
-  { icon: Users, title: 'Customer service', text: 'Ask before you order — we confirm fitment on WhatsApp or by phone.' },
+  { icon: Users, title: 'Customer service', text: 'Ask before you order — we confirm fitment by phone or email.' },
   { icon: Wrench, title: 'Workshop stock', text: 'Mechanics and workshops can order the parts they use every day.' },
-  { icon: MessageCircle, title: 'Reliable availability', text: 'Stock status is shown on each product, including when it runs out.' },
+  { icon: Mail, title: 'Reliable availability', text: 'Stock status is shown on each product, including when it runs out.' },
 ];
 
 const About = () => {
@@ -39,8 +38,8 @@ const About = () => {
           and whether it is in stock, so you can decide before you order rather than after the part arrives.
         </p>
         <p className="mt-4 text-base leading-relaxed text-ink-600">
-          If you are not sure which part your bike needs, send us the model and a photo of the old part on WhatsApp. We
-          will confirm what fits, quote the price and tell you honestly if we do not have it.
+          If you are not sure which part your bike needs, call the shop with your model, or email us a photo of the old
+          part. We will confirm what fits, quote the price and tell you honestly if we do not have it.
         </p>
       </div>
 
@@ -60,8 +59,8 @@ const About = () => {
         <Link to="/shop" className="btn-primary px-6">
           Browse the shop
         </Link>
-        <a href={generalInquiryLink()} target="_blank" rel="noreferrer noopener" className="btn-whatsapp px-6">
-          <MessageCircle className="size-4" aria-hidden="true" /> Ask a question
+        <a href={siteConfig.phoneHref} className="btn-outline px-6">
+          <Phone className="size-4" aria-hidden="true" /> Call {siteConfig.phone}
         </a>
       </div>
     </div>

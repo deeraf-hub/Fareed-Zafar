@@ -190,7 +190,7 @@ const Shop = () => {
             <EmptyState
               icon={PackageSearch}
               title="No products found"
-              description="Try another search or browse our categories. You can also send us the part name on WhatsApp and we will check for you."
+              description="Try another search or browse our categories. You can also call the shop with the part name and we will check for you."
               action={
                 <button type="button" className="btn-primary" onClick={() => setParams(new URLSearchParams(), { replace: true })}>
                   Clear search and filters

@@ -65,16 +65,11 @@ someone a preview; it uses the hash router and is not what you deploy.
 
 ## Business configuration — edit these first
 
-Everything the business owns lives in **one file**: [`src/config/site.ts`](src/config/site.ts).
-
-```ts
-export const WHATSAPP_NUMBER = '923000000000'; // digits only, international format
-```
-
-That file also holds the phone number, email, shop address, business hours, map location, social
-links, delivery fee, free-delivery threshold and the low-stock threshold. Every value marked
-`// PLACEHOLDER` must be replaced with the real business detail before launch — nothing else in the
-codebase hardcodes contact information.
+Everything the business owns lives in **one file**: [`src/config/site.ts`](src/config/site.ts) — the
+phone number, email, shop address, business hours, map location, social links, delivery fee,
+free-delivery threshold and the low-stock threshold. Every value marked `// PLACEHOLDER` must be
+replaced with the real business detail before launch — nothing else in the codebase hardcodes
+contact information.
 
 Other editable content:
 
@@ -108,9 +103,9 @@ toggles), Orders (filter, open, change status), Customers (derived from order hi
   the shop page. It matches product name, SKU, category, description and compatible bikes, so
   "CD 70", "brake shoe" and "QAS-BRK-001" all work. Shop filters live in the URL, so any filtered
   result set can be shared or bookmarked.
-- **WhatsApp** (`src/lib/whatsapp.ts`) — every WhatsApp button is built from `WHATSAPP_NUMBER`.
-  Product buttons prefill: *"Hello Qalandari Autos & Spare Parts, I am interested in [product].
-  Price: PKR [price]. Is this product available?"*
+- **Contact actions** — every "call us" button uses `siteConfig.phoneHref` and every email link
+  uses `siteConfig.email`. Product pages offer a prefilled email enquiry, and the contact form
+  composes a message into the visitor's email client rather than storing anything.
 - **SEO** (`src/lib/seo.ts`) — per-page title, meta description, canonical URL, Open Graph tags and
   JSON-LD (`Product` on product pages, `Store` / `LocalBusiness` on home and contact). Admin and
   cart pages are marked `noindex`.
@@ -166,7 +161,7 @@ The data layer is deliberately isolated. To move to Supabase/PostgreSQL:
 4. Swap `AdminAuthContext` for Supabase Auth and put row-level security on the admin tables.
 5. Keep secrets in environment variables; none are needed by the frontend today.
 
-Order notifications (WhatsApp / email / SMS) are not wired up. `placeOrder` is the single point
+Order notifications (email / SMS) are not wired up. `placeOrder` is the single point
 where an order is created, so a notification call belongs there once a backend exists.
 
 ## Accessibility & performance notes

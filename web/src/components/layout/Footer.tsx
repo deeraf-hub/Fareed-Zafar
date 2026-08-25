@@ -1,8 +1,7 @@
-import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { siteConfig } from '../../config/site';
 import { categories } from '../../data/categories';
-import { generalInquiryLink } from '../../lib/whatsapp';
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from './SocialIcons';
 
 const shopLinks = [
@@ -102,12 +101,6 @@ export const Footer = () => (
             <Phone className="mt-0.5 size-4 shrink-0 text-brand-500" aria-hidden="true" />
             <a href={siteConfig.phoneHref} className="transition-colors hover:text-white">
               {siteConfig.phone}
-            </a>
-          </li>
-          <li className="flex gap-2.5">
-            <MessageCircle className="mt-0.5 size-4 shrink-0 text-brand-500" aria-hidden="true" />
-            <a href={generalInquiryLink()} target="_blank" rel="noreferrer noopener" className="transition-colors hover:text-white">
-              WhatsApp us
             </a>
           </li>
           <li className="flex gap-2.5">

@@ -1,4 +1,4 @@
-import { Check, MessageCircle, PackageX, ShieldCheck, ShoppingCart, Truck } from 'lucide-react';
+import { Check, Mail, PackageX, Phone, ShieldCheck, ShoppingCart, Truck } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { SectionHeading } from '../components/home/SectionHeading';
@@ -13,7 +13,6 @@ import { categoryBySlug } from '../data/categories';
 import { bikes } from '../data/bikes';
 import { discountPercent, formatPKR } from '../lib/format';
 import { useSeo } from '../lib/seo';
-import { productInquiryLink, stockInquiryLink } from '../lib/whatsapp';
 import { useCart } from '../store/CartContext';
 import { useCatalog } from '../store/CatalogContext';
 import { ProductImage } from '../components/product/ProductImage';
@@ -145,8 +144,8 @@ const ProductDetail = () => {
               Checked before dispatch
             </div>
             <div className="card flex items-center gap-2 p-3">
-              <MessageCircle className="size-4 shrink-0 text-brand-600" aria-hidden="true" />
-              Fitment help on WhatsApp
+              <Phone className="size-4 shrink-0 text-brand-600" aria-hidden="true" />
+              Fitment help by phone
             </div>
           </div>
         </div>
@@ -193,7 +192,7 @@ const ProductDetail = () => {
               })}
             </ul>
             <p className="mt-3 text-xs text-ink-500">
-              Not sure if this fits your bike? Send us the model on WhatsApp and we will confirm before you order.
+              Not sure if this fits your bike? Call the shop with your model and we will confirm before you order.
             </p>
           </div>
 
@@ -226,26 +225,23 @@ const ProductDetail = () => {
             <div className="mt-6 rounded-xl border border-ink-200 bg-ink-50 p-4">
               <p className="text-sm font-medium text-ink-800">This part is currently out of stock.</p>
               <p className="mt-1 text-sm text-ink-500">
-                Message us on WhatsApp and we will tell you when it is back or suggest an alternative that fits your bike.
+                Call the shop and we will tell you when it is back, or suggest an alternative that fits your bike.
               </p>
-              <a
-                href={stockInquiryLink(product)}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="btn-whatsapp mt-4 w-full sm:w-auto"
-              >
-                <MessageCircle className="size-4" aria-hidden="true" /> Ask about availability
+              <a href={siteConfig.phoneHref} className="btn-primary mt-4 w-full sm:w-auto">
+                <Phone className="size-4" aria-hidden="true" /> Ask about availability
               </a>
             </div>
           )}
 
           <a
-            href={productInquiryLink(product)}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="btn-whatsapp mt-3 w-full"
+            href={`mailto:${siteConfig.email}?subject=${encodeURIComponent(
+              `Enquiry: ${product.name} (${product.sku})`,
+            )}&body=${encodeURIComponent(
+              `Hello ${siteConfig.name},\n\nI am interested in ${product.name}. Price: ${formatPKR(product.price)}.\nIs this product available?\n`,
+            )}`}
+            className="btn-outline mt-3 w-full"
           >
-            <MessageCircle className="size-4" aria-hidden="true" /> Ask about this product on WhatsApp
+            <Mail className="size-4" aria-hidden="true" /> Email us about this part
           </a>
 
           <div className="mt-8">

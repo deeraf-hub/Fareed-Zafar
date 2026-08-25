@@ -25,7 +25,7 @@ export const OrderStatusTracker = ({ status }: { status: OrderStatus }) => {
         </span>
         <div>
           <p className="text-sm font-semibold text-ink-900">Order cancelled</p>
-          <p className="text-xs text-ink-500">Contact us on WhatsApp if you would like to place it again.</p>
+          <p className="text-xs text-ink-500">Call the shop if you would like to place it again.</p>
         </div>
       </div>
     );

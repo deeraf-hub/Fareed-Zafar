@@ -1,8 +1,7 @@
-import { Menu, MessageCircle, Phone, Search, ShoppingCart, X } from 'lucide-react';
+import { Menu, Phone, Search, ShoppingCart, X } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { siteConfig } from '../../config/site';
-import { generalInquiryLink } from '../../lib/whatsapp';
 import { useEscapeKey } from '../../lib/useEscapeKey';
 import { useCart } from '../../store/CartContext';
 import { SearchBar } from '../shop/SearchBar';
@@ -48,19 +47,9 @@ export const Header = () => {
       <div className="hidden bg-ink-900 text-ink-100 lg:block">
         <div className="container-page flex h-9 items-center justify-between text-xs">
           <p>Motorcycle spare parts for Honda, Yamaha, Suzuki, United, Road Prince &amp; Super Power</p>
-          <div className="flex items-center gap-5">
-            <a href={siteConfig.phoneHref} className="flex items-center gap-1.5 transition-colors hover:text-white">
-              <Phone className="size-3.5" aria-hidden="true" /> {siteConfig.phone}
-            </a>
-            <a
-              href={generalInquiryLink()}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="flex items-center gap-1.5 transition-colors hover:text-white"
-            >
-              <MessageCircle className="size-3.5" aria-hidden="true" /> WhatsApp
-            </a>
-          </div>
+          <a href={siteConfig.phoneHref} className="flex items-center gap-1.5 transition-colors hover:text-white">
+            <Phone className="size-3.5" aria-hidden="true" /> {siteConfig.phone}
+          </a>
         </div>
       </div>
 
@@ -108,14 +97,9 @@ export const Header = () => {
             <Search className="size-5" aria-hidden="true" />
           </button>
 
-          <a
-            href={generalInquiryLink()}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="btn-whatsapp hidden px-3 sm:inline-flex"
-          >
-            <MessageCircle className="size-4" aria-hidden="true" />
-            <span className="hidden xl:inline">WhatsApp</span>
+          <a href={siteConfig.phoneHref} className="btn-dark hidden px-3 sm:inline-flex">
+            <Phone className="size-4" aria-hidden="true" />
+            <span className="hidden xl:inline">{siteConfig.phone}</span>
           </a>
 
           <Link to="/cart" className="btn-ghost relative px-2" aria-label={`Cart, ${itemCount} items`}>
@@ -186,12 +170,12 @@ export const Header = () => {
               </ul>
             </nav>
             <div className="space-y-2 border-t border-ink-200 p-4">
-              <a href={generalInquiryLink()} target="_blank" rel="noreferrer noopener" className="btn-whatsapp w-full">
-                <MessageCircle className="size-4" aria-hidden="true" /> Chat on WhatsApp
+              <a href={siteConfig.phoneHref} className="btn-primary w-full">
+                <Phone className="size-4" aria-hidden="true" /> Call {siteConfig.phone}
               </a>
-              <a href={siteConfig.phoneHref} className="btn-outline w-full">
-                <Phone className="size-4" aria-hidden="true" /> {siteConfig.phone}
-              </a>
+              <Link to="/contact" className="btn-outline w-full">
+                Contact us
+              </Link>
             </div>
           </div>
         </div>

@@ -49,7 +49,7 @@ const BikePage = () => {
           tone="error"
           as="h1"
           title="Motorcycle not found"
-          description="We do not have a parts page for this model yet. Browse the full shop or ask us on WhatsApp."
+          description="We do not have a parts page for this model yet. Browse the full shop or contact us and we will check."
           action={
             <Link to="/shop" className="btn-primary">
               Browse all parts
@@ -111,7 +111,7 @@ const BikePage = () => {
         <EmptyState
           icon={PackageSearch}
           title="No parts listed for this selection"
-          description="Try another category, or message us on WhatsApp with the part you need for this bike."
+          description="Try another category, or contact us with the part you need for this bike."
           action={
             <button type="button" className="btn-primary" onClick={() => setActiveCategory('all')}>
               Show all parts for this bike

@@ -6,7 +6,7 @@ import { Hero } from '../components/home/Hero';
 import { PopularBikes } from '../components/home/PopularBikes';
 import { SectionHeading } from '../components/home/SectionHeading';
 import { Testimonials } from '../components/home/Testimonials';
-import { WhatsAppCta } from '../components/home/WhatsAppCta';
+import { HelpCta } from '../components/home/HelpCta';
 import { WhyChooseUs } from '../components/home/WhyChooseUs';
 import { ProductGrid } from '../components/product/ProductGrid';
 import { ProductGridSkeleton } from '../components/ui/Skeletons';
@@ -97,7 +97,7 @@ const Home = () => {
       </div>
 
       <div className="container-page pb-12">
-        <WhatsAppCta />
+        <HelpCta />
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import { CheckCircle2, MessageCircle, PackageX, Printer } from 'lucide-react';
+import { CheckCircle2, PackageX, Phone, Printer } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { OrderStatusTracker } from '../components/order/OrderStatusTracker';
 import { Breadcrumbs } from '../components/ui/Breadcrumbs';
@@ -6,7 +6,6 @@ import { EmptyState } from '../components/ui/EmptyState';
 import { siteConfig } from '../config/site';
 import { formatDateTime, formatPKR } from '../lib/format';
 import { useSeo } from '../lib/seo';
-import { orderInquiryLink } from '../lib/whatsapp';
 import { useOrders } from '../store/OrdersContext';
 import { ProductImage } from '../components/product/ProductImage';
 
@@ -36,7 +35,7 @@ const OrderConfirmation = () => {
           tone="error"
           as="h1"
           title="Order not found"
-          description={`We could not find order ${orderNumber} on this device. Use the Track Order page with your order number and mobile number, or contact us on WhatsApp.`}
+          description={`We could not find order ${orderNumber} on this device. Use the Track Order page with your order number and mobile number, or call the shop.`}
           action={
             <>
               <Link to="/track-order" className="btn-primary">
@@ -161,8 +160,8 @@ const OrderConfirmation = () => {
           <Link to={`/track-order?order=${order.orderNumber}`} className="btn-primary w-full">
             Track Your Order
           </Link>
-          <a href={orderInquiryLink(order)} target="_blank" rel="noreferrer noopener" className="btn-whatsapp w-full">
-            <MessageCircle className="size-4" aria-hidden="true" /> Send order on WhatsApp
+          <a href={siteConfig.phoneHref} className="btn-outline w-full">
+            <Phone className="size-4" aria-hidden="true" /> Call about this order
           </a>
           <button type="button" className="btn-outline w-full" onClick={() => window.print()}>
             <Printer className="size-4" aria-hidden="true" /> Print this page

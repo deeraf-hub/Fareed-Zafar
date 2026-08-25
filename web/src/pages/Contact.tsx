@@ -1,16 +1,15 @@
-import { Clock, ExternalLink, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
+import { Clock, ExternalLink, Mail, MapPin, Phone } from 'lucide-react';
 import { useState } from 'react';
 import { Breadcrumbs } from '../components/ui/Breadcrumbs';
 import { siteConfig } from '../config/site';
 import { useSeo } from '../lib/seo';
-import { whatsappLink } from '../lib/whatsapp';
 
 const Contact = () => {
   const [form, setForm] = useState({ name: '', phone: '', bike: '', message: '' });
 
   useSeo({
     title: `Contact Us | ${siteConfig.name}`,
-    description: `Contact ${siteConfig.name} by phone, WhatsApp or email for motorcycle spare parts, availability and fitment questions.`,
+    description: `Contact ${siteConfig.name} by phone or email for motorcycle spare parts, availability and fitment questions.`,
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'LocalBusiness',
@@ -26,9 +25,13 @@ const Contact = () => {
     },
   });
 
-  const composedMessage = `Hello ${siteConfig.name}, my name is ${form.name || '[name]'}. Bike: ${
+  const composedMessage = `Hello ${siteConfig.name},\n\nMy name is ${form.name || '[name]'}.\nBike: ${
     form.bike || '[bike model]'
-  }. ${form.message || '[your question]'} You can reach me at ${form.phone || '[mobile number]'}.`;
+  }\n\n${form.message || '[your question]'}\n\nYou can reach me at ${form.phone || '[mobile number]'}.`;
+
+  const mailtoLink = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
+    `Parts enquiry${form.bike ? ` — ${form.bike}` : ''}`,
+  )}&body=${encodeURIComponent(composedMessage)}`;
 
   return (
     <div className="container-page">
@@ -36,8 +39,8 @@ const Contact = () => {
 
       <h1 className="section-title">Contact {siteConfig.shortName}</h1>
       <p className="mt-2 max-w-2xl text-sm text-ink-500">
-        Ask about a part, check availability or get help finding the right item for your bike. WhatsApp is the fastest
-        way to reach us.
+        Ask about a part, check availability or get help finding the right item for your bike. Calling the shop is the
+        fastest way to reach us.
       </p>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.1fr]">
@@ -51,20 +54,6 @@ const Contact = () => {
                   <span className="block text-ink-500">Phone</span>
                   <a href={siteConfig.phoneHref} className="font-medium text-ink-900 hover:text-brand-600">
                     {siteConfig.phone}
-                  </a>
-                </span>
-              </li>
-              <li className="flex gap-3">
-                <MessageCircle className="mt-0.5 size-5 shrink-0 text-brand-600" aria-hidden="true" />
-                <span>
-                  <span className="block text-ink-500">WhatsApp</span>
-                  <a
-                    href={whatsappLink(`Hello ${siteConfig.name}, I have a question about a spare part.`)}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="font-medium text-ink-900 hover:text-brand-600"
-                  >
-                    Start a chat
                   </a>
                 </span>
               </li>
@@ -137,7 +126,7 @@ const Contact = () => {
         <div className="card h-fit p-5">
           <h2 className="text-base font-semibold text-ink-900">Send us a message</h2>
           <p className="mt-1 text-sm text-ink-500">
-            Fill this in and it opens WhatsApp with your message ready to send — nothing is stored on this site.
+            Fill this in and it opens your email app with the message ready to send — nothing is stored on this site.
           </p>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -196,13 +185,8 @@ const Contact = () => {
             </div>
           </div>
 
-          <a
-            href={whatsappLink(composedMessage)}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="btn-whatsapp mt-5 w-full"
-          >
-            <MessageCircle className="size-4" aria-hidden="true" /> Send on WhatsApp
+          <a href={mailtoLink} className="btn-primary mt-5 w-full">
+            <Mail className="size-4" aria-hidden="true" /> Send by email
           </a>
           <a href={siteConfig.phoneHref} className="btn-outline mt-3 w-full">
             <Phone className="size-4" aria-hidden="true" /> Call the shop

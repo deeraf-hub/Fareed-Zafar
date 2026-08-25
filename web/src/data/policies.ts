@@ -31,7 +31,7 @@ export const policies: Record<string, PolicyPage> = {
           'Your name, mobile number and delivery address, entered at checkout.',
           'Your email address, if you choose to provide one.',
           'The products you ordered and the order total.',
-          'Messages you send us on WhatsApp, by phone or by email.',
+          'Messages you send us by phone or by email.',
         ],
       },
       {
@@ -50,7 +50,7 @@ export const policies: Record<string, PolicyPage> = {
       {
         heading: 'Your choices',
         paragraphs: [
-          `Contact us at ${siteConfig.email} or on WhatsApp to ask what information we hold about an order, or to ask us to remove it once the order is complete.`,
+          `Contact us at ${siteConfig.email} or by phone to ask what information we hold about an order, or to ask us to remove it once the order is complete.`,
         ],
       },
     ],
@@ -59,12 +59,12 @@ export const policies: Record<string, PolicyPage> = {
   'terms-and-conditions': {
     slug: 'terms-and-conditions',
     title: 'Terms & Conditions',
-    intro: `These terms cover orders placed with ${siteConfig.name} through this website, WhatsApp or by phone.`,
+    intro: `These terms cover orders placed with ${siteConfig.name} through this website or by phone.`,
     sections: [
       {
         heading: 'Orders',
         paragraphs: [
-          'Placing an order is a request to buy. We confirm it by phone or WhatsApp before dispatch. An order is accepted once we have confirmed stock and your delivery address.',
+          'Placing an order is a request to buy. We confirm it by phone before dispatch. An order is accepted once we have confirmed stock and your delivery address.',
           'We may cancel an order if the item is no longer available, if the address cannot be reached by our courier, or if the order cannot be confirmed with the customer.',
         ],
       },
@@ -152,7 +152,7 @@ export const policies: Record<string, PolicyPage> = {
       {
         heading: 'How to start a return',
         paragraphs: [
-          `Message us on WhatsApp or email ${siteConfig.email} with your order number, the part and a photo. We will confirm the next step and the return address.`,
+          `Call the shop or email ${siteConfig.email} with your order number, the part and a photo. We will confirm the next step and the return address.`,
         ],
       },
     ],

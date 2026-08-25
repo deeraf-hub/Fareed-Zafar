@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { categoryBySlug } from '../../data/categories';
 import { discountPercent, formatPKR } from '../../lib/format';
-import { stockInquiryLink } from '../../lib/whatsapp';
 import { useCart } from '../../store/CartContext';
 import type { Product } from '../../types';
 import { StockBadge } from '../ui/StockBadge';
@@ -99,14 +98,9 @@ export const ProductCard = ({ product, onQuickView }: ProductCardProps) => {
               )}
             </button>
           ) : (
-            <a
-              href={stockInquiryLink(product)}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="btn-outline w-full whitespace-nowrap px-2 text-xs sm:text-sm"
-            >
-              Ask on WhatsApp
-            </a>
+            <Link to="/contact" className="btn-outline w-full whitespace-nowrap px-2 text-xs sm:text-sm">
+              Ask about stock
+            </Link>
           )}
         </div>
       </div>

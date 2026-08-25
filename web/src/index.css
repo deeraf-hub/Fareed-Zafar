@@ -99,10 +99,6 @@
     @apply btn btn-disabled-state text-ink-700 hover:bg-ink-100;
   }
 
-  .btn-whatsapp {
-    @apply btn btn-disabled-state bg-[#25D366] text-white hover:bg-[#1da851];
-  }
-
   .card {
     @apply rounded-xl border border-ink-200 bg-white;
   }

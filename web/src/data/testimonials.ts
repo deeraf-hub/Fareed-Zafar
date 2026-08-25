@@ -26,7 +26,7 @@ export const testimonials: Testimonial[] = [
     name: 'Delivery rider',
     role: 'Daily rider',
     city: 'Rawalpindi',
-    quote: 'Ordered a chain set on WhatsApp in the evening and paid cash when it arrived. Simple process.',
+    quote: 'Ordered a chain set in the evening and paid cash when it arrived. Simple process.',
   },
   {
     id: 't-3',
