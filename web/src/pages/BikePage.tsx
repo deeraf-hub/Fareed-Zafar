@@ -11,6 +11,7 @@ import { sortProducts } from '../lib/catalog';
 import { useSeo } from '../lib/seo';
 import { useCatalog } from '../store/CatalogContext';
 import type { CategorySlug } from '../types';
+import { ProductImage } from '../components/product/ProductImage';
 
 const BikePage = () => {
   const { slug = '' } = useParams();
@@ -68,7 +69,7 @@ const BikePage = () => {
       <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Shop', to: '/shop' }, { label: bike.name }]} />
 
       <header className="mb-8 flex flex-col gap-6 rounded-2xl bg-ink-900 p-6 text-white sm:flex-row sm:items-center">
-        <img src={bike.image} alt="" width={480} height={280} className="w-full max-w-xs rounded-xl bg-white" />
+        <ProductImage src={bike.image} fallback={bike.fallbackImage} alt="" width={640} height={400} priority className="aspect-16/10 w-full max-w-xs rounded-xl bg-white object-cover" />
         <div>
           <span className="badge bg-white/10 text-ink-200">{bike.brand} · {bike.engineCc}cc</span>
           <h1 className="mt-3 text-2xl font-bold text-white sm:text-3xl">{bike.name} Spare Parts</h1>

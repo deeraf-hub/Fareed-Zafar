@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { siteConfig } from '../../config/site';
 import { useSeo } from '../../lib/seo';
 import { useCatalog } from '../../store/CatalogContext';
+import { ProductImage } from '../../components/product/ProductImage';
 
 const AdminCategories = () => {
   const { categories, products, createCategory, updateCategory, deleteCategory } = useCatalog();
@@ -76,7 +77,7 @@ const AdminCategories = () => {
           return (
             <div key={category.id} className="card p-5">
               <div className="flex flex-wrap items-start gap-4">
-                <img src={category.image} alt="" width={480} height={360} loading="lazy" className="size-16 rounded-lg bg-ink-50 object-cover" />
+                <ProductImage src={category.image} fallback={category.fallbackImage} alt="" className="size-16 rounded-lg bg-ink-50 object-cover" />
                 <div className="min-w-56 flex-1 space-y-3">
                   <div>
                     <label htmlFor={`cat-name-${category.id}`} className="field-label">Name</label>

@@ -11,6 +11,7 @@ import { formatPKR } from '../lib/format';
 import { useSeo } from '../lib/seo';
 import { useCart } from '../store/CartContext';
 import { useOrders } from '../store/OrdersContext';
+import { ProductImage } from '../components/product/ProductImage';
 
 const Checkout = () => {
   const { items, subtotal, deliveryFee, total, clearCart } = useCart();
@@ -87,12 +88,10 @@ const Checkout = () => {
             <ul className="mt-4 space-y-4">
               {items.map((item) => (
                 <li key={item.productId} className="flex gap-3">
-                  <img
+                  <ProductImage
                     src={item.product.image}
+                    fallback={item.product.fallbackImage}
                     alt=""
-                    width={480}
-                    height={360}
-                    loading="lazy"
                     className="size-14 shrink-0 rounded-lg bg-ink-50 object-cover"
                   />
                   <div className="min-w-0 flex-1">

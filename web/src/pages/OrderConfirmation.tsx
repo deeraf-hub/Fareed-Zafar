@@ -8,6 +8,7 @@ import { formatDateTime, formatPKR } from '../lib/format';
 import { useSeo } from '../lib/seo';
 import { orderInquiryLink } from '../lib/whatsapp';
 import { useOrders } from '../store/OrdersContext';
+import { ProductImage } from '../components/product/ProductImage';
 
 const paymentLabels: Record<string, string> = {
   cod: 'Cash on Delivery',
@@ -93,7 +94,7 @@ const OrderConfirmation = () => {
             <ul className="mt-4 divide-y divide-ink-100">
               {order.items.map((item) => (
                 <li key={item.productId} className="flex items-center gap-3 py-3">
-                  <img src={item.image} alt="" width={480} height={360} loading="lazy" className="size-14 rounded-lg bg-ink-50 object-cover" />
+                  <ProductImage src={item.image} fallback={item.fallbackImage} alt="" className="size-14 rounded-lg bg-ink-50 object-cover" />
                   <div className="min-w-0 flex-1">
                     <Link to={`/shop/${item.slug}`} className="truncate text-sm font-medium text-ink-900 hover:text-brand-600">
                       {item.name}

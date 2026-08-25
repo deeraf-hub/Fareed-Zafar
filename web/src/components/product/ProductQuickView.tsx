@@ -9,6 +9,7 @@ import type { Product } from '../../types';
 import { Modal } from '../ui/Modal';
 import { QuantityStepper } from '../ui/QuantityStepper';
 import { StockBadge } from '../ui/StockBadge';
+import { ProductImage } from './ProductImage';
 
 interface ProductQuickViewProps {
   product: Product | null;
@@ -28,12 +29,12 @@ export const ProductQuickView = ({ product, onClose }: ProductQuickViewProps) =>
   return (
     <Modal open onClose={onClose} title={`Quick view: ${product.name}`}>
       <div className="grid gap-6 p-5 sm:grid-cols-2 sm:p-6">
-        <img
+        <ProductImage
           src={product.image}
+          fallback={product.fallbackImage}
           alt={product.name}
-          width={480}
-          height={360}
-          className="w-full rounded-xl bg-ink-50 object-cover"
+          priority
+          className="aspect-4/3 w-full rounded-xl bg-ink-50 object-cover"
         />
 
         <div className="flex flex-col">

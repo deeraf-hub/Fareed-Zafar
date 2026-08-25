@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Category, Product } from '../../types';
+import { ProductImage } from '../product/ProductImage';
 
 interface CategoryGridProps {
   categories: Category[];
@@ -18,13 +19,10 @@ export const CategoryGrid = ({ categories, products }: CategoryGridProps) => (
           className="card group flex flex-col overflow-hidden transition-shadow hover:shadow-md"
         >
           <div className="aspect-4/3 overflow-hidden bg-ink-50">
-            <img
+            <ProductImage
               src={category.image}
+              fallback={category.fallbackImage}
               alt=""
-              width={480}
-              height={360}
-              loading="lazy"
-              decoding="async"
               className="size-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
             />
           </div>

@@ -68,6 +68,7 @@ export const OrdersProvider = ({ children }: { children: ReactNode }) => {
         name: item.product.name,
         slug: item.product.slug,
         image: item.product.image,
+        fallbackImage: item.product.fallbackImage,
         quantity: item.quantity,
         unitPrice: item.product.price,
         total: item.product.price * item.quantity,

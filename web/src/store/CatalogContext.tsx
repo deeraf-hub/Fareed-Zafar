@@ -96,6 +96,7 @@ export const CatalogProvider = ({ children }: { children: ReactNode }) => {
         slug: slugify(input.name) as Category['slug'],
         description: input.description,
         image: input.image,
+        fallbackImage: '/products/spark-plug.svg',
         createdAt: new Date().toISOString(),
       },
     ]);

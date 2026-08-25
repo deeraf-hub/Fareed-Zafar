@@ -8,6 +8,7 @@ import { useSeo } from '../../lib/seo';
 import { whatsappLink } from '../../lib/whatsapp';
 import { useOrders } from '../../store/OrdersContext';
 import type { OrderStatus } from '../../types';
+import { ProductImage } from '../../components/product/ProductImage';
 
 const AdminOrderDetail = () => {
   const { id = '' } = useParams();
@@ -79,7 +80,7 @@ const AdminOrderDetail = () => {
           <ul className="mt-4 divide-y divide-ink-100">
             {order.items.map((item) => (
               <li key={item.productId} className="flex items-center gap-3 py-3">
-                <img src={item.image} alt="" width={480} height={360} loading="lazy" className="size-12 rounded-lg bg-ink-50 object-cover" />
+                <ProductImage src={item.image} fallback={item.fallbackImage} alt="" className="size-12 rounded-lg bg-ink-50 object-cover" />
                 <div className="min-w-0 flex-1">
                   <Link to={`/shop/${item.slug}`} className="block truncate text-sm font-medium text-ink-900 hover:text-brand-600">
                     {item.name}

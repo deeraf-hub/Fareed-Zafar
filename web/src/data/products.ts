@@ -1,3 +1,4 @@
+import { photoUrl } from './photos';
 import type { CategorySlug, Product, ProductSpecification } from '../types';
 
 /**
@@ -10,6 +11,9 @@ interface RawProduct {
   category: CategorySlug;
   price: number;
   oldPrice?: number;
+  /** Key into the royalty-free photo library in ./photos. */
+  photo: string;
+  /** Local illustration used if the photograph fails to load. */
   image: string;
   stockQuantity: number;
   compatibleBikes: string[];
@@ -37,6 +41,7 @@ const rawProducts: RawProduct[] = [
   // ───────────────────────── Engine Parts ─────────────────────────
   {
     sku: 'QAS-ENG-001',
+    photo: 'spark-plug',
     name: 'Honda CD 70 Spark Plug',
     category: 'engine-parts',
     price: 265,
@@ -59,6 +64,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ENG-002',
+    photo: 'spark-plug-2',
     name: 'Honda CG 125 Spark Plug',
     category: 'engine-parts',
     price: 345,
@@ -80,6 +86,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ENG-003',
+    photo: 'air-filter',
     name: 'Air Filter Element – Honda CD 70',
     category: 'engine-parts',
     price: 320,
@@ -99,6 +106,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ENG-004',
+    photo: 'air-filter-2',
     name: 'Air Filter Element – Honda CG 125',
     category: 'engine-parts',
     price: 455,
@@ -119,6 +127,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ENG-005',
+    photo: 'oil-filter',
     name: 'Engine Oil Filter Screen – Honda CB 125F',
     category: 'engine-parts',
     price: 380,
@@ -138,6 +147,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ENG-006',
+    photo: 'engine-assembly',
     name: 'Clutch Plate Set – Honda CD 70',
     category: 'engine-parts',
     price: 1150,
@@ -161,6 +171,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ENG-007',
+    photo: 'cylinder-head',
     name: 'Clutch Plate Set – Honda CG 125',
     category: 'engine-parts',
     price: 1495,
@@ -181,6 +192,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ENG-008',
+    photo: 'cylinder-head-2',
     name: 'Piston Ring Set – Honda CD 70 (0.25 Oversize)',
     category: 'engine-parts',
     price: 785,
@@ -200,6 +212,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ENG-009',
+    photo: 'mechanic-wrench',
     name: 'Complete Engine Gasket Set – Honda CG 125',
     category: 'engine-parts',
     price: 965,
@@ -219,6 +232,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ENG-010',
+    photo: 'cylinder-head-3',
     name: 'Carburetor Assembly – Honda CD 70',
     category: 'engine-parts',
     price: 2650,
@@ -240,6 +254,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ENG-011',
+    photo: 'cylinder-head-4',
     name: 'Valve Set – Honda CG 125 (Inlet & Exhaust)',
     category: 'engine-parts',
     price: 1075,
@@ -259,6 +274,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ENG-012',
+    photo: 'engine-oil',
     name: '4T Engine Oil 20W-50 (1 Litre)',
     category: 'engine-parts',
     price: 920,
@@ -282,6 +298,7 @@ const rawProducts: RawProduct[] = [
   // ─────────────────────── Electrical Parts ───────────────────────
   {
     sku: 'QAS-ELE-001',
+    photo: 'battery',
     name: 'Motorcycle Battery 12V 5Ah',
     category: 'electrical-parts',
     price: 4350,
@@ -304,6 +321,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ELE-002',
+    photo: 'battery-2',
     name: 'Motorcycle Battery 12V 2.5Ah',
     category: 'electrical-parts',
     price: 2450,
@@ -324,6 +342,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ELE-003',
+    photo: 'headlight-3',
     name: 'Headlight Bulb 12V 35/35W',
     category: 'electrical-parts',
     price: 225,
@@ -344,6 +363,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ELE-004',
+    photo: 'bike-close-2',
     name: 'Indicator Set – Front Pair (Amber)',
     category: 'electrical-parts',
     price: 655,
@@ -364,6 +384,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ELE-005',
+    photo: 'tools',
     name: 'Motorcycle Horn 12V',
     category: 'electrical-parts',
     price: 495,
@@ -384,6 +405,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ELE-006',
+    photo: 'mechanic',
     name: 'Ignition Coil – Honda CG 125',
     category: 'electrical-parts',
     price: 1475,
@@ -403,6 +425,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ELE-007',
+    photo: 'wiring-2',
     name: 'CDI Unit – Honda CD 70',
     category: 'electrical-parts',
     price: 2395,
@@ -423,6 +446,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ELE-008',
+    photo: 'workshop',
     name: 'Rectifier / Regulator – Honda CG 125',
     category: 'electrical-parts',
     price: 1285,
@@ -442,6 +466,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ELE-009',
+    photo: 'wiring',
     name: 'Complete Wiring Harness – Honda CD 70',
     category: 'electrical-parts',
     price: 1850,
@@ -461,6 +486,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ELE-010',
+    photo: 'dashboard',
     name: 'Brake Light Switch (Rear)',
     category: 'electrical-parts',
     price: 195,
@@ -482,6 +508,7 @@ const rawProducts: RawProduct[] = [
   // ───────────────────────── Brake Parts ─────────────────────────
   {
     sku: 'QAS-BRK-001',
+    photo: 'brake-front',
     name: 'Front Brake Shoe Set – Honda CD 70',
     category: 'brake-parts',
     price: 625,
@@ -503,6 +530,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-BRK-002',
+    photo: 'brake-system',
     name: 'Rear Brake Shoe Set – Honda CG 125',
     category: 'brake-parts',
     price: 865,
@@ -523,6 +551,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-BRK-003',
+    photo: 'handbrake',
     name: 'Front Brake Cable – Honda CD 70',
     category: 'brake-parts',
     price: 285,
@@ -542,6 +571,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-BRK-004',
+    photo: 'lever-2',
     name: 'Rear Brake Cable – Honda CG 125',
     category: 'brake-parts',
     price: 325,
@@ -561,6 +591,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-BRK-005',
+    photo: 'brake-disc',
     name: 'Disc Brake Pad Set – Honda CB 125F',
     category: 'brake-parts',
     price: 985,
@@ -582,6 +613,7 @@ const rawProducts: RawProduct[] = [
   // ───────────────────────── Suspension ─────────────────────────
   {
     sku: 'QAS-SUS-001',
+    photo: 'fork',
     name: 'Rear Shock Absorber Pair – Honda CD 70',
     category: 'suspension',
     price: 3450,
@@ -604,6 +636,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-SUS-002',
+    photo: 'fork-2',
     name: 'Rear Shock Absorber Pair – Honda CG 125',
     category: 'suspension',
     price: 3895,
@@ -624,6 +657,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-SUS-003',
+    photo: 'fork-3',
     name: 'Front Fork Oil Seal Set',
     category: 'suspension',
     price: 485,
@@ -643,6 +677,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-SUS-004',
+    photo: 'engine-oil-2',
     name: 'Front Fork Oil 10W (500 ml)',
     category: 'suspension',
     price: 555,
@@ -664,6 +699,7 @@ const rawProducts: RawProduct[] = [
   // ─────────────────────── Chain & Sprocket ───────────────────────
   {
     sku: 'QAS-CHN-001',
+    photo: 'chain-sprocket',
     name: 'Chain Set – Honda CD 70 (Chain + Sprockets)',
     category: 'chain-sprocket',
     price: 1795,
@@ -687,6 +723,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-CHN-002',
+    photo: 'chain-sprocket-2',
     name: 'Chain Set – Honda CG 125 (Chain + Sprockets)',
     category: 'chain-sprocket',
     price: 2295,
@@ -708,6 +745,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-CHN-003',
+    photo: 'rear-wheel-gear',
     name: 'Rear Sprocket 41T – Honda CD 70',
     category: 'chain-sprocket',
     price: 795,
@@ -727,6 +765,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-CHN-004',
+    photo: 'chain',
     name: 'Front Sprocket 15T – Honda CG 125',
     category: 'chain-sprocket',
     price: 435,
@@ -746,6 +785,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-CHN-005',
+    photo: 'wheel-chain',
     name: 'Chain Adjuster Pair',
     category: 'chain-sprocket',
     price: 265,
@@ -767,6 +807,7 @@ const rawProducts: RawProduct[] = [
   // ────────────────────────── Controls ──────────────────────────
   {
     sku: 'QAS-CTL-001',
+    photo: 'lever',
     name: 'Brake & Clutch Lever Set – Honda CG 125',
     category: 'controls',
     price: 545,
@@ -787,6 +828,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-CTL-002',
+    photo: 'grip-2',
     name: 'Clutch Cable – Honda CG 125',
     category: 'controls',
     price: 305,
@@ -806,6 +848,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-CTL-003',
+    photo: 'lever-3',
     name: 'Accelerator Cable – Honda CD 70',
     category: 'controls',
     price: 275,
@@ -825,6 +868,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-CTL-004',
+    photo: 'grip',
     name: 'Handle Grip Pair – Rubber',
     category: 'controls',
     price: 365,
@@ -845,6 +889,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-CTL-005',
+    photo: 'bike-side',
     name: 'Kick Starter Lever – Honda CD 70',
     category: 'controls',
     price: 795,
@@ -864,6 +909,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-CTL-006',
+    photo: 'bike-close',
     name: 'Gear Lever – Honda CG 125',
     category: 'controls',
     price: 575,
@@ -883,6 +929,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-CTL-007',
+    photo: 'bike-street',
     name: 'Foot Rest Set – Front Pair',
     category: 'controls',
     price: 695,
@@ -904,6 +951,7 @@ const rawProducts: RawProduct[] = [
   // ───────────────────────── Body Parts ─────────────────────────
   {
     sku: 'QAS-BDY-001',
+    photo: 'mirror',
     name: 'Side Mirror Set – Pair',
     category: 'body-parts',
     price: 895,
@@ -925,6 +973,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-BDY-002',
+    photo: 'headlight',
     name: 'Headlight Assembly – Honda CD 70',
     category: 'body-parts',
     price: 1685,
@@ -944,6 +993,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-BDY-003',
+    photo: 'bike-black',
     name: 'Tail Light Assembly – Honda CG 125',
     category: 'body-parts',
     price: 745,
@@ -963,6 +1013,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-BDY-004',
+    photo: 'bike-vintage',
     name: 'Rear Mudguard – Honda CD 70',
     category: 'body-parts',
     price: 1145,
@@ -982,6 +1033,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-BDY-005',
+    photo: 'speedometer',
     name: 'Speedometer Assembly – Honda CD 70',
     category: 'body-parts',
     price: 1985,
@@ -1003,6 +1055,7 @@ const rawProducts: RawProduct[] = [
   // ───────────────────────── Accessories ─────────────────────────
   {
     sku: 'QAS-ACC-001',
+    photo: 'bike-city',
     name: 'Motorcycle Wheel Lock',
     category: 'accessories',
     price: 965,
@@ -1022,6 +1075,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ACC-002',
+    photo: 'accessories',
     name: 'Waterproof Bike Cover',
     category: 'accessories',
     price: 1275,
@@ -1041,6 +1095,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ACC-003',
+    photo: 'rider-phone',
     name: 'Handlebar Mobile Holder',
     category: 'accessories',
     price: 785,
@@ -1061,6 +1116,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ACC-004',
+    photo: 'headlight-2',
     name: 'LED Auxiliary Light Bar',
     category: 'accessories',
     price: 1450,
@@ -1081,6 +1137,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ACC-005',
+    photo: 'accessories-2',
     name: 'Reflector Set (4 Pieces)',
     category: 'accessories',
     price: 185,
@@ -1100,6 +1157,7 @@ const rawProducts: RawProduct[] = [
   },
   {
     sku: 'QAS-ACC-006',
+    photo: 'bikes-parked',
     name: 'Number Plate Frame',
     category: 'accessories',
     price: 245,
@@ -1129,8 +1187,9 @@ const buildProduct = (raw: RawProduct, index: number): Product => ({
   oldPrice: raw.oldPrice ?? null,
   description: raw.description,
   shortDescription: raw.shortDescription,
-  image: raw.image,
-  images: [raw.image],
+  image: photoUrl(raw.photo),
+  fallbackImage: raw.image,
+  images: [photoUrl(raw.photo, 1200, 900)],
   stock: raw.stockQuantity > 0,
   stockQuantity: raw.stockQuantity,
   compatibleBikes: raw.compatibleBikes,

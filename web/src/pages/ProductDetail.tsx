@@ -16,6 +16,7 @@ import { useSeo } from '../lib/seo';
 import { productInquiryLink, stockInquiryLink } from '../lib/whatsapp';
 import { useCart } from '../store/CartContext';
 import { useCatalog } from '../store/CatalogContext';
+import { ProductImage } from '../components/product/ProductImage';
 
 const ProductDetail = () => {
   const { slug = '' } = useParams();
@@ -122,13 +123,14 @@ const ProductDetail = () => {
       <div className="grid gap-8 lg:grid-cols-2">
         <div>
           <div className="relative overflow-hidden rounded-2xl border border-ink-200 bg-ink-50">
-            <img
-              src={product.image}
+            <ProductImage
+              src={product.images[0] ?? product.image}
+              fallback={product.fallbackImage}
               alt={product.name}
-              width={480}
-              height={360}
-              className="w-full object-cover"
-              decoding="async"
+              width={1200}
+              height={900}
+              priority
+              className="aspect-4/3 w-full object-cover"
             />
             {discount !== null && <span className="badge absolute left-4 top-4 bg-brand-600 text-white">{discount}% off</span>}
           </div>

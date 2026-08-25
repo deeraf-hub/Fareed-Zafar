@@ -5,6 +5,7 @@ import { useCart } from '../../store/CartContext';
 import type { CartLineDetailed } from '../../types';
 import { QuantityStepper } from '../ui/QuantityStepper';
 import { StockBadge } from '../ui/StockBadge';
+import { ProductImage } from '../product/ProductImage';
 
 export const CartLineItem = ({ item }: { item: CartLineDetailed }) => {
   const { setQuantity, removeItem } = useCart();
@@ -13,12 +14,10 @@ export const CartLineItem = ({ item }: { item: CartLineDetailed }) => {
   return (
     <li className="flex gap-4 py-5">
       <Link to={`/shop/${product.slug}`} className="shrink-0">
-        <img
+        <ProductImage
           src={product.image}
+          fallback={product.fallbackImage}
           alt={product.name}
-          width={480}
-          height={360}
-          loading="lazy"
           className="size-24 rounded-lg bg-ink-50 object-cover sm:size-28"
         />
       </Link>

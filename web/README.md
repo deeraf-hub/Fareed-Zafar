@@ -18,6 +18,9 @@ npm run dev      # development server (http://localhost:5173)
 npm run build    # type-check + production build into dist/
 npm run preview  # serve the production build (http://localhost:4173)
 npm run lint     # TypeScript check only
+
+npm run fetch-images   # download the product photos for self-hosting
+npm run build:single   # one self-contained HTML file (see below)
 ```
 
 Node 18+ is required.
@@ -107,11 +110,26 @@ toggles), Orders (filter, open, change status), Customers (derived from order hi
 
 ## Product images
 
-Product photography has not been supplied, so the catalogue ships with a consistent set of clean
-SVG part illustrations in `public/products/` — one per part type, drawn in the site's palette. They
-are lazy-loaded, carry width/height to avoid layout shift, and are referenced by path from the
-product data, so swapping in real photographs is a per-product `image` change (plus an upload field
-in the admin form once storage exists).
+The catalogue uses royalty-free photographs from [Pexels](https://www.pexels.com/license/),
+whose licence allows free commercial use with no attribution required. Every photo is
+listed in [`src/data/photos.ts`](src/data/photos.ts) with the page it came from, and is
+served from the Pexels CDN with sizing parameters.
+
+Two things follow from that:
+
+- **Self-host before launch.** `npm run fetch-images` downloads every photo into
+  `public/products/photos/`; then set `SELF_HOSTED = true` in `src/data/photos.ts` and the
+  shop serves its own images instead of depending on a third-party CDN.
+- **Nothing renders broken.** Each product, category and bike also carries a local SVG
+  illustration in `fallbackImage`. The `ProductImage` component shows the photograph and
+  falls back to the illustration if it cannot be fetched — offline, CDN blocked, or a bad
+  URL — so an image slot is never empty.
+
+Free stock photography covers some parts exactly (spark plugs, filters, chain and sprocket,
+battery, brake disc, fork, mirror, headlight, speedometer) and others only at category level
+(a workshop bench or wiring loom standing in for a CDI unit or rectifier). Replacing any of
+them with a real product photograph is a one-line change: set the product's `photo` to a new
+entry in `photos.ts`, or paste a URL into the Photo URL field in the admin product form.
 
 ## Admin access
 

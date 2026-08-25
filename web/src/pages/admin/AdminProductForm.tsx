@@ -1,14 +1,15 @@
 import { ArrowLeft, CircleAlert, Save } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { ProductImage } from '../../components/product/ProductImage';
 import { siteConfig } from '../../config/site';
 import { bikes } from '../../data/bikes';
 import { useSeo } from '../../lib/seo';
 import { useCatalog } from '../../store/CatalogContext';
 import type { CategorySlug, ProductSpecification } from '../../types';
 
-/** Images available to assign — the illustration set shipped with the site. */
-const imageOptions = [
+/** Local illustrations, used as the fallback when a photo cannot be loaded. */
+const fallbackOptions = [
   'spark-plug', 'air-filter', 'oil-filter', 'clutch-plate', 'cable', 'piston-ring', 'gasket', 'carburetor',
   'valve-set', 'engine-oil', 'battery', 'bulb', 'indicator', 'horn', 'ignition-coil', 'cdi-unit', 'rectifier',
   'wiring-set', 'brake-switch', 'brake-shoe', 'fork-seal', 'shock-absorber', 'lever', 'mirror', 'handle-grip',
@@ -31,7 +32,8 @@ const AdminProductForm = () => {
     price: existing?.price?.toString() ?? '',
     oldPrice: existing?.oldPrice?.toString() ?? '',
     brand: existing?.brand ?? 'Qalandari Select',
-    image: existing?.image ?? imageOptions[0],
+    image: existing?.image ?? '',
+    fallbackImage: existing?.fallbackImage ?? fallbackOptions[0],
     stockQuantity: existing?.stockQuantity?.toString() ?? '0',
     shortDescription: existing?.shortDescription ?? '',
     description: existing?.description ?? '',
@@ -90,6 +92,7 @@ const AdminProductForm = () => {
       oldPrice: form.oldPrice.trim() ? Number(form.oldPrice) : null,
       brand: form.brand.trim(),
       image: form.image,
+      fallbackImage: form.fallbackImage,
       stockQuantity,
       shortDescription: form.shortDescription.trim(),
       description: form.description.trim() || form.shortDescription.trim(),
@@ -233,24 +236,46 @@ const AdminProductForm = () => {
         <section className="card space-y-4 p-5">
           <h2 className="text-base font-semibold text-ink-900">Product image</h2>
           <p className="text-xs text-ink-500">
-            Pick an image from the product image set. When a backend is connected, this becomes an upload field.
+            Paste the URL of the product photograph. The fallback illustration is shown only if the photo cannot be
+            loaded, so a product never renders a broken image.
           </p>
-          <div className="flex items-center gap-4">
-            <img src={form.image} alt="" width={480} height={360} className="size-24 rounded-lg border border-ink-200 bg-ink-50 object-cover" />
-            <div className="flex-1">
-              <label htmlFor="product-image" className="field-label">Image</label>
-              <select
-                id="product-image"
-                className="field"
-                value={form.image}
-                onChange={(event) => setForm({ ...form, image: event.target.value })}
-              >
-                {imageOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option.replace('/products/', '').replace('.svg', '').replace(/-/g, ' ')}
-                  </option>
-                ))}
-              </select>
+          <div className="flex flex-wrap items-start gap-4">
+            <ProductImage
+              src={form.image}
+              fallback={form.fallbackImage}
+              alt=""
+              className="size-24 rounded-lg border border-ink-200 bg-ink-50 object-cover"
+            />
+            <div className="min-w-56 flex-1 space-y-4">
+              <div>
+                <label htmlFor="product-image" className="field-label">
+                  Photo URL
+                </label>
+                <input
+                  id="product-image"
+                  className="field"
+                  placeholder="https://…"
+                  value={form.image}
+                  onChange={(event) => setForm({ ...form, image: event.target.value })}
+                />
+              </div>
+              <div>
+                <label htmlFor="product-fallback" className="field-label">
+                  Fallback illustration
+                </label>
+                <select
+                  id="product-fallback"
+                  className="field"
+                  value={form.fallbackImage}
+                  onChange={(event) => setForm({ ...form, fallbackImage: event.target.value })}
+                >
+                  {fallbackOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option.replace('/products/', '').replace('.svg', '').replace(/-/g, ' ')}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
         </section>

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { searchSuggestions } from '../../lib/catalog';
 import { formatPKR } from '../../lib/format';
 import { useCatalog } from '../../store/CatalogContext';
+import { ProductImage } from '../product/ProductImage';
 
 interface SearchBarProps {
   placeholder?: string;
@@ -140,7 +141,7 @@ export const SearchBar = ({
                       navigate(`/shop/${product.slug}`);
                     }}
                   >
-                    <img src={product.image} alt="" className="size-10 rounded-md object-cover" loading="lazy" />
+                    <ProductImage src={product.image} fallback={product.fallbackImage} alt="" className="size-10 rounded-md object-cover" />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-medium text-ink-900">{product.name}</span>
                       <span className="block truncate text-xs text-ink-500">{product.compatibleBikes.join(', ')}</span>

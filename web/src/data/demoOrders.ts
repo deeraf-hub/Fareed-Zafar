@@ -16,6 +16,7 @@ const line = (sku: string, quantity: number): OrderItem => {
     name: product.name,
     slug: product.slug,
     image: product.image,
+    fallbackImage: product.fallbackImage,
     quantity,
     unitPrice: product.price,
     total: product.price * quantity,

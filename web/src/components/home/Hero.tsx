@@ -2,6 +2,8 @@ import { ArrowRight, MessageCircle, ShieldCheck, Truck, Wrench } from 'lucide-re
 import { Link } from 'react-router-dom';
 import { siteConfig } from '../../config/site';
 import { generalInquiryLink } from '../../lib/whatsapp';
+import { photoAlt, photoUrl } from '../../data/photos';
+import { ProductImage } from '../product/ProductImage';
 import { SearchBar } from '../shop/SearchBar';
 
 export const Hero = () => (
@@ -66,19 +68,30 @@ export const Hero = () => (
       </div>
 
       <div className="relative hidden lg:block">
-        <div className="overflow-hidden rounded-2xl bg-white/5 p-8 ring-1 ring-white/10">
-          <img
-            src="/motorcycle.svg"
-            alt="Illustration of a motorcycle, the bikes Qalandari Autos supplies parts for"
-            width={480}
-            height={280}
-            className="w-full rounded-xl bg-white"
+        <div className="overflow-hidden rounded-2xl ring-1 ring-white/10">
+          <ProductImage
+            src={photoUrl('mechanic', 1200, 900)}
+            fallback="/motorcycle.svg"
+            alt={photoAlt('mechanic')}
+            width={1200}
+            height={900}
+            priority
+            className="aspect-4/3 w-full object-cover"
           />
-          <div className="mt-6 grid grid-cols-3 gap-3">
-            <img src="/products/spark-plug.svg" alt="" className="rounded-lg bg-white" loading="lazy" width={480} height={360} />
-            <img src="/products/chain-set.svg" alt="" className="rounded-lg bg-white" loading="lazy" width={480} height={360} />
-            <img src="/products/brake-shoe.svg" alt="" className="rounded-lg bg-white" loading="lazy" width={480} height={360} />
-          </div>
+        </div>
+        <div className="mt-4 grid grid-cols-3 gap-4">
+          {(['chain-sprocket', 'brake-disc', 'spark-plug'] as const).map((id) => (
+            <div key={id} className="overflow-hidden rounded-xl ring-1 ring-white/10">
+              <ProductImage
+                src={photoUrl(id, 480, 360)}
+                fallback="/products/spark-plug.svg"
+                alt={photoAlt(id)}
+                width={480}
+                height={360}
+                className="aspect-4/3 w-full object-cover"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>

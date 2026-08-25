@@ -8,6 +8,7 @@ import { formatDate, formatPKR } from '../../lib/format';
 import { useSeo } from '../../lib/seo';
 import { useCatalog } from '../../store/CatalogContext';
 import { useOrders } from '../../store/OrdersContext';
+import { ProductImage } from '../../components/product/ProductImage';
 
 const AdminDashboard = () => {
   const { products, loading: catalogLoading } = useCatalog();
@@ -112,7 +113,7 @@ const AdminDashboard = () => {
             <ul className="divide-y divide-ink-100">
               {lowStock.slice(0, 8).map((product) => (
                 <li key={product.id} className="flex items-center gap-3 py-3">
-                  <img src={product.image} alt="" width={480} height={360} loading="lazy" className="size-10 rounded-lg bg-ink-50 object-cover" />
+                  <ProductImage src={product.image} fallback={product.fallbackImage} alt="" className="size-10 rounded-lg bg-ink-50 object-cover" />
                   <div className="min-w-0 flex-1">
                     <Link to={`/admin/products/${product.id}`} className="block truncate text-sm font-medium text-ink-900 hover:text-brand-600">
                       {product.name}

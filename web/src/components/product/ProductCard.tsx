@@ -7,6 +7,7 @@ import { stockInquiryLink } from '../../lib/whatsapp';
 import { useCart } from '../../store/CartContext';
 import type { Product } from '../../types';
 import { StockBadge } from '../ui/StockBadge';
+import { ProductImage } from './ProductImage';
 
 interface ProductCardProps {
   product: Product;
@@ -29,13 +30,10 @@ export const ProductCard = ({ product, onQuickView }: ProductCardProps) => {
     <article className="card group flex flex-col overflow-hidden transition-shadow hover:shadow-md">
       <div className="relative">
         <Link to={`/shop/${product.slug}`} className="block aspect-4/3 overflow-hidden bg-ink-50">
-          <img
+          <ProductImage
             src={product.image}
+            fallback={product.fallbackImage}
             alt={product.name}
-            width={480}
-            height={360}
-            loading="lazy"
-            decoding="async"
             className="size-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           />
         </Link>

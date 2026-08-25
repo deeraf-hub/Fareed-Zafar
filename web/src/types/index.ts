@@ -14,6 +14,7 @@ export interface Category {
   slug: CategorySlug;
   description: string;
   image: string;
+  fallbackImage: string;
   createdAt: string;
 }
 
@@ -25,6 +26,7 @@ export interface BikeModel {
   brand: 'Honda' | 'Yamaha' | 'Suzuki' | 'United' | 'Road Prince' | 'Super Power';
   engineCc: number;
   image: string;
+  fallbackImage: string;
 }
 
 export interface ProductSpecification {
@@ -42,7 +44,10 @@ export interface Product {
   oldPrice: number | null;
   description: string;
   shortDescription: string;
+  /** Product photograph (remote CDN URL). */
   image: string;
+  /** Local illustration shown if the photograph cannot be loaded. */
+  fallbackImage: string;
   images: string[];
   stock: boolean;
   stockQuantity: number;
@@ -92,6 +97,7 @@ export interface OrderItem {
   name: string;
   slug: string;
   image: string;
+  fallbackImage: string;
   quantity: number;
   unitPrice: number;
   total: number;
