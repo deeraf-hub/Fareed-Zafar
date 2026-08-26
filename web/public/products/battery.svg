@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect width="480" height="360" fill="#f5f5f4"/><circle cx="240" cy="176" r="132" fill="#e7e5e4"/><ellipse cx="240" cy="318" rx="128" ry="14" fill="#d6d3d1"/><g transform="translate(240,180)">
+ <rect x="-104" y="-72" width="208" height="150" rx="12" fill="#27272a" stroke="#3f3f46" stroke-width="4"/>
+ <rect x="-104" y="-72" width="208" height="42" rx="12" fill="#a1a1aa" stroke="#3f3f46" stroke-width="4"/>
+ <rect x="-66" y="-92" width="34" height="24" rx="5" fill="#dc2626" stroke="#3f3f46" stroke-width="4"/>
+ <rect x="34" y="-92" width="34" height="24" rx="5" fill="#d4d4d8" stroke="#3f3f46" stroke-width="4"/>
+ <text x="-49" y="-46" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#27272a" text-anchor="middle">+</text>
+ <text x="51" y="-46" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#27272a" text-anchor="middle">–</text>
+ <rect x="-80" y="-14" width="160" height="72" rx="8" fill="#18181b" stroke="#a1a1aa" stroke-width="3"/>
+ <text x="0" y="24" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#fafafa" text-anchor="middle">12V</text>
+ <text x="0" y="46" font-family="Arial, sans-serif" font-size="13" fill="#d4d4d8" text-anchor="middle">MAINTENANCE FREE</text>
+</g></svg>

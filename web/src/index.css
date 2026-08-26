@@ -1,0 +1,142 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Automotive palette: charcoal, white, red accent, neutral grey. */
+  --color-ink-50: #f7f7f8;
+  --color-ink-100: #ececee;
+  --color-ink-200: #d5d5da;
+  --color-ink-300: #b0b0b8;
+  --color-ink-400: #85858f;
+  --color-ink-500: #66666f;
+  --color-ink-600: #4d4d55;
+  --color-ink-700: #3a3a41;
+  --color-ink-800: #26262b;
+  --color-ink-900: #18181b;
+  --color-ink-950: #101012;
+
+  --color-brand-50: #fef2f2;
+  --color-brand-100: #fee2e2;
+  --color-brand-200: #fecaca;
+  --color-brand-400: #f87171;
+  --color-brand-500: #ef4444;
+  --color-brand-600: #dc2626;
+  --color-brand-700: #b91c1c;
+
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white text-ink-800 font-sans antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    @apply text-ink-900 font-semibold tracking-tight;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-600;
+  }
+
+  /* Respect users who ask for less motion. */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  min-height: 2.75rem; /* comfortable touch target on mobile */
+  transition: background-color 150ms, border-color 150ms, color 150ms;
+}
+
+@utility btn-disabled-state {
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply btn-disabled-state;
+  }
+
+  .btn-primary {
+    @apply btn btn-disabled-state bg-brand-600 text-white hover:bg-brand-700;
+  }
+
+  .btn-dark {
+    @apply btn btn-disabled-state bg-ink-900 text-white hover:bg-ink-800;
+  }
+
+  .btn-outline {
+    @apply btn btn-disabled-state border border-ink-200 bg-white text-ink-800 hover:border-ink-300 hover:bg-ink-50;
+  }
+
+  .btn-ghost {
+    @apply btn btn-disabled-state text-ink-700 hover:bg-ink-100;
+  }
+
+  .card {
+    @apply rounded-xl border border-ink-200 bg-white;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-sm font-medium text-ink-700;
+  }
+
+  .field {
+    @apply w-full rounded-lg border border-ink-200 bg-white px-3.5 py-2.5 text-sm text-ink-900
+           placeholder:text-ink-400 focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20 focus:outline-none;
+    min-height: 2.75rem;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+
+  .section-title {
+    @apply text-2xl font-semibold tracking-tight text-ink-900 sm:text-3xl;
+  }
+
+  .link-quiet {
+    @apply text-ink-600 transition-colors hover:text-brand-600;
+  }
+
+  .skeleton {
+    @apply animate-pulse rounded-lg bg-ink-100;
+  }
+}
+
+/* Hide the number input spinners on quantity fields. */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
