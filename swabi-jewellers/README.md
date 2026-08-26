@@ -126,13 +126,33 @@ dialogs and toggles, and a `prefers-reduced-motion` override that disables every
 
 ---
 
-## Deployment
+## Hosting
 
-`npm run build` emits a static `dist/`. Because routing is client-side, the host must rewrite unknown
-paths to `index.html` — `public/_redirects` already does this on Netlify; on Vercel, Cloudflare Pages
-or Nginx add the equivalent SPA fallback.
+### GitHub Pages (set up in this repo)
 
----
+`.github/workflows/deploy-swabi-jewellers.yml` builds this directory on every push to the
+storefront branch and force-pushes the static output to the **`gh-pages`** branch. The build runs
+with `BASE_PATH=/Fareed-Zafar/` so assets resolve under the repository subpath, and `index.html` is
+copied to `404.html` so client-side routes survive a hard refresh (Pages has no rewrite rules).
+
+One manual step is needed once, because a workflow token is not allowed to create a Pages site:
+
+> **Settings → Pages → Source: "Deploy from a branch" → Branch: `gh-pages`, folder `/ (root)` → Save**
+
+The site then goes live at **https://deeraf-hub.github.io/Fareed-Zafar/** and updates itself on
+every later push.
+
+### Netlify
+
+`netlify.toml` already declares the build (`npm run build`) and publish directory (`dist`). In
+Netlify, "Add new site → Import an existing project", pick this repository, and set the base
+directory to `swabi-jewellers`. Leave `BASE_PATH` unset so the site builds for the domain root;
+`public/_redirects` supplies the SPA fallback.
+
+### Anywhere else
+
+`npm run build` emits a static `dist/`. Any host works as long as unknown paths are rewritten to
+`index.html`.
 
 ## Verified
 
