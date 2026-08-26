@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /cart
+Disallow: /account
+
+Sitemap: https://swabijewellers.pk/sitemap.xml
