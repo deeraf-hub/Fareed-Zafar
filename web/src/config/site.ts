@@ -18,13 +18,13 @@ export const siteConfig = {
   phoneHref: 'tel:+923002389772',
   email: 'info@qalandariautos.pk', // PLACEHOLDER
   address: {
-    line1: 'Shop # 00, Auto Parts Market', // PLACEHOLDER
-    line2: 'Main Bazaar Road', // PLACEHOLDER
-    city: 'Lahore', // PLACEHOLDER
+    line1: '1/C Hajrabad',
+    line2: 'Shah Faisal Colony, Korangi',
+    city: 'Karachi',
     country: 'Pakistan',
   },
-  /** Embedded map — replace with the shop's own Google Maps place. */
-  mapsEmbedQuery: 'Auto Parts Market Lahore Pakistan', // PLACEHOLDER
+  /** Embedded map and the "open in Google Maps" link both search this. */
+  mapsEmbedQuery: '1/C Hajrabad, Shah Faisal Colony, Korangi, Karachi',
   businessHours: [
     { days: 'Monday – Saturday', hours: '9:00 AM – 8:00 PM' },
     { days: 'Sunday', hours: 'Closed' },

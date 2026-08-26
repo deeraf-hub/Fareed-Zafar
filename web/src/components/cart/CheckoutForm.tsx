@@ -148,7 +148,7 @@ export const CheckoutForm = ({ onSubmit, submitting }: CheckoutFormProps) => {
             <label htmlFor="city" className="field-label">
               City <span className="text-brand-600">*</span>
             </label>
-            <input type="text" autoComplete="address-level2" placeholder="Lahore" {...inputProps('city')} />
+            <input type="text" autoComplete="address-level2" placeholder="Karachi" {...inputProps('city')} />
             {fieldError('city')}
           </div>
 
@@ -156,7 +156,7 @@ export const CheckoutForm = ({ onSubmit, submitting }: CheckoutFormProps) => {
             <label htmlFor="area" className="field-label">
               Area <span className="text-brand-600">*</span>
             </label>
-            <input type="text" autoComplete="address-level3" placeholder="Gulberg" {...inputProps('area')} />
+            <input type="text" autoComplete="address-level3" placeholder="Shah Faisal Colony" {...inputProps('area')} />
             {fieldError('area')}
           </div>
 
