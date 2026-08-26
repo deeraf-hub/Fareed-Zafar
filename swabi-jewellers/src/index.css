@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-ivory text-charcoal font-sans antialiased;
+    font-feature-settings: 'liga' 1, 'kern' 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-navy-700;
+    font-weight: 400;
+  }
+
+  ::selection {
+    @apply bg-champagne-200 text-navy-800;
+  }
+
+  /* Elegant, restrained focus ring for keyboard users only. */
+  :focus-visible {
+    outline: 2px solid theme('colors.champagne.500');
+    outline-offset: 3px;
+  }
+
+  input,
+  select,
+  textarea {
+    @apply font-sans;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-luxe {
+    @apply mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12;
+  }
+
+  .eyebrow {
+    @apply text-[11px] uppercase tracking-luxe text-champagne-600;
+  }
+
+  .rule-gold {
+    @apply mx-auto h-px w-16 bg-gradient-to-r from-transparent via-champagne-400 to-transparent;
+  }
+
+  .link-underline {
+    @apply relative inline-block after:absolute after:bottom-[-2px] after:left-0 after:h-px after:w-0 after:bg-current after:transition-[width] after:duration-500 after:ease-luxe hover:after:w-full;
+  }
+
+  .field {
+    @apply w-full border border-linen bg-white px-4 py-3 text-sm text-charcoal placeholder:text-stoneish/70 transition-colors duration-300 focus:border-champagne-400 focus:outline-none;
+  }
+
+  .card-hover-media {
+    @apply transition-transform duration-[900ms] ease-luxe group-hover:scale-[1.05];
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
