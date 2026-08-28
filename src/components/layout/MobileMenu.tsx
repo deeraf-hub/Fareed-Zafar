@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { CloseIcon, UserIcon } from '@/components/ui/Icons'
-import { siteConfig } from '@/config/site'
+import { Logo } from '@/components/ui/Logo'
 
 export function MobileMenu({
   open,
@@ -35,7 +35,7 @@ export function MobileMenu({
         }`}
       >
         <div className="flex items-center justify-between border-b border-beige px-5 py-4">
-          <span className="font-display text-xl text-charcoal">{siteConfig.brandName}</span>
+          <Logo tone="navy" markClassName="h-8 w-auto" />
           <button type="button" onClick={onClose} aria-label="Close menu" className="text-charcoal">
             <CloseIcon />
           </button>

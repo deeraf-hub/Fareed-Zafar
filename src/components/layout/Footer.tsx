@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { siteConfig } from '@/config/site'
 import { FacebookIcon, InstagramIcon, TiktokIcon } from '@/components/ui/Icons'
+import { Logo } from '@/components/ui/Logo'
 
 const columns: { title: string; links: { label: string; to: string }[] }[] = [
   {
@@ -40,8 +41,8 @@ export function Footer() {
     <footer className="bg-charcoal text-ivory">
       <div className="container-lux grid grid-cols-2 gap-10 py-16 sm:grid-cols-2 lg:grid-cols-5 lg:gap-8">
         <div className="col-span-2 flex flex-col gap-4 lg:col-span-2">
-          <Link to="/" className="font-display text-2xl tracking-wide">
-            {siteConfig.brandName}
+          <Link to="/" aria-label={siteConfig.brandName}>
+            <Logo tone="ivory" markClassName="h-10 w-auto" />
           </Link>
           <p className="max-w-xs text-sm leading-relaxed text-ivory/65">{siteConfig.supportingText}</p>
           <div className="flex items-center gap-3 pt-2">

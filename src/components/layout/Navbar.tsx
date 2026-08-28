@@ -4,6 +4,7 @@ import { siteConfig } from '@/config/site'
 import { useCart } from '@/context/CartContext'
 import { useWishlist } from '@/context/WishlistContext'
 import { SearchIcon, UserIcon, HeartIcon, BagIcon, MenuIcon } from '@/components/ui/Icons'
+import { Logo } from '@/components/ui/Logo'
 import { SearchOverlay } from './SearchOverlay'
 import { MobileMenu } from './MobileMenu'
 
@@ -56,9 +57,8 @@ export function Navbar() {
           <MenuIcon />
         </button>
 
-        <Link to="/" className="mx-auto lg:mx-0 flex flex-col items-center leading-none lg:items-start">
-          <span className="font-display text-2xl sm:text-[28px] tracking-wide text-charcoal">{siteConfig.brandName}</span>
-          <span className="hidden sm:block text-[9px] uppercase tracking-widest2 text-champagne-700">Fine Jewellery</span>
+        <Link to="/" className="mx-auto lg:mx-0" aria-label={siteConfig.brandName}>
+          <Logo tone="navy" markClassName="h-9 w-auto sm:h-10" />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">
