@@ -1,21 +1,39 @@
 {
-  "name": "messenger-to-whatsapp-forwarder",
+  "name": "swabi-jewellers",
+  "private": true,
   "version": "1.0.0",
-  "description": "Forwards every incoming Facebook Messenger (Page inbox) message to a WhatsApp number in real time via the Meta Graph API and WhatsApp Business Cloud API.",
-  "main": "src/server.js",
+  "description": "Swabi Jewellers — a premium jewellery e-commerce storefront.",
   "type": "module",
   "engines": {
     "node": ">=18.0.0"
   },
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "node --watch src/server.js",
-    "test": "node --test",
-    "test:whatsapp": "node scripts/check-whatsapp.js"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "typecheck": "tsc -b --noEmit"
   },
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2"
   },
-  "license": "MIT"
+  "devDependencies": {
+    "@types/node": "^26.4.0",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.5.0",
+    "@typescript-eslint/parser": "^8.5.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "postcss": "^8.4.45",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.3"
+  },
+  "license": "UNLICENSED"
 }
