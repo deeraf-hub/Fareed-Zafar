@@ -212,14 +212,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background-size: auto, auto, auto, cover;
   background-position: center, center, center, center 40%;
 }
-.hero-pattern {
-  position: absolute; inset: 0;
-  opacity: 0.14;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='none' stroke='white' stroke-width='2'%3E%3Ccircle cx='40' cy='40' r='22'/%3E%3Ccircle cx='40' cy='40' r='6'/%3E%3Cpath d='M40 8v8M40 64v8M8 40h8M64 40h8M18 18l6 6M56 56l6 6M62 18l-6 6M24 56l-6 6'/%3E%3Ccircle cx='105' cy='100' r='16'/%3E%3Cpath d='M105 78v8M105 114v8M83 100h8M119 100h8'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: 260px 260px;
-  animation: driftPattern 40s linear infinite;
-}
-@keyframes driftPattern { from { background-position: 0 0; } to { background-position: 260px 260px; } }
 .hero-content { position: relative; z-index: 2; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
