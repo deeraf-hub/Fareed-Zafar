@@ -138,8 +138,15 @@
 }
 .product-card:hover { transform: translateY(-4px); box-shadow: 0 16px 34px -14px rgba(13,27,62,.25); }
 .product-card .card-img-wrap { position: relative; aspect-ratio: 4/5; overflow: hidden; background: #eee7d6; }
-.product-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
-.product-card:hover img { transform: scale(1.06); }
+
+/* Generated art panel: brand-gradient background + centered icon, used everywhere a
+   product/category photo would normally go (see artHTML() in js/app.js). */
+.art-panel {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .5s ease;
+}
+.product-card:hover .art-panel, .category-card:hover .art-panel { transform: scale(1.06); }
 
 .badge-pill {
   position: absolute; top: .6rem; left: .6rem;
@@ -246,8 +253,6 @@
 
 /* ===== Category card ===== */
 .category-card { position: relative; border-radius: 1.5rem; overflow: hidden; aspect-ratio: 1/1; cursor: pointer; }
-.category-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
-.category-card:hover img { transform: scale(1.08); }
 .category-card .overlay {
   position: absolute; inset: 0;
   background: linear-gradient(to top, rgba(13,27,62,.85), rgba(13,27,62,.1) 60%);

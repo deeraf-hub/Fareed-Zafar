@@ -1,6 +1,30 @@
 /* New Taj Cloth House — product catalog
-   Prices, names and stock are demo data for the storefront. Swap PRODUCT_IMAGE_POOL
-   and item names with real photography/inventory before going live. */
+   Prices, names and stock are demo data for the storefront. Product art is generated
+   in-house (icon + gradient) rather than sourced from stock photos, so it's guaranteed
+   to match each item's category — swap in real product photography before going live. */
+
+/* Font Awesome solid glyphs — reliable, professionally-drawn icons rather than
+   hand-guessed SVG paths or unverifiable stock photos. */
+const CATEGORY_ICON = {
+  'men-garments': 'fa-shirt',
+  'women-garments': 'fa-person-dress',
+  'kids-garments': 'fa-child',
+  'men-footwear': 'fa-shoe-prints',
+  'women-footwear': 'fa-shoe-prints',
+  'kids-footwear': 'fa-shoe-prints'
+};
+
+/* [from, to] CSS gradient stop pairs. Kept within the navy/gold brand family with a
+   couple of warm accents so the 126-item grid stays legible without turning into
+   random stock-photo noise. */
+const GRADIENT_PALETTE = [
+  ['#0d1b3e', '#1e2f5c'],
+  ['#c9a24b', '#a4802f'],
+  ['#7a2e3a', '#4a1620'],
+  ['#1b4d4a', '#0d2b29'],
+  ['#5b3a29', '#2e1d15'],
+  ['#3c2a5e', '#1f1533']
+];
 
 const RAW_CATALOG = {
   'men-garments': {
@@ -119,10 +143,6 @@ function pick(arr, r) {
   return arr[Math.floor(r * arr.length) % arr.length];
 }
 
-function productImage(seed) {
-  return `https://picsum.photos/seed/${encodeURIComponent(seed)}/600/750`;
-}
-
 function buildCatalog() {
   const byCategory = [];
   let id = 1;
@@ -162,8 +182,8 @@ function buildCatalog() {
         reviews: Math.round(8 + r4 * 420),
         sizes: cat.sizes,
         colors: colors.length ? colors : [pick(COLOR_POOL, r1)],
-        image: productImage(seed + '-a'),
-        image2: productImage(seed + '-b'),
+        icon: CATEGORY_ICON[catKey],
+        gradient: pick(GRADIENT_PALETTE, seededRandom(seed + 'gradient')),
         badge: isSale ? 'Sale' : isNew ? 'New' : isBestseller ? 'Bestseller' : null,
         description: `Premium quality ${name.toLowerCase()} from New Taj Cloth House — crafted for everyday comfort with a modern fit. Available in multiple sizes and colours.`
       });
@@ -184,10 +204,10 @@ function buildCatalog() {
 const PRODUCTS = buildCatalog();
 
 const CATEGORY_META = [
-  { key: 'men-garments', title: "Men's Garments", filterGender: 'men', filterType: 'garments', img: 'https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=600&q=70&auto=format&fit=crop' },
-  { key: 'women-garments', title: "Women's Garments", filterGender: 'women', filterType: 'garments', img: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=70&auto=format&fit=crop' },
-  { key: 'kids-garments', title: "Kids' Garments", filterGender: 'kids', filterType: 'garments', img: 'https://images.unsplash.com/photo-1519238359922-989348752efb?w=600&q=70&auto=format&fit=crop' },
-  { key: 'men-footwear', title: "Men's Footwear", filterGender: 'men', filterType: 'footwear', img: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&q=70&auto=format&fit=crop' },
-  { key: 'women-footwear', title: "Women's Footwear", filterGender: 'women', filterType: 'footwear', img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&q=70&auto=format&fit=crop' },
-  { key: 'kids-footwear', title: "Kids' Footwear", filterGender: 'kids', filterType: 'footwear', img: 'https://images.unsplash.com/photo-1560343776-97e7d202ff0e?w=600&q=70&auto=format&fit=crop' }
+  { key: 'men-garments', title: "Men's Garments", filterGender: 'men', filterType: 'garments', icon: CATEGORY_ICON['men-garments'], gradient: GRADIENT_PALETTE[0] },
+  { key: 'women-garments', title: "Women's Garments", filterGender: 'women', filterType: 'garments', icon: CATEGORY_ICON['women-garments'], gradient: GRADIENT_PALETTE[1] },
+  { key: 'kids-garments', title: "Kids' Garments", filterGender: 'kids', filterType: 'garments', icon: CATEGORY_ICON['kids-garments'], gradient: GRADIENT_PALETTE[3] },
+  { key: 'men-footwear', title: "Men's Footwear", filterGender: 'men', filterType: 'footwear', icon: CATEGORY_ICON['men-footwear'], gradient: GRADIENT_PALETTE[4] },
+  { key: 'women-footwear', title: "Women's Footwear", filterGender: 'women', filterType: 'footwear', icon: CATEGORY_ICON['women-footwear'], gradient: GRADIENT_PALETTE[2] },
+  { key: 'kids-footwear', title: "Kids' Footwear", filterGender: 'kids', filterType: 'footwear', icon: CATEGORY_ICON['kids-footwear'], gradient: GRADIENT_PALETTE[5] }
 ];

@@ -22,7 +22,16 @@ function formatPrice(n) {
   return 'Rs. ' + Math.round(n).toLocaleString('en-PK');
 }
 
-/* imgFallback() is defined inline in <head> so it exists before any <img onerror> can fire. */
+/* Generated product/category art: a brand-gradient panel + a Font Awesome glyph.
+   Guarantees the visual always matches the category — no stock-photo lookup, so
+   nothing can render the wrong thing. */
+function artHTML(icon, gradient, size = 'text-6xl') {
+  const [from, to] = gradient;
+  return `
+    <div class="art-panel" style="background:linear-gradient(135deg, ${from}, ${to})">
+      <i class="fa-solid ${icon} ${size} text-cream/90"></i>
+    </div>`;
+}
 
 function starsHTML(rating) {
   const full = Math.round(rating);
@@ -90,7 +99,7 @@ function productCardHTML(p) {
   <div class="product-card" data-aos="fade-up">
     <div class="card-img-wrap">
       ${p.badge ? `<span class="badge-pill badge-${p.badge}">${p.badge}</span>` : ''}
-      <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="imgFallback(this,'${p.slug}')">
+      ${artHTML(p.icon, p.gradient)}
       <button class="eye-btn" aria-label="Quick view" onclick="openQuickView(${p.id})"><i class="fa-solid fa-eye"></i></button>
       <button class="quick-add-btn" aria-label="Add to cart" onclick="quickAdd(${p.id})"><i class="fa-solid fa-bag-shopping"></i></button>
     </div>
@@ -121,7 +130,7 @@ function renderCategories() {
   const grid = document.getElementById('category-grid');
   grid.innerHTML = CATEGORY_META.map(c => `
     <div class="category-card" data-aos="zoom-in" onclick="setFilters('${c.filterGender}','${c.filterType}')">
-      <img src="${c.img}" alt="${c.title}" loading="lazy" onerror="imgFallback(this,'${c.key}')">
+      ${artHTML(c.icon, c.gradient, 'text-7xl')}
       <div class="overlay">
         <div>
           <h3 class="text-cream font-display font-700 text-lg">${c.title}</h3>
@@ -155,7 +164,7 @@ function renderQuickView() {
   document.getElementById('quickview-modal').innerHTML = `
     <button class="icon-btn absolute top-4 right-4 bg-white z-10" onclick="closeQuickView()"><i class="fa-solid fa-xmark"></i></button>
     <div class="grid md:grid-cols-2 gap-0">
-      <img src="${p.image}" alt="${p.name}" class="w-full h-72 md:h-full object-cover" onerror="imgFallback(this,'${p.slug}')">
+      <div class="relative w-full h-72 md:h-full">${artHTML(p.icon, p.gradient, 'text-7xl')}</div>
       <div class="p-6 sm:p-8">
         <p class="text-xs uppercase tracking-wide text-gold-dark font-semibold mb-1">${p.categoryLabel}</p>
         <h2 class="font-display font-700 text-2xl mb-2">${p.name}</h2>
@@ -234,7 +243,7 @@ function closeCart() {
 function cartLineHTML(item) {
   return `
   <div class="flex gap-3 items-start">
-    <img src="${item.image}" alt="${item.name}" class="w-16 h-20 object-cover rounded-lg shrink-0" onerror="imgFallback(this,'${item.lineId}')">
+    <div class="relative w-16 h-20 rounded-lg overflow-hidden shrink-0">${artHTML(item.icon, item.gradient, 'text-2xl')}</div>
     <div class="flex-1 min-w-0">
       <p class="font-semibold text-sm line-clamp-1">${item.name}</p>
       <p class="text-xs text-navy/45 mb-1.5">${item.size ? 'Size ' + item.size : ''}${item.size && item.color ? ' · ' : ''}${item.color || ''}</p>
@@ -533,14 +542,10 @@ function renderTestimonials() {
 }
 
 /* ---------- instagram strip ---------- */
-const INSTA_IMAGES = [
-  'photo-1441986300917-64674bd600d8', 'photo-1523381210434-271e8be1f52b', 'photo-1529139574466-a303027c1d8b',
-  'photo-1542291026-7eec264c27ff', 'photo-1445205170230-053b83016050', 'photo-1520975916090-3105956dac38'
-];
 function renderInstaGrid() {
-  document.getElementById('insta-grid').innerHTML = INSTA_IMAGES.map((id, i) => `
+  document.getElementById('insta-grid').innerHTML = CATEGORY_META.map(c => `
     <a href="#" class="relative block aspect-square rounded-xl overflow-hidden group">
-      <img src="https://images.unsplash.com/${id}?w=300&q=65&auto=format&fit=crop" onerror="imgFallback(this,'insta-${i}')" alt="Style inspiration" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+      ${artHTML(c.icon, c.gradient, 'text-5xl transition-transform duration-500 group-hover:scale-110')}
       <span class="absolute inset-0 bg-navy/0 group-hover:bg-navy/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
         <i class="fa-brands fa-instagram text-white text-xl"></i>
       </span>
