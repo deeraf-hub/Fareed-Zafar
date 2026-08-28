@@ -5,13 +5,13 @@ const PKR = (n) => "Rs " + Number(n).toLocaleString("en-PK");
 /* Each category has a pool of distinct real photos so products in the same
    category don't all show the identical picture; cards cycle through the pool. */
 const CATEGORY_IMAGE_POOL = {
-  Drivetrain: ["images/cat-drivetrain-1.webp"],
-  Brakes: ["images/cat-brakes-1.webp", "images/cat-brakes-2.webp", "images/cat-brakes-3.webp"],
+  Drivetrain: ["images/cat-drivetrain-1.webp", "images/cat-drivetrain-2.webp"],
+  Brakes: ["images/cat-brakes-1.webp", "images/cat-brakes-2.webp"],
   Engine: ["images/cat-engine-1.webp", "images/cat-engine-2.webp", "images/cat-engine-3.webp", "images/cat-engine-4.webp"],
   Fluids: ["images/cat-fluids-1.webp"],
   Electrical: ["images/cat-electrical-1.webp", "images/cat-electrical-2.webp", "images/cat-electrical-3.webp", "images/cat-electrical-4.webp"],
   Body: ["images/cat-body-1.webp", "images/cat-body-2.webp", "images/cat-body-3.webp", "images/cat-body-4.webp", "images/cat-body-5.webp"],
-  Suspension: ["images/cat-suspension-1.webp", "images/cat-suspension-2.webp"],
+  Suspension: ["images/cat-suspension-1.webp", "images/cat-tyres-2.webp"],
   Tyres: ["images/cat-tyres-1.webp", "images/cat-tyres-2.webp"],
 };
 
