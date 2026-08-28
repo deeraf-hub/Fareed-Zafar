@@ -60,22 +60,29 @@ src/
 
 ## Image / photography strategy
 
-This build ships **without licensed photography**. Every hero, model,
-lifestyle and product image is a hand-drawn, on-brand SVG placeholder
-(`src/lib/placeholderArt.tsx`) instead of a hot-linked stock photo — nothing
-to break, nothing to license.
+Every hero, model, lifestyle and product image is real, licensed
+photography — 29 free-tier Adobe Stock photos, resized/compressed for web
+(`src/assets/photography/*.jpg`, ~4MB total) and registered with their
+license credit in `src/assets/photography/photos.ts`. Product photos are
+assigned per category so no two products in the same category share an
+image (see `categoryPhotoPool` in `src/data/products.ts`).
 
-Every placeholder scene (`hero`, `bridal`, `necklace`, `hand`, …) has a
-matching entry in `PLACEHOLDER_PROMPTS` inside that same file — a ready-to-use
-photography/AI-generation brief. To go live with real photography:
+Everywhere in the app that shows a photo uses the `<Photo photoKey="..." />`
+component (`src/components/ui/Photo.tsx`), which reads from that one
+registry. To replace any image, swap the file in
+`src/assets/photography/`, update its import in `photos.ts`, and every
+place it's used updates automatically — no other code changes needed.
 
-1. Shoot or generate images using the prompt text as your brief.
-2. Drop the files into `src/assets/photography/`.
-3. Replace the relevant `<PlaceholderArt scene="..." />` usage with a plain
-   `<img>` pointing at the new file.
+A standalone SVG placeholder-art system also ships alongside this
+(`src/lib/placeholderArt.tsx`, `<PlaceholderArt scene="..." />`) — unused by
+default, but available as a zero-dependency, no-license-risk fallback for
+any future image slot before real photography is ready for it. Its own
+`PLACEHOLDER_PROMPTS` map doubles as a shoot/generation brief.
 
-No other code changes are required — every component only ever reads image
-"scenes" from this one system.
+The header/footer logo (`src/components/ui/Logo.tsx`) is a hand-drawn SVG
+recreation of the brand mark, since no source logo file was available to
+this build session — swap it for the real artwork by replacing `LogoMark`'s
+contents with an `<img>`.
 
 ## Editable business content
 

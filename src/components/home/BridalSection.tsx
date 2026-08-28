@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { PlaceholderArt } from '@/lib/placeholderArt'
+import { Photo } from '@/components/ui/Photo'
 import { Reveal } from '@/components/ui/Reveal'
 
 const highlights = ['Bridal Necklace', 'Earrings', 'Matha Patti', 'Bangles', 'Rings']
@@ -7,7 +7,7 @@ const highlights = ['Bridal Necklace', 'Earrings', 'Matha Patti', 'Bangles', 'Ri
 export function BridalSection() {
   return (
     <section className="relative overflow-hidden bg-charcoal text-ivory">
-      <PlaceholderArt scene="bridal" tone="charcoal" className="absolute inset-0 h-full w-full opacity-40" />
+      <Photo photoKey="model-bridal" className="absolute inset-0 h-full w-full" />
       <div className="absolute inset-0 bg-gradient-to-r from-charcoal via-charcoal/85 to-transparent" />
 
       <div className="container-lux relative flex min-h-[560px] flex-col justify-center py-20">

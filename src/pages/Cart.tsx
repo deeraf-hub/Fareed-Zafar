@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useCart } from '@/context/CartContext'
 import { getProductBySlug, products } from '@/data/products'
-import { PlaceholderArt } from '@/lib/placeholderArt'
+import { Photo } from '@/components/ui/Photo'
 import { formatPKR } from '@/lib/currency'
 import { MinusIcon, PlusIcon, TrashIcon, BagIcon } from '@/components/ui/Icons'
 import { useSeo } from '@/lib/useSeo'
@@ -37,7 +37,7 @@ export function Cart() {
           {lineItems.map(({ line, product }) => (
             <div key={product.id} className="flex gap-4 py-6 sm:gap-6">
               <Link to={`/product/${product.slug}`} className="h-28 w-24 flex-none overflow-hidden sm:h-32 sm:w-28">
-                <PlaceholderArt scene={product.images[0]} className="h-full w-full" />
+                <Photo photoKey={product.images[0]} className="h-full w-full" />
               </Link>
               <div className="flex flex-1 flex-col justify-between">
                 <div className="flex items-start justify-between gap-4">

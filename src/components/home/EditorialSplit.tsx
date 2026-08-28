@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
-import { PlaceholderArt } from '@/lib/placeholderArt'
+import { Photo } from '@/components/ui/Photo'
 import { Reveal } from '@/components/ui/Reveal'
 
 export function EditorialSplit() {
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2">
       <Reveal className="aspect-[4/5] lg:aspect-auto">
-        <PlaceholderArt scene="editorial" className="h-full w-full" showCaption caption="Editorial — Everyday Elegance" />
+        <Photo photoKey="model-editorial" className="h-full w-full" showCaption caption="Editorial — Everyday Elegance" />
       </Reveal>
       <Reveal delay={150} className="flex flex-col items-start justify-center gap-6 bg-cream px-8 py-16 sm:px-14 lg:px-20">
         <span className="eyebrow">Our Philosophy</span>

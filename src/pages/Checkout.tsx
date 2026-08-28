@@ -4,7 +4,7 @@ import { useCart } from '@/context/CartContext'
 import { useAuth } from '@/context/AuthContext'
 import { getProductBySlug, products } from '@/data/products'
 import { formatPKR } from '@/lib/currency'
-import { PlaceholderArt } from '@/lib/placeholderArt'
+import { Photo } from '@/components/ui/Photo'
 import { useSeo } from '@/lib/useSeo'
 import { siteConfig } from '@/config/site'
 
@@ -200,7 +200,7 @@ export function Checkout() {
             {lineItems.map(({ line, product }) => (
               <div key={product.id} className="flex items-center gap-3 pt-4 first:pt-0">
                 <div className="relative h-14 w-12 flex-none overflow-hidden">
-                  <PlaceholderArt scene={product.images[0]} className="h-full w-full" />
+                  <Photo photoKey={product.images[0]} className="h-full w-full" />
                   <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-charcoal text-[10px] text-ivory">
                     {line.quantity}
                   </span>

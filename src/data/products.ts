@@ -1,12 +1,35 @@
-import type { Product, ProductReview } from '@/types'
+import type { CategorySlug, Product, ProductReview } from '@/types'
+import type { PhotoKey } from '@/assets/photography/photos'
 
 /**
  * Demo product catalog — 31 pieces across every category, realistic PKR
- * pricing, and placeholder art in place of licensed photography (see
- * lib/placeholderArt.tsx). This file stands in for a future
- * products/inventory table; swap it for an API call without touching any
- * component that imports `products`.
+ * pricing, and licensed photography (see assets/photography/photos.ts).
+ * This file stands in for a future products/inventory table; swap it for
+ * an API call without touching any component that imports `products`.
  */
+
+/** Product photo pool per category — cycled so no two products in the same category share an image. */
+const categoryPhotoPool: Partial<Record<CategorySlug, PhotoKey[]>> = {
+  necklaces: ['necklace-gold-chain', 'necklace-pearl-emerald', 'necklace-silver-diamond'],
+  earrings: ['earrings-gold-hoop', 'earrings-pearl', 'earrings-diamond-pink'],
+  rings: ['ring-diamond', 'ring-opal-gold', 'ring-gold-pair'],
+  bracelets: ['bracelet-golden-pair', 'bracelet-tennis', 'bracelet-on-hand'],
+  bangles: ['bangle-gold', 'bangle-indian-design', 'bangle-display-set'],
+  bridal: ['bridal-pearl-set', 'bridal-temple-earrings', 'bridal-heart-necklace-box'],
+  sets: ['set-bracelet-earrings-pink', 'set-earrings-pendant', 'set-jewelry-collage'],
+}
+
+/** Secondary "detail/lifestyle" shot pool, cycled independently for the hover-swap image. */
+const secondaryPhotoPool: PhotoKey[] = ['model-closeup', 'model-hand-ring', 'lifestyle-silk-chain', 'model-minimal']
+
+const categoryCounters: Partial<Record<CategorySlug, number>> = {}
+
+function nextProductImages(category: CategorySlug): PhotoKey[] {
+  const pool = categoryPhotoPool[category] ?? secondaryPhotoPool
+  const i = categoryCounters[category] ?? 0
+  categoryCounters[category] = i + 1
+  return [pool[i % pool.length], secondaryPhotoPool[i % secondaryPhotoPool.length]]
+}
 
 const reviewPool: Omit<ProductReview, 'id'>[] = [
   {
@@ -68,7 +91,7 @@ function makeReviews(seed: number, count: number): ProductReview[] {
   return list
 }
 
-type Draft = Omit<Product, 'currency' | 'reviews' | 'id'> & { reviewSeed: number; reviewSampleCount?: number }
+type Draft = Omit<Product, 'currency' | 'reviews' | 'id' | 'images'> & { reviewSeed: number; reviewSampleCount?: number }
 
 const drafts: Draft[] = [
   // ── Necklaces ────────────────────────────────────────────────────────────
@@ -86,7 +109,6 @@ const drafts: Draft[] = [
     description:
       'A graceful strand of lustrous pearls finished with a delicate gold-plated clasp. Timeless enough for everyday elegance, refined enough for a formal evening.',
     careInstructions: 'Wipe with a soft dry cloth after each wear. Avoid contact with perfume and water.',
-    images: ['necklace', 'closeup', 'lifestyle'],
     inStock: true,
     stockCount: 24,
     featured: true,
@@ -107,7 +129,6 @@ const drafts: Draft[] = [
     dimensions: '40 cm chain',
     description: 'A softly sculpted pendant necklace with a warm gold finish — an easy everyday layering piece.',
     careInstructions: 'Store flat in a pouch. Keep away from moisture.',
-    images: ['necklace', 'lifestyle'],
     inStock: true,
     stockCount: 40,
     isNew: true,
@@ -126,7 +147,6 @@ const drafts: Draft[] = [
     dimensions: '45 cm chain',
     description: 'A refined 18K gold pendant designed to catch light from every angle. An investment piece for a woman who values quiet luxury.',
     careInstructions: 'Professionally polish once a year. Store separately to avoid scratches.',
-    images: ['necklace', 'closeup'],
     inStock: true,
     stockCount: 9,
     featured: true,
@@ -145,7 +165,6 @@ const drafts: Draft[] = [
     dimensions: '38 cm + 4 cm extender',
     description: 'An impossibly delicate silver chain for the woman who prefers her jewellery to whisper, not shout.',
     careInstructions: 'Polish with a silver cloth occasionally. Avoid chlorine and swimming pools.',
-    images: ['minimal', 'lifestyle'],
     inStock: true,
     stockCount: 60,
     isNew: true,
@@ -165,7 +184,6 @@ const drafts: Draft[] = [
     dimensions: '38–44 cm adjustable, double layer',
     description: 'Two perfectly balanced layers in a warm rose gold tone — designed to be worn alone or stacked with your favourites.',
     careInstructions: 'Remove before sleeping or exercising. Wipe clean after wear.',
-    images: ['necklace', 'editorial'],
     inStock: true,
     stockCount: 18,
     bestSeller: true,
@@ -188,7 +206,6 @@ const drafts: Draft[] = [
     dimensions: '3.2 cm drop',
     description: 'A softly faceted drop earring with a warm gold finish, light enough for all-day wear.',
     careInstructions: 'Remove before applying perfume or lotion.',
-    images: ['earrings', 'closeup'],
     inStock: true,
     stockCount: 51,
     featured: true,
@@ -209,7 +226,6 @@ const drafts: Draft[] = [
     dimensions: '2.4 cm drop',
     description: 'Classic pearl drops that pair effortlessly with both traditional and western wear.',
     careInstructions: 'Wipe gently after wear; avoid contact with water and perfume.',
-    images: ['earrings', 'lifestyle'],
     inStock: true,
     stockCount: 33,
     tags: ['pearl', 'earrings', 'classic'],
@@ -227,7 +243,6 @@ const drafts: Draft[] = [
     dimensions: '4.1 cm drop',
     description: 'Traditional jhumka earrings with intricate detailing — a festive-season favourite.',
     careInstructions: 'Store in the original pouch. Avoid tangling the jhumka bells.',
-    images: ['earrings', 'bridal'],
     inStock: true,
     stockCount: 22,
     bestSeller: true,
@@ -247,7 +262,6 @@ const drafts: Draft[] = [
     dimensions: '0.8 cm stud',
     description: 'Understated 18K gold studs designed to be worn every single day without a second thought.',
     careInstructions: 'Clean with a soft cloth; avoid harsh chemicals.',
-    images: ['earrings', 'minimal'],
     inStock: true,
     stockCount: 15,
     isNew: true,
@@ -267,7 +281,6 @@ const drafts: Draft[] = [
     dimensions: '3.6 cm drop',
     description: 'A fluid, ribbon-like drop earring in a soft rose gold tone.',
     careInstructions: 'Remove before sleeping. Store flat to keep the shape.',
-    images: ['earrings', 'closeup'],
     inStock: false,
     stockCount: 0,
     tags: ['rose gold', 'earrings'],
@@ -287,7 +300,6 @@ const drafts: Draft[] = [
     dimensions: 'Available sizes 5–9',
     description: 'A clean, sculpted band ring that layers beautifully with your other rings.',
     careInstructions: 'Remove before washing hands or applying hand cream.',
-    images: ['ring', 'hand'],
     inStock: true,
     stockCount: 44,
     tags: ['gold', 'ring', 'everyday'],
@@ -305,7 +317,6 @@ const drafts: Draft[] = [
     dimensions: 'Available sizes 5–8',
     description: 'A brilliant diamond-accent ring set in 18K gold — a piece made for milestones.',
     careInstructions: 'Have prongs checked annually by a jeweller. Store in a hard case.',
-    images: ['ring', 'closeup'],
     inStock: true,
     stockCount: 6,
     featured: true,
@@ -325,7 +336,6 @@ const drafts: Draft[] = [
     dimensions: 'Available sizes 5–8',
     description: 'A single brilliant stone set in a fine gold band — quietly confident and endlessly wearable.',
     careInstructions: 'Avoid contact with chlorine. Clean gently with a soft brush.',
-    images: ['ring', 'hand'],
     inStock: true,
     stockCount: 11,
     bestSeller: true,
@@ -345,7 +355,6 @@ const drafts: Draft[] = [
     dimensions: 'Available sizes 5–9',
     description: 'A slim, stackable band designed to be mixed, matched and worn three at a time.',
     careInstructions: 'Polish occasionally with a silver cloth.',
-    images: ['ring', 'minimal'],
     inStock: true,
     stockCount: 70,
     isNew: true,
@@ -364,7 +373,6 @@ const drafts: Draft[] = [
     dimensions: 'Available sizes 5–8',
     description: 'A central stone framed by a delicate halo, set in warm 18K gold.',
     careInstructions: 'Have the setting checked annually.',
-    images: ['ring', 'closeup'],
     inStock: true,
     stockCount: 8,
     tags: ['18k gold', 'halo', 'ring'],
@@ -385,7 +393,6 @@ const drafts: Draft[] = [
     dimensions: '17 cm + 3 cm extender',
     description: 'A fine gold chain bracelet finished with a single delicate charm.',
     careInstructions: 'Remove before showering or swimming.',
-    images: ['bracelet', 'hand'],
     inStock: true,
     stockCount: 38,
     bestSeller: true,
@@ -405,7 +412,6 @@ const drafts: Draft[] = [
     dimensions: '18 cm',
     description: 'A continuous line of brilliant stones in a classic tennis-bracelet silhouette.',
     careInstructions: 'Store flat in its box. Have the clasp checked yearly.',
-    images: ['bracelet', 'closeup'],
     inStock: true,
     stockCount: 5,
     featured: true,
@@ -424,7 +430,6 @@ const drafts: Draft[] = [
     dimensions: '16 cm + 3 cm extender',
     description: 'A playful silver bracelet with three small charms — a lovely everyday gift.',
     careInstructions: 'Polish with a silver cloth as needed.',
-    images: ['bracelet', 'lifestyle'],
     inStock: true,
     stockCount: 55,
     isNew: true,
@@ -443,7 +448,6 @@ const drafts: Draft[] = [
     dimensions: '6 cm diameter, open cuff',
     description: 'A structured open-cuff bracelet in soft rose gold — makes a statement on its own.',
     careInstructions: 'Handle the opening gently; avoid repeated over-bending.',
-    images: ['bracelet', 'hand'],
     inStock: true,
     stockCount: 20,
     isNew: true,
@@ -464,7 +468,6 @@ const drafts: Draft[] = [
     dimensions: '2.6" inner diameter',
     description: 'A set of four classic gold bangles — the everyday staple of any Pakistani jewellery box.',
     careInstructions: 'Store in a soft pouch to prevent surface scratches.',
-    images: ['bangles', 'lifestyle'],
     inStock: true,
     stockCount: 30,
     bestSeller: true,
@@ -484,7 +487,6 @@ const drafts: Draft[] = [
     dimensions: '2.5" inner diameter',
     description: 'A single, substantial kada bangle in 18K gold with a hand-finished surface texture.',
     careInstructions: 'Professional polish recommended once a year.',
-    images: ['bangles', 'closeup'],
     inStock: true,
     stockCount: 7,
     featured: true,
@@ -503,7 +505,6 @@ const drafts: Draft[] = [
     dimensions: '2.4" inner diameter',
     description: 'Three slim silver bangles designed to be stacked or worn separately.',
     careInstructions: 'Polish with a silver cloth occasionally.',
-    images: ['bangles', 'minimal'],
     inStock: true,
     stockCount: 46,
     isNew: true,
@@ -523,7 +524,6 @@ const drafts: Draft[] = [
     dimensions: '2.6" inner diameter',
     description: 'A bold, wide bangle in warm rose gold with a subtly textured finish.',
     careInstructions: 'Avoid contact with perfume and hairspray.',
-    images: ['bangles', 'hand'],
     inStock: true,
     stockCount: 14,
     tags: ['rose gold', 'bangle', 'statement'],
@@ -545,7 +545,6 @@ const drafts: Draft[] = [
     dimensions: 'Necklace, earrings, tikka and 2 bangles',
     description: 'A complete bridal set — necklace, earrings, matha tikka and bangles — designed for a mehndi or valima look.',
     careInstructions: 'Professional cleaning recommended after each wear. Store flat in the original box.',
-    images: ['bridal', 'closeup', 'lifestyle'],
     inStock: true,
     stockCount: 12,
     featured: true,
@@ -567,7 +566,6 @@ const drafts: Draft[] = [
     dimensions: 'Necklace, earrings and matha patti',
     description: 'A layered 18K gold bridal necklace set with matching jhumka earrings and matha patti — statement bridal jewellery for the big day.',
     careInstructions: 'Store in the padded box provided. Professional polish recommended.',
-    images: ['bridal', 'editorial'],
     inStock: true,
     stockCount: 4,
     featured: true,
@@ -587,7 +585,6 @@ const drafts: Draft[] = [
     dimensions: 'Necklace, earrings and 2 bangles',
     description: 'Designed for the nikah ceremony — refined, layered gold detailing without heaviness.',
     careInstructions: 'Wipe gently after wear. Store in provided pouch.',
-    images: ['bridal', 'lifestyle'],
     inStock: true,
     stockCount: 9,
     tags: ['bridal', 'gold', 'nikah'],
@@ -607,7 +604,6 @@ const drafts: Draft[] = [
     dimensions: 'Necklace, earrings, tikka, bangles and ring',
     description: 'The most elaborate set in the Swabi Jewellers bridal collection — a complete look for your walima.',
     careInstructions: 'Professional cleaning recommended. Store each piece separately.',
-    images: ['bridal', 'closeup', 'editorial'],
     inStock: true,
     stockCount: 3,
     featured: true,
@@ -629,7 +625,6 @@ const drafts: Draft[] = [
     dimensions: 'Necklace + earrings',
     description: 'A perfectly matched necklace and earring duo — easy elegance for any occasion.',
     careInstructions: 'Store together in the original pouch.',
-    images: ['set', 'lifestyle'],
     inStock: true,
     stockCount: 27,
     bestSeller: true,
@@ -650,7 +645,6 @@ const drafts: Draft[] = [
     dimensions: 'Necklace + earrings + ring',
     description: 'A three-piece pearl set finished with warm gold accents — soft, romantic, endlessly elegant.',
     careInstructions: 'Wipe gently; avoid water and perfume contact.',
-    images: ['set', 'closeup'],
     inStock: true,
     stockCount: 16,
     isNew: true,
@@ -669,7 +663,6 @@ const drafts: Draft[] = [
     dimensions: 'Necklace + earrings',
     description: 'A minimal silver set built for everyday wear — office to evening in one piece.',
     careInstructions: 'Polish occasionally with a silver cloth.',
-    images: ['set', 'minimal'],
     inStock: true,
     stockCount: 42,
     isNew: true,
@@ -688,7 +681,6 @@ const drafts: Draft[] = [
     dimensions: 'Necklace + earrings + bracelet',
     description: 'A three-piece rose gold set with a soft radiant finish — dress it up or wear it alone.',
     careInstructions: 'Store each piece separately to prevent scratching.',
-    images: ['set', 'editorial'],
     inStock: true,
     stockCount: 13,
     featured: true,
@@ -704,6 +696,7 @@ export const products: Product[] = drafts.map((draft, index) => {
     ...rest,
     id: `p-${index + 1}`,
     currency: 'PKR',
+    images: nextProductImages(rest.category),
     reviews: makeReviews(reviewSeed, reviewSampleCount ?? 1),
   }
 })

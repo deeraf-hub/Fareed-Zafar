@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { products } from '@/data/products'
 import { categories } from '@/data/categories'
-import { PlaceholderArt } from '@/lib/placeholderArt'
+import { Photo } from '@/components/ui/Photo'
 import { Price } from '@/components/ui/Price'
 import { CloseIcon, SearchIcon } from '@/components/ui/Icons'
 
@@ -107,7 +107,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                 className="flex items-center gap-4 py-3 transition-colors hover:bg-cream/60"
               >
                 <div className="h-16 w-14 flex-none overflow-hidden">
-                  <PlaceholderArt scene={p.images[0]} className="h-full w-full" />
+                  <Photo photoKey={p.images[0]} className="h-full w-full" />
                 </div>
                 <div className="flex-1">
                   <p className="text-sm text-charcoal">{p.name}</p>

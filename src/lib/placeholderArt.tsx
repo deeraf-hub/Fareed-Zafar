@@ -1,17 +1,35 @@
 import { useId } from 'react'
-import type { PlaceholderScene } from '@/types'
 
 /**
- * Swabi Jewellers ships without licensed photography. Every image slot on
- * this site is a hand-drawn, on-brand SVG placeholder rather than a
+ * Standalone fallback art system, kept for any image slot that doesn't
+ * (yet) have a licensed photo in src/assets/photography — see Photo.tsx for
+ * the primary, photo-backed renderer used across the live site. Every image
+ * slot here is a hand-drawn, on-brand SVG placeholder rather than a
  * hot-linked stock photo — nothing to break, nothing to license, and every
  * scene below carries the descriptive prompt an art director or an
- * AI image generator would need to shoot/generate the real replacement.
+ * AI image generator would need to shoot/generate a real replacement.
  *
  * To go live with real photography: drop files into `src/assets/photography/`
  * and swap the `<PlaceholderArt scene="..." />` usage for a plain <img>,
  * using the prompt text below as the photography brief.
  */
+export type PlaceholderScene =
+  | 'necklace'
+  | 'earrings'
+  | 'ring'
+  | 'bracelet'
+  | 'bangles'
+  | 'bridal'
+  | 'set'
+  | 'arrivals'
+  | 'hero'
+  | 'editorial'
+  | 'hand'
+  | 'minimal'
+  | 'closeup'
+  | 'packaging'
+  | 'lifestyle'
+
 export const PLACEHOLDER_PROMPTS: Record<PlaceholderScene, string> = {
   hero: 'Luxury fashion campaign photo of an elegant female model in three-quarter profile wearing a statement gold necklace, matching drop earrings and a delicate bracelet, soft studio lighting, ivory backdrop, premium editorial jewellery advertisement, natural skin texture, sophisticated composition.',
   editorial: 'Split-frame editorial portrait of a woman wearing a layered gold necklace and rings, soft window light, neutral champagne background, fashion-magazine styling, jewellery clearly in focus.',

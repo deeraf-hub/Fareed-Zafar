@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import type { Product } from '@/types'
-import { PlaceholderArt } from '@/lib/placeholderArt'
+import { Photo } from './Photo'
 import { Price } from './Price'
 import { Rating } from './Rating'
 import { HeartIcon, BagIcon, EyeIcon } from './Icons'
@@ -30,13 +30,13 @@ export function ProductCard({
     <div className="group relative flex flex-col">
       <div className="relative aspect-[4/5] overflow-hidden bg-ivory-soft">
         <Link to={`/product/${product.slug}`} aria-label={product.name}>
-          <PlaceholderArt
-            scene={product.images[0]}
+          <Photo
+            photoKey={product.images[0]}
             className="h-full w-full transition-transform duration-700 ease-luxe group-hover:scale-[1.06]"
           />
           {product.images[1] && (
-            <PlaceholderArt
-              scene={product.images[1]}
+            <Photo
+              photoKey={product.images[1]}
               className="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-500 ease-luxe group-hover:opacity-100"
             />
           )}

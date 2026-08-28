@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { categories } from '@/data/categories'
-import { PlaceholderArt } from '@/lib/placeholderArt'
+import { Photo } from '@/components/ui/Photo'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Reveal } from '@/components/ui/Reveal'
 
@@ -13,8 +13,8 @@ export function CategoryGrid() {
         {categories.map((category, i) => (
           <Reveal key={category.slug} delay={i * 60}>
             <Link to={`/shop/${category.slug}`} className="group relative block aspect-[3/4] overflow-hidden">
-              <PlaceholderArt
-                scene={category.scene}
+              <Photo
+                photoKey={category.photo}
                 className="h-full w-full transition-transform duration-700 ease-luxe group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/0 to-transparent" />

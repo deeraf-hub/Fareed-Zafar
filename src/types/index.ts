@@ -1,3 +1,5 @@
+import type { PhotoKey } from '@/assets/photography/photos'
+
 export type CategorySlug =
   | 'necklaces'
   | 'earrings'
@@ -12,26 +14,9 @@ export interface Category {
   slug: CategorySlug
   name: string
   description: string
-  /** Placeholder art scene key, see lib/placeholderArt.tsx */
-  scene: PlaceholderScene
+  /** Cover photo key, see assets/photography/photos.ts */
+  photo: PhotoKey
 }
-
-export type PlaceholderScene =
-  | 'necklace'
-  | 'earrings'
-  | 'ring'
-  | 'bracelet'
-  | 'bangles'
-  | 'bridal'
-  | 'set'
-  | 'arrivals'
-  | 'hero'
-  | 'editorial'
-  | 'hand'
-  | 'minimal'
-  | 'closeup'
-  | 'packaging'
-  | 'lifestyle'
 
 export type Material = 'Gold Plated' | '18K Gold' | 'Sterling Silver' | 'Rose Gold' | 'Pearl' | 'Diamond Accent'
 
@@ -62,7 +47,7 @@ export interface Product {
   dimensions: string
   description: string
   careInstructions: string
-  images: PlaceholderScene[]
+  images: PhotoKey[]
   inStock: boolean
   stockCount: number
   featured?: boolean

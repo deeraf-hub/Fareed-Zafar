@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import type { Product } from '@/types'
-import { PlaceholderArt } from '@/lib/placeholderArt'
+import { Photo } from '@/components/ui/Photo'
 import { Price } from './Price'
 import { Rating } from './Rating'
 import { CloseIcon, HeartIcon } from './Icons'
@@ -38,7 +38,7 @@ export function QuickViewModal({ product, onClose }: { product: Product | null; 
           <CloseIcon />
         </button>
         <div className="aspect-square sm:aspect-auto">
-          <PlaceholderArt scene={product.images[0]} className="h-full w-full" />
+          <Photo photoKey={product.images[0]} className="h-full w-full" />
         </div>
         <div className="flex flex-col gap-4 p-6 sm:p-8">
           <div>

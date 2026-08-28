@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom'
-import { PlaceholderArt } from '@/lib/placeholderArt'
+import { Photo } from '@/components/ui/Photo'
 import { siteConfig } from '@/config/site'
 
 export function Hero() {
   return (
     <section className="relative h-[86vh] min-h-[560px] w-full overflow-hidden">
-      <PlaceholderArt
-        scene="hero"
-        tone="beige"
+      <Photo
+        photoKey="model-hero"
+        priority
         className="absolute inset-0 h-full w-full animate-fadeIn"
         showCaption
         caption="Editorial Campaign — The Aura Collection"

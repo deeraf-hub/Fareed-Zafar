@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { PlaceholderArt } from '@/lib/placeholderArt'
+import { Photo } from '@/components/ui/Photo'
 import { Reveal } from '@/components/ui/Reveal'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { GemIcon, ShieldIcon, HeadsetIcon } from '@/components/ui/Icons'
@@ -30,7 +30,7 @@ export function About() {
   return (
     <div>
       <section className="relative h-[52vh] min-h-[380px] overflow-hidden">
-        <PlaceholderArt scene="editorial" tone="beige" className="h-full w-full" />
+        <Photo photoKey="model-editorial" className="h-full w-full" />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 to-transparent" />
         <div className="container-lux relative flex h-full flex-col justify-end pb-16 text-ivory">
           <span className="eyebrow text-ivory/85">About Swabi Jewellers</span>
@@ -56,7 +56,7 @@ export function About() {
           </Link>
         </Reveal>
         <Reveal delay={150} className="aspect-[4/5]">
-          <PlaceholderArt scene="closeup" className="h-full w-full" showCaption caption="Founder's Note — Editable Placeholder" />
+          <Photo photoKey="model-closeup" className="h-full w-full" showCaption caption="Founder's Note — Editable Placeholder" />
         </Reveal>
       </section>
 

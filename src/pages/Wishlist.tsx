@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useWishlist } from '@/context/WishlistContext'
 import { useCart } from '@/context/CartContext'
 import { products } from '@/data/products'
-import { PlaceholderArt } from '@/lib/placeholderArt'
+import { Photo } from '@/components/ui/Photo'
 import { Price } from '@/components/ui/Price'
 import { TrashIcon, HeartIcon } from '@/components/ui/Icons'
 import { useSeo } from '@/lib/useSeo'
@@ -36,7 +36,7 @@ export function Wishlist() {
         {items.map((product) => (
           <div key={product.id} className="flex flex-wrap items-center gap-4 py-6 sm:gap-6">
             <Link to={`/product/${product.slug}`} className="h-28 w-24 flex-none overflow-hidden">
-              <PlaceholderArt scene={product.images[0]} className="h-full w-full" />
+              <Photo photoKey={product.images[0]} className="h-full w-full" />
             </Link>
             <div className="min-w-[160px] flex-1">
               <Link to={`/product/${product.slug}`} className="text-charcoal hover:text-champagne-700">

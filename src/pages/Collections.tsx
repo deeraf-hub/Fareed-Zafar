@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { categories } from '@/data/categories'
-import { PlaceholderArt } from '@/lib/placeholderArt'
+import { Photo } from '@/components/ui/Photo'
 import { Reveal } from '@/components/ui/Reveal'
 import { useSeo } from '@/lib/useSeo'
 import { siteConfig } from '@/config/site'
@@ -22,7 +22,7 @@ export function Collections() {
         {categories.map((category, i) => (
           <Reveal key={category.slug} delay={i * 60}>
             <Link to={`/collections/${category.slug}`} className="group relative block aspect-[4/5] overflow-hidden">
-              <PlaceholderArt scene={category.scene} className="h-full w-full transition-transform duration-700 ease-luxe group-hover:scale-110" />
+              <Photo photoKey={category.photo} className="h-full w-full transition-transform duration-700 ease-luxe group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal/75 via-charcoal/10 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-6">
                 <h2 className="font-display text-2xl text-ivory">{category.name}</h2>

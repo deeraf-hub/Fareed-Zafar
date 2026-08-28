@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { getProductBySlug, getRelatedProducts } from '@/data/products'
-import { PlaceholderArt } from '@/lib/placeholderArt'
+import { Photo } from '@/components/ui/Photo'
 import { Price } from '@/components/ui/Price'
 import { Rating } from '@/components/ui/Rating'
 import { ProductGrid } from '@/components/ui/ProductGrid'
@@ -56,8 +56,9 @@ export function ProductDetail() {
             className="relative aspect-square overflow-hidden bg-ivory-soft cursor-zoom-in"
             onClick={() => setZoomed((z) => !z)}
           >
-            <PlaceholderArt
-              scene={product.images[activeImage]}
+            <Photo
+              photoKey={product.images[activeImage]}
+              priority
               className={`h-full w-full transition-transform duration-500 ${zoomed ? 'scale-150' : 'scale-100'}`}
             />
             <span className="absolute bottom-3 right-3 bg-ivory/90 px-2 py-1 text-[10px] uppercase tracking-widest2 text-charcoal-muted">
@@ -66,16 +67,16 @@ export function ProductDetail() {
           </div>
           {product.images.length > 1 && (
             <div className="flex gap-3">
-              {product.images.map((scene, i) => (
+              {product.images.map((photoKey, i) => (
                 <button
-                  key={`${scene}-${i}`}
+                  key={`${photoKey}-${i}`}
                   type="button"
                   onClick={() => setActiveImage(i)}
                   className={`h-20 w-20 flex-none overflow-hidden border transition-colors ${
                     activeImage === i ? 'border-champagne-600' : 'border-transparent'
                   }`}
                 >
-                  <PlaceholderArt scene={scene} className="h-full w-full" />
+                  <Photo photoKey={photoKey} className="h-full w-full" />
                 </button>
               ))}
             </div>
