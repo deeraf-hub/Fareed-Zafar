@@ -13,6 +13,17 @@ const CATEGORY_ICON = {
   Tyres: "wheel",
 };
 
+const CATEGORY_IMAGE = {
+  Drivetrain: "images/cat-drivetrain.webp",
+  Brakes: "images/cat-brakes.webp",
+  Engine: "images/cat-engine.webp",
+  Fluids: "images/cat-fluids.webp",
+  Electrical: "images/cat-electrical.webp",
+  Body: "images/cat-body.webp",
+  Suspension: "images/cat-suspension.webp",
+  Tyres: "images/cat-tyres.webp",
+};
+
 let PRODUCTS = [];
 
 /* ---------------- data ---------------- */
@@ -143,11 +154,12 @@ function renderCartDrawer() {
 
 /* ---------------- product card / add to cart ---------------- */
 function productCardHTML(p) {
+  const bg = CATEGORY_IMAGE[p.category] || "";
   return `
     <article class="product-card reveal" data-id="${p.id}" data-category="${p.category}" data-name="${p.name.toLowerCase()}">
-      <div class="product-media">
+      <div class="product-media" style="background-image:url('${bg}')">
         <span class="product-tag">${p.category}</span>
-        ${icon(p.icon)}
+        <span class="icon-badge">${icon(p.icon)}</span>
       </div>
       <div class="product-body">
         <span class="cat">${p.category}</span>
@@ -219,9 +231,14 @@ function renderCategories() {
     .map(
       ([name, count]) => `
       <a href="shop.html?category=${encodeURIComponent(name)}" class="cat-card reveal">
-        <div class="cat-icon">${icon(CATEGORY_ICON[name] || "gear")}</div>
-        <h4>${name}</h4>
-        <p>${count} items</p>
+        <div class="cat-photo">
+          <img src="${CATEGORY_IMAGE[name] || ""}" alt="${name} parts" loading="lazy" />
+          <div class="cat-icon">${icon(CATEGORY_ICON[name] || "gear")}</div>
+        </div>
+        <div class="cat-body">
+          <h4>${name}</h4>
+          <p>${count} items</p>
+        </div>
       </a>`
     )
     .join("");

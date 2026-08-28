@@ -207,7 +207,10 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background:
     radial-gradient(circle at 15% 20%, rgba(255, 122, 26, 0.35), transparent 45%),
     radial-gradient(circle at 85% 80%, rgba(255, 122, 26, 0.22), transparent 50%),
-    linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 55%, var(--navy-light) 100%);
+    linear-gradient(120deg, rgba(8, 20, 38, 0.94) 0%, rgba(15, 42, 74, 0.9) 45%, rgba(15, 42, 74, 0.72) 100%),
+    url("../images/hero-workshop.webp");
+  background-size: auto, auto, auto, cover;
+  background-position: center, center, center, center 40%;
 }
 .hero-pattern {
   position: absolute; inset: 0;
@@ -278,18 +281,29 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background: var(--white);
   border: 1px solid var(--gray-100);
   border-radius: var(--radius);
-  padding: 26px 18px;
+  overflow: hidden;
   text-align: center;
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   cursor: pointer;
 }
 .cat-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: transparent; }
+.cat-card:hover .cat-photo img { transform: scale(1.08); }
+.cat-card .cat-photo {
+  aspect-ratio: 4 / 3;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--gray-50), var(--gray-100));
+}
+.cat-card .cat-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
 .cat-card .cat-icon {
-  width: 58px; height: 58px; border-radius: 16px; margin: 0 auto 14px;
-  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  position: absolute; bottom: 10px; left: 10px;
+  width: 38px; height: 38px; border-radius: 10px;
+  background: rgba(15, 42, 74, 0.82);
+  backdrop-filter: blur(3px);
   display: flex; align-items: center; justify-content: center;
 }
-.cat-card .cat-icon svg { width: 28px; height: 28px; stroke: var(--white); }
+.cat-card .cat-icon svg { width: 19px; height: 19px; stroke: var(--white); }
+.cat-card .cat-body { padding: 16px 12px 20px; }
 .cat-card h4 { font-size: 0.92rem; font-weight: 700; margin-bottom: 4px; }
 .cat-card p { font-size: 0.76rem; color: var(--gray-500); }
 
@@ -334,9 +348,25 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   aspect-ratio: 4 / 3;
   display: flex; align-items: center; justify-content: center;
   background: linear-gradient(135deg, var(--gray-50), var(--gray-100));
+  background-size: cover;
+  background-position: center;
   position: relative;
+  overflow: hidden;
 }
-.product-media svg { width: 64px; height: 64px; stroke: var(--navy); opacity: 0.85; }
+.product-media::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(15,42,74,0.12), rgba(15,42,74,0.55));
+}
+.product-media .icon-badge {
+  position: relative; z-index: 1;
+  width: 54px; height: 54px; border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(3px);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+.product-media .icon-badge svg { width: 26px; height: 26px; stroke: var(--navy); }
 .product-tag {
   position: absolute; top: 12px; left: 12px;
   background: var(--navy); color: var(--white);

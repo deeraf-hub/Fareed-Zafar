@@ -52,6 +52,10 @@ Both providers have revised field names/signature formulas across integration-gu
 
 If credentials aren't set, the site automatically falls back to the manual transfer flow above — checkout never breaks.
 
+## Images
+
+`images/` contains the hero background and category photos (motorcycle workshop, engine, brakes, electrical, body, suspension, tyres, drivetrain), licensed via Adobe Stock's free tier and resized/compressed to WebP for the web. Replace any of them with your own shop photos by keeping the same filename, or update the `CATEGORY_IMAGE` map in `js/app.js` and the `.hero` background rule in `css/style.css` to point at new files.
+
 ## Editing shop content
 
 - **Products**: edit `data/products.json` (id, name, category, price, icon, desc). The `icon` field picks a key from `js/icons.js`.
