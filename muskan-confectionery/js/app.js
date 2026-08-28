@@ -2,16 +2,29 @@
 
 const PKR = (n) => "Rs " + Number(n).toLocaleString("en-PK");
 
-const CATEGORY_IMAGE = {
-  Drivetrain: "images/cat-drivetrain.webp",
-  Brakes: "images/cat-brakes.webp",
-  Engine: "images/cat-engine.webp",
-  Fluids: "images/cat-fluids.webp",
-  Electrical: "images/cat-electrical.webp",
-  Body: "images/cat-body.webp",
-  Suspension: "images/cat-suspension.webp",
-  Tyres: "images/cat-tyres.webp",
+/* Each category has a pool of distinct real photos so products in the same
+   category don't all show the identical picture; cards cycle through the pool. */
+const CATEGORY_IMAGE_POOL = {
+  Drivetrain: ["images/cat-drivetrain-1.webp"],
+  Brakes: ["images/cat-brakes-1.webp", "images/cat-brakes-2.webp", "images/cat-brakes-3.webp"],
+  Engine: ["images/cat-engine-1.webp", "images/cat-engine-2.webp", "images/cat-engine-3.webp", "images/cat-engine-4.webp"],
+  Fluids: ["images/cat-fluids-1.webp"],
+  Electrical: ["images/cat-electrical-1.webp", "images/cat-electrical-2.webp", "images/cat-electrical-3.webp", "images/cat-electrical-4.webp"],
+  Body: ["images/cat-body-1.webp", "images/cat-body-2.webp", "images/cat-body-3.webp", "images/cat-body-4.webp", "images/cat-body-5.webp"],
+  Suspension: ["images/cat-suspension-1.webp", "images/cat-suspension-2.webp"],
+  Tyres: ["images/cat-tyres-1.webp", "images/cat-tyres-2.webp"],
 };
+
+const CATEGORY_IMAGE = Object.fromEntries(
+  Object.entries(CATEGORY_IMAGE_POOL).map(([cat, pool]) => [cat, pool[0]])
+);
+
+function imageForProduct(p) {
+  const pool = CATEGORY_IMAGE_POOL[p.category] || [];
+  if (pool.length === 0) return "";
+  const indexInCategory = PRODUCTS.filter((x) => x.category === p.category).findIndex((x) => x.id === p.id);
+  return pool[indexInCategory % pool.length];
+}
 
 let PRODUCTS = [];
 
@@ -143,7 +156,7 @@ function renderCartDrawer() {
 
 /* ---------------- product card / add to cart ---------------- */
 function productCardHTML(p) {
-  const bg = CATEGORY_IMAGE[p.category] || "";
+  const bg = imageForProduct(p);
   return `
     <article class="product-card reveal" data-id="${p.id}" data-category="${p.category}" data-name="${p.name.toLowerCase()}">
       <div class="product-media" style="background-image:url('${bg}')">
