@@ -2,17 +2,6 @@
 
 const PKR = (n) => "Rs " + Number(n).toLocaleString("en-PK");
 
-const CATEGORY_ICON = {
-  Drivetrain: "gear",
-  Brakes: "brake",
-  Engine: "engine",
-  Fluids: "oil",
-  Electrical: "battery",
-  Body: "body",
-  Suspension: "wheel",
-  Tyres: "wheel",
-};
-
 const CATEGORY_IMAGE = {
   Drivetrain: "images/cat-drivetrain.webp",
   Brakes: "images/cat-brakes.webp",
@@ -159,7 +148,6 @@ function productCardHTML(p) {
     <article class="product-card reveal" data-id="${p.id}" data-category="${p.category}" data-name="${p.name.toLowerCase()}">
       <div class="product-media" style="background-image:url('${bg}')">
         <span class="product-tag">${p.category}</span>
-        <span class="icon-badge">${icon(p.icon)}</span>
       </div>
       <div class="product-body">
         <span class="cat">${p.category}</span>
@@ -233,7 +221,6 @@ function renderCategories() {
       <a href="shop.html?category=${encodeURIComponent(name)}" class="cat-card reveal">
         <div class="cat-photo">
           <img src="${CATEGORY_IMAGE[name] || ""}" alt="${name} parts" loading="lazy" />
-          <div class="cat-icon">${icon(CATEGORY_ICON[name] || "gear")}</div>
         </div>
         <div class="cat-body">
           <h4>${name}</h4>
