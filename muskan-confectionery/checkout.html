@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Checkout — Muskan Confessionary</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230f2a4a'/%3E%3Cpath fill='%23ff7a1a' d='M14.7 6.3a4 4 0 0 0-5.4 4.9L3 17.5 5.5 20l6.3-6.3a4 4 0 0 0 4.9-5.4l-2.6 2.6-2-2 2.6-2.6z'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-item">📍 Al Hammad Plaza, Shop No 16, Sector 5B2, North Karachi Central, Karachi</div>
+    <a class="topbar-item" href="tel:+923120215642">📞 0312-0215642</a>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <span class="brand-mark" id="icon-wrenchBadge"></span>
+      <span class="brand-text">
+        <span class="name">Muskan Confessionary</span>
+        <span class="tag">Bike Spare Parts</span>
+      </span>
+    </a>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <a class="icon-btn" href="tel:+923120215642" aria-label="Call us" id="icon-phone-btn"></a>
+      <button class="icon-btn" data-open-cart aria-label="Open cart" id="icon-cart-btn">
+        <span class="cart-badge">0</span>
+      </button>
+      <button class="hamburger" aria-label="Menu"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Checkout</div>
+    <h1>Checkout</h1>
+  </div>
+</section>
+
+<main>
+  <section class="section-tight">
+    <div class="container">
+
+      <div id="checkout-empty" style="display:none;" class="empty-state">
+        <p>Your cart is empty. <a href="shop.html" style="color:var(--orange-dark);font-weight:700;">Browse parts →</a></p>
+      </div>
+
+      <form id="checkout-form" class="checkout-grid">
+        <div>
+          <div class="card">
+            <h3>Delivery Details</h3>
+            <div class="form-grid">
+              <div class="form-group full">
+                <label for="cust-name">Full Name</label>
+                <input type="text" id="cust-name" name="name" required placeholder="e.g. Ahmed Raza" />
+              </div>
+              <div class="form-group">
+                <label for="cust-phone">Mobile Number</label>
+                <input type="tel" id="cust-phone" name="phone" required placeholder="03XX-XXXXXXX" />
+              </div>
+              <div class="form-group">
+                <label for="cust-city">City</label>
+                <input type="text" id="cust-city" name="city" required placeholder="Karachi" value="Karachi" />
+              </div>
+              <div class="form-group full">
+                <label for="cust-address">Delivery Address</label>
+                <textarea id="cust-address" name="address" required placeholder="House / shop no, street, area, landmark"></textarea>
+              </div>
+              <div class="form-group full">
+                <label for="cust-notes">Order Notes (optional)</label>
+                <textarea id="cust-notes" name="notes" placeholder="e.g. bike model, part number"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Payment Method</h3>
+            <div class="pay-options">
+              <label class="pay-option" data-method="jazzcash">
+                <input type="radio" name="payment" value="jazzcash" />
+                <span class="pay-logo jazzcash">JC</span>
+                <span class="meta"><strong>JazzCash</strong><span>Mobile wallet payment</span></span>
+              </label>
+              <div class="pay-details" data-details="jazzcash">
+                Pay directly from your JazzCash app or dial <code>*786#</code> to <code>0312-0215642</code> (Muskan Confessionary), then enter your <strong>Order ID</strong> as the reference. If online redirect is enabled it will open automatically after you place the order.
+              </div>
+
+              <label class="pay-option" data-method="easypaisa">
+                <input type="radio" name="payment" value="easypaisa" />
+                <span class="pay-logo easypaisa">EP</span>
+                <span class="meta"><strong>EasyPaisa</strong><span>Mobile wallet payment</span></span>
+              </label>
+              <div class="pay-details" data-details="easypaisa">
+                Send payment via EasyPaisa app or dial <code>*786#</code> to <code>0312-0215642</code> (Muskan Confessionary), then enter your <strong>Order ID</strong> as the reference. If online redirect is enabled it will open automatically after you place the order.
+              </div>
+
+              <label class="pay-option" data-method="cod">
+                <input type="radio" name="payment" value="cod" checked />
+                <span class="pay-logo cod">COD</span>
+                <span class="meta"><strong>Cash on Delivery</strong><span>Pay when your order arrives</span></span>
+              </label>
+              <div class="pay-details" data-details="cod">
+                Pay in cash to our rider when your parts are delivered to your address.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <h3>Order Summary</h3>
+            <div id="mini-cart"></div>
+            <div class="order-line"><span>Subtotal</span><span id="sum-subtotal">Rs 0</span></div>
+            <div class="order-line"><span>Delivery Fee</span><span id="sum-delivery">Rs 0</span></div>
+            <div class="order-line total"><span>Total</span><span id="sum-total">Rs 0</span></div>
+            <p id="checkout-error" class="error-text"></p>
+            <button type="submit" class="btn btn-primary btn-block" style="margin-top:16px;" id="place-order-btn">Place Order</button>
+            <p class="hint" style="text-align:center;margin-top:12px;">No WhatsApp needed — call <a href="tel:+923120215642" style="color:var(--orange-dark);font-weight:700;">0312-0215642</a> for help with your order.</p>
+          </div>
+        </div>
+      </form>
+
+      <div id="order-success" class="order-success card" style="display:none;">
+        <div class="check" id="icon-order-check"></div>
+        <h2>Order Placed Successfully!</h2>
+        <p>Thank you — we've received your order and will contact you shortly to confirm delivery.</p>
+        <div class="order-id-box">Order ID: <span id="success-order-id"></span></div>
+        <p id="success-payment-note" style="margin-top:18px;"></p>
+        <a href="shop.html" class="btn btn-dark" style="margin-top:20px;">Continue Shopping</a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<div class="overlay" data-close-cart></div>
+<aside class="cart-drawer">
+  <div class="cart-head">
+    <h3>Your Cart</h3>
+    <button class="cart-close" data-close-cart id="icon-close-btn"></button>
+  </div>
+  <div class="cart-items"></div>
+  <div class="cart-foot" style="display:none;">
+    <div class="cart-subtotal"><span>Subtotal</span><span class="cart-subtotal-amount">Rs 0</span></div>
+    <a href="checkout.html" class="btn btn-primary btn-block">Proceed to Checkout</a>
+  </div>
+</aside>
+
+<script src="js/icons.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/app.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/checkout.js"></script>
+</body>
+</html>
