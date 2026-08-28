@@ -267,8 +267,16 @@ export function PlaceholderArt({ scene, className = '', caption, showCaption, to
   const [from, to] = toneStops[tone]
   const dark = tone === 'charcoal'
 
+  // Tailwind's position utilities share one CSS property, and its stylesheet
+  // orders `.relative` after `.absolute` — so a hardcoded "relative" here
+  // would always win over a caller's "absolute inset-0" full-bleed layering,
+  // regardless of class order in the attribute. Only default to `relative`
+  // when the caller hasn't already taken a position stance of their own.
+  const callerSetsPosition = /(^|\s)(absolute|fixed|sticky|static|relative)(\s|$)/.test(className)
+  const positionClass = callerSetsPosition ? '' : 'relative'
+
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div className={`${positionClass} overflow-hidden ${className}`}>
       <svg
         viewBox="0 0 400 500"
         preserveAspectRatio="xMidYMid slice"
