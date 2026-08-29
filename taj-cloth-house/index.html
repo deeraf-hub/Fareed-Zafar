@@ -27,7 +27,8 @@
           navy: { DEFAULT: '#0d1b3e', light: '#1e2f5c', dark: '#08122b' },
           gold: { DEFAULT: '#c9a24b', light: '#e6cd8f', dark: '#a4802f' },
           cream: '#f8f4ea',
-          pop: '#ff5470'
+          pop: '#ff5470',
+          lime: '#d7f24c'
         },
         fontFamily: {
           display: ['"Playfair Display"', 'serif'],
@@ -72,21 +73,22 @@
   </symbol>
 </svg>
 
-<!-- ============ TOP UTILITY MARQUEE ============ -->
-<div class="bg-navy text-cream text-xs sm:text-sm overflow-hidden py-2 border-b border-white/10">
-  <div class="marquee whitespace-nowrap flex gap-10 font-medium tracking-wide">
-    <span class="flex items-center gap-8 pr-10">
-      <span><i class="fa-solid fa-truck-fast text-gold mr-1.5"></i>Free delivery in Karachi on orders above Rs. 3,000</span>
-      <span><i class="fa-solid fa-mobile-screen-button text-gold mr-1.5"></i>JazzCash &amp; EasyPaisa accepted</span>
-      <span><i class="fa-solid fa-tags text-gold mr-1.5"></i>New Season Drop — up to 30% off</span>
-      <span><i class="fa-solid fa-shield-heart text-gold mr-1.5"></i>Quality fabrics, honest prices</span>
-    </span>
-    <span class="flex items-center gap-8 pr-10" aria-hidden="true">
-      <span><i class="fa-solid fa-truck-fast text-gold mr-1.5"></i>Free delivery in Karachi on orders above Rs. 3,000</span>
-      <span><i class="fa-solid fa-mobile-screen-button text-gold mr-1.5"></i>JazzCash &amp; EasyPaisa accepted</span>
-      <span><i class="fa-solid fa-tags text-gold mr-1.5"></i>New Season Drop — up to 30% off</span>
-      <span><i class="fa-solid fa-shield-heart text-gold mr-1.5"></i>Quality fabrics, honest prices</span>
-    </span>
+<!-- ============ TOP UTILITY BAR ============ -->
+<div class="bg-navy text-cream text-xs py-2.5 border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+    <div class="hidden md:flex items-center gap-6 font-medium">
+      <span><i class="fa-solid fa-location-dot text-gold mr-1.5"></i>A-90/1, Frontier Colony, Kikar Midan, Banaras, Karachi</span>
+      <span><i class="fa-solid fa-truck-fast text-gold mr-1.5"></i>Free delivery on orders above Rs. 3,000</span>
+    </div>
+    <div class="flex items-center gap-4 font-medium mx-auto md:mx-0">
+      <a href="tel:+923462493123" class="whitespace-nowrap"><i class="fa-solid fa-phone text-gold mr-1.5"></i>+92 346 2493123</a>
+      <span class="hidden sm:flex items-center gap-3 text-cream/70">
+        <a href="#" aria-label="Facebook" class="hover:text-cream"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="Instagram" class="hover:text-cream"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="TikTok" class="hover:text-cream"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://wa.me/923462493123" target="_blank" rel="noopener" aria-label="WhatsApp" class="hover:text-cream"><i class="fa-brands fa-whatsapp"></i></a>
+      </span>
+    </div>
   </div>
 </div>
 
@@ -116,12 +118,19 @@
       </nav>
 
       <!-- Right icons -->
-      <div class="flex items-center gap-2 sm:gap-4">
+      <div class="flex items-center gap-1 sm:gap-2">
         <button id="search-toggle" aria-label="Search" class="icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
-        <a href="https://wa.me/923462493123" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" class="icon-btn hidden sm:inline-flex text-green-600"><i class="fa-brands fa-whatsapp text-lg"></i></a>
-        <button id="cart-toggle" aria-label="Open cart" class="icon-btn relative">
-          <i class="fa-solid fa-bag-shopping"></i>
-          <span id="cart-count" class="absolute -top-1.5 -right-1.5 bg-pop text-white text-[10px] font-bold w-[18px] h-[18px] rounded-full flex items-center justify-center">0</span>
+        <button class="icon-btn relative hidden md:flex flex-col items-center justify-center leading-none text-[10px] font-semibold gap-0.5 w-auto px-2" aria-label="Wishlist">
+          <span class="relative"><i class="fa-solid fa-heart"></i><span id="wishlist-count" class="absolute -top-2 -right-2.5 bg-pop text-white text-[9px] font-bold w-[15px] h-[15px] rounded-full flex items-center justify-center">0</span></span>
+          Wishlist
+        </button>
+        <button class="icon-btn hidden md:flex flex-col items-center justify-center leading-none text-[10px] font-semibold gap-0.5 w-auto px-2" aria-label="Account">
+          <i class="fa-solid fa-user text-sm"></i>
+          Account
+        </button>
+        <button id="cart-toggle" aria-label="Open cart" class="icon-btn flex flex-col items-center justify-center leading-none text-[10px] font-semibold gap-0.5 w-auto px-2 relative">
+          <span class="relative"><i class="fa-solid fa-bag-shopping"></i><span id="cart-count" class="absolute -top-2 -right-2.5 bg-pop text-white text-[9px] font-bold w-[15px] h-[15px] rounded-full flex items-center justify-center">0</span></span>
+          <span id="cart-mini-total">Rs. 0</span>
         </button>
         <button id="mobile-menu-toggle" aria-label="Open menu" class="icon-btn lg:hidden"><i class="fa-solid fa-bars"></i></button>
       </div>
@@ -156,18 +165,20 @@
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 grid lg:grid-cols-2 gap-12 items-center">
     <div data-aos="fade-up" class="text-cream">
-      <span class="inline-flex items-center gap-2 bg-gold/15 text-gold-light border border-gold/30 rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide">
-        <i class="fa-solid fa-sparkles"></i> NEW SEASON DROP IS LIVE
-      </span>
-      <h1 class="mt-6 font-display font-800 text-4xl sm:text-5xl lg:text-6xl leading-[1.1]">
-        Heritage Style, <span class="text-gold">Remixed</span> for Right Now.
+      <span class="block text-gold font-semibold text-sm tracking-[0.25em] mb-3">STYLE FOR</span>
+      <h1 class="font-display font-800 text-4xl sm:text-5xl lg:text-6xl leading-[1.1] uppercase">
+        Every <span class="text-gold">Generation</span>
       </h1>
       <p class="mt-5 text-cream/70 text-base sm:text-lg max-w-lg">
-        Fresh drops in garments &amp; footwear for Men, Women and Kids — quality fabric, honest prices (Rs. 500–5,000), delivered across Karachi.
+        Men, Women &amp; Kids Fashion — all in one place. Quality fabric, honest prices, delivered across Karachi.
       </p>
-      <div class="mt-8 flex flex-wrap gap-4">
+      <div class="mt-6 flex items-baseline gap-2">
+        <span class="text-cream/50 text-xs tracking-[0.2em] font-semibold">STARTING FROM</span>
+        <span class="text-gold font-display font-800 text-2xl">Rs. 500</span>
+      </div>
+      <div class="mt-6 flex flex-wrap gap-4">
         <a href="#shop" class="btn-gold">Shop Now <i class="fa-solid fa-arrow-right ml-2"></i></a>
-        <a href="#categories" class="btn-outline-light">Browse Categories</a>
+        <a href="#categories" class="btn-outline-light">Explore Collection</a>
       </div>
       <div class="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm text-cream/70">
         <span><i class="fa-solid fa-truck-fast text-gold mr-2"></i>Fast Karachi Delivery</span>
@@ -226,10 +237,12 @@
 
 <!-- ============ SHOP BY CATEGORY ============ -->
 <section id="categories" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-  <div class="text-center max-w-2xl mx-auto mb-12" data-aos="fade-up">
-    <span class="text-gold-dark font-semibold text-xs tracking-[0.2em]">SHOP BY CATEGORY</span>
-    <h2 class="font-display font-700 text-3xl sm:text-4xl mt-2">Find Your Fit</h2>
-    <p class="text-navy/60 mt-3">Garments and footwear curated for Men, Women and Kids.</p>
+  <div class="flex items-end justify-between mb-10" data-aos="fade-up">
+    <div>
+      <span class="text-navy/50 font-semibold text-xs tracking-[0.2em]">SHOP YOUR WAY</span>
+      <h2 class="font-display font-800 text-4xl sm:text-5xl mt-2 tracking-tight"><span class="text-navy">Find your</span> <span class="text-navy/35">fit.</span></h2>
+    </div>
+    <a href="#shop" class="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-navy border-b-2 border-navy pb-0.5">View all <i class="fa-solid fa-arrow-right text-xs"></i></a>
   </div>
   <div id="category-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6"></div>
 </section>
@@ -237,9 +250,12 @@
 <!-- ============ SHOP / PRODUCT GRID ============ -->
 <section id="shop" class="bg-white py-16 sm:py-20 border-y border-navy/5">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-2xl mx-auto mb-10" data-aos="fade-up">
-      <span class="text-gold-dark font-semibold text-xs tracking-[0.2em]">THE COLLECTION</span>
-      <h2 class="font-display font-700 text-3xl sm:text-4xl mt-2">Shop All Products</h2>
+    <div class="flex items-end justify-between mb-10" data-aos="fade-up">
+      <div>
+        <span class="text-navy/50 font-semibold text-xs tracking-[0.2em]">THE EDIT</span>
+        <h2 class="font-display font-800 text-4xl sm:text-5xl mt-2 tracking-tight"><span class="text-navy">Trending</span> <span class="text-navy/35">now.</span></h2>
+      </div>
+      <span class="hidden sm:inline-flex bg-lime text-navy text-xs font-bold tracking-wide px-4 py-2 rounded-full">NEW TAJ / 2026</span>
     </div>
 
     <!-- Filters -->

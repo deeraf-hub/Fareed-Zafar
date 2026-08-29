@@ -204,10 +204,10 @@ function buildCatalog() {
 const PRODUCTS = buildCatalog();
 
 const CATEGORY_META = [
-  { key: 'men-garments', title: "Men's Garments", filterGender: 'men', filterType: 'garments', icon: CATEGORY_ICON['men-garments'], gradient: GRADIENT_PALETTE[0] },
-  { key: 'women-garments', title: "Women's Garments", filterGender: 'women', filterType: 'garments', icon: CATEGORY_ICON['women-garments'], gradient: GRADIENT_PALETTE[1] },
-  { key: 'kids-garments', title: "Kids' Garments", filterGender: 'kids', filterType: 'garments', icon: CATEGORY_ICON['kids-garments'], gradient: GRADIENT_PALETTE[3] },
-  { key: 'men-footwear', title: "Men's Footwear", filterGender: 'men', filterType: 'footwear', icon: CATEGORY_ICON['men-footwear'], gradient: GRADIENT_PALETTE[4] },
-  { key: 'women-footwear', title: "Women's Footwear", filterGender: 'women', filterType: 'footwear', icon: CATEGORY_ICON['women-footwear'], gradient: GRADIENT_PALETTE[2] },
-  { key: 'kids-footwear', title: "Kids' Footwear", filterGender: 'kids', filterType: 'footwear', icon: CATEGORY_ICON['kids-footwear'], gradient: GRADIENT_PALETTE[5] }
+  { key: 'men-garments', title: 'Men', shopLabel: 'Shop Men', subtitle: 'Latest Collection', filterGender: 'men', filterType: 'garments', icon: CATEGORY_ICON['men-garments'], gradient: GRADIENT_PALETTE[0] },
+  { key: 'women-garments', title: 'Women', shopLabel: 'Shop Women', subtitle: 'New Arrivals', filterGender: 'women', filterType: 'garments', icon: CATEGORY_ICON['women-garments'], gradient: GRADIENT_PALETTE[1] },
+  { key: 'kids-garments', title: 'Kids', shopLabel: 'Shop Kids', subtitle: 'Trendy Fashion', filterGender: 'kids', filterType: 'garments', icon: CATEGORY_ICON['kids-garments'], gradient: GRADIENT_PALETTE[3] },
+  { key: 'men-footwear', title: "Men's Footwear", shopLabel: 'Shop Footwear', subtitle: 'Step in Style', filterGender: 'men', filterType: 'footwear', icon: CATEGORY_ICON['men-footwear'], gradient: GRADIENT_PALETTE[4] },
+  { key: 'women-footwear', title: "Women's Footwear", shopLabel: 'Shop Footwear', subtitle: 'Step in Style', filterGender: 'women', filterType: 'footwear', icon: CATEGORY_ICON['women-footwear'], gradient: GRADIENT_PALETTE[2] },
+  { key: 'kids-footwear', title: "Kids' Footwear", shopLabel: 'Shop Footwear', subtitle: 'Step in Style', filterGender: 'kids', filterType: 'footwear', icon: CATEGORY_ICON['kids-footwear'], gradient: GRADIENT_PALETTE[5] }
 ];

@@ -17,6 +17,27 @@ const state = {
 
 const PAGE_SIZE = 12;
 
+/* ---------- wishlist (lightweight, id-only, persisted separately from cart) ---------- */
+const WISHLIST_KEY = 'tajClothHouseWishlist_v1';
+const Wishlist = {
+  ids: [],
+  load() {
+    try { this.ids = JSON.parse(localStorage.getItem(WISHLIST_KEY)) || []; } catch (e) { this.ids = []; }
+    return this.ids;
+  },
+  save() {
+    try { localStorage.setItem(WISHLIST_KEY, JSON.stringify(this.ids)); } catch (e) { /* storage unavailable */ }
+    const el = document.getElementById('wishlist-count');
+    if (el) el.textContent = this.ids.length;
+  },
+  has(id) { return this.ids.includes(id); },
+  toggle(id) {
+    this.ids = this.has(id) ? this.ids.filter(x => x !== id) : [...this.ids, id];
+    this.save();
+  }
+};
+Wishlist.load();
+
 /* ---------- helpers ---------- */
 function formatPrice(n) {
   return 'Rs. ' + Math.round(n).toLocaleString('en-PK');
@@ -94,23 +115,35 @@ function syncPillActiveStates() {
 
 /* ---------- rendering: product grid ---------- */
 function productCardHTML(p) {
+  const discount = p.originalPrice ? Math.round((1 - p.price / p.originalPrice) * 100) : 0;
   const strike = p.originalPrice ? `<span class="text-navy/35 line-through text-xs ml-2">${formatPrice(p.originalPrice)}</span>` : '';
+  let badgeHTML = '';
+  if (p.badge === 'Sale') badgeHTML = `<span class="badge-pill badge-sale">-${discount}%</span>`;
+  else if (p.badge === 'New') badgeHTML = `<span class="badge-pill badge-new">New</span>`;
+  else if (p.badge === 'Bestseller') badgeHTML = `<span class="badge-pill badge-trending">Trending</span>`;
   return `
   <div class="product-card" data-aos="fade-up">
     <div class="card-img-wrap">
-      ${p.badge ? `<span class="badge-pill badge-${p.badge}">${p.badge}</span>` : ''}
       ${artHTML(p.icon, p.gradient)}
-      <button class="eye-btn" aria-label="Quick view" onclick="openQuickView(${p.id})"><i class="fa-solid fa-eye"></i></button>
-      <button class="quick-add-btn" aria-label="Add to cart" onclick="quickAdd(${p.id})"><i class="fa-solid fa-bag-shopping"></i></button>
+      ${badgeHTML}
+      <button class="wishlist-btn" data-active="${Wishlist.has(p.id)}" aria-label="Add to wishlist" onclick="toggleWishlist(${p.id}, this)"><i class="fa-solid fa-heart text-sm"></i></button>
+      <button class="quickview-pill" onclick="openQuickView(${p.id})">Quick view</button>
     </div>
-    <div class="p-3.5">
-      <p class="text-[11px] uppercase tracking-wide text-navy/40 font-semibold mb-0.5">${p.categoryLabel}</p>
-      <h3 class="font-semibold text-sm leading-snug line-clamp-2 mb-1.5 cursor-pointer" onclick="openQuickView(${p.id})">${p.name}</h3>
-      <div class="flex items-center gap-1 mb-2"><span class="stars">${starsHTML(p.rating)}</span><span class="text-[11px] text-navy/40">(${p.reviews})</span></div>
-      <div class="flex items-center flex-wrap"><span class="font-bold text-navy">${formatPrice(p.price)}</span>${strike}</div>
+    <div class="pt-3">
+      <p class="text-[11px] uppercase tracking-wide text-navy/40 font-medium mb-0.5">${p.categoryLabel}</p>
+      <h3 class="font-semibold text-sm leading-snug line-clamp-2 mb-1 cursor-pointer" onclick="openQuickView(${p.id})">${p.name}</h3>
+      <div class="flex items-center gap-1 mb-1.5"><span class="stars">${starsHTML(p.rating)}</span><span class="text-[11px] text-navy/40">${p.rating} (${p.reviews})</span></div>
+      <div class="flex items-center flex-wrap mb-3"><span class="font-bold text-navy">${formatPrice(p.price)}</span>${strike}</div>
+      <button class="add-to-cart-btn" onclick="quickAdd(${p.id})">Add to cart +</button>
     </div>
   </div>`;
 }
+
+function toggleWishlist(id, btn) {
+  Wishlist.toggle(id);
+  btn.dataset.active = Wishlist.has(id) ? 'true' : 'false';
+}
+window.toggleWishlist = toggleWishlist;
 
 function renderProducts() {
   const all = getFilteredProducts();
@@ -132,9 +165,10 @@ function renderCategories() {
     <div class="category-card" data-aos="zoom-in" onclick="setFilters('${c.filterGender}','${c.filterType}')">
       ${artHTML(c.icon, c.gradient, 'text-7xl')}
       <div class="overlay">
-        <div>
-          <h3 class="text-cream font-display font-700 text-lg">${c.title}</h3>
-          <span class="text-gold text-xs font-semibold">Shop Now <i class="fa-solid fa-arrow-right ml-1"></i></span>
+        <div class="w-full">
+          <h3 class="text-cream font-display font-800 text-2xl">${c.title}</h3>
+          <p class="text-cream/70 text-sm mb-3">${c.subtitle}</p>
+          <span class="inline-block bg-navy text-cream text-xs font-semibold px-4 py-2 rounded-full">${c.shopLabel}</span>
         </div>
       </div>
     </div>
@@ -269,6 +303,7 @@ function renderCart() {
   const subtotal = Cart.subtotal();
   document.getElementById('cart-subtotal').textContent = formatPrice(subtotal);
   document.getElementById('cart-count').textContent = Cart.count();
+  document.getElementById('cart-mini-total').textContent = formatPrice(subtotal);
 
   const remaining = STORE.freeDeliveryThreshold - subtotal;
   const note = document.getElementById('free-delivery-note');
@@ -299,6 +334,7 @@ window.cartRemove = cartRemove;
 
 document.addEventListener('cart:updated', () => {
   document.getElementById('cart-count').textContent = Cart.count();
+  document.getElementById('cart-mini-total').textContent = formatPrice(Cart.subtotal());
   if (document.getElementById('cart-drawer').classList.contains('drawer-open')) {
     renderCart();
   }
@@ -578,6 +614,7 @@ window.toggleFAQ = toggleFAQ;
 /* ---------- misc UI wiring ---------- */
 function initUI() {
   document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('wishlist-count').textContent = Wishlist.ids.length;
 
   window.addEventListener('scroll', () => {
     document.getElementById('site-header').classList.toggle('shadow-soft', window.scrollY > 10);
