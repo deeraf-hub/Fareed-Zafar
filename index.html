@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sehrish Builders | Building Construction Materials in Karachi</title>
+  <meta name="description" content="Sehrish Builders supplies quality building and construction materials in Keamari Town, Karachi, including cement, bricks, steel, plumbing, electrical and finishing materials." />
+  <meta name="keywords" content="Building materials Karachi, Construction materials Karachi, Sehrish Builders, Building materials Keamari, Construction supplies Keamari, Cement supplier Karachi, Hardware materials Karachi" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              50: "#eef3f9",
+              100: "#d4e0ee",
+              200: "#a9c1dd",
+              300: "#7ea3cc",
+              400: "#4d7fb0",
+              500: "#2f6094",
+              600: "#234a74",
+              700: "#1a3a5c",
+              800: "#122943",
+              900: "#0b1c30",
+              950: "#060f1c",
+            },
+          },
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+          },
+          boxShadow: {
+            card: "0 4px 20px -4px rgba(11,28,48,0.12)",
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="font-sans text-slate-800 antialiased">
+
+  <!-- Navbar -->
+  <header id="navbar" class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-100 transition-shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        <a href="index.html" class="flex items-center gap-2">
+          <span class="w-10 h-10 rounded-xl bg-navy-900 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="hard-hat" class="w-5 h-5 text-orange-400"></i>
+          </span>
+          <span class="text-lg md:text-xl font-extrabold text-navy-900 leading-tight">Sehrish Builders</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-navy-800">
+          <a href="index.html#home" class="hover:text-orange-600 transition">Home</a>
+          <a href="products.html" class="hover:text-orange-600 transition">Products</a>
+          <a href="index.html#categories" class="hover:text-orange-600 transition">Categories</a>
+          <a href="index.html#about" class="hover:text-orange-600 transition">About Us</a>
+          <a href="index.html#contact" class="hover:text-orange-600 transition">Contact</a>
+        </nav>
+
+        <div class="hidden md:flex items-center gap-3">
+          <a href="tel:+923496693739" class="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2.5 rounded-lg transition">
+            <i data-lucide="phone" class="w-4 h-4"></i> Call Now: +92 349 6693739
+          </a>
+          <button onclick="openCart()" aria-label="Open cart" class="relative w-11 h-11 flex items-center justify-center rounded-lg border border-slate-200 hover:border-navy-300 transition">
+            <i data-lucide="shopping-cart" class="w-5 h-5 text-navy-900"></i>
+            <span class="cart-count hidden absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2 md:hidden">
+          <button onclick="openCart()" aria-label="Open cart" class="relative w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200">
+            <i data-lucide="shopping-cart" class="w-5 h-5 text-navy-900"></i>
+            <span class="cart-count hidden absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+          </button>
+          <button onclick="toggleMobileMenu()" aria-label="Toggle menu" class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200">
+            <i data-lucide="menu" class="w-5 h-5 text-navy-900"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white">
+      <div class="px-4 py-4 flex flex-col gap-1 text-navy-800 font-medium">
+        <a href="index.html#home" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">Home</a>
+        <a href="products.html" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">Products</a>
+        <a href="index.html#categories" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">Categories</a>
+        <a href="index.html#about" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">About Us</a>
+        <a href="index.html#contact" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">Contact</a>
+        <a href="tel:+923496693739" class="mt-3 flex items-center justify-center gap-2 bg-orange-500 text-white font-semibold px-4 py-3 rounded-lg">
+          <i data-lucide="phone" class="w-4 h-4"></i> Call Now: +92 349 6693739
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="home" class="relative overflow-hidden">
+    <div class="absolute inset-0">
+      <img src="https://images.unsplash.com/photo-1599707254554-027aeb4deacd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600" alt="Construction site with materials" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-r from-navy-950/95 via-navy-900/85 to-navy-900/60"></div>
+    </div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 md:py-40">
+      <div class="max-w-2xl">
+        <span class="animate-fade-up inline-block bg-orange-500/15 text-orange-300 text-xs font-semibold tracking-wide uppercase px-3 py-1.5 rounded-full mb-5 border border-orange-400/30">Building Construction Materials</span>
+        <h1 class="animate-fade-up-d1 text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-6">
+          Quality Building Materials for Every Project
+        </h1>
+        <p class="animate-fade-up-d2 text-lg text-slate-200 mb-8 max-w-xl">
+          Reliable construction materials for builders, contractors, renovators and homeowners in Karachi.
+        </p>
+        <div class="animate-fade-up-d3 flex flex-col sm:flex-row gap-4">
+          <a href="products.html" class="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-7 py-3.5 rounded-lg transition shadow-lg shadow-orange-900/30">
+            Explore Products <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+          <a href="tel:+923496693739" class="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-100 text-navy-900 font-semibold px-7 py-3.5 rounded-lg transition">
+            <i data-lucide="phone" class="w-4 h-4"></i> Call Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust / Highlights -->
+  <section class="py-16 md:py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="group p-6 rounded-2xl border border-slate-100 shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-4 group-hover:bg-navy-900 transition-colors">
+            <i data-lucide="shield-check" class="w-6 h-6 text-navy-900 group-hover:text-orange-400 transition-colors"></i>
+          </div>
+          <h3 class="font-bold text-navy-900 mb-1.5">Quality Materials</h3>
+          <p class="text-sm text-slate-600">Reliable materials for residential and commercial construction.</p>
+        </div>
+        <div class="group p-6 rounded-2xl border border-slate-100 shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-4 group-hover:bg-navy-900 transition-colors">
+            <i data-lucide="tag" class="w-6 h-6 text-navy-900 group-hover:text-orange-400 transition-colors"></i>
+          </div>
+          <h3 class="font-bold text-navy-900 mb-1.5">Competitive Prices</h3>
+          <p class="text-sm text-slate-600">Products available across different budgets.</p>
+        </div>
+        <div class="group p-6 rounded-2xl border border-slate-100 shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-4 group-hover:bg-navy-900 transition-colors">
+            <i data-lucide="layout-grid" class="w-6 h-6 text-navy-900 group-hover:text-orange-400 transition-colors"></i>
+          </div>
+          <h3 class="font-bold text-navy-900 mb-1.5">Wide Product Range</h3>
+          <p class="text-sm text-slate-600">Everything you need for your construction project in one place.</p>
+        </div>
+        <div class="group p-6 rounded-2xl border border-slate-100 shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-navy-50 flex items-center justify-center mb-4 group-hover:bg-navy-900 transition-colors">
+            <i data-lucide="map-pin" class="w-6 h-6 text-navy-900 group-hover:text-orange-400 transition-colors"></i>
+          </div>
+          <h3 class="font-bold text-navy-900 mb-1.5">Local Supplier</h3>
+          <p class="text-sm text-slate-600">Conveniently located in Keamari Town, Karachi.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section id="categories" class="py-16 md:py-24 bg-slate-50 scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-navy-900 mb-3">Shop by Category</h2>
+        <p class="text-slate-600">Browse our full range of construction materials, organized by category.</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+        <a href="products.html?category=cement-binders" class="group bg-white rounded-2xl border border-slate-100 shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-navy-900 flex items-center justify-center mb-4 group-hover:bg-orange-500 transition-colors">
+            <i data-lucide="package" class="w-7 h-7 text-white"></i>
+          </div>
+          <h3 class="font-semibold text-navy-900 text-sm md:text-base">Cement & Binders</h3>
+        </a>
+        <a href="products.html?category=bricks-blocks" class="group bg-white rounded-2xl border border-slate-100 shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-navy-900 flex items-center justify-center mb-4 group-hover:bg-orange-500 transition-colors">
+            <i data-lucide="blocks" class="w-7 h-7 text-white"></i>
+          </div>
+          <h3 class="font-semibold text-navy-900 text-sm md:text-base">Bricks & Blocks</h3>
+        </a>
+        <a href="products.html?category=steel-hardware" class="group bg-white rounded-2xl border border-slate-100 shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-navy-900 flex items-center justify-center mb-4 group-hover:bg-orange-500 transition-colors">
+            <i data-lucide="hammer" class="w-7 h-7 text-white"></i>
+          </div>
+          <h3 class="font-semibold text-navy-900 text-sm md:text-base">Steel & Hardware</h3>
+        </a>
+        <a href="products.html?category=plumbing" class="group bg-white rounded-2xl border border-slate-100 shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-navy-900 flex items-center justify-center mb-4 group-hover:bg-orange-500 transition-colors">
+            <i data-lucide="droplets" class="w-7 h-7 text-white"></i>
+          </div>
+          <h3 class="font-semibold text-navy-900 text-sm md:text-base">Plumbing</h3>
+        </a>
+        <a href="products.html?category=electrical" class="group bg-white rounded-2xl border border-slate-100 shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-navy-900 flex items-center justify-center mb-4 group-hover:bg-orange-500 transition-colors">
+            <i data-lucide="zap" class="w-7 h-7 text-white"></i>
+          </div>
+          <h3 class="font-semibold text-navy-900 text-sm md:text-base">Electrical</h3>
+        </a>
+        <a href="products.html?category=sand-aggregate" class="group bg-white rounded-2xl border border-slate-100 shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-navy-900 flex items-center justify-center mb-4 group-hover:bg-orange-500 transition-colors">
+            <i data-lucide="mountain" class="w-7 h-7 text-white"></i>
+          </div>
+          <h3 class="font-semibold text-navy-900 text-sm md:text-base">Sand & Aggregate</h3>
+        </a>
+        <a href="products.html?category=finishing-materials" class="group bg-white rounded-2xl border border-slate-100 shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-navy-900 flex items-center justify-center mb-4 group-hover:bg-orange-500 transition-colors">
+            <i data-lucide="paint-bucket" class="w-7 h-7 text-white"></i>
+          </div>
+          <h3 class="font-semibold text-navy-900 text-sm md:text-base">Finishing Materials</h3>
+        </a>
+        <a href="products.html?category=tools-hardware" class="group bg-white rounded-2xl border border-slate-100 shadow-card hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-6 text-center">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-navy-900 flex items-center justify-center mb-4 group-hover:bg-orange-500 transition-colors">
+            <i data-lucide="wrench" class="w-7 h-7 text-white"></i>
+          </div>
+          <h3 class="font-semibold text-navy-900 text-sm md:text-base">Tools & Hardware</h3>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="py-16 md:py-24 bg-white scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="text-orange-600 font-semibold text-sm uppercase tracking-wide">About Us</span>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-navy-900 mt-2 mb-6">Building Materials You Can Rely On</h2>
+          <p class="text-slate-600 mb-4 leading-relaxed">
+            Sehrish Builders provides a range of building and construction materials for home construction, renovation, commercial projects and general construction needs.
+          </p>
+          <p class="text-slate-600 mb-4 leading-relaxed">
+            Our product range includes cement, bricks, blocks, steel and hardware, plumbing materials, electrical supplies, finishing products, aggregates and construction tools.
+          </p>
+          <p class="text-slate-600 leading-relaxed">
+            Located in Keamari Town, Karachi, Sehrish Builders serves builders, contractors, tradespeople and homeowners looking for convenient access to essential construction materials.
+          </p>
+          <a href="tel:+923496693739" class="mt-8 inline-flex items-center gap-2 bg-navy-900 hover:bg-navy-800 text-white font-semibold px-6 py-3 rounded-lg transition">
+            <i data-lucide="phone" class="w-4 h-4"></i> Call Now: +92 349 6693739
+          </a>
+        </div>
+        <div class="rounded-2xl overflow-hidden shadow-card h-72 md:h-96">
+          <img src="https://images.unsplash.com/photo-1637241612956-b7309005288b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" alt="Building materials shelf" class="w-full h-full object-cover" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="py-16 md:py-24 bg-slate-50 scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-navy-900 mb-3">Contact Sehrish Builders</h2>
+        <p class="text-slate-600">Reach out by phone or visit our shop in Keamari Town, Karachi.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white rounded-2xl shadow-card border border-slate-100 p-8">
+          <h3 class="text-xl font-bold text-navy-900 mb-6">Sehrish Builders</h3>
+          <div class="flex items-start gap-4 mb-5">
+            <div class="w-11 h-11 rounded-xl bg-navy-50 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="phone" class="w-5 h-5 text-navy-900"></i>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500 mb-0.5">Phone</p>
+              <a href="tel:+923496693739" class="font-semibold text-navy-900 hover:text-orange-600 transition">+92 349 6693739</a>
+            </div>
+          </div>
+          <div class="flex items-start gap-4 mb-8">
+            <div class="w-11 h-11 rounded-xl bg-navy-50 flex items-center justify-center flex-shrink-0">
+              <i data-lucide="map-pin" class="w-5 h-5 text-navy-900"></i>
+            </div>
+            <div>
+              <p class="text-sm text-slate-500 mb-0.5">Address</p>
+              <p class="font-semibold text-navy-900">Seaman Hostel, Keamari Shop No. 106, Karachi-West, Keamari Town, Karachi, Pakistan</p>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <a href="tel:+923496693739" class="flex-1 inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition">
+              <i data-lucide="phone" class="w-4 h-4"></i> Call Now
+            </a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Seaman%20Hostel%2C%20Keamari%20Shop%20No.%20106%2C%20Karachi-West%2C%20Keamari%20Town%2C%20Karachi%2C%20Pakistan" target="_blank" rel="noopener" class="flex-1 inline-flex items-center justify-center gap-2 bg-navy-900 hover:bg-navy-800 text-white font-semibold px-6 py-3 rounded-lg transition">
+              <i data-lucide="navigation" class="w-4 h-4"></i> Get Directions
+            </a>
+          </div>
+        </div>
+        <div class="rounded-2xl overflow-hidden shadow-card border border-slate-100 h-72 md:h-auto min-h-[320px]">
+          <iframe
+            title="Sehrish Builders location map"
+            class="w-full h-full"
+            style="border:0;"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://maps.google.com/maps?q=Seaman%20Hostel%2C%20Keamari%20Shop%20No.%20106%2C%20Karachi-West%2C%20Keamari%20Town%2C%20Karachi%2C%20Pakistan&output=embed">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-navy-950 text-slate-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10">
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-9 h-9 rounded-lg bg-orange-500 flex items-center justify-center">
+              <i data-lucide="hard-hat" class="w-4 h-4 text-white"></i>
+            </span>
+            <span class="text-lg font-extrabold text-white">Sehrish Builders</span>
+          </div>
+          <p class="text-sm text-slate-400">Building Construction Materials</p>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+          <ul class="space-y-2.5 text-sm">
+            <li><a href="index.html#home" class="hover:text-orange-400 transition">Home</a></li>
+            <li><a href="products.html" class="hover:text-orange-400 transition">Products</a></li>
+            <li><a href="index.html#categories" class="hover:text-orange-400 transition">Categories</a></li>
+            <li><a href="index.html#about" class="hover:text-orange-400 transition">About Us</a></li>
+            <li><a href="index.html#contact" class="hover:text-orange-400 transition">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Contact</h4>
+          <ul class="space-y-2.5 text-sm">
+            <li class="flex items-center gap-2">
+              <i data-lucide="phone" class="w-4 h-4 text-orange-400"></i>
+              <a href="tel:+923496693739" class="hover:text-orange-400 transition">+92 349 6693739</a>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="map-pin" class="w-4 h-4 text-orange-400 mt-0.5"></i>
+              <span>Seaman Hostel, Keamari Shop No. 106, Karachi-West, Keamari Town, Karachi</span>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Call Us</h4>
+          <p class="text-sm text-slate-400 mb-4">For orders and product availability, please call us directly.</p>
+          <a href="tel:+923496693739" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-5 py-2.5 rounded-lg transition text-sm">
+            <i data-lucide="phone" class="w-4 h-4"></i> Call Now
+          </a>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-10 pt-6 text-center text-sm text-slate-500">
+        &copy; <span id="year"></span> Sehrish Builders. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Cart Drawer -->
+  <div id="cart-overlay" onclick="closeCart()" class="hidden fixed inset-0 bg-navy-950/50 z-50"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white z-50 translate-x-full flex flex-col shadow-2xl">
+    <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100">
+      <h3 class="text-lg font-bold text-navy-900">Order Summary</h3>
+      <button onclick="closeCart()" aria-label="Close cart" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100">
+        <i data-lucide="x" class="w-5 h-5 text-navy-900"></i>
+      </button>
+    </div>
+    <div class="flex-1 overflow-y-auto px-6">
+      <p id="cart-empty" class="text-center text-slate-500 py-16">Your cart is empty.</p>
+      <div id="cart-items"></div>
+    </div>
+    <div class="border-t border-slate-100 px-6 py-5">
+      <div class="flex items-center justify-between text-sm text-slate-600 mb-2">
+        <span>Total Items</span>
+        <span id="cart-total-items" class="font-semibold text-navy-900">0</span>
+      </div>
+      <div class="flex items-center justify-between text-base font-bold text-navy-900 mb-4">
+        <span>Subtotal</span>
+        <span id="cart-subtotal">PKR 0</span>
+      </div>
+      <a href="tel:+923496693739" class="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-lg transition mb-2">
+        <i data-lucide="phone" class="w-4 h-4"></i> Call to Place Order
+      </a>
+      <button onclick="clearCart()" class="w-full text-center text-sm text-slate-500 hover:text-red-500 py-2 transition">Clear Cart</button>
+      <p class="text-xs text-slate-500 text-center mt-2 leading-relaxed">
+        For orders and product availability, please call Sehrish Builders at
+        <a href="tel:+923496693739" class="text-navy-900 font-medium">+92 349 6693739</a>.
+      </p>
+    </div>
+  </aside>
+
+  <script src="js/data.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/site.js"></script>
+</body>
+</html>

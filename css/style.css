@@ -1,0 +1,51 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f7f8fa;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.8s ease-out both;
+}
+.animate-fade-up-d1 {
+  animation: fadeUp 0.8s ease-out 0.15s both;
+}
+.animate-fade-up-d2 {
+  animation: fadeUp 0.8s ease-out 0.3s both;
+}
+.animate-fade-up-d3 {
+  animation: fadeUp 0.8s ease-out 0.45s both;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+#cart-drawer {
+  transition: transform 0.35s ease;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}

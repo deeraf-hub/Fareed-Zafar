@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products | Sehrish Builders — Construction Materials Karachi</title>
+  <meta name="description" content="Browse Sehrish Builders' full catalog of construction materials in Karachi — cement, bricks, steel, plumbing, electrical, sand, finishing materials and tools." />
+  <meta name="keywords" content="Building materials Karachi, Construction materials Karachi, Sehrish Builders, Building materials Keamari, Construction supplies Keamari, Cement supplier Karachi, Hardware materials Karachi" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              50: "#eef3f9",
+              100: "#d4e0ee",
+              200: "#a9c1dd",
+              300: "#7ea3cc",
+              400: "#4d7fb0",
+              500: "#2f6094",
+              600: "#234a74",
+              700: "#1a3a5c",
+              800: "#122943",
+              900: "#0b1c30",
+              950: "#060f1c",
+            },
+          },
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+          },
+          boxShadow: {
+            card: "0 4px 20px -4px rgba(11,28,48,0.12)",
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="font-sans text-slate-800 antialiased">
+
+  <!-- Navbar -->
+  <header id="navbar" class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-100 transition-shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        <a href="index.html" class="flex items-center gap-2">
+          <span class="w-10 h-10 rounded-xl bg-navy-900 flex items-center justify-center flex-shrink-0">
+            <i data-lucide="hard-hat" class="w-5 h-5 text-orange-400"></i>
+          </span>
+          <span class="text-lg md:text-xl font-extrabold text-navy-900 leading-tight">Sehrish Builders</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-navy-800">
+          <a href="index.html#home" class="hover:text-orange-600 transition">Home</a>
+          <a href="products.html" class="text-orange-600">Products</a>
+          <a href="index.html#categories" class="hover:text-orange-600 transition">Categories</a>
+          <a href="index.html#about" class="hover:text-orange-600 transition">About Us</a>
+          <a href="index.html#contact" class="hover:text-orange-600 transition">Contact</a>
+        </nav>
+
+        <div class="hidden md:flex items-center gap-3">
+          <a href="tel:+923496693739" class="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2.5 rounded-lg transition">
+            <i data-lucide="phone" class="w-4 h-4"></i> Call Now: +92 349 6693739
+          </a>
+          <button onclick="openCart()" aria-label="Open cart" class="relative w-11 h-11 flex items-center justify-center rounded-lg border border-slate-200 hover:border-navy-300 transition">
+            <i data-lucide="shopping-cart" class="w-5 h-5 text-navy-900"></i>
+            <span class="cart-count hidden absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2 md:hidden">
+          <button onclick="openCart()" aria-label="Open cart" class="relative w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200">
+            <i data-lucide="shopping-cart" class="w-5 h-5 text-navy-900"></i>
+            <span class="cart-count hidden absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+          </button>
+          <button onclick="toggleMobileMenu()" aria-label="Toggle menu" class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200">
+            <i data-lucide="menu" class="w-5 h-5 text-navy-900"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white">
+      <div class="px-4 py-4 flex flex-col gap-1 text-navy-800 font-medium">
+        <a href="index.html#home" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">Home</a>
+        <a href="products.html" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">Products</a>
+        <a href="index.html#categories" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">Categories</a>
+        <a href="index.html#about" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">About Us</a>
+        <a href="index.html#contact" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">Contact</a>
+        <a href="tel:+923496693739" class="mt-3 flex items-center justify-center gap-2 bg-orange-500 text-white font-semibold px-4 py-3 rounded-lg">
+          <i data-lucide="phone" class="w-4 h-4"></i> Call Now: +92 349 6693739
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page header -->
+  <section class="bg-navy-950 py-14 md:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-3">Our Products</h1>
+      <p class="text-slate-300 max-w-xl mx-auto">Search, filter and browse our full range of construction materials.</p>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="bg-white border-b border-slate-100 sticky top-16 md:top-20 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+        <div class="relative flex-1">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+          <input id="search-input" type="text" placeholder="Search products by name..." class="w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-navy-300 text-sm" />
+        </div>
+        <div class="flex items-center gap-2">
+          <label for="sort-select" class="text-sm text-slate-500 whitespace-nowrap hidden sm:block">Sort by</label>
+          <select id="sort-select" class="w-full md:w-56 px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-navy-300 text-sm bg-white">
+            <option value="default">Default</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name-asc">Name A-Z</option>
+          </select>
+        </div>
+      </div>
+      <div id="category-filters" class="flex items-center gap-2 overflow-x-auto pb-1"></div>
+    </div>
+  </section>
+
+  <!-- Product Grid -->
+  <section class="py-10 md:py-14 bg-slate-50 min-h-[50vh]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p id="result-count" class="text-sm text-slate-500 mb-6"></p>
+      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-navy-950 text-slate-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10">
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-9 h-9 rounded-lg bg-orange-500 flex items-center justify-center">
+              <i data-lucide="hard-hat" class="w-4 h-4 text-white"></i>
+            </span>
+            <span class="text-lg font-extrabold text-white">Sehrish Builders</span>
+          </div>
+          <p class="text-sm text-slate-400">Building Construction Materials</p>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+          <ul class="space-y-2.5 text-sm">
+            <li><a href="index.html#home" class="hover:text-orange-400 transition">Home</a></li>
+            <li><a href="products.html" class="hover:text-orange-400 transition">Products</a></li>
+            <li><a href="index.html#categories" class="hover:text-orange-400 transition">Categories</a></li>
+            <li><a href="index.html#about" class="hover:text-orange-400 transition">About Us</a></li>
+            <li><a href="index.html#contact" class="hover:text-orange-400 transition">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Contact</h4>
+          <ul class="space-y-2.5 text-sm">
+            <li class="flex items-center gap-2">
+              <i data-lucide="phone" class="w-4 h-4 text-orange-400"></i>
+              <a href="tel:+923496693739" class="hover:text-orange-400 transition">+92 349 6693739</a>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="map-pin" class="w-4 h-4 text-orange-400 mt-0.5"></i>
+              <span>Seaman Hostel, Keamari Shop No. 106, Karachi-West, Keamari Town, Karachi</span>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Call Us</h4>
+          <p class="text-sm text-slate-400 mb-4">For orders and product availability, please call us directly.</p>
+          <a href="tel:+923496693739" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-5 py-2.5 rounded-lg transition text-sm">
+            <i data-lucide="phone" class="w-4 h-4"></i> Call Now
+          </a>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-10 pt-6 text-center text-sm text-slate-500">
+        &copy; <span id="year"></span> Sehrish Builders. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Cart Drawer -->
+  <div id="cart-overlay" onclick="closeCart()" class="hidden fixed inset-0 bg-navy-950/50 z-50"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white z-50 translate-x-full flex flex-col shadow-2xl">
+    <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100">
+      <h3 class="text-lg font-bold text-navy-900">Order Summary</h3>
+      <button onclick="closeCart()" aria-label="Close cart" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100">
+        <i data-lucide="x" class="w-5 h-5 text-navy-900"></i>
+      </button>
+    </div>
+    <div class="flex-1 overflow-y-auto px-6">
+      <p id="cart-empty" class="text-center text-slate-500 py-16">Your cart is empty.</p>
+      <div id="cart-items"></div>
+    </div>
+    <div class="border-t border-slate-100 px-6 py-5">
+      <div class="flex items-center justify-between text-sm text-slate-600 mb-2">
+        <span>Total Items</span>
+        <span id="cart-total-items" class="font-semibold text-navy-900">0</span>
+      </div>
+      <div class="flex items-center justify-between text-base font-bold text-navy-900 mb-4">
+        <span>Subtotal</span>
+        <span id="cart-subtotal">PKR 0</span>
+      </div>
+      <a href="tel:+923496693739" class="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-lg transition mb-2">
+        <i data-lucide="phone" class="w-4 h-4"></i> Call to Place Order
+      </a>
+      <button onclick="clearCart()" class="w-full text-center text-sm text-slate-500 hover:text-red-500 py-2 transition">Clear Cart</button>
+      <p class="text-xs text-slate-500 text-center mt-2 leading-relaxed">
+        For orders and product availability, please call Sehrish Builders at
+        <a href="tel:+923496693739" class="text-navy-900 font-medium">+92 349 6693739</a>.
+      </p>
+    </div>
+  </aside>
+
+  <!-- Product Details Modal -->
+  <div id="product-modal" class="hidden fixed inset-0 bg-navy-950/60 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
+      <button onclick="closeProductModal()" aria-label="Close" class="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 shadow hover:bg-slate-100">
+        <i data-lucide="x" class="w-5 h-5 text-navy-900"></i>
+      </button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/catalog.js"></script>
+</body>
+</html>
