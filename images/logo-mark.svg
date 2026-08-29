@@ -1,0 +1,9 @@
+<svg viewBox="8 0 172 168" width="172" height="168" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sehrish Builders logo">
+  <rect x="72" y="14" width="20" height="86" fill="#c9a227"/>
+  <rect x="96" y="34" width="20" height="66" fill="#c9a227"/>
+  <path d="M126 44 L126 8 M116 20 L126 6 L136 20" stroke="#c9a227" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M20 100 L100 46 L180 100 L156 100 L100 62 L44 100 Z" fill="#c9a227"/>
+  <rect x="38" y="100" width="20" height="58" fill="#c9a227"/>
+  <rect x="142" y="100" width="20" height="58" fill="#c9a227"/>
+  <path d="M92 100 C74 100 74 122 92 122 C110 122 110 144 92 144" stroke="#0b1c30" stroke-width="9" stroke-linecap="round" fill="none"/>
+</svg>
