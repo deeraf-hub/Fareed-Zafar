@@ -1,10 +1,11 @@
 /* New Taj Cloth House — product catalog
-   Prices, names and stock are demo data for the storefront. Product art is generated
-   in-house (icon + gradient) rather than sourced from stock photos, so it's guaranteed
-   to match each item's category — swap in real product photography before going live. */
+   Prices and stock are demo data for the storefront. Product images come from Unsplash
+   (verified via the Unsplash MCP search — each photo's alt_description was checked
+   against its category before being added below). Font Awesome glyph + gradient art
+   is kept as an automatic fallback (see mediaHTML() in app.js) in case any single
+   photo URL ever fails to load — swap in real product photography before going live. */
 
-/* Font Awesome solid glyphs — reliable, professionally-drawn icons rather than
-   hand-guessed SVG paths or unverifiable stock photos. */
+/* Font Awesome solid glyphs — used only as the fallback layer under each photo. */
 const CATEGORY_ICON = {
   'men-garments': 'fa-shirt',
   'women-garments': 'fa-person-dress',
@@ -13,6 +14,46 @@ const CATEGORY_ICON = {
   'women-footwear': 'fa-shoe-prints',
   'kids-footwear': 'fa-shoe-prints'
 };
+
+/* Real photos, verified via Unsplash search (alt_description checked per category).
+   Sized/cropped to a 4:5 portrait via Unsplash's imgix params to match the product
+   card aspect ratio. */
+const PHOTO_POOL = {
+  'men-garments': [
+    'photo-1642764873654-9eef0467b342', 'photo-1624835567150-0c530a20d8cc',
+    'photo-1605794432120-f4bb5dc9067d', 'photo-1621072156002-e2fccdc0b176',
+    'photo-1627686011747-74adda3d2343', 'photo-1744551358303-46edae8b374b',
+    'photo-1711044871601-301f9b0ecf91', 'photo-1727835523545-70ee992b5763'
+  ],
+  'women-garments': [
+    'photo-1753192108753-81be0db2f7fe', 'photo-1762154057377-cc9d3dd6900c',
+    'photo-1753192108606-b4a2bc9e5661', 'photo-1616313253719-c46514cddee1',
+    'photo-1721990336298-90832e791b5a', 'photo-1599662875272-64de8289f6d8',
+    'photo-1602010069450-0a62034f235c'
+  ],
+  'kids-garments': [
+    'photo-1578897367107-2828e351c8a8', 'photo-1519238263530-99bdd11df2ea',
+    'photo-1590480598135-3be152c87913', 'photo-1518831959646-742c3a14ebf7',
+    'photo-1596870230751-ebdfce98ec42'
+  ],
+  'men-footwear': [
+    'photo-1560769629-975ec94e6a86', 'photo-1603808033192-082d6919d3e1',
+    'photo-1603808033176-9d134e6f2c74', 'photo-1537261131936-3cdff36a1ac9'
+  ],
+  'women-footwear': [
+    'photo-1573100925118-870b8efc799d', 'photo-1596703263926-eb0762ee17e4',
+    'photo-1590099033615-be195f8d575c', 'photo-1518049362265-d5b2a6467637',
+    'photo-1621996659490-3275b4d0d951', 'photo-1611233299310-f6276ff55307'
+  ],
+  'kids-footwear': [
+    'photo-1678192568478-9488ee55def6', 'photo-1636130748629-655be0c60041',
+    'photo-1573309463328-ec43614b3def', 'photo-1775813282325-7c154e126f73'
+  ]
+};
+
+function photoUrl(id) {
+  return `https://images.unsplash.com/${id}?w=600&h=750&fit=crop&crop=entropy&q=80&auto=format`;
+}
 
 /* [from, to] CSS gradient stop pairs. Kept within the navy/gold brand family with a
    couple of warm accents so the 126-item grid stays legible without turning into
@@ -182,6 +223,7 @@ function buildCatalog() {
         reviews: Math.round(8 + r4 * 420),
         sizes: cat.sizes,
         colors: colors.length ? colors : [pick(COLOR_POOL, r1)],
+        image: photoUrl(PHOTO_POOL[catKey][idx % PHOTO_POOL[catKey].length]),
         icon: CATEGORY_ICON[catKey],
         gradient: pick(GRADIENT_PALETTE, seededRandom(seed + 'gradient')),
         badge: isSale ? 'Sale' : isNew ? 'New' : isBestseller ? 'Bestseller' : null,
@@ -204,10 +246,10 @@ function buildCatalog() {
 const PRODUCTS = buildCatalog();
 
 const CATEGORY_META = [
-  { key: 'men-garments', title: 'Men', shopLabel: 'Shop Men', subtitle: 'Latest Collection', filterGender: 'men', filterType: 'garments', icon: CATEGORY_ICON['men-garments'], gradient: GRADIENT_PALETTE[0] },
-  { key: 'women-garments', title: 'Women', shopLabel: 'Shop Women', subtitle: 'New Arrivals', filterGender: 'women', filterType: 'garments', icon: CATEGORY_ICON['women-garments'], gradient: GRADIENT_PALETTE[1] },
-  { key: 'kids-garments', title: 'Kids', shopLabel: 'Shop Kids', subtitle: 'Trendy Fashion', filterGender: 'kids', filterType: 'garments', icon: CATEGORY_ICON['kids-garments'], gradient: GRADIENT_PALETTE[3] },
-  { key: 'men-footwear', title: "Men's Footwear", shopLabel: 'Shop Footwear', subtitle: 'Step in Style', filterGender: 'men', filterType: 'footwear', icon: CATEGORY_ICON['men-footwear'], gradient: GRADIENT_PALETTE[4] },
-  { key: 'women-footwear', title: "Women's Footwear", shopLabel: 'Shop Footwear', subtitle: 'Step in Style', filterGender: 'women', filterType: 'footwear', icon: CATEGORY_ICON['women-footwear'], gradient: GRADIENT_PALETTE[2] },
-  { key: 'kids-footwear', title: "Kids' Footwear", shopLabel: 'Shop Footwear', subtitle: 'Step in Style', filterGender: 'kids', filterType: 'footwear', icon: CATEGORY_ICON['kids-footwear'], gradient: GRADIENT_PALETTE[5] }
+  { key: 'men-garments', title: 'Men', shopLabel: 'Shop Men', subtitle: 'Latest Collection', filterGender: 'men', filterType: 'garments', icon: CATEGORY_ICON['men-garments'], gradient: GRADIENT_PALETTE[0], image: photoUrl(PHOTO_POOL['men-garments'][1]) },
+  { key: 'women-garments', title: 'Women', shopLabel: 'Shop Women', subtitle: 'New Arrivals', filterGender: 'women', filterType: 'garments', icon: CATEGORY_ICON['women-garments'], gradient: GRADIENT_PALETTE[1], image: photoUrl(PHOTO_POOL['women-garments'][1]) },
+  { key: 'kids-garments', title: 'Kids', shopLabel: 'Shop Kids', subtitle: 'Trendy Fashion', filterGender: 'kids', filterType: 'garments', icon: CATEGORY_ICON['kids-garments'], gradient: GRADIENT_PALETTE[3], image: photoUrl(PHOTO_POOL['kids-garments'][0]) },
+  { key: 'men-footwear', title: "Men's Footwear", shopLabel: 'Shop Footwear', subtitle: 'Step in Style', filterGender: 'men', filterType: 'footwear', icon: CATEGORY_ICON['men-footwear'], gradient: GRADIENT_PALETTE[4], image: photoUrl(PHOTO_POOL['men-footwear'][0]) },
+  { key: 'women-footwear', title: "Women's Footwear", shopLabel: 'Shop Footwear', subtitle: 'Step in Style', filterGender: 'women', filterType: 'footwear', icon: CATEGORY_ICON['women-footwear'], gradient: GRADIENT_PALETTE[2], image: photoUrl(PHOTO_POOL['women-footwear'][0]) },
+  { key: 'kids-footwear', title: "Kids' Footwear", shopLabel: 'Shop Footwear', subtitle: 'Step in Style', filterGender: 'kids', filterType: 'footwear', icon: CATEGORY_ICON['kids-footwear'], gradient: GRADIENT_PALETTE[5], image: photoUrl(PHOTO_POOL['kids-footwear'][0]) }
 ];

@@ -54,6 +54,15 @@ function artHTML(icon, gradient, size = 'text-6xl') {
     </div>`;
 }
 
+/* Real photo layered over the generated art panel. The art panel renders first as a
+   permanent fallback; the photo sits on top and removes itself on error, revealing
+   the icon underneath instead of a broken-image icon. */
+function mediaHTML(image, icon, gradient, alt = '', size = 'text-6xl') {
+  return `
+    ${artHTML(icon, gradient, size)}
+    ${image ? `<img src="${image}" alt="${alt}" loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.remove()">` : ''}`;
+}
+
 function starsHTML(rating) {
   const full = Math.round(rating);
   let html = '';
@@ -124,7 +133,7 @@ function productCardHTML(p) {
   return `
   <div class="product-card" data-aos="fade-up">
     <div class="card-img-wrap">
-      ${artHTML(p.icon, p.gradient)}
+      ${mediaHTML(p.image, p.icon, p.gradient, p.name)}
       ${badgeHTML}
       <button class="wishlist-btn" data-active="${Wishlist.has(p.id)}" aria-label="Add to wishlist" onclick="toggleWishlist(${p.id}, this)"><i class="fa-solid fa-heart text-sm"></i></button>
       <button class="quickview-pill" onclick="openQuickView(${p.id})">Quick view</button>
@@ -163,7 +172,7 @@ function renderCategories() {
   const grid = document.getElementById('category-grid');
   grid.innerHTML = CATEGORY_META.map(c => `
     <div class="category-card" data-aos="zoom-in" onclick="setFilters('${c.filterGender}','${c.filterType}')">
-      ${artHTML(c.icon, c.gradient, 'text-7xl')}
+      ${mediaHTML(c.image, c.icon, c.gradient, c.title, 'text-7xl')}
       <div class="overlay">
         <div class="w-full">
           <h3 class="text-cream font-display font-800 text-2xl">${c.title}</h3>
@@ -198,7 +207,7 @@ function renderQuickView() {
   document.getElementById('quickview-modal').innerHTML = `
     <button class="icon-btn absolute top-4 right-4 bg-white z-10" onclick="closeQuickView()"><i class="fa-solid fa-xmark"></i></button>
     <div class="grid md:grid-cols-2 gap-0">
-      <div class="relative w-full h-72 md:h-full">${artHTML(p.icon, p.gradient, 'text-7xl')}</div>
+      <div class="relative w-full h-72 md:h-full">${mediaHTML(p.image, p.icon, p.gradient, p.name, 'text-7xl')}</div>
       <div class="p-6 sm:p-8">
         <p class="text-xs uppercase tracking-wide text-gold-dark font-semibold mb-1">${p.categoryLabel}</p>
         <h2 class="font-display font-700 text-2xl mb-2">${p.name}</h2>
@@ -277,7 +286,7 @@ function closeCart() {
 function cartLineHTML(item) {
   return `
   <div class="flex gap-3 items-start">
-    <div class="relative w-16 h-20 rounded-lg overflow-hidden shrink-0">${artHTML(item.icon, item.gradient, 'text-2xl')}</div>
+    <div class="relative w-16 h-20 rounded-lg overflow-hidden shrink-0">${mediaHTML(item.image, item.icon, item.gradient, item.name, 'text-2xl')}</div>
     <div class="flex-1 min-w-0">
       <p class="font-semibold text-sm line-clamp-1">${item.name}</p>
       <p class="text-xs text-navy/45 mb-1.5">${item.size ? 'Size ' + item.size : ''}${item.size && item.color ? ' · ' : ''}${item.color || ''}</p>
@@ -581,7 +590,7 @@ function renderTestimonials() {
 function renderInstaGrid() {
   document.getElementById('insta-grid').innerHTML = CATEGORY_META.map(c => `
     <a href="#" class="relative block aspect-square rounded-xl overflow-hidden group">
-      ${artHTML(c.icon, c.gradient, 'text-5xl transition-transform duration-500 group-hover:scale-110')}
+      ${mediaHTML(c.image, c.icon, c.gradient, c.title, 'text-5xl')}
       <span class="absolute inset-0 bg-navy/0 group-hover:bg-navy/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
         <i class="fa-brands fa-instagram text-white text-xl"></i>
       </span>

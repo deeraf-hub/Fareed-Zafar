@@ -36,6 +36,7 @@ const Cart = {
         lineId,
         productId: product.id,
         name: product.name,
+        image: product.image,
         icon: product.icon,
         gradient: product.gradient,
         price: product.price,
