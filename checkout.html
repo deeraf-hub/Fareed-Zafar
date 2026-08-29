@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout | Sehrish Builders</title>
+  <meta name="description" content="Complete your order from Sehrish Builders — pay via JazzCash, EasyPaisa or Cash on Delivery." />
+  <link rel="icon" type="image/svg+xml" href="images/logo-mark.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              50: "#eef3f9", 100: "#d4e0ee", 200: "#a9c1dd", 300: "#7ea3cc",
+              400: "#4d7fb0", 500: "#2f6094", 600: "#234a74", 700: "#1a3a5c",
+              800: "#122943", 900: "#0b1c30", 950: "#060f1c",
+            },
+          },
+          fontFamily: { sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"] },
+          boxShadow: { card: "0 4px 20px -4px rgba(11,28,48,0.12)" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="font-sans text-slate-800 antialiased">
+
+  <!-- Navbar -->
+  <header id="navbar" class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-100 transition-shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        <a href="index.html" class="flex items-center gap-2.5">
+          <img src="images/logo-mark.svg" alt="Sehrish Builders logo" class="w-10 h-10 flex-shrink-0" />
+          <span class="text-lg md:text-xl font-extrabold text-navy-900 leading-tight">Sehrish Builders</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-navy-800">
+          <a href="index.html#home" class="hover:text-orange-600 transition">Home</a>
+          <a href="products.html" class="hover:text-orange-600 transition">Products</a>
+          <a href="index.html#categories" class="hover:text-orange-600 transition">Categories</a>
+          <a href="index.html#about" class="hover:text-orange-600 transition">About Us</a>
+          <a href="index.html#contact" class="hover:text-orange-600 transition">Contact</a>
+        </nav>
+        <div class="hidden md:flex items-center gap-3">
+          <a href="tel:+923496693739" class="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2.5 rounded-lg transition">
+            <i data-lucide="phone" class="w-4 h-4"></i> Call Now: +92 349 6693739
+          </a>
+          <button onclick="openCart()" aria-label="Open cart" class="relative w-11 h-11 flex items-center justify-center rounded-lg border border-slate-200 hover:border-navy-300 transition">
+            <i data-lucide="shopping-cart" class="w-5 h-5 text-navy-900"></i>
+            <span class="cart-count hidden absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-2 md:hidden">
+          <button onclick="openCart()" aria-label="Open cart" class="relative w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200">
+            <i data-lucide="shopping-cart" class="w-5 h-5 text-navy-900"></i>
+            <span class="cart-count hidden absolute -top-1.5 -right-1.5 bg-orange-500 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+          </button>
+          <button onclick="toggleMobileMenu()" aria-label="Toggle menu" class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200">
+            <i data-lucide="menu" class="w-5 h-5 text-navy-900"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white">
+      <div class="px-4 py-4 flex flex-col gap-1 text-navy-800 font-medium">
+        <a href="index.html#home" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">Home</a>
+        <a href="products.html" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">Products</a>
+        <a href="index.html#categories" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">Categories</a>
+        <a href="index.html#about" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">About Us</a>
+        <a href="index.html#contact" onclick="closeMobileMenu()" class="py-2.5 border-b border-slate-50">Contact</a>
+        <a href="tel:+923496693739" class="mt-3 flex items-center justify-center gap-2 bg-orange-500 text-white font-semibold px-4 py-3 rounded-lg">
+          <i data-lucide="phone" class="w-4 h-4"></i> Call Now: +92 349 6693739
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page header -->
+  <section class="bg-navy-950 py-14 md:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-3">Checkout</h1>
+      <p class="text-slate-300 max-w-xl mx-auto">Review your order, choose a payment method, and confirm.</p>
+    </div>
+  </section>
+
+  <!-- Empty cart state -->
+  <section id="checkout-empty" class="hidden py-24">
+    <div class="max-w-md mx-auto px-4 text-center">
+      <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-5">
+        <i data-lucide="shopping-cart" class="w-7 h-7 text-slate-400"></i>
+      </div>
+      <h2 class="text-xl font-bold text-navy-900 mb-2">Your cart is empty</h2>
+      <p class="text-slate-500 mb-6">Add some products before checking out.</p>
+      <a href="products.html" class="inline-flex items-center gap-2 bg-navy-900 hover:bg-navy-800 text-white font-semibold px-6 py-3 rounded-lg transition">
+        Browse Products <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- Checkout form + order summary -->
+  <section id="checkout-content" class="hidden py-12 md:py-16 bg-slate-50 min-h-[60vh]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-[1fr_380px] gap-8 items-start">
+
+        <form id="checkout-form" class="bg-white rounded-2xl shadow-card border border-slate-100 p-6 md:p-8">
+          <h2 class="text-lg font-bold text-navy-900 mb-5">Delivery Details</h2>
+          <div id="checkout-error" class="hidden mb-5 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-4 py-3">
+            Please fill in your name, phone number and address before placing the order.
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label for="customer-name" class="block text-sm font-medium text-navy-900 mb-1.5">Full Name</label>
+              <input id="customer-name" type="text" required class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-navy-300 text-sm" placeholder="Your name" />
+            </div>
+            <div>
+              <label for="customer-phone" class="block text-sm font-medium text-navy-900 mb-1.5">Phone Number</label>
+              <input id="customer-phone" type="tel" required class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-navy-300 text-sm" placeholder="03XX XXXXXXX" />
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="customer-address" class="block text-sm font-medium text-navy-900 mb-1.5">Delivery Address</label>
+            <textarea id="customer-address" required rows="2" class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-navy-300 text-sm resize-none" placeholder="House / shop no., street, area, city"></textarea>
+          </div>
+          <div class="mb-8">
+            <label for="customer-notes" class="block text-sm font-medium text-navy-900 mb-1.5">Order Notes <span class="text-slate-400 font-normal">(optional)</span></label>
+            <textarea id="customer-notes" rows="2" class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-navy-300 text-sm resize-none" placeholder="Preferred delivery time, special instructions, etc."></textarea>
+          </div>
+
+          <h2 class="text-lg font-bold text-navy-900 mb-1.5">Payment Method</h2>
+          <p class="text-sm text-slate-500 mb-4">Payments are verified manually — this site does not process payments automatically.</p>
+
+          <div class="grid sm:grid-cols-3 gap-3 mb-5">
+            <button type="button" data-method="jazzcash" onclick="selectPaymentMethod('jazzcash')" class="payment-option text-left border-2 border-navy-900 ring-2 ring-navy-900 rounded-xl p-4 transition">
+              <input type="radio" id="radio-jazzcash" name="payment-method" value="jazzcash" checked class="sr-only" />
+              <i data-lucide="smartphone" class="w-5 h-5 text-navy-900 mb-2"></i>
+              <p class="font-semibold text-navy-900 text-sm">JazzCash</p>
+              <p class="text-xs text-slate-500">Mobile wallet transfer</p>
+            </button>
+            <button type="button" data-method="easypaisa" onclick="selectPaymentMethod('easypaisa')" class="payment-option text-left border-2 border-slate-200 rounded-xl p-4 transition">
+              <input type="radio" id="radio-easypaisa" name="payment-method" value="easypaisa" class="sr-only" />
+              <i data-lucide="smartphone" class="w-5 h-5 text-navy-900 mb-2"></i>
+              <p class="font-semibold text-navy-900 text-sm">EasyPaisa</p>
+              <p class="text-xs text-slate-500">Mobile wallet transfer</p>
+            </button>
+            <button type="button" data-method="cod" onclick="selectPaymentMethod('cod')" class="payment-option text-left border-2 border-slate-200 rounded-xl p-4 transition">
+              <input type="radio" id="radio-cod" name="payment-method" value="cod" class="sr-only" />
+              <i data-lucide="banknote" class="w-5 h-5 text-navy-900 mb-2"></i>
+              <p class="font-semibold text-navy-900 text-sm">Cash on Delivery</p>
+              <p class="text-xs text-slate-500">Pay when you receive it</p>
+            </button>
+          </div>
+
+          <div data-method="jazzcash" class="payment-details bg-navy-50 rounded-xl p-4 mb-3">
+            <p class="text-sm text-navy-900">Send payment via <span class="font-semibold">JazzCash</span> to:</p>
+            <p class="text-lg font-bold text-navy-900 my-1">+92 349 6693739 <span class="font-normal text-sm text-slate-500">(Sehrish Builders)</span></p>
+            <p class="text-xs text-slate-500">Enter your transaction ID below so we can verify your payment when we call to confirm your order.</p>
+          </div>
+          <div data-method="easypaisa" class="payment-details hidden bg-navy-50 rounded-xl p-4 mb-3">
+            <p class="text-sm text-navy-900">Send payment via <span class="font-semibold">EasyPaisa</span> to:</p>
+            <p class="text-lg font-bold text-navy-900 my-1">+92 349 6693739 <span class="font-normal text-sm text-slate-500">(Sehrish Builders)</span></p>
+            <p class="text-xs text-slate-500">Enter your transaction ID below so we can verify your payment when we call to confirm your order.</p>
+          </div>
+          <div data-method="cod" class="payment-details hidden bg-navy-50 rounded-xl p-4 mb-3">
+            <p class="text-sm text-navy-900">Pay in <span class="font-semibold">cash</span> when your order is delivered or picked up from our shop in Keamari Town.</p>
+          </div>
+
+          <div id="txn-id-wrap" class="mb-2">
+            <label for="txn-id" class="block text-sm font-medium text-navy-900 mb-1.5">Transaction ID <span class="text-slate-400 font-normal">(optional)</span></label>
+            <input id="txn-id" type="text" class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-navy-300 text-sm" placeholder="e.g. TXN123456789" />
+          </div>
+
+          <button type="submit" class="w-full mt-6 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3.5 rounded-lg transition">
+            Place Order
+          </button>
+        </form>
+
+        <aside class="bg-white rounded-2xl shadow-card border border-slate-100 p-6 md:p-8 lg:sticky lg:top-24">
+          <h2 class="text-lg font-bold text-navy-900 mb-4">Order Summary</h2>
+          <div id="checkout-items"></div>
+          <div class="flex items-center justify-between text-sm text-slate-600 mt-4 mb-2">
+            <span>Total Items</span>
+            <span id="checkout-total-items" class="font-semibold text-navy-900">0</span>
+          </div>
+          <div class="flex items-center justify-between text-base font-bold text-navy-900 border-t border-slate-100 pt-3">
+            <span>Subtotal</span>
+            <span id="checkout-subtotal">PKR 0</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Confirmation -->
+  <section id="checkout-confirmation" class="hidden py-16 md:py-24 bg-slate-50 min-h-[60vh]">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white rounded-2xl shadow-card border border-slate-100 p-8 md:p-10 text-center">
+        <div class="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-5">
+          <i data-lucide="check-circle-2" class="w-8 h-8 text-emerald-600"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-navy-900 mb-2">Order Received</h2>
+        <p class="text-slate-600 mb-8">Thank you! Please call us to confirm your order and delivery details.</p>
+
+        <div class="text-left bg-slate-50 rounded-xl p-5 mb-5">
+          <h3 class="text-sm font-semibold text-navy-900 mb-3">Your Details</h3>
+          <div id="confirmation-details"></div>
+        </div>
+
+        <div class="text-left bg-slate-50 rounded-xl p-5 mb-8">
+          <h3 class="text-sm font-semibold text-navy-900 mb-3">Order Items</h3>
+          <div id="confirmation-items"></div>
+          <div class="flex justify-between text-sm font-bold text-navy-900 border-t border-slate-200 mt-3 pt-3">
+            <span>Subtotal</span>
+            <span id="confirmation-subtotal">PKR 0</span>
+          </div>
+        </div>
+
+        <a href="tel:+923496693739" class="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-7 py-3.5 rounded-lg transition mb-3 w-full sm:w-auto">
+          <i data-lucide="phone" class="w-4 h-4"></i> Call Now to Confirm: +92 349 6693739
+        </a>
+        <p class="text-sm">
+          <a href="products.html" class="text-navy-700 hover:text-orange-600 font-medium transition">Continue Shopping</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-navy-950 text-slate-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-10">
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <img src="images/logo-mark.svg" alt="Sehrish Builders logo" class="w-9 h-9" />
+            <span class="text-lg font-extrabold text-white">Sehrish Builders</span>
+          </div>
+          <p class="text-sm text-slate-400">Building Construction Materials</p>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+          <ul class="space-y-2.5 text-sm">
+            <li><a href="index.html#home" class="hover:text-orange-400 transition">Home</a></li>
+            <li><a href="products.html" class="hover:text-orange-400 transition">Products</a></li>
+            <li><a href="index.html#categories" class="hover:text-orange-400 transition">Categories</a></li>
+            <li><a href="index.html#about" class="hover:text-orange-400 transition">About Us</a></li>
+            <li><a href="index.html#contact" class="hover:text-orange-400 transition">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Contact</h4>
+          <ul class="space-y-2.5 text-sm">
+            <li class="flex items-center gap-2">
+              <i data-lucide="phone" class="w-4 h-4 text-orange-400"></i>
+              <a href="tel:+923496693739" class="hover:text-orange-400 transition">+92 349 6693739</a>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="map-pin" class="w-4 h-4 text-orange-400 mt-0.5"></i>
+              <span>Seaman Hostel, Keamari Shop No. 106, Karachi-West, Keamari Town, Karachi</span>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4">Call Us</h4>
+          <p class="text-sm text-slate-400 mb-4">For orders and product availability, please call us directly.</p>
+          <a href="tel:+923496693739" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-5 py-2.5 rounded-lg transition text-sm">
+            <i data-lucide="phone" class="w-4 h-4"></i> Call Now
+          </a>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-10 pt-6 text-center text-sm text-slate-500">
+        &copy; <span id="year"></span> Sehrish Builders. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Cart Drawer -->
+  <div id="cart-overlay" onclick="closeCart()" class="hidden fixed inset-0 bg-navy-950/50 z-50"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white z-50 translate-x-full flex flex-col shadow-2xl">
+    <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100">
+      <h3 class="text-lg font-bold text-navy-900">Order Summary</h3>
+      <button onclick="closeCart()" aria-label="Close cart" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100">
+        <i data-lucide="x" class="w-5 h-5 text-navy-900"></i>
+      </button>
+    </div>
+    <div class="flex-1 overflow-y-auto px-6">
+      <p id="cart-empty" class="text-center text-slate-500 py-16">Your cart is empty.</p>
+      <div id="cart-items"></div>
+    </div>
+    <div class="border-t border-slate-100 px-6 py-5">
+      <div class="flex items-center justify-between text-sm text-slate-600 mb-2">
+        <span>Total Items</span>
+        <span id="cart-total-items" class="font-semibold text-navy-900">0</span>
+      </div>
+      <div class="flex items-center justify-between text-base font-bold text-navy-900 mb-4">
+        <span>Subtotal</span>
+        <span id="cart-subtotal">PKR 0</span>
+      </div>
+      <a href="checkout.html" class="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-lg transition mb-2">
+        <i data-lucide="credit-card" class="w-4 h-4"></i> Checkout
+      </a>
+      <button onclick="clearCart()" class="w-full text-center text-sm text-slate-500 hover:text-red-500 py-2 transition">Clear Cart</button>
+      <p class="text-xs text-slate-500 text-center mt-2 leading-relaxed">
+        For orders and product availability, please call Sehrish Builders at
+        <a href="tel:+923496693739" class="text-navy-900 font-medium">+92 349 6693739</a>.
+      </p>
+    </div>
+  </aside>
+
+  <script src="js/data.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>
