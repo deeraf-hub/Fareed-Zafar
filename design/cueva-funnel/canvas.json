@@ -1,14 +1,14 @@
 {
   "artboards": [
-    { "file": "Main.dc.html", "title": "Desktop — 1440", "x": 0, "y": 0, "w": 1440, "h": 10600 },
-    { "file": "Mobile.dc.html", "title": "Mobile — 390", "x": 1620, "y": 0, "w": 390, "h": 12200 },
-    { "file": "Styleguide.dc.html", "title": "Design System", "x": 2140, "y": 0, "w": 1100, "h": 2100 }
+    { "file": "Main.dc.html", "title": "Desktop — 1440", "x": 0, "y": 0, "w": 1440, "h": 10200 },
+    { "file": "Mobile.dc.html", "title": "Mobile — 390", "x": 1600, "y": 0, "w": 390, "h": 10800 },
+    { "file": "Styleguide.dc.html", "title": "Design System", "x": 2150, "y": 0, "w": 1100, "h": 3450 }
   ],
   "annotations": [
     {
       "id": "brief",
-      "x": 2140,
-      "y": 2260,
+      "x": 2150,
+      "y": 3620,
       "w": 520,
       "text": "CUEVA — Shopify lead-gen funnel\n\nAll copy is verbatim from the Master Funnel Register PDF. Every dashed block is an asset slot awaiting the real file from the brand media folder — each one carries the client's own note for what belongs there.\n\nThree things in the source copy needed a decision:\n1. The form list was numbered 1, 2, 2, 3, 3, 4, 5, 6 with 5 blank. Renumbered 1–7, no fields added or removed.\n2. Page 6 ends mid-word: \"…on your phone or computer inst\". Set as \"instead.\"\n3. The privacy line's emoji did not survive the PDF export. Drawn as a lock icon.\n\nColours are a placeholder token set — swap the 12 hexes in the Design System artboard once the brand guidelines are to hand."
     }

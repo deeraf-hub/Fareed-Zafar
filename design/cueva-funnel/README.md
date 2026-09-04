@@ -59,7 +59,7 @@ Corner radius is **0** everywhere. Square, architectural, no rounded cards.
 | Line | `#E0D9CC` | Card borders, dividers |
 | Trust Green | `#3E6B4F` | Certification and privacy icons only |
 | Body Text | `#4A4F49` | Paragraph copy on light grounds |
-| Muted | `#8A8F87` | Field hints, captions, legal |
+| Muted | `#6E736C` | Field hints, captions, legal |
 | Body on Dark | `#C3CAC1` | Paragraph copy on Forest / Ink |
 | Warning | `#B24A2A` | Pain-point cross icons |
 
@@ -69,6 +69,11 @@ Figma and in Shopify without licensing.
 
 **Layout:** Desktop frame 1440, side padding 150, content 1140, section
 padding 112–118. Mobile frame 390, side padding 22, section padding 56.
+
+**Accessibility:** all body and caption text clears 4.5:1 against its ground,
+and every tap target on the mobile board is at least 44px tall. Artboard
+heights were measured by rendering each board in Chromium rather than
+estimated, so nothing is clipped.
 
 ---
 
