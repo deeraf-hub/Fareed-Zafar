@@ -25,6 +25,23 @@ Customer ──▶ Facebook Page inbox
 
 ---
 
+## Companion project: `ai-automation/`
+
+The forwarder tells you a message arrived. [`ai-automation/`](ai-automation/) is
+the AI layer that decides what to do about it — and the same service also writes
+the merchant's daily social posts and the weekly client report.
+
+- Two importable **n8n workflows** (daily content pipeline, inbox triage and reply)
+- A **FastAPI service** that wraps Claude with structured outputs, prompt caching, and per-call cost reporting
+- A **tool-using reporting agent**, and an **eval harness** that measures pass rate, cost, and run-to-run consistency
+- 79 tests, and an `--offline` mode so the whole pipeline demos with no API key
+
+See [`ai-automation/README.md`](ai-automation/README.md) to run it, and
+[`ai-automation/docs/REQUIREMENTS-COVERAGE.md`](ai-automation/docs/REQUIREMENTS-COVERAGE.md)
+for what each piece demonstrates.
+
+---
+
 ## Why this approach (vs. Zapier / Make / n8n)
 
 | Option | Real-time? | Attachments | Cost | Maintenance | Verdict |
