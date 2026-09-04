@@ -1,0 +1,273 @@
+{
+  "name": "Daily merchant content pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "every-weekday-09:00",
+      "name": "Every weekday 09:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// The day's posting plan. In production this reads a Google Sheet or Airtable\n// base that the account managers already keep \u2014 one row per merchant per day.\nconst plan = [\n  {\n    merchant: {\n      name: 'Karachi Coffee Roasters',\n      industry: 'specialty coffee retail',\n      tone: 'warm, unfussy, a little playful',\n      audience: 'city professionals aged 25-40 who care where their beans come from',\n      banned_words: ['cheap', \"world's best\", 'guaranteed'],\n    },\n    topic: 'the new single-origin Ethiopian blend arriving Friday',\n    platforms: ['instagram', 'facebook', 'tiktok'],\n  },\n  {\n    merchant: {\n      name: 'Deeraf Logistics',\n      industry: 'B2B freight and last-mile delivery',\n      tone: 'direct, credible, numbers-first',\n      audience: 'operations managers at mid-size retailers',\n      banned_words: ['synergy', 'revolutionary', 'guaranteed'],\n    },\n    topic: 'zone-based routing cut our average delivery window by 18%',\n    platforms: ['linkedin', 'facebook'],\n  },\n];\n\nreturn plan.map((item) => ({ json: item }));"
+      },
+      "id": "posting-plan",
+      "name": "Posting plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        40,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.AIAUTO_BASE_URL }}/content/campaign",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.AIAUTO_API_TOKEN }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ merchant: $json.merchant, topic: $json.topic, platforms: $json.platforms }) }}",
+        "options": {
+          "timeout": 120000,
+          "response": {
+            "response": {
+              "neverError": false
+            }
+          }
+        }
+      },
+      "id": "generate-campaign",
+      "name": "Generate campaign",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        280,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item per platform, so every post is scheduled, reviewed and logged\n// on its own rather than as a blob.\nconst out = [];\nfor (const item of $input.all()) {\n  const plan = $('Posting plan').itemMatching(item.pairedItem?.item ?? 0).json;\n  for (const [platform, post] of Object.entries(item.json.output)) {\n    out.push({\n      json: {\n        merchant: plan.merchant.name,\n        platform,\n        caption: post.caption,\n        hashtags: (post.hashtags || []).join(' '),\n        call_to_action: post.call_to_action,\n        image_prompt: post.image_prompt,\n        alt_text: post.alt_text,\n        cost_usd: item.json.cost_usd,\n        generated_at: new Date().toISOString(),\n      },\n    });\n  }\n}\nreturn out;"
+      },
+      "id": "one-item-per-platform",
+      "name": "One item per platform",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "review-gate",
+              "leftValue": "={{ $json.platform }}",
+              "rightValue": "linkedin",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "needs-a-human-look",
+      "name": "Needs a human look?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        760,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.REVIEW_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: `Review needed \u2014 ${$json.merchant} / ${$json.platform}\\n\\n${$json.caption}\\n\\n${$json.hashtags}` }) }}",
+        "options": {}
+      },
+      "id": "send-for-approval",
+      "name": "Send for approval",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v21.0/{{ $env.FB_PAGE_ID }}/feed",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ message: `${$json.caption}\\n\\n${$json.hashtags}`, access_token: $env.FB_PAGE_TOKEN }) }}",
+        "options": {}
+      },
+      "id": "publish-to-page",
+      "name": "Publish to page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.CONTENT_LOG_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "log-the-post",
+      "name": "Log the post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1260,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Every weekday 09:00": {
+      "main": [
+        [
+          {
+            "node": "Posting plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Posting plan": {
+      "main": [
+        [
+          {
+            "node": "Generate campaign",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate campaign": {
+      "main": [
+        [
+          {
+            "node": "One item per platform",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "One item per platform": {
+      "main": [
+        [
+          {
+            "node": "Needs a human look?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs a human look?": {
+      "main": [
+        [
+          {
+            "node": "Send for approval",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Publish to page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send for approval": {
+      "main": [
+        [
+          {
+            "node": "Log the post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish to page": {
+      "main": [
+        [
+          {
+            "node": "Log the post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all"
+  },
+  "pinData": {},
+  "tags": [
+    {
+      "name": "aiauto"
+    }
+  ]
+}

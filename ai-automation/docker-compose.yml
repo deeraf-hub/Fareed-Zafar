@@ -1,0 +1,29 @@
+# The pair as it runs in practice: n8n orchestrates, this service does the AI
+# work, and only this service ever holds the Anthropic key.
+services:
+  aiauto:
+    build: .
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:?set ANTHROPIC_API_KEY}
+      AIAUTO_API_TOKEN: ${AIAUTO_API_TOKEN:-change-me}
+      AIAUTO_MODEL: ${AIAUTO_MODEL:-claude-opus-5}
+    expose:
+      - "8000"
+    restart: unless-stopped
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    environment:
+      AIAUTO_BASE_URL: http://aiauto:8000
+      AIAUTO_API_TOKEN: ${AIAUTO_API_TOKEN:-change-me}
+      GENERIC_TIMEZONE: ${TZ:-Asia/Karachi}
+    volumes:
+      - n8n_data:/home/node/.n8n
+    depends_on:
+      - aiauto
+    restart: unless-stopped
+
+volumes:
+  n8n_data:
