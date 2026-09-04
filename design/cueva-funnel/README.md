@@ -46,44 +46,49 @@ No top-navigation links: nothing leaks a click out of the funnel.
 
 ## Design tokens
 
-Corner radius is **0** everywhere. Square, architectural, no rounded cards.
+Built from the supplied brand guidelines. Corner radius is **0** everywhere.
 
 | Token | Hex | Use |
 | --- | --- | --- |
-| Ink | `#1C201D` | Headlines, header bar, footer |
-| Forest | `#243029` | Dark feature bands (The Shift, Booking) |
-| Ember | `#C0552B` | **Accent** — every call to action |
-| Ember Light | `#E08355` | Eyebrows and accent text on dark grounds |
-| Bone | `#FBF9F5` | Default page background |
-| Sand | `#F1ECE3` | Alternating sections, trust strip |
-| Line | `#E0D9CC` | Card borders, dividers |
-| Trust Green | `#3E6B4F` | Certification and privacy icons only |
-| Body Text | `#4A4F49` | Paragraph copy on light grounds |
-| Muted | `#6E736C` | Field hints, captions, legal |
-| Body on Dark | `#C3CAC1` | Paragraph copy on Forest / Ink |
-| Warning | `#B24A2A` | Pain-point cross icons |
+| Deep | `#16211D` | Footer only — the darkest note |
+| Slate | `#25322E` | **Primary.** Header, hero, the two dark feature bands |
+| Slate Raised | `#2E3D38` | Arc-pattern stroke on Slate. Tone-on-tone, never text |
+| Meadow | `#BCD6A4` | **The only accent.** Buttons on dark, eyebrows, key figures |
+| Sage | `#DCE5DC` | Alternating sections, trust strip, pull quotes |
+| Paper | `#F2F5F0` | Default page ground, and text on Slate |
+| Line | `#C9D4C8` | Hairlines on Paper (`#C2CEC1` on Sage) |
+| Line Dark | `#3B4A44` | Hairlines on Slate |
+| Ink | `#1B2A24` | Headlines and labels on light grounds |
+| Body | `#46554E` | Paragraph copy on light — 7.0:1 on Paper |
+| Muted | `#5C6B63` | Hints, captions, legal — 4.9:1 on Paper |
+| Body on Dark | `#C2CFC5` | Paragraph copy on Slate — 8.3:1 |
 
-**Type:** Archivo (display, 600/700, tracking −0.022em) + IBM Plex Sans
-(body, 400/500/600). Both are on Google Fonts, so both are available in
-Figma and in Shopify without licensing.
+**Type:** Newsreader (display serif, weight 400, headlines and pull quotes only)
++ Archivo (text sans, 400/500/600, everything else). Both are on Google Fonts,
+so both are available in Figma and in Shopify without licensing.
 
-**Layout:** Desktop frame 1440, side padding 150, content 1140, section
+**The arch.** Six nested arcs, stroked in Slate Raised at 15–18px, anchored
+past the frame edge so the arch is always cropped rather than centred and
+complete. This is the signature device from the supplied guidelines; here it
+also reads as an arch — a *cueva*, a shelter.
+
+**Layout:** Desktop frame 1440, side padding 100, content 1240, section
 padding 112–118. Mobile frame 390, side padding 22, section padding 56.
+Backgrounds run Paper → Sage → Slate, never two alike adjacent. Section 06
+runs edge to edge with zero gutters.
 
 **Accessibility:** all body and caption text clears 4.5:1 against its ground,
 and every tap target on the mobile board is at least 44px tall. Artboard
 heights were measured by rendering each board in Chromium rather than
 estimated, so nothing is clipped.
 
----
-
 ## Assumptions to confirm
 
-1. **Colours are a placeholder token set.** The brand guidelines in the
-   client's media folder were not reachable from the build environment.
-   The palette is grounded in the category and the brand name, and it is
-   tokenised — swapping to the real brand colours means replacing the 12
-   hexes above, nothing else.
+1. **The palette follows the supplied brand guidelines**, not a guess:
+   deep green-slate ground, pale sage secondary, one meadow accent, and the
+   tone-on-tone arc line work. The competitor sites named in the brief were
+   not reachable from the build environment (network egress is blocked), so
+   layout reference came from the guidelines themselves.
 
 2. **Every dashed block is an empty asset slot.** No stock imagery was
    substituted. Each slot carries the client's own note describing what
@@ -93,6 +98,10 @@ estimated, so nothing is clipped.
 3. **Certification logos are placeholder icons.** CSA A277, the fixed-price
    guarantee, 2-5-10 warranty and BC-weather badges are drawn as line icons
    pending the real logo files.
+
+4. **The nested-arc glyph beside the wordmark is a stand-in, not a proposed
+   identity.** Drop the real Cueva logo into that slot in the header and
+   footer; the arc pattern stands on its own either way.
 
 ---
 

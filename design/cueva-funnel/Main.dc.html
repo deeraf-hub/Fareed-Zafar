@@ -7,99 +7,112 @@
 <body>
 <x-dc>
 <helmet>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&display=swap">
   <style>
     *,*::before,*::after { box-sizing: border-box; }
-    body { margin: 0; font-family: 'IBM Plex Sans','Segoe UI',system-ui,sans-serif; color: #4A4F49; background: #FBF9F5; -webkit-font-smoothing: antialiased; }
-    h1,h2,h3,h4 { font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; margin: 0; color: #1C201D; letter-spacing: -0.022em; line-height: 1.08; font-weight: 700; }
+    body { margin: 0; font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; color: #46554E; background: #F2F5F0; -webkit-font-smoothing: antialiased; }
+    h1,h2,h3 { font-family: 'Newsreader','Iowan Old Style','Times New Roman',serif; margin: 0; color: #1B2A24; font-weight: 400; letter-spacing: -0.012em; line-height: 1.1; }
     p { margin: 0; }
-    a { color: #C0552B; text-decoration: none; }
-    a:hover { color: #A44521; }
-    .ph { border: 1.5px dashed #C9BFAE; background: #EFE9DE; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 36px; }
-    .ph-d { border-color: #4E6053; background: #2B382F; }
-    .ph-l { font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #6F675A; }
-    .ph-l-d { color: #93A697; }
-    .ph-t { font-size: 15px; line-height: 1.55; color: #6E6555; max-width: 520px; }
-    .ph-t-d { color: #A9BCAD; }
+    a { color: #25322E; text-decoration: none; }
+    a:hover { color: #46554E; }
+    .eyebrow { font-family: 'Archivo',Arial,sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; }
+    .rule { height: 1px; background: #C9D4C8; }
+    .rule-d { height: 1px; background: #3B4A44; }
+    .ph { border: 1px dashed #B7C4B6; background: #E6EDE5; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 13px; text-align: center; padding: 34px; }
+    .ph-d { border-color: #45564F; background: #2B3A35; }
+    .ph-l { font-family: 'Archivo',Arial,sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.17em; text-transform: uppercase; color: #5F6E64; }
+    .ph-l-d { color: #93A398; }
+    .ph-t { font-size: 15px; line-height: 1.6; color: #5C6B63; max-width: 520px; }
+    .ph-t-d { color: #A9B9AE; }
+    .btn-lt { display: inline-flex; align-items: center; gap: 12px; background: #25322E; color: #F2F5F0; font-family: 'Archivo',Arial,sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; padding: 21px 38px; }
+    .btn-dk { display: inline-flex; align-items: center; gap: 12px; background: #BCD6A4; color: #1B2A24; font-family: 'Archivo',Arial,sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; padding: 21px 38px; }
   </style>
 </helmet>
 
-<div style="width: 1440px; background: #FBF9F5;">
+<div style="width: 1440px; background: #F2F5F0;">
 
   <!-- ============ HEADER ============ -->
-  <div style="display: flex; align-items: center; justify-content: space-between; padding: 26px 150px; background: #1C201D; border-bottom: 1px solid #2E352F;">
-    <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 24px; font-weight: 700; letter-spacing: 0.30em; color: #FBF9F5;">CUEVA</div>
-    <div style="display: flex; align-items: center; gap: 32px;">
-      <div style="font-size: 14px; color: #A9AFA8; letter-spacing: 0.01em;">Factory-Built Backyard Suites &middot; Nanaimo, BC</div>
-      <div style="display: flex; align-items: center; gap: 9px; background: #C0552B; color: #FFFFFF; font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 13px 22px;">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.09 4.18 2 2 0 0 1 4.08 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        Book Your Tour
-      </div>
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 24px 100px; background: #25322E;">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <svg width="42" height="24" viewBox="0 0 40 22" fill="none" stroke="#F2F5F0" stroke-width="2.4" stroke-linecap="square">
+        <path d="M2 21 A18 18 0 0 1 38 21"/><path d="M8 21 A12 12 0 0 1 32 21"/><path d="M14 21 A6 6 0 0 1 26 21"/>
+      </svg>
+      <div style="font-family: 'Archivo',Arial,sans-serif; font-size: 19px; font-weight: 600; letter-spacing: 0.34em; color: #F2F5F0;">CUEVA</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 30px;">
+      <div style="font-size: 13px; color: #93A398; letter-spacing: 0.05em;">Factory-Built Backyard Suites &nbsp;&middot;&nbsp; Nanaimo, BC</div>
+      <div class="btn-dk" style="font-size: 12px; padding: 14px 24px;">Book Your Tour</div>
     </div>
   </div>
 
   <!-- ============ 1. HERO ============ -->
-  <div style="background: #1C201D; padding: 96px 150px 88px;">
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 26px; text-align: center;">
-      <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: #E08355;">Vancouver Island &amp; Lower Mainland Homeowners</div>
-      <h1 style="font-size: 62px; line-height: 1.06; color: #FBF9F5; max-width: 1060px; text-wrap: pretty;">Turn 600&nbsp;Sq&nbsp;Ft of Your Unused Lawn Into a <span style="color: #E08355;">$1,800/Month Income Stream</span> or Private Family Suite In Just 8 to 12 Weeks.</h1>
-      <p style="font-size: 20px; line-height: 1.62; color: #B6BCB4; max-width: 830px; text-wrap: pretty;">We build beautiful small homes in a clean indoor facility. You get a locked-in price, zero builder tricks, no mess in your yard, and no weather delays.</p>
+  <div style="background: #25322E; padding: 92px 100px 84px; position: relative; overflow: hidden;">
+    <svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMax meet" aria-hidden="true" style="position: absolute; right: -110px; bottom: -30px; width: 760px; height: 380px;">
+      <g fill="none" stroke="#2E3D38" stroke-width="15">
+        <path d="M40 300 A260 260 0 0 1 560 300"/><path d="M80 300 A220 220 0 0 1 520 300"/><path d="M120 300 A180 180 0 0 1 480 300"/>
+        <path d="M160 300 A140 140 0 0 1 440 300"/><path d="M200 300 A100 100 0 0 1 400 300"/><path d="M240 300 A60 60 0 0 1 360 300"/>
+      </g>
+    </svg>
+
+    <div style="position: relative; display: flex; flex-direction: column; gap: 26px; max-width: 1000px;">
+      <div class="eyebrow" style="color: #BCD6A4;">Vancouver Island &amp; Lower Mainland Homeowners</div>
+      <h1 style="font-size: 66px; line-height: 1.07; color: #F2F5F0; text-wrap: pretty;">Turn 600&nbsp;Sq&nbsp;Ft of Your Unused Lawn Into a $1,800/Month Income Stream or Private Family Suite In Just 8 to 12 Weeks.</h1>
+      <p style="font-size: 19px; line-height: 1.68; color: #C2CFC5; max-width: 760px; text-wrap: pretty;">We build beautiful small homes in a clean indoor facility. You get a locked-in price, zero builder tricks, no mess in your yard, and no weather delays.</p>
     </div>
 
-    <!-- Hero video placeholder -->
-    <div class="ph ph-d" style="margin-top: 52px; height: 560px; position: relative;">
-      <svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="#7E9384" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="#7E9384" stroke="none"/></svg>
+    <div class="ph ph-d" style="position: relative; margin-top: 50px; height: 540px;">
+      <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#7E9384" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="#7E9384" stroke="none"/></svg>
       <div class="ph-l ph-l-d">Hero Video &mdash; 30 second silent loop, autoplay</div>
-      <div class="ph-t ph-t-d">A CUEVA suite being crane-installed, overlaid with a callout badge:<br><strong style="color:#CBD9CC;">&ldquo;Installed in 7 Days | Move-In Ready in Weeks.&rdquo;</strong></div>
-      <div style="position: absolute; right: 28px; bottom: 28px; background: #C0552B; color: #FFFFFF; font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; padding: 12px 20px;">Installed in 7 Days &nbsp;|&nbsp; Move-In Ready in Weeks</div>
+      <div class="ph-t ph-t-d">A CUEVA suite being crane-installed, overlaid with a callout badge:</div>
+      <div style="position: absolute; right: 30px; bottom: 30px; background: #BCD6A4; color: #1B2A24; font-family: 'Archivo',Arial,sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; padding: 13px 22px;">Installed in 7 Days &nbsp;&middot;&nbsp; Move-In Ready in Weeks</div>
     </div>
 
-    <!-- Hero CTA -->
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 44px;">
-      <div style="display: inline-flex; align-items: center; gap: 12px; background: #C0552B; color: #FFFFFF; font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 22px 44px;">
+    <div style="position: relative; margin-top: 42px;">
+      <div class="btn-dk" style="font-size: 16px; padding: 24px 46px;">
         Claim Your $10,000 Rebate &amp; Book Your Tour Here
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
       </div>
     </div>
   </div>
 
   <!-- ============ TRUST STRIP ============ -->
-  <div style="background: #F1ECE3; border-top: 1px solid #E0D9CC; border-bottom: 1px solid #E0D9CC; padding: 34px 150px;">
-    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px;">
-      <div style="display: flex; align-items: center; gap: 13px;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3E6B4F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-        <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 15px; font-weight: 600; color: #1C201D; line-height: 1.3;">CSA A277 Certified</div>
+  <div style="background: #DCE5DC; padding: 40px 100px;">
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0;">
+      <div style="display: flex; align-items: center; gap: 14px; padding-right: 30px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#25322E" stroke-width="1.4" stroke-linecap="square"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        <div style="font-size: 15px; font-weight: 500; color: #1B2A24; line-height: 1.35;">CSA A277 Certified</div>
       </div>
-      <div style="display: flex; align-items: center; gap: 13px;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3E6B4F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-        <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 15px; font-weight: 600; color: #1C201D; line-height: 1.3;">100% Fixed-Price Guarantee</div>
+      <div style="display: flex; align-items: center; gap: 14px; padding: 0 30px; border-left: 1px solid #C2CEC1;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#25322E" stroke-width="1.4" stroke-linecap="square"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        <div style="font-size: 15px; font-weight: 500; color: #1B2A24; line-height: 1.35;">100% Fixed-Price Guarantee</div>
       </div>
-      <div style="display: flex; align-items: center; gap: 13px;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3E6B4F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 15px; font-weight: 600; color: #1C201D; line-height: 1.3;">2-5-10 Home Warranty Ready</div>
+      <div style="display: flex; align-items: center; gap: 14px; padding: 0 30px; border-left: 1px solid #C2CEC1;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#25322E" stroke-width="1.4" stroke-linecap="square"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <div style="font-size: 15px; font-weight: 500; color: #1B2A24; line-height: 1.35;">2-5-10 Home Warranty Ready</div>
       </div>
-      <div style="display: flex; align-items: center; gap: 13px;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3E6B4F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9"/><line x1="8" y1="19" x2="8" y2="21"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="16" y1="19" x2="16" y2="21"/></svg>
-        <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 15px; font-weight: 600; color: #1C201D; line-height: 1.3;">Engineered for BC Weather</div>
+      <div style="display: flex; align-items: center; gap: 14px; padding-left: 30px; border-left: 1px solid #C2CEC1;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#25322E" stroke-width="1.4" stroke-linecap="square"><path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9"/><line x1="8" y1="19" x2="8" y2="21"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="16" y1="19" x2="16" y2="21"/></svg>
+        <div style="font-size: 15px; font-weight: 500; color: #1B2A24; line-height: 1.35;">Engineered for BC Weather</div>
       </div>
     </div>
-    <div style="margin-top: 18px; font-size: 12px; color: #6E6A5E; letter-spacing: 0.02em;">Placeholder icons &mdash; replace each with the supplied certification logo from the brand media folder.</div>
+    <div style="margin-top: 22px; font-size: 12px; color: #5C6B63; letter-spacing: 0.02em;">Placeholder icons &mdash; replace each with the supplied certification logo from the brand media folder.</div>
   </div>
 
   <!-- ============ 2. PROBLEM ============ -->
-  <div style="background: #FBF9F5; padding: 118px 150px;">
-    <div style="display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: 76px; align-items: start;">
-      <div style="display: flex; flex-direction: column; gap: 30px;">
-        <div style="width: 54px; height: 3px; background: #C0552B;"></div>
-        <h2 style="font-size: 44px; line-height: 1.14; text-wrap: pretty;">No Matter What Lever You Pull, the Real Estate Numbers in BC Just Don&rsquo;t Make Sense Anymore.</h2>
-        <p style="font-size: 18px; line-height: 1.72;">Navigating today&rsquo;s housing costs feels expensive, painful, and confusing. If you&rsquo;re a homeowner in Nanaimo or the Lower Mainland, you&rsquo;ve likely realized that every traditional path feels like a dead end.</p>
-        <p style="font-size: 18px; line-height: 1.72;">You might think about selling to downsize, but real estate fees, taxes, and moving costs instantly eat up <strong style="color:#1C201D;">$30,000+</strong> of your equity. You may look into building a secondary suite, but contractors quote <strong style="color:#1C201D;">$400,000+</strong>, take months, and give zero budget guarantees. Or you might try helping adult kids rent an apartment or finding ground-level space for aging parents, only to watch thousands vanish every month into a stranger&rsquo;s mortgage while bleeding your family wealth dry.</p>
-        <div style="border-left: 3px solid #C0552B; padding: 4px 0 4px 24px;">
-          <p style="font-size: 19px; line-height: 1.66; color: #1C201D; font-weight: 500;">Every option leads to the exact same outcome: high financial stress, lost time, and feeling stuck with an expensive asset that isn&rsquo;t working for you.</p>
+  <div style="background: #F2F5F0; padding: 118px 100px;">
+    <div style="display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 80px; align-items: start;">
+      <div style="display: flex; flex-direction: column; gap: 28px;">
+        <div class="eyebrow" style="color: #5C6B63;">The Situation</div>
+        <div class="rule"></div>
+        <h2 style="font-size: 46px; line-height: 1.13; text-wrap: pretty;">No Matter What Lever You Pull, the Real Estate Numbers in BC Just Don&rsquo;t Make Sense Anymore.</h2>
+        <p style="font-size: 18px; line-height: 1.74;">Navigating today&rsquo;s housing costs feels expensive, painful, and confusing. If you&rsquo;re a homeowner in Nanaimo or the Lower Mainland, you&rsquo;ve likely realized that every traditional path feels like a dead end.</p>
+        <p style="font-size: 18px; line-height: 1.74;">You might think about selling to downsize, but real estate fees, taxes, and moving costs instantly eat up <span style="color:#1B2A24; font-weight: 500;">$30,000+</span> of your equity. You may look into building a secondary suite, but contractors quote <span style="color:#1B2A24; font-weight: 500;">$400,000+</span>, take months, and give zero budget guarantees. Or you might try helping adult kids rent an apartment or finding ground-level space for aging parents, only to watch thousands vanish every month into a stranger&rsquo;s mortgage while bleeding your family wealth dry.</p>
+        <div style="background: #DCE5DC; padding: 30px 34px;">
+          <p style="font-family: 'Newsreader','Iowan Old Style',serif; font-size: 24px; line-height: 1.45; color: #1B2A24;">Every option leads to the exact same outcome: high financial stress, lost time, and feeling stuck with an expensive asset that isn&rsquo;t working for you.</p>
         </div>
       </div>
-      <div class="ph" style="height: 620px;">
-        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#B3A692" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <div class="ph" style="height: 660px;">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#8C9C8D" stroke-width="1.3" stroke-linecap="square"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         <div class="ph-l">Section Image</div>
         <div class="ph-t">Supporting image for the problem section &mdash; suggested: a Nanaimo / Lower Mainland home exterior with unused side or back lawn.</div>
       </div>
@@ -107,32 +120,33 @@
   </div>
 
   <!-- ============ 3a. ROOT CAUSE ============ -->
-  <div style="background: #F1ECE3; padding: 118px 150px;">
-    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: 76px; align-items: start;">
-      <div class="ph" style="height: 560px;">
-        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#B3A692" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+  <div style="background: #DCE5DC; padding: 118px 100px;">
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 80px; align-items: start;">
+      <div class="ph" style="height: 560px; background: #D0DBD0; border-color: #AFBDAF;">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#8C9C8D" stroke-width="1.3" stroke-linecap="square"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         <div class="ph-l">Section Image</div>
         <div class="ph-t">Messy, overstimulated on-site construction zone. Client note: overlay a red cross / &ldquo;no&rdquo; mark.</div>
       </div>
-      <div style="display: flex; flex-direction: column; gap: 30px;">
-        <div style="width: 54px; height: 3px; background: #C0552B;"></div>
-        <h2 style="font-size: 44px; line-height: 1.14; text-wrap: pretty;">The Real Problem Is the Way Homes Are Built On-Site.</h2>
-        <div style="display: flex; flex-direction: column; gap: 18px;">
-          <div style="display: flex; gap: 16px; align-items: flex-start; background: #FBF9F5; border: 1px solid #E0D9CC; padding: 20px 22px;">
-            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#B24A2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 3px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-            <p style="font-size: 17px; line-height: 1.62;">Regular builders bring workers, tools, and trucks to your yard.</p>
+      <div style="display: flex; flex-direction: column; gap: 28px;">
+        <div class="eyebrow" style="color: #5C6B63;">The Root Cause</div>
+        <div style="height: 1px; background: #C2CEC1;"></div>
+        <h2 style="font-size: 46px; line-height: 1.13; text-wrap: pretty;">The Real Problem Is the Way Homes Are Built On-Site.</h2>
+        <div style="display: flex; flex-direction: column;">
+          <div style="display: flex; gap: 22px; align-items: flex-start; padding: 22px 0; border-top: 1px solid #C2CEC1;">
+            <div style="font-family: 'Newsreader',serif; font-size: 17px; color: #7A8A80; flex-shrink: 0; width: 24px; padding-top: 2px;">01</div>
+            <p style="font-size: 17px; line-height: 1.66;">Regular builders bring workers, tools, and trucks to your yard.</p>
           </div>
-          <div style="display: flex; gap: 16px; align-items: flex-start; background: #FBF9F5; border: 1px solid #E0D9CC; padding: 20px 22px;">
-            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#B24A2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 3px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-            <p style="font-size: 17px; line-height: 1.62;">They leave wood out in the rain.</p>
+          <div style="display: flex; gap: 22px; align-items: flex-start; padding: 22px 0; border-top: 1px solid #C2CEC1;">
+            <div style="font-family: 'Newsreader',serif; font-size: 17px; color: #7A8A80; flex-shrink: 0; width: 24px; padding-top: 2px;">02</div>
+            <p style="font-size: 17px; line-height: 1.66;">They leave wood out in the rain.</p>
           </div>
-          <div style="display: flex; gap: 16px; align-items: flex-start; background: #FBF9F5; border: 1px solid #E0D9CC; padding: 20px 22px;">
-            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#B24A2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 3px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-            <p style="font-size: 17px; line-height: 1.62;">They run into constant delays, make tons of noise right outside your window, and charge you extra every time something goes wrong.</p>
+          <div style="display: flex; gap: 22px; align-items: flex-start; padding: 22px 0; border-top: 1px solid #C2CEC1;">
+            <div style="font-family: 'Newsreader',serif; font-size: 17px; color: #7A8A80; flex-shrink: 0; width: 24px; padding-top: 2px;">03</div>
+            <p style="font-size: 17px; line-height: 1.66;">They run into constant delays, make tons of noise right outside your window, and charge you extra every time something goes wrong.</p>
           </div>
-          <div style="display: flex; gap: 16px; align-items: flex-start; background: #FBF9F5; border: 1px solid #E0D9CC; padding: 20px 22px;">
-            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#B24A2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 3px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-            <p style="font-size: 17px; line-height: 1.62;">When people build outdoors on your lawn, it always takes too long and costs too much.</p>
+          <div style="display: flex; gap: 22px; align-items: flex-start; padding: 22px 0; border-top: 1px solid #C2CEC1; border-bottom: 1px solid #C2CEC1;">
+            <div style="font-family: 'Newsreader',serif; font-size: 17px; color: #7A8A80; flex-shrink: 0; width: 24px; padding-top: 2px;">04</div>
+            <p style="font-size: 17px; line-height: 1.66;">When people build outdoors on your lawn, it always takes too long and costs too much.</p>
           </div>
         </div>
       </div>
@@ -140,109 +154,136 @@
   </div>
 
   <!-- ============ 3b. THE SHIFT ============ -->
-  <div style="background: #243029; padding: 112px 150px;">
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center;">
-      <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: #E08355;">The Cueva Difference</div>
-      <h2 style="font-size: 48px; line-height: 1.12; color: #FBF9F5; max-width: 900px; text-wrap: pretty;">We build your home indoors where nothing can go wrong</h2>
+  <div style="background: #25322E; padding: 112px 100px; position: relative; overflow: hidden;">
+    <svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMax meet" aria-hidden="true" style="position: absolute; left: -140px; top: -60px; width: 620px; height: 310px; transform: rotate(180deg);">
+      <g fill="none" stroke="#2E3D38" stroke-width="15">
+        <path d="M40 300 A260 260 0 0 1 560 300"/><path d="M80 300 A220 220 0 0 1 520 300"/><path d="M120 300 A180 180 0 0 1 480 300"/>
+        <path d="M160 300 A140 140 0 0 1 440 300"/><path d="M200 300 A100 100 0 0 1 400 300"/>
+      </g>
+    </svg>
+
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center;">
+      <div class="eyebrow" style="color: #BCD6A4;">The Cueva Difference</div>
+      <h2 style="font-size: 52px; line-height: 1.1; color: #F2F5F0; max-width: 880px; text-wrap: pretty;">We build your home indoors where nothing can go wrong</h2>
     </div>
 
-    <div class="ph ph-d" style="margin-top: 48px; height: 470px;">
-      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#7E9384" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    <div class="ph ph-d" style="position: relative; margin-top: 48px; height: 460px;">
+      <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#7E9384" stroke-width="1.3" stroke-linecap="square"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
       <div class="ph-l ph-l-d">Section Image or Video</div>
       <div class="ph-t ph-t-d">CUEVA homes in production &mdash; interior of the Nanaimo indoor facility, or the build-process video.</div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px 64px; margin-top: 52px;">
-      <p style="font-size: 18px; line-height: 1.74; color: #C3CAC1;">We take the whole project off your lawn and move it inside a warm, clean factory in Nanaimo.</p>
-      <p style="font-size: 18px; line-height: 1.74; color: #C3CAC1;">Because we build indoors, rain never delays us. We buy materials in big batches, so your price stays completely locked.</p>
-      <p style="font-size: 18px; line-height: 1.74; color: #C3CAC1;">You get a brand-new, safe home built in just <strong style="color:#FBF9F5;">8 to 12 weeks</strong>.</p>
-      <p style="font-size: 18px; line-height: 1.74; color: #C3CAC1;">When the home is fully finished, we bring it to your yard on a truck, place it on your ground, hook up the power and water, and hand you the keys.</p>
+    <div style="position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 70px; margin-top: 54px;">
+      <p style="font-size: 18px; line-height: 1.76; color: #C2CFC5; padding: 26px 0; border-top: 1px solid #3B4A44;">We take the whole project off your lawn and move it inside a warm, clean factory in Nanaimo.</p>
+      <p style="font-size: 18px; line-height: 1.76; color: #C2CFC5; padding: 26px 0; border-top: 1px solid #3B4A44;">Because we build indoors, rain never delays us. We buy materials in big batches, so your price stays completely locked.</p>
+      <p style="font-size: 18px; line-height: 1.76; color: #C2CFC5; padding: 26px 0; border-top: 1px solid #3B4A44;">You get a brand-new, safe home built in just <span style="color:#BCD6A4;">8 to 12 weeks</span>.</p>
+      <p style="font-size: 18px; line-height: 1.76; color: #C2CFC5; padding: 26px 0; border-top: 1px solid #3B4A44;">When the home is fully finished, we bring it to your yard on a truck, place it on your ground, hook up the power and water, and hand you the keys.</p>
     </div>
   </div>
 
   <!-- ============ 4. MEET CUEVA HOMES ============ -->
-  <div style="background: #FBF9F5; padding: 118px 150px;">
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center;">
-      <div style="width: 54px; height: 3px; background: #C0552B;"></div>
-      <h2 style="font-size: 48px; line-height: 1.1; letter-spacing: 0.02em;">MEET CUEVA HOMES</h2>
+  <div style="background: #F2F5F0; padding: 118px 0 0;">
+    <div style="padding: 0 100px; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; margin-bottom: 54px;">
+      <div class="eyebrow" style="color: #5C6B63;">Who We Are</div>
+      <h2 style="font-size: 52px; line-height: 1.1;">Meet Cueva Homes</h2>
     </div>
 
-    <div class="ph" style="margin-top: 46px; height: 480px;">
-      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#B3A692" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      <div class="ph-l">Brand / Facility Images</div>
-      <div class="ph-t">Cueva Homes hero shots and images of the Nanaimo facility. Suggested: a 3-up image strip.</div>
-    </div>
+    <!-- modular block grid -->
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 300px; gap: 0;">
 
-    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 44px; margin-top: 52px;">
-      <div style="display: flex; flex-direction: column; gap: 16px;">
-        <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: #C0552B;">01</div>
-        <p style="font-size: 18px; line-height: 1.72;">We are the only ones in BC who can build lots of these homes fast without making them cheap or flimsy.</p>
+      <div class="ph" style="grid-column: span 2; border: none; border-right: 1px solid #DCE5DC; background: #E6EDE5;">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#8C9C8D" stroke-width="1.3" stroke-linecap="square"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <div class="ph-l">Cueva Homes &mdash; Exterior</div>
       </div>
-      <div style="display: flex; flex-direction: column; gap: 16px;">
-        <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: #C0552B;">02</div>
-        <p style="font-size: 18px; line-height: 1.72;">We take care of every single step for you. From getting city permits to installing the home,</p>
+
+      <div style="background: #DCE5DC; padding: 40px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="font-family: 'Newsreader',serif; font-size: 30px; color: #7A8A80;">01</div>
+        <p style="font-size: 17px; line-height: 1.7; color: #1B2A24;">We are the only ones in BC who can build lots of these homes fast without making them cheap or flimsy.</p>
       </div>
-      <div style="display: flex; flex-direction: column; gap: 16px;">
-        <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: #C0552B;">03</div>
-        <p style="font-size: 18px; line-height: 1.72;">So you never have to deal with noisy workers or builder stress</p>
+
+      <div style="background: #25322E; position: relative; overflow: hidden;">
+        <svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%;">
+          <g fill="none" stroke="#2E3D38" stroke-width="18">
+            <path d="M40 300 A260 260 0 0 1 560 300"/><path d="M80 300 A220 220 0 0 1 520 300"/><path d="M120 300 A180 180 0 0 1 480 300"/>
+            <path d="M160 300 A140 140 0 0 1 440 300"/><path d="M200 300 A100 100 0 0 1 400 300"/><path d="M240 300 A60 60 0 0 1 360 300"/>
+          </g>
+        </svg>
       </div>
+
+      <div style="background: #25322E; padding: 40px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="font-family: 'Newsreader',serif; font-size: 30px; color: #BCD6A4;">02</div>
+        <p style="font-size: 17px; line-height: 1.7; color: #C2CFC5;">We take care of every single step for you. From getting city permits to installing the home,</p>
+      </div>
+
+      <div class="ph" style="grid-column: span 2; border: none; border-left: 1px solid #DCE5DC; border-right: 1px solid #DCE5DC; background: #E6EDE5;">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#8C9C8D" stroke-width="1.3" stroke-linecap="square"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <div class="ph-l">Nanaimo Facility &mdash; Interior</div>
+      </div>
+
+      <div style="background: #DCE5DC; padding: 40px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="font-family: 'Newsreader',serif; font-size: 30px; color: #7A8A80;">03</div>
+        <p style="font-size: 17px; line-height: 1.7; color: #1B2A24;">So you never have to deal with noisy workers or builder stress</p>
+      </div>
+
     </div>
   </div>
 
   <!-- ============ 5. WHY CUEVA ============ -->
-  <div style="background: #F1ECE3; padding: 118px 150px;">
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; margin-bottom: 56px;">
-      <div style="width: 54px; height: 3px; background: #C0552B;"></div>
-      <h2 style="font-size: 46px; line-height: 1.12; max-width: 900px; text-wrap: pretty;">Why Cueva beats regular builders every single time?</h2>
+  <div style="background: #F2F5F0; padding: 118px 100px;">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; margin-bottom: 56px;">
+      <div class="eyebrow" style="color: #5C6B63;">The Comparison</div>
+      <h2 style="font-size: 48px; line-height: 1.12; max-width: 900px; text-wrap: pretty;">Why Cueva beats regular builders every single time?</h2>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px;">
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: #C9D4C8; border: 1px solid #C9D4C8;">
 
-      <div style="display: flex; gap: 28px; background: #FBF9F5; border: 1px solid #E0D9CC; padding: 34px;">
-        <div style="display: flex; flex-direction: column; gap: 14px; flex-grow: 1;">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#C0552B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          <h3 style="font-size: 23px; line-height: 1.25;">One Clear Price</h3>
-          <p style="font-size: 17px; line-height: 1.66;">The price we quote you is the exact price you pay. No surprise bills ever.</p>
+      <div style="background: #F2F5F0; padding: 40px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 24px;">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#25322E" stroke-width="1.4" stroke-linecap="square"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <h3 style="font-size: 27px; line-height: 1.22;">One Clear Price</h3>
+            <p style="font-size: 17px; line-height: 1.68;">The price we quote you is the exact price you pay. No surprise bills ever.</p>
+          </div>
         </div>
-        <div class="ph" style="width: 180px; flex-shrink: 0; padding: 16px;">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B3A692" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <div class="ph-l" style="font-size: 12px;">Image</div>
+        <div class="ph" style="height: 170px; padding: 18px; background: #E6EDE5;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8C9C8D" stroke-width="1.3" stroke-linecap="square"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <div class="ph-l">Image</div>
         </div>
       </div>
 
-      <div style="display: flex; gap: 28px; background: #FBF9F5; border: 1px solid #E0D9CC; padding: 34px;">
-        <div style="display: flex; flex-direction: column; gap: 14px; flex-grow: 1;">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#C0552B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <h3 style="font-size: 23px; line-height: 1.25;">Done in Weeks</h3>
-          <p style="font-size: 17px; line-height: 1.66;">We finish in 8 to 12 weeks, not a full year of loud hammering.</p>
+      <div style="background: #F2F5F0; padding: 40px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#25322E" stroke-width="1.4" stroke-linecap="square"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <h3 style="font-size: 27px; line-height: 1.22;">Done in Weeks</h3>
+          <p style="font-size: 17px; line-height: 1.68;">We finish in 8 to 12 weeks, not a full year of loud hammering.</p>
         </div>
-        <div class="ph" style="width: 180px; flex-shrink: 0; padding: 16px;">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B3A692" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <div class="ph-l" style="font-size: 12px;">Image</div>
-        </div>
-      </div>
-
-      <div style="display: flex; gap: 28px; background: #FBF9F5; border: 1px solid #E0D9CC; padding: 34px;">
-        <div style="display: flex; flex-direction: column; gap: 14px; flex-grow: 1;">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#C0552B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          <h3 style="font-size: 23px; line-height: 1.25;">Built Indoors</h3>
-          <p style="font-size: 17px; line-height: 1.66;">Your home is built inside a warm factory, safe from BC rain and mud.</p>
-        </div>
-        <div class="ph" style="width: 180px; flex-shrink: 0; padding: 16px;">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B3A692" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <div class="ph-l" style="font-size: 12px;">Image</div>
+        <div class="ph" style="height: 170px; padding: 18px; background: #E6EDE5;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8C9C8D" stroke-width="1.3" stroke-linecap="square"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <div class="ph-l">Image</div>
         </div>
       </div>
 
-      <div style="display: flex; gap: 28px; background: #FBF9F5; border: 1px solid #E0D9CC; padding: 34px;">
-        <div style="display: flex; flex-direction: column; gap: 14px; flex-grow: 1;">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#C0552B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <h3 style="font-size: 23px; line-height: 1.25;">Zero Work For You</h3>
-          <p style="font-size: 17px; line-height: 1.66;">We handle the city, the setup, and the build while you relax.</p>
+      <div style="background: #F2F5F0; padding: 40px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#25322E" stroke-width="1.4" stroke-linecap="square"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <h3 style="font-size: 27px; line-height: 1.22;">Built Indoors</h3>
+          <p style="font-size: 17px; line-height: 1.68;">Your home is built inside a warm factory, safe from BC rain and mud.</p>
         </div>
-        <div class="ph" style="width: 180px; flex-shrink: 0; padding: 16px;">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B3A692" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <div class="ph-l" style="font-size: 12px;">Image</div>
+        <div class="ph" style="height: 170px; padding: 18px; background: #E6EDE5;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8C9C8D" stroke-width="1.3" stroke-linecap="square"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <div class="ph-l">Image</div>
+        </div>
+      </div>
+
+      <div style="background: #F2F5F0; padding: 40px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#25322E" stroke-width="1.4" stroke-linecap="square"><polyline points="20 6 9 17 4 12"/></svg>
+          <h3 style="font-size: 27px; line-height: 1.22;">Zero Work For You</h3>
+          <p style="font-size: 17px; line-height: 1.68;">We handle the city, the setup, and the build while you relax.</p>
+        </div>
+        <div class="ph" style="height: 170px; padding: 18px; background: #E6EDE5;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8C9C8D" stroke-width="1.3" stroke-linecap="square"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <div class="ph-l">Image</div>
         </div>
       </div>
 
@@ -250,21 +291,22 @@
   </div>
 
   <!-- ============ 6. SHOW HOME ============ -->
-  <div style="background: #FBF9F5; padding: 118px 150px;">
-    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 76px; align-items: center;">
-      <div style="display: flex; flex-direction: column; gap: 28px;">
-        <div style="width: 54px; height: 3px; background: #C0552B;"></div>
-        <h2 style="font-size: 44px; line-height: 1.14; text-wrap: pretty;">Come walk inside our Nanaimo show home and see for yourself.</h2>
-        <p style="font-size: 18px; line-height: 1.72;">Reading about a home is one thing, but stepping inside changes everything. Most people worry a small home will feel tiny, but walking inside our show home proves how big, bright, and comfy it actually is.</p>
-        <p style="font-size: 18px; line-height: 1.72;">You can touch the walls, check out the kitchen, see the high ceilings, and talk to our team about your yard.</p>
-        <p style="font-size: 18px; line-height: 1.72;">If you live far away, you can do a live 3D Zoom tour on your phone or computer instead.</p>
-        <div style="display: inline-flex; align-self: flex-start; align-items: center; gap: 12px; background: #C0552B; color: #FFFFFF; font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 20px 38px; margin-top: 8px;">
+  <div style="background: #DCE5DC; padding: 118px 100px;">
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 80px; align-items: center;">
+      <div style="display: flex; flex-direction: column; gap: 26px;">
+        <div class="eyebrow" style="color: #5C6B63;">See It For Yourself</div>
+        <div style="height: 1px; background: #C2CEC1;"></div>
+        <h2 style="font-size: 46px; line-height: 1.13; text-wrap: pretty;">Come walk inside our Nanaimo show home and see for yourself.</h2>
+        <p style="font-size: 18px; line-height: 1.74;">Reading about a home is one thing, but stepping inside changes everything. Most people worry a small home will feel tiny, but walking inside our show home proves how big, bright, and comfy it actually is.</p>
+        <p style="font-size: 18px; line-height: 1.74;">You can touch the walls, check out the kitchen, see the high ceilings, and talk to our team about your yard.</p>
+        <p style="font-size: 18px; line-height: 1.74;">If you live far away, you can do a live 3D Zoom tour on your phone or computer instead.</p>
+        <div class="btn-lt" style="align-self: flex-start; margin-top: 8px;">
           Reserve Your Private Tour Right Now
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
         </div>
       </div>
-      <div class="ph" style="height: 620px;">
-        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#B3A692" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <div class="ph" style="height: 640px; background: #D0DBD0; border-color: #AFBDAF;">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#8C9C8D" stroke-width="1.3" stroke-linecap="square"><rect x="3" y="3" width="18" height="18"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         <div class="ph-l">Nanaimo Facility Image</div>
         <div class="ph-t">Interior of the Nanaimo show home &mdash; wide shot showing ceiling height and natural light.</div>
       </div>
@@ -272,77 +314,84 @@
   </div>
 
   <!-- ============ 7. BOOKING ============ -->
-  <div style="background: #243029; padding: 112px 150px;">
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; margin-bottom: 56px;">
-      <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: #E08355;">Two Steps Left</div>
-      <h2 style="font-size: 48px; line-height: 1.1; color: #FBF9F5; max-width: 900px; text-wrap: pretty;">Reserve Your Private Tour Right Now</h2>
+  <div style="background: #25322E; padding: 112px 100px; position: relative; overflow: hidden;">
+    <svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMax meet" aria-hidden="true" style="position: absolute; right: -130px; bottom: -40px; width: 700px; height: 350px;">
+      <g fill="none" stroke="#2E3D38" stroke-width="15">
+        <path d="M40 300 A260 260 0 0 1 560 300"/><path d="M80 300 A220 220 0 0 1 520 300"/><path d="M120 300 A180 180 0 0 1 480 300"/>
+        <path d="M160 300 A140 140 0 0 1 440 300"/><path d="M200 300 A100 100 0 0 1 400 300"/>
+      </g>
+    </svg>
+
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; margin-bottom: 56px;">
+      <div class="eyebrow" style="color: #BCD6A4;">Two Steps Left</div>
+      <h2 style="font-size: 52px; line-height: 1.1; color: #F2F5F0; max-width: 900px; text-wrap: pretty;">Reserve Your Private Tour Right Now</h2>
     </div>
 
-    <div style="display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 56px; align-items: start;">
+    <div style="position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 56px; align-items: start;">
 
       <!-- FORM CARD -->
-      <div style="background: #FBF9F5; padding: 44px;">
+      <div style="background: #F2F5F0; padding: 46px;">
         <div style="display: flex; flex-direction: column; gap: 24px;">
 
           <div style="display: flex; flex-direction: column; gap: 9px;">
-            <label style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 14px; font-weight: 600; color: #1C201D;">1. Do you own an empty lot or land?</label>
-            <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #CFC6B6; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #6E736C; height: 52px;">
+            <label style="font-family: 'Archivo',Arial,sans-serif; font-size: 14px; font-weight: 500; color: #1B2A24;">1. Do you own an empty lot or land?</label>
+            <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #C2CEC1; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #5C6B63; height: 54px;">
               <span>Select&hellip;</span>
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#6E736C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5C6B63" stroke-width="1.8" stroke-linecap="square"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
-            <div style="font-size: 13px; color: #6E736C;">Dropdown: Yes / No</div>
+            <div style="font-size: 13px; color: #5C6B63;">Dropdown: Yes / No</div>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 9px;">
-            <label style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 14px; font-weight: 600; color: #1C201D; line-height: 1.5;">2. The investment range you&rsquo;re looking at is $165K to $300K. Are you comfortable with this amount?</label>
+            <label style="font-family: 'Archivo',Arial,sans-serif; font-size: 14px; font-weight: 500; color: #1B2A24; line-height: 1.5;">2. The investment range you&rsquo;re looking at is $165K to $300K. Are you comfortable with this amount?</label>
             <div style="display: flex; gap: 12px;">
-              <div style="flex-grow: 1; border: 1px solid #CFC6B6; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #4A4F49; text-align: center; height: 52px;">Yes</div>
-              <div style="flex-grow: 1; border: 1px solid #CFC6B6; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #4A4F49; text-align: center; height: 52px;">No</div>
+              <div style="flex-grow: 1; border: 1px solid #C2CEC1; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #46554E; text-align: center; height: 54px;">Yes</div>
+              <div style="flex-grow: 1; border: 1px solid #C2CEC1; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #46554E; text-align: center; height: 54px;">No</div>
             </div>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 9px;">
-            <label style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 14px; font-weight: 600; color: #1C201D;">3. Full Name</label>
-            <div style="border: 1px solid #CFC6B6; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #767B74; height: 52px;">Your full name</div>
+            <label style="font-family: 'Archivo',Arial,sans-serif; font-size: 14px; font-weight: 500; color: #1B2A24;">3. Full Name</label>
+            <div style="border: 1px solid #C2CEC1; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #78877E; height: 54px;">Your full name</div>
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
             <div style="display: flex; flex-direction: column; gap: 9px;">
-              <label style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 14px; font-weight: 600; color: #1C201D;">4. Email Address</label>
-              <div style="border: 1px solid #CFC6B6; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #767B74; height: 52px;">you@email.com</div>
+              <label style="font-family: 'Archivo',Arial,sans-serif; font-size: 14px; font-weight: 500; color: #1B2A24;">4. Email Address</label>
+              <div style="border: 1px solid #C2CEC1; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #78877E; height: 54px;">you@email.com</div>
             </div>
             <div style="display: flex; flex-direction: column; gap: 9px;">
-              <label style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 14px; font-weight: 600; color: #1C201D; line-height: 1.5;">5. Phone Number (for SMS confirmation)</label>
-              <div style="border: 1px solid #CFC6B6; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #767B74; height: 52px;">(250) 000-0000</div>
+              <label style="font-family: 'Archivo',Arial,sans-serif; font-size: 14px; font-weight: 500; color: #1B2A24; line-height: 1.5;">5. Phone Number (for SMS confirmation)</label>
+              <div style="border: 1px solid #C2CEC1; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #78877E; height: 54px;">(250) 000-0000</div>
             </div>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 9px;">
-            <label style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 14px; font-weight: 600; color: #1C201D;">6. Property Location</label>
-            <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #CFC6B6; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #6E736C; height: 52px;">
+            <label style="font-family: 'Archivo',Arial,sans-serif; font-size: 14px; font-weight: 500; color: #1B2A24;">6. Property Location</label>
+            <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid #C2CEC1; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #5C6B63; height: 54px;">
               <span>Select&hellip;</span>
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#6E736C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5C6B63" stroke-width="1.8" stroke-linecap="square"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
-            <div style="font-size: 13px; color: #6E736C;">Nanaimo / Victoria / Mid-Island / North Island / Lower Mainland / Other</div>
+            <div style="font-size: 13px; color: #5C6B63;">Nanaimo / Victoria / Mid-Island / North Island / Lower Mainland / Other</div>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 9px;">
-            <label style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 14px; font-weight: 600; color: #1C201D;">7. Select The Date Of Your Tour</label>
-            <div class="ph" style="height: 190px; padding: 20px;">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#B3A692" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <label style="font-family: 'Archivo',Arial,sans-serif; font-size: 14px; font-weight: 500; color: #1B2A24;">7. Select The Date Of Your Tour</label>
+            <div class="ph" style="height: 190px; padding: 22px; background: #E6EDE5;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8C9C8D" stroke-width="1.3" stroke-linecap="square"><rect x="3" y="4" width="18" height="18"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
               <div class="ph-l">Calendar Picker</div>
               <div class="ph-t" style="font-size: 13px;">Shopify app or embedded booking widget &mdash; shows available tour dates.</div>
             </div>
           </div>
 
-          <div style="display: flex; align-items: center; justify-content: center; gap: 12px; background: #C0552B; color: #FFFFFF; font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 17px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 24px 28px; text-align: center; line-height: 1.35; margin-top: 4px;">
+          <div class="btn-lt" style="justify-content: center; text-align: center; line-height: 1.4; padding: 25px 28px; margin-top: 4px;">
             Claim Your $10,000 Rebate &amp; Book Your Tour Here
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex-shrink: 0;"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
           </div>
 
-          <div style="display: flex; align-items: flex-start; gap: 10px; justify-content: center;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3E6B4F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <p style="font-size: 14px; line-height: 1.6; color: #6E736C; text-align: center;">Your information is 100% private. Zero high-pressure sales calls. Instant booking confirmation.</p>
+          <div style="display: flex; align-items: flex-start; gap: 11px; justify-content: center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#25322E" stroke-width="1.7" stroke-linecap="square" style="flex-shrink: 0; margin-top: 2px;"><rect x="3" y="11" width="18" height="11"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p style="font-size: 14px; line-height: 1.62; color: #46554E; text-align: center;">Your information is 100% private. Zero high-pressure sales calls. Instant booking confirmation.</p>
           </div>
 
         </div>
@@ -350,27 +399,27 @@
 
       <!-- RIGHT: WALKTHROUGH -->
       <div style="display: flex; flex-direction: column; gap: 28px;">
-        <div class="ph ph-d" style="height: 400px; position: relative;">
-          <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#7E9384" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="#7E9384" stroke="none"/></svg>
+        <div class="ph ph-d" style="height: 390px;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#7E9384" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="#7E9384" stroke="none"/></svg>
           <div class="ph-l ph-l-d">High-Resolution Video &mdash; 30 second loop</div>
-          <div class="ph-t ph-t-d">A CUEVA suite being crane-installed in a single day, overlaid with a callout badge:<br><strong style="color:#CBD9CC;">&ldquo;Installed in 7 Days | Move-In Ready in Weeks.&rdquo;</strong></div>
+          <div class="ph-t ph-t-d">A CUEVA suite being crane-installed in a single day, overlaid with a callout badge:<br><span style="color:#BCD6A4;">&ldquo;Installed in 7 Days | Move-In Ready in Weeks.&rdquo;</span></div>
         </div>
         <div style="display: flex; flex-direction: column; gap: 16px;">
-          <h3 style="font-size: 30px; line-height: 1.2; color: #FBF9F5;">Reserve Your Private Walkthrough (In-Person)</h3>
-          <p style="font-size: 18px; line-height: 1.72; color: #C3CAC1;">Experience the high-end architectural finishes, ceiling height, and full spatial layout for yourself.</p>
+          <h3 style="font-size: 34px; line-height: 1.18; color: #F2F5F0;">Reserve Your Private Walkthrough (In-Person)</h3>
+          <p style="font-size: 18px; line-height: 1.74; color: #C2CFC5;">Experience the high-end architectural finishes, ceiling height, and full spatial layout for yourself.</p>
         </div>
-        <div style="border-top: 1px solid #3A4B40; padding-top: 26px; display: flex; flex-direction: column; gap: 16px;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7FA98C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span style="font-size: 16px; color: #C3CAC1;">Locked-in, fixed price &mdash; no surprise bills</span>
+        <div style="display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: center; gap: 14px; padding: 18px 0; border-top: 1px solid #3B4A44;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BCD6A4" stroke-width="1.8" stroke-linecap="square" style="flex-shrink: 0;"><polyline points="20 6 9 17 4 12"/></svg>
+            <span style="font-size: 16px; color: #C2CFC5;">Locked-in, fixed price &mdash; no surprise bills</span>
           </div>
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7FA98C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span style="font-size: 16px; color: #C3CAC1;">Built in 8 to 12 weeks, indoors</span>
+          <div style="display: flex; align-items: center; gap: 14px; padding: 18px 0; border-top: 1px solid #3B4A44;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BCD6A4" stroke-width="1.8" stroke-linecap="square" style="flex-shrink: 0;"><polyline points="20 6 9 17 4 12"/></svg>
+            <span style="font-size: 16px; color: #C2CFC5;">Built in 8 to 12 weeks, indoors</span>
           </div>
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7FA98C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span style="font-size: 16px; color: #C3CAC1;">Can&rsquo;t travel? Take a live 3D Zoom tour instead</span>
+          <div style="display: flex; align-items: center; gap: 14px; padding: 18px 0; border-top: 1px solid #3B4A44; border-bottom: 1px solid #3B4A44;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#BCD6A4" stroke-width="1.8" stroke-linecap="square" style="flex-shrink: 0;"><polyline points="20 6 9 17 4 12"/></svg>
+            <span style="font-size: 16px; color: #C2CFC5;">Can&rsquo;t travel? Take a live 3D Zoom tour instead</span>
           </div>
         </div>
       </div>
@@ -379,17 +428,22 @@
   </div>
 
   <!-- ============ 8. FOOTER ============ -->
-  <div style="background: #1C201D; padding: 56px 150px;">
-    <div style="display: flex; align-items: center; justify-content: space-between; gap: 40px; padding-bottom: 30px; border-bottom: 1px solid #2E352F;">
-      <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 0.30em; color: #FBF9F5;">CUEVA</div>
-      <div style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: #9AA098;">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7FA98C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+  <div style="background: #16211D; padding: 58px 100px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 40px; padding-bottom: 30px; border-bottom: 1px solid #2A3733;">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <svg width="40" height="23" viewBox="0 0 40 22" fill="none" stroke="#F2F5F0" stroke-width="2.4" stroke-linecap="square">
+          <path d="M2 21 A18 18 0 0 1 38 21"/><path d="M8 21 A12 12 0 0 1 32 21"/><path d="M14 21 A6 6 0 0 1 26 21"/>
+        </svg>
+        <div style="font-family: 'Archivo',Arial,sans-serif; font-size: 18px; font-weight: 600; letter-spacing: 0.34em; color: #F2F5F0;">CUEVA</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 11px; font-size: 15px; color: #A3B1A7;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#BCD6A4" stroke-width="1.5" stroke-linecap="square"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         <span>info@cueva.ca</span>
       </div>
     </div>
     <div style="display: flex; align-items: center; justify-content: space-between; gap: 40px; padding-top: 26px;">
-      <p style="font-size: 14px; line-height: 1.7; color: #8A908A;">CUEVA HOMES LTD. &nbsp;|&nbsp; Factory-Built Backyard Suites &nbsp;|&nbsp; Nanaimo, Vancouver Island, BC &nbsp;|&nbsp; Cueva.ca &nbsp;|&nbsp; Email: info@cueva.ca</p>
-      <p style="font-size: 14px; color: #8A908A; white-space: nowrap;">Terms &amp; Conditions &nbsp;|&nbsp; Privacy Policy</p>
+      <p style="font-size: 14px; line-height: 1.7; color: #93A398;">CUEVA HOMES LTD. &nbsp;|&nbsp; Factory-Built Backyard Suites &nbsp;|&nbsp; Nanaimo, Vancouver Island, BC &nbsp;|&nbsp; Cueva.ca &nbsp;|&nbsp; Email: info@cueva.ca</p>
+      <p style="font-size: 14px; color: #93A398; white-space: nowrap;">Terms &amp; Conditions &nbsp;|&nbsp; Privacy Policy</p>
     </div>
   </div>
 
