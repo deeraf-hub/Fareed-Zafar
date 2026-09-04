@@ -1,0 +1,287 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <style>
+    *,*::before,*::after { box-sizing: border-box; }
+    body { margin: 0; font-family: 'IBM Plex Sans','Segoe UI',system-ui,sans-serif; color: #4A4F49; background: #FBF9F5; -webkit-font-smoothing: antialiased; }
+    h1,h2,h3,h4 { font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; margin: 0; color: #1C201D; letter-spacing: -0.02em; line-height: 1.1; font-weight: 700; }
+    p { margin: 0; }
+    a { color: #C0552B; text-decoration: none; }
+    a:hover { color: #A44521; }
+    .sec { font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #9A9384; }
+    .sw { height: 92px; display: flex; align-items: flex-end; padding: 12px; }
+    .swn { font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 13px; font-weight: 600; color: #1C201D; margin-top: 10px; }
+    .swh { font-size: 12px; color: #8A8F87; font-variant-numeric: tabular-nums; }
+    .swu { font-size: 12px; color: #8A8F87; line-height: 1.5; margin-top: 3px; }
+  </style>
+</helmet>
+
+<div style="width: 1100px; background: #FBF9F5; padding: 64px 64px 72px;">
+
+  <!-- TITLE -->
+  <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; padding-bottom: 26px; border-bottom: 2px solid #1C201D;">
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 0.30em; color: #1C201D;">CUEVA</div>
+      <h1 style="font-size: 38px;">Funnel Design System</h1>
+    </div>
+    <div style="font-size: 13px; line-height: 1.7; color: #8A8F87; text-align: right;">Lead-generation funnel &middot; Shopify<br>Desktop 1440 &middot; Mobile 390</div>
+  </div>
+
+  <!-- COLOR -->
+  <div style="margin-top: 44px;">
+    <div class="sec">01 &nbsp;&mdash;&nbsp; Colour</div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; margin-top: 22px;">
+      <div>
+        <div class="sw" style="background: #1C201D;"></div>
+        <div class="swn">Ink</div><div class="swh">#1C201D</div>
+        <div class="swu">Headlines, header bar, footer.</div>
+      </div>
+      <div>
+        <div class="sw" style="background: #243029;"></div>
+        <div class="swn">Forest</div><div class="swh">#243029</div>
+        <div class="swu">Dark feature bands: The Shift, Booking.</div>
+      </div>
+      <div>
+        <div class="sw" style="background: #C0552B;"></div>
+        <div class="swn">Ember &mdash; Accent</div><div class="swh">#C0552B</div>
+        <div class="swu">Every call to action. One accent only.</div>
+      </div>
+      <div>
+        <div class="sw" style="background: #E08355;"></div>
+        <div class="swn">Ember Light</div><div class="swh">#E08355</div>
+        <div class="swu">Eyebrows and accent text on dark grounds.</div>
+      </div>
+      <div>
+        <div class="sw" style="background: #FBF9F5; border: 1px solid #E0D9CC;"></div>
+        <div class="swn">Bone &mdash; Page</div><div class="swh">#FBF9F5</div>
+        <div class="swu">Default page background.</div>
+      </div>
+      <div>
+        <div class="sw" style="background: #F1ECE3; border: 1px solid #E0D9CC;"></div>
+        <div class="swn">Sand &mdash; Alt</div><div class="swh">#F1ECE3</div>
+        <div class="swu">Alternating sections, trust strip.</div>
+      </div>
+      <div>
+        <div class="sw" style="background: #E0D9CC;"></div>
+        <div class="swn">Line</div><div class="swh">#E0D9CC</div>
+        <div class="swu">Card borders, dividers.</div>
+      </div>
+      <div>
+        <div class="sw" style="background: #3E6B4F;"></div>
+        <div class="swn">Trust Green</div><div class="swh">#3E6B4F</div>
+        <div class="swu">Certification and privacy icons only.</div>
+      </div>
+      <div>
+        <div class="sw" style="background: #4A4F49;"></div>
+        <div class="swn">Body Text</div><div class="swh">#4A4F49</div>
+        <div class="swu">Paragraph copy on light grounds.</div>
+      </div>
+      <div>
+        <div class="sw" style="background: #8A8F87;"></div>
+        <div class="swn">Muted</div><div class="swh">#8A8F87</div>
+        <div class="swu">Field hints, captions, legal.</div>
+      </div>
+      <div>
+        <div class="sw" style="background: #C3CAC1;"></div>
+        <div class="swn">Body on Dark</div><div class="swh">#C3CAC1</div>
+        <div class="swu">Paragraph copy on Forest / Ink.</div>
+      </div>
+      <div>
+        <div class="sw" style="background: #B24A2A;"></div>
+        <div class="swn">Warning</div><div class="swh">#B24A2A</div>
+        <div class="swu">Pain-point cross icons.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TYPE -->
+  <div style="margin-top: 52px;">
+    <div class="sec">02 &nbsp;&mdash;&nbsp; Typography</div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 22px;">
+      <div style="border: 1px solid #E0D9CC; background: #FFFFFF; padding: 24px;">
+        <div class="swn" style="margin-top: 0;">Display &mdash; Archivo</div>
+        <div style="font-family: 'Archivo','Helvetica Neue',Arial,sans-serif; font-size: 40px; font-weight: 700; color: #1C201D; letter-spacing: -0.022em; margin-top: 10px;">Aa Bb Cc 123</div>
+        <div class="swu">Weights 600 / 700. Tracking &minus;0.022em. Headings, buttons, labels, eyebrows.<br>Fallback: Helvetica Neue, Arial.</div>
+      </div>
+      <div style="border: 1px solid #E0D9CC; background: #FFFFFF; padding: 24px;">
+        <div class="swn" style="margin-top: 0;">Body &mdash; IBM Plex Sans</div>
+        <div style="font-size: 40px; font-weight: 400; color: #1C201D; margin-top: 10px;">Aa Bb Cc 123</div>
+        <div class="swu">Weights 400 / 500 / 600. Paragraphs, field text, captions.<br>Fallback: Segoe UI, system-ui.</div>
+      </div>
+    </div>
+
+    <div style="border: 1px solid #E0D9CC; background: #FFFFFF; margin-top: 22px;">
+      <div style="display: grid; grid-template-columns: 200px 1fr 150px 130px; gap: 20px; padding: 14px 24px; background: #F1ECE3; border-bottom: 1px solid #E0D9CC;">
+        <div class="swn" style="margin-top: 0;">Token</div>
+        <div class="swn" style="margin-top: 0;">Sample</div>
+        <div class="swn" style="margin-top: 0;">Desktop</div>
+        <div class="swn" style="margin-top: 0;">Mobile</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 200px 1fr 150px 130px; gap: 20px; padding: 16px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-size: 14px; color: #1C201D; font-weight: 500;">H1 / Hero</div>
+        <div style="font-family: 'Archivo',Arial,sans-serif; font-size: 26px; font-weight: 700; color: #1C201D; letter-spacing: -0.022em;">Turn 600 Sq Ft&hellip;</div>
+        <div class="swh">62 / 1.06</div><div class="swh">33 / 1.14</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 200px 1fr 150px 130px; gap: 20px; padding: 16px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-size: 14px; color: #1C201D; font-weight: 500;">H2 / Section</div>
+        <div style="font-family: 'Archivo',Arial,sans-serif; font-size: 22px; font-weight: 700; color: #1C201D; letter-spacing: -0.022em;">The Real Problem&hellip;</div>
+        <div class="swh">44&ndash;48 / 1.12</div><div class="swh">27&ndash;29 / 1.18</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 200px 1fr 150px 130px; gap: 20px; padding: 16px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-size: 14px; color: #1C201D; font-weight: 500;">H3 / Card</div>
+        <div style="font-family: 'Archivo',Arial,sans-serif; font-size: 19px; font-weight: 700; color: #1C201D; letter-spacing: -0.02em;">One Clear Price</div>
+        <div class="swh">23&ndash;30 / 1.25</div><div class="swh">20&ndash;23 / 1.25</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 200px 1fr 150px 130px; gap: 20px; padding: 16px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-size: 14px; color: #1C201D; font-weight: 500;">Body Large</div>
+        <div style="font-size: 17px; color: #4A4F49;">Lead paragraph copy</div>
+        <div class="swh">20 / 1.62</div><div class="swh">16 / 1.66</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 200px 1fr 150px 130px; gap: 20px; padding: 16px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-size: 14px; color: #1C201D; font-weight: 500;">Body</div>
+        <div style="font-size: 16px; color: #4A4F49;">Standard paragraph copy</div>
+        <div class="swh">17&ndash;18 / 1.72</div><div class="swh">15&ndash;16 / 1.72</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 200px 1fr 150px 130px; gap: 20px; padding: 16px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-size: 14px; color: #1C201D; font-weight: 500;">Eyebrow</div>
+        <div style="font-family: 'Archivo',Arial,sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: #C0552B;">Two Steps Left</div>
+        <div class="swh">13 / 0.22em</div><div class="swh">10 / 0.18em</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 200px 1fr 150px 130px; gap: 20px; padding: 16px 24px; align-items: center;">
+        <div style="font-size: 14px; color: #1C201D; font-weight: 500;">Caption / Legal</div>
+        <div style="font-size: 13px; color: #8A8F87;">Field hints and legal lines</div>
+        <div class="swh">13&ndash;14 / 1.6</div><div class="swh">12&ndash;13 / 1.6</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENTS -->
+  <div style="margin-top: 52px;">
+    <div class="sec">03 &nbsp;&mdash;&nbsp; Components</div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 22px;">
+
+      <div style="border: 1px solid #E0D9CC; background: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 18px;">
+        <div class="swn" style="margin-top: 0;">Primary Button</div>
+        <div style="display: inline-flex; align-self: flex-start; align-items: center; gap: 11px; background: #C0552B; color: #FFFFFF; font-family: 'Archivo',Arial,sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 19px 34px;">
+          Book Your Tour
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+        <div style="display: inline-flex; align-self: flex-start; align-items: center; gap: 11px; background: #A44521; color: #FFFFFF; font-family: 'Archivo',Arial,sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 19px 34px;">
+          Hover &mdash; #A44521
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+        <div class="swu">Square corners &mdash; radius 0 throughout. Height 60&ndash;68px desktop, min 56px mobile. Uppercase, tracking 0.05&ndash;0.06em.</div>
+      </div>
+
+      <div style="border: 1px solid #E0D9CC; background: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 14px;">
+        <div class="swn" style="margin-top: 0;">Form Field</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <label style="font-family: 'Archivo',Arial,sans-serif; font-size: 14px; font-weight: 600; color: #1C201D;">3. Full Name</label>
+          <div style="border: 1px solid #CFC6B6; background: #FFFFFF; padding: 15px 16px; font-size: 16px; color: #A9ADA7; height: 52px;">Your full name</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <label style="font-family: 'Archivo',Arial,sans-serif; font-size: 14px; font-weight: 600; color: #1C201D;">Focus state</label>
+          <div style="border: 2px solid #C0552B; background: #FFFFFF; padding: 14px 15px; font-size: 16px; color: #1C201D; height: 52px;">Fareed Zafar</div>
+        </div>
+        <div class="swu">Height 52px desktop / 50px mobile. Border #CFC6B6, focus 2px #C0552B. Hint text 13px #8A8F87 below.</div>
+      </div>
+
+      <div style="border: 1px solid #E0D9CC; background: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 14px;">
+        <div class="swn" style="margin-top: 0;">Section Rule</div>
+        <div style="width: 54px; height: 3px; background: #C0552B;"></div>
+        <div class="swu">Precedes every H2 on light grounds. 54&times;3px desktop, 44&times;3px mobile. On dark grounds an uppercase eyebrow in Ember Light replaces it.</div>
+      </div>
+
+      <div style="border: 1px solid #E0D9CC; background: #FFFFFF; padding: 26px; display: flex; flex-direction: column; gap: 14px;">
+        <div class="swn" style="margin-top: 0;">Asset Placeholder</div>
+        <div style="border: 1.5px dashed #C9BFAE; background: #EFE9DE; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 22px; height: 118px;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B3A692" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <div style="font-family: 'Archivo',Arial,sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #8A8070;">Section Image</div>
+        </div>
+        <div class="swu">Every dashed block is a slot awaiting a real asset from the brand media folder. Each carries the client&rsquo;s own note for what belongs there.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LAYOUT -->
+  <div style="margin-top: 52px;">
+    <div class="sec">04 &nbsp;&mdash;&nbsp; Layout &amp; Spacing</div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin-top: 22px;">
+      <div style="border: 1px solid #E0D9CC; background: #FFFFFF; padding: 24px;">
+        <div class="swn" style="margin-top: 0;">Desktop</div>
+        <div class="swu">Frame 1440px. Side padding 150px, content 1140px. Section padding 112&ndash;118px vertical. Column gap 56&ndash;76px.</div>
+      </div>
+      <div style="border: 1px solid #E0D9CC; background: #FFFFFF; padding: 24px;">
+        <div class="swn" style="margin-top: 0;">Mobile</div>
+        <div class="swu">Frame 390px. Side padding 22px. Section padding 56px vertical. Everything stacks single-column; the 4 benefit cards stack too.</div>
+      </div>
+      <div style="border: 1px solid #E0D9CC; background: #FFFFFF; padding: 24px;">
+        <div class="swn" style="margin-top: 0;">Rhythm</div>
+        <div class="swu">Backgrounds alternate Bone &rarr; Sand &rarr; Forest so no two adjacent sections share a ground. Corner radius is 0 everywhere.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FUNNEL ORDER -->
+  <div style="margin-top: 52px;">
+    <div class="sec">05 &nbsp;&mdash;&nbsp; Funnel Order</div>
+    <div style="display: flex; flex-direction: column; margin-top: 22px; border: 1px solid #E0D9CC; background: #FFFFFF;">
+      <div style="display: grid; grid-template-columns: 54px 1fr 210px 150px; gap: 18px; padding: 13px 24px; background: #F1ECE3; border-bottom: 1px solid #E0D9CC;">
+        <div class="swn" style="margin-top: 0;">#</div><div class="swn" style="margin-top: 0;">Section</div><div class="swn" style="margin-top: 0;">Job</div><div class="swn" style="margin-top: 0;">Ground</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 54px 1fr 210px 150px; gap: 18px; padding: 14px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-family:'Archivo',Arial,sans-serif; font-size: 13px; font-weight: 700; color: #C0552B;">01</div>
+        <div style="font-size: 15px; color: #1C201D;">Hero &mdash; offer, video, CTA</div><div style="font-size: 14px; color: #8A8F87;">State the offer</div><div class="swh">Ink</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 54px 1fr 210px 150px; gap: 18px; padding: 14px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-family:'Archivo',Arial,sans-serif; font-size: 13px; font-weight: 700; color: #C0552B;">02</div>
+        <div style="font-size: 15px; color: #1C201D;">Trust strip &mdash; 4 certifications</div><div style="font-size: 14px; color: #8A8F87;">Earn permission</div><div class="swh">Sand</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 54px 1fr 210px 150px; gap: 18px; padding: 14px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-family:'Archivo',Arial,sans-serif; font-size: 13px; font-weight: 700; color: #C0552B;">03</div>
+        <div style="font-size: 15px; color: #1C201D;">The BC numbers problem</div><div style="font-size: 14px; color: #8A8F87;">Name the pain</div><div class="swh">Bone</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 54px 1fr 210px 150px; gap: 18px; padding: 14px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-family:'Archivo',Arial,sans-serif; font-size: 13px; font-weight: 700; color: #C0552B;">04</div>
+        <div style="font-size: 15px; color: #1C201D;">Why on-site building fails</div><div style="font-size: 14px; color: #8A8F87;">Blame the method</div><div class="swh">Sand</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 54px 1fr 210px 150px; gap: 18px; padding: 14px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-family:'Archivo',Arial,sans-serif; font-size: 13px; font-weight: 700; color: #C0552B;">05</div>
+        <div style="font-size: 15px; color: #1C201D;">We build indoors &mdash; the shift</div><div style="font-size: 14px; color: #8A8F87;">Offer the fix</div><div class="swh">Forest</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 54px 1fr 210px 150px; gap: 18px; padding: 14px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-family:'Archivo',Arial,sans-serif; font-size: 13px; font-weight: 700; color: #C0552B;">06</div>
+        <div style="font-size: 15px; color: #1C201D;">Meet Cueva Homes</div><div style="font-size: 14px; color: #8A8F87;">Establish authority</div><div class="swh">Bone</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 54px 1fr 210px 150px; gap: 18px; padding: 14px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-family:'Archivo',Arial,sans-serif; font-size: 13px; font-weight: 700; color: #C0552B;">07</div>
+        <div style="font-size: 15px; color: #1C201D;">Why Cueva wins &mdash; 4 cards</div><div style="font-size: 14px; color: #8A8F87;">Answer objections</div><div class="swh">Sand</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 54px 1fr 210px 150px; gap: 18px; padding: 14px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-family:'Archivo',Arial,sans-serif; font-size: 13px; font-weight: 700; color: #C0552B;">08</div>
+        <div style="font-size: 15px; color: #1C201D;">Nanaimo show home</div><div style="font-size: 14px; color: #8A8F87;">Remove the risk</div><div class="swh">Bone</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 54px 1fr 210px 150px; gap: 18px; padding: 14px 24px; border-bottom: 1px solid #EFE9DE; align-items: center;">
+        <div style="font-family:'Archivo',Arial,sans-serif; font-size: 13px; font-weight: 700; color: #C0552B;">09</div>
+        <div style="font-size: 15px; color: #1C201D;">Booking form &mdash; 7 fields</div><div style="font-size: 14px; color: #8A8F87;">Capture the lead</div><div class="swh">Forest</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 54px 1fr 210px 150px; gap: 18px; padding: 14px 24px; align-items: center;">
+        <div style="font-family:'Archivo',Arial,sans-serif; font-size: 13px; font-weight: 700; color: #C0552B;">10</div>
+        <div style="font-size: 15px; color: #1C201D;">Footer</div><div style="font-size: 14px; color: #8A8F87;">Legal and contact</div><div class="swh">Ink</div>
+      </div>
+    </div>
+    <div class="swu" style="margin-top: 14px;">One primary action repeated three times down the page &mdash; hero, show home, booking form. No competing buttons, no top navigation links: nothing leaks a click out of the funnel.</div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>
