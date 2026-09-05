@@ -194,9 +194,9 @@ function render(spec: Spec): SceneNode {
   for (const kid of spec.kids) {
     const node = render(kid)
     f.appendChild(node)
-    const anyKid = kid as any
-    if (anyKid.stretch) node.layoutAlign = 'STRETCH'
-    if (anyKid.grow) node.layoutGrow = anyKid.grow
+    const anyKid = kid as { stretch?: boolean; grow?: number }
+    if (anyKid.stretch && 'layoutAlign' in node) node.layoutAlign = 'STRETCH'
+    if (anyKid.grow && 'layoutGrow' in node) node.layoutGrow = anyKid.grow
   }
 
   // Fixed width/height applied AFTER children so auto-layout settles first.
