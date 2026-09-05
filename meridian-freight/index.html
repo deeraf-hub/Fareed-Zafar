@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian Freight — know where your cargo is</title>
+<meta name="description" content="Meridian Freight moves air, sea and ground cargo across 148 cities. Track any consignment by ID and see every scan within 30 minutes.">
+<meta name="theme-color" content="#12294D">
+
+<!-- Open Graph / social -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Meridian Freight">
+<meta property="og:title" content="Meridian Freight — know where your cargo is">
+<meta property="og:description" content="Air, sea and ground freight across 148 cities. Track any consignment by ID and see every scan within 30 minutes.">
+<meta property="og:url" content="https://meridianfreight.example/">
+<meta property="og:locale" content="en_US">
+<!-- og:image needs a hosted file (1200x630 PNG). Upload one, then add:
+     <meta property="og:image" content="https://meridianfreight.example/og.png"> -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Meridian Freight — know where your cargo is">
+<meta name="twitter:description" content="Air, sea and ground freight across 148 cities. Track any consignment by ID.">
+
+<!-- Inline SVG favicon, no external file -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2312294D'/%3E%3Cpath d='M8 22V10l8 7 8-7v12' fill='none' stroke='%23FBF9F6' stroke-width='2.6' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   Design tokens
+   ============================================================ */
+:root{
+  --ink:#0B1220;
+  --ink-soft:#414C5E;
+  --ink-faint:#6B7688;
+  --bg:#FBF9F6;
+  --surface:#FFFFFF;
+  --surface-alt:#F4F1EC;
+  --line:#E3DED5;
+  --line-strong:#CFC8BC;
+  --navy:#12294D;
+  --navy-deep:#0C1D38;
+  --orange:#E1600C;
+  --orange-deep:#BE4F08;
+  --green:#177849;
+
+  --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:40px;
+  --s6:48px; --s8:64px; --s10:80px; --s12:96px;
+
+  --maxw:1120px;
+  --radius:10px;
+  --radius-sm:6px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:14px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{margin:0;line-height:1.15;letter-spacing:-0.02em;font-weight:800}
+h1{font-size:52px}
+h2{font-size:32px}
+h3{font-size:18px;letter-spacing:-0.01em}
+p{margin:0}
+a{color:inherit}
+ul,ol{margin:0;padding:0;list-style:none}
+img{max-width:100%;height:auto}
+
+:where(a,button,input,select,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--navy);
+  outline-offset:2px;
+  border-radius:4px;
+}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--s3)}
+:target,section[id],#top{scroll-margin-top:96px}
+.section{padding:var(--s12) 0}
+.section--tight{padding:var(--s10) 0}
+.eyebrow{
+  font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-faint);margin-bottom:var(--s2);
+}
+.lede{font-size:16px;color:var(--ink-soft);max-width:62ch}
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+.skip-link{
+  position:absolute;left:var(--s2);top:-64px;z-index:100;
+  background:var(--navy);color:#fff;padding:var(--s1) var(--s2);
+  border-radius:var(--radius-sm);font-weight:600;text-decoration:none;
+}
+.skip-link:focus{top:var(--s2)}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s1);
+  min-height:48px;padding:0 var(--s3);
+  border-radius:var(--radius-sm);border:1px solid transparent;
+  font:inherit;font-weight:600;font-size:14px;
+  text-decoration:none;cursor:pointer;
+}
+.btn--primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn--primary:hover{background:var(--navy-deep);border-color:var(--navy-deep)}
+.btn--accent{background:var(--orange);color:#fff;border-color:var(--orange)}
+.btn--accent:hover{background:var(--orange-deep);border-color:var(--orange-deep)}
+.btn--ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn--ghost:hover{background:var(--surface-alt)}
+.btn--sm{min-height:40px;padding:0 var(--s2);font-size:13px}
+.btn--block{width:100%}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.site-header{
+  position:sticky;top:0;z-index:40;
+  background:var(--bg);
+  border-bottom:1px solid var(--line);
+}
+.header-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:var(--s3);flex-wrap:wrap;padding-top:var(--s2);padding-bottom:var(--s2);
+}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.brand-mark{
+  width:30px;height:30px;border-radius:7px;background:var(--navy);
+  display:grid;place-items:center;flex:none;
+}
+.brand-name{font-weight:800;font-size:17px;letter-spacing:-0.02em}
+.brand-name span{color:var(--ink-faint);font-weight:600}
+.site-nav ul{display:flex;align-items:center;gap:var(--s3)}
+.site-nav a{
+  font-weight:600;font-size:14px;text-decoration:none;color:var(--ink-soft);
+  padding:6px 0;display:inline-block;
+}
+.site-nav a:hover{color:var(--ink)}
+.header-cta{display:flex;align-items:center;gap:var(--s2)}
+
+/* ============================================================
+   Hero + tracking
+   ============================================================ */
+.hero{padding:var(--s10) 0 var(--s8)}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s8);align-items:start}
+.hero h1{max-width:12ch}
+.hero .lede{margin-top:var(--s3);font-size:17px}
+.hero-points{margin-top:var(--s4);display:grid;gap:var(--s1)}
+.hero-points li{display:flex;gap:10px;color:var(--ink-soft);font-size:14px}
+.hero-points svg{flex:none;margin-top:4px}
+
+.track-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:var(--s4);
+}
+.track-card h2{font-size:20px}
+.track-card .track-sub{margin-top:6px;color:var(--ink-soft);font-size:14px}
+.track-form{margin-top:var(--s3)}
+.track-row{display:flex;gap:var(--s1)}
+.track-row input{flex:1;min-width:0}
+.field-label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}
+.input,.select{
+  width:100%;min-height:48px;padding:0 14px;
+  background:var(--surface);color:var(--ink);
+  border:1px solid var(--line-strong);border-radius:var(--radius-sm);
+  font:inherit;font-size:15px;
+}
+.input::placeholder{color:#9AA3B2}
+.input:focus,.select:focus{border-color:var(--navy)}
+.input[aria-invalid="true"],.select[aria-invalid="true"]{border-color:#B3261E}
+.hint{margin-top:10px;font-size:12px;color:var(--ink-faint)}
+.hint b{font-weight:600;color:var(--ink-soft)}
+.field-error{display:none;margin-top:6px;font-size:12px;color:#B3261E;font-weight:600}
+.field-error.on{display:block}
+
+/* tracking result */
+.result-wrap{display:grid;grid-template-rows:0fr;margin-top:var(--s3)}
+.result-wrap.open{grid-template-rows:1fr}
+.result-inner{overflow:hidden;min-height:0}
+.result-card{border-top:1px solid var(--line);padding-top:var(--s3)}
+.result-head{display:flex;justify-content:space-between;gap:var(--s2);flex-wrap:wrap;align-items:baseline}
+.result-id{font-weight:800;font-size:18px;letter-spacing:-0.01em}
+.result-service{font-size:12px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.1em}
+.result-meta{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2);
+  margin-top:var(--s3);padding:var(--s2);
+  background:var(--surface-alt);border-radius:var(--radius-sm);
+}
+.result-meta dt{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-faint)}
+.result-meta dd{margin:4px 0 0;font-size:14px;font-weight:600}
+
+.timeline{margin-top:var(--s3)}
+.stage{display:flex;gap:var(--s2);padding:0 0 var(--s3)}
+.stage:last-child{padding-bottom:0}
+.stage-rail{position:relative;width:16px;flex:none;display:flex;justify-content:center}
+.stage-dot{
+  width:14px;height:14px;border-radius:50%;margin-top:4px;flex:none;
+  border:2px solid var(--line-strong);background:var(--surface);z-index:1;
+}
+.stage-rail::after{
+  content:"";position:absolute;top:20px;bottom:-6px;width:2px;background:var(--line);
+}
+.stage:last-child .stage-rail::after{display:none}
+.stage-name{font-weight:600;font-size:14px}
+.stage-time{font-size:12px;color:var(--ink-faint);margin-top:2px}
+.stage-note{font-size:12px;color:var(--ink-soft);margin-top:4px}
+
+.stage.done .stage-dot{background:var(--green);border-color:var(--green)}
+.stage.done .stage-rail::after{background:var(--green);opacity:.35}
+.stage.current .stage-dot{
+  background:var(--orange);border-color:var(--orange);
+  box-shadow:0 0 0 4px rgba(225,96,12,.16);
+}
+.stage.current .stage-body{
+  background:rgba(225,96,12,.06);border-left:2px solid var(--orange);
+  margin:-6px 0 0 -10px;padding:6px 10px 8px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+}
+.stage.current .stage-name{color:var(--orange-deep)}
+.stage.future .stage-name,.stage.future .stage-time{color:#9AA3B2}
+.stage-flag{
+  display:inline-block;margin-left:8px;font-size:10px;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--orange-deep);
+  vertical-align:2px;
+}
+.result-actions{margin-top:var(--s3)}
+.notice{
+  border:1px solid var(--line-strong);background:var(--surface-alt);
+  border-radius:var(--radius-sm);padding:var(--s2);font-size:14px;color:var(--ink-soft);
+}
+.notice b{color:var(--ink);font-weight:600}
+
+/* ============================================================
+   Services / steps / proof / FAQ
+   ============================================================ */
+.section-head{max-width:62ch;margin-bottom:var(--s6)}
+.section-head p{margin-top:var(--s2);color:var(--ink-soft);font-size:16px}
+
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3)}
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:var(--s3);
+}
+.card h3{margin-bottom:10px}
+.card p{color:var(--ink-soft)}
+.card-icon{
+  width:36px;height:36px;border-radius:var(--radius-sm);background:var(--surface-alt);
+  display:grid;place-items:center;margin-bottom:var(--s2);
+}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s5);counter-reset:step}
+.step{border-top:2px solid var(--navy);padding-top:var(--s2)}
+.step-num{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--navy);margin-bottom:10px}
+.step h3{margin-bottom:8px}
+.step p{color:var(--ink-soft)}
+
+.proof{background:var(--navy);color:#fff}
+.proof dl,.proof dd,.proof dt{margin:0}
+.proof .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3);padding:var(--s8) 0}
+.stat-num{font-size:40px;font-weight:800;letter-spacing:-0.03em;line-height:1}
+.stat-label{margin-top:10px;font-size:13px;color:#B9C4D6}
+
+.faq{display:grid;gap:0;border-top:1px solid var(--line);max-width:840px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{
+  display:flex;justify-content:space-between;align-items:center;gap:var(--s2);
+  padding:var(--s3) 0;font-weight:600;font-size:16px;cursor:pointer;list-style:none;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:22px;font-weight:400;color:var(--ink-faint);line-height:1}
+.faq details[open] summary::after{content:"–"}
+.faq p{padding:0 0 var(--s3);color:var(--ink-soft);max-width:70ch}
+
+/* ============================================================
+   Rate form
+   ============================================================ */
+.rate{background:var(--surface-alt);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.rate-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:var(--s8);align-items:start}
+.rate-list{margin-top:var(--s3);display:grid;gap:12px}
+.rate-list li{display:flex;gap:10px;color:var(--ink-soft)}
+.rate-list svg{flex:none;margin-top:4px}
+.form-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s4);
+}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.field{display:block}
+.field--full{grid-column:1 / -1}
+.form-foot{margin-top:var(--s3);display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap}
+.form-foot p{font-size:12px;color:var(--ink-faint)}
+.success{
+  border:1px solid var(--navy);border-radius:var(--radius);
+  background:var(--surface-alt);padding:var(--s4);
+}
+.success h3{margin-bottom:8px}
+.success p{color:var(--ink-soft)}
+.success .btn{margin-top:var(--s3)}
+
+/* ============================================================
+   Footer + floating WhatsApp
+   ============================================================ */
+.site-footer{padding:var(--s10) 0 var(--s6);font-size:14px}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:var(--s6)}
+.footer-grid h4{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:var(--s2)}
+.footer-grid address{font-style:normal;color:var(--ink-soft);display:grid;gap:6px}
+.footer-grid a{color:var(--ink-soft);text-decoration:none}
+.footer-grid a:hover{color:var(--ink);text-decoration:underline}
+.footer-links{display:grid;gap:8px;color:var(--ink-soft)}
+.footer-bottom{
+  margin-top:var(--s8);padding-top:var(--s3);border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:var(--s2);flex-wrap:wrap;
+  font-size:12px;color:var(--ink-faint);
+}
+.footer-bottom a{color:var(--ink-soft)}
+
+.wa-float{
+  position:fixed;right:16px;bottom:16px;z-index:50;
+  width:56px;height:56px;border-radius:50%;
+  background:var(--navy);color:#fff;display:grid;place-items:center;
+  text-decoration:none;border:1px solid var(--navy-deep);
+}
+.wa-float:hover{background:var(--navy-deep)}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width:1024px){
+  h1{font-size:44px}
+  .hero-grid{grid-template-columns:1fr;gap:var(--s6)}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .rate-grid{grid-template-columns:1fr;gap:var(--s5)}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:var(--s5)}
+}
+@media (max-width:720px){
+  h1{font-size:34px}
+  h2{font-size:26px}
+  .section{padding:var(--s8) 0}
+  .section--tight{padding:var(--s6) 0}
+  .hero{padding:var(--s6) 0 var(--s5)}
+  .site-nav{order:3;width:100%;border-top:1px solid var(--line);padding-top:10px}
+  .site-nav ul{gap:var(--s3);justify-content:flex-start}
+  .site-nav a{font-size:13px}
+  .header-inner{padding-top:12px;padding-bottom:10px}
+  .cards,.steps{grid-template-columns:1fr}
+  .steps{gap:var(--s3)}
+  .proof .stats{grid-template-columns:1fr 1fr;gap:var(--s4);padding:var(--s6) 0}
+  .stat-num{font-size:32px}
+  .track-card,.form-card{padding:var(--s3)}
+  .track-row{flex-direction:column}
+  .track-row .btn{width:100%}
+  .form-grid{grid-template-columns:1fr}
+  .result-meta{grid-template-columns:1fr;gap:12px}
+  .footer-grid{grid-template-columns:1fr;gap:var(--s4)}
+  .wa-float{right:12px;bottom:12px}
+}
+@media (max-width:520px){
+  .brand-name{font-size:16px}
+  #headerWa{padding:0 12px}
+  #headerWa .btn-label{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+  }
+}
+@media (max-width:380px){
+  .wrap{padding:0 var(--s2)}
+  h1{font-size:31px}
+  .site-nav ul{gap:var(--s2)}
+}
+
+/* ============================================================
+   Motion — only added when the visitor has not asked to reduce it.
+   The .motion class is set by JS after a prefers-reduced-motion check,
+   so with reduced motion (or no JS) every element renders in place.
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference){
+  html{scroll-behavior:smooth}
+  .motion .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.3,1)}
+  .motion .reveal.in{opacity:1;transform:none}
+  .motion .result-wrap{transition:grid-template-rows .4s cubic-bezier(.2,.7,.3,1)}
+  .motion .result-card{opacity:0;transition:opacity .35s ease .1s}
+  .motion .result-wrap.open .result-card{opacity:1}
+  .motion .btn,.motion .card,.motion .site-nav a{transition:background-color .18s ease,border-color .18s ease,color .18s ease}
+}
+</style>
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top" aria-label="Meridian Freight, home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path d="M8 22V10l8 7 8-7v12" stroke="#FBF9F6" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="brand-name">Meridian <span>Freight</span></span>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#rate">Get a rate</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-cta">
+      <a class="btn btn--ghost btn--sm" id="headerWa" href="#" rel="noopener" target="_blank"
+         aria-label="Message Meridian Freight on WhatsApp">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.02h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.37c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.22-8.24 8.22Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.14.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.71-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.16 0-.43.06-.65.31-.22.25-.85.84-.85 2.04 0 1.2.87 2.36.99 2.52.12.16 1.71 2.61 4.15 3.66.58.25 1.03.4 1.39.51.58.19 1.11.16 1.53.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29Z"/>
+        </svg>
+        <span class="btn-label">WhatsApp us</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- ===================== HERO + TRACKING ===================== -->
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Air, sea and ground freight</p>
+        <h1>You always know where your cargo is</h1>
+        <p class="lede">Every scan reaches your consignment page within 30 minutes, from pickup to signature. You stop calling for updates, because the update is already there.</p>
+        <ul class="hero-points">
+          <li>
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="#12294D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>96.4 percent of shipments delivered on the promised date in 2025</span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="#12294D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>One named coordinator per file, reachable on WhatsApp</span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="#12294D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Written rate within 4 business hours of your request</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="track-card" id="track">
+        <h2>Track a consignment</h2>
+        <p class="track-sub">Enter the ID from your booking confirmation.</p>
+
+        <form class="track-form" id="trackForm" novalidate>
+          <label class="field-label" for="trackId">Consignment ID</label>
+          <div class="track-row">
+            <input class="input" id="trackId" name="trackId" type="text" inputmode="text"
+                   autocomplete="off" spellcheck="false" placeholder="MF-2481"
+                   aria-describedby="trackHint trackError">
+            <button class="btn btn--accent" type="submit">Track</button>
+          </div>
+          <p class="field-error" id="trackError" role="alert"></p>
+          <p class="hint" id="trackHint">Try a sample ID: <b>MF-2481</b>, <b>MF-1173</b>, <b>MF-3096</b></p>
+        </form>
+
+        <div class="result-wrap" id="resultWrap" hidden>
+          <div class="result-inner">
+            <div class="result-card" id="resultCard" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SERVICES ===================== -->
+  <section class="section" id="services">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Services</p>
+        <h2>Four ways we move your freight</h2>
+        <p>Each mode runs on the same file, the same coordinator and the same tracking page.</p>
+      </div>
+
+      <div class="cards">
+        <article class="card reveal">
+          <span class="card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2 14l20-8-5 13-4-4-2 5-1-6-8-0z" stroke="#12294D" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </span>
+          <h3>Air freight</h3>
+          <p>Daily consolidations from Karachi, Lahore and Sialkot to the Gulf, Europe and the US East Coast. Airport to airport in 2 to 4 days, door to door in 4 to 7.</p>
+        </article>
+
+        <article class="card reveal">
+          <span class="card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 18h16l-2-5H6l-2 5z" stroke="#12294D" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 13V5m-4 8V8h8v5" stroke="#12294D" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </span>
+          <h3>Sea freight</h3>
+          <p>Full and part container loads through Port Qasim, Karachi Port and Jebel Ali. We book space 14 days ahead, so the rate on your quote is the rate on your invoice.</p>
+        </article>
+
+        <article class="card reveal">
+          <span class="card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2 7h11v9H2zM13 10h4l3 3v3h-7z" stroke="#12294D" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7" cy="18" r="1.8" stroke="#12294D" stroke-width="1.6"/><circle cx="17" cy="18" r="1.8" stroke="#12294D" stroke-width="1.6"/></svg>
+          </span>
+          <h3>Ground transport</h3>
+          <p>Bonded and open trucking across Pakistan, plus contracted line haul in 22 US states. Every truck carries a GPS unit that feeds your consignment page directly.</p>
+        </article>
+
+        <article class="card reveal">
+          <span class="card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 10l9-5 9 5v10H3z" stroke="#12294D" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 20v-6h8v6" stroke="#12294D" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </span>
+          <h3>Warehousing</h3>
+          <p>Six sites holding 41,000 square feet of racked and floor space, two of them temperature controlled. Stock is counted nightly and the reconciled figure is on your dashboard by 08:00.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOW IT WORKS ===================== -->
+  <section class="section section--tight" id="how">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">How it works</p>
+        <h2>Three steps, no chasing</h2>
+      </div>
+
+      <ol class="steps">
+        <li class="step reveal">
+          <p class="step-num">STEP 1</p>
+          <h3>You book it</h3>
+          <p>Send origin, destination, weight and cargo type. You get a written rate, a cut-off time and a named coordinator within 4 business hours.</p>
+        </li>
+        <li class="step reveal">
+          <p class="step-num">STEP 2</p>
+          <h3>We move it</h3>
+          <p>We arrange pickup, customs paperwork and the carrier booking. The same coordinator owns your file until the cargo is signed for.</p>
+        </li>
+        <li class="step reveal">
+          <p class="step-num">STEP 3</p>
+          <h3>You watch it move</h3>
+          <p>Every scan appears on your consignment page within 30 minutes. We message you at pickup, at customs clearance and on the morning of delivery.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== PROOF ===================== -->
+  <section class="proof" aria-label="Company figures">
+    <div class="wrap">
+      <dl class="stats">
+        <div class="reveal"><dd class="stat-num">96.4%</dd><dt class="stat-label">Delivered on the promised date, 2025</dt></div>
+        <div class="reveal"><dd class="stat-num">148</dd><dt class="stat-label">Cities served across 19 countries</dt></div>
+        <div class="reveal"><dd class="stat-num">41,200</dd><dt class="stat-label">Tonnes moved in 2025</dt></div>
+        <div class="reveal"><dd class="stat-num">14</dd><dt class="stat-label">Years operating, since 2012</dt></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ===================== RATE FORM ===================== -->
+  <section class="rate section" id="rate">
+    <div class="wrap rate-grid">
+      <div class="reveal">
+        <p class="eyebrow">Get a rate</p>
+        <h2>Tell us what you are shipping</h2>
+        <p class="lede" style="margin-top:16px">A coordinator prices the lane by hand and replies with a written rate. No call needed unless the cargo needs a permit.</p>
+        <ul class="rate-list">
+          <li>
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="#12294D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Reply within 4 business hours, 09:00 to 18:00 PKT, Monday to Saturday</span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="#12294D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Rate held for 7 days, or 14 days on booked sea space</span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="#12294D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>All charges itemised, including handling, documentation and duty deposits</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="form-card reveal">
+        <form id="rateForm" novalidate>
+          <div class="form-grid">
+            <label class="field">
+              <span class="field-label">Origin city or port</span>
+              <input class="input" id="origin" name="origin" type="text" autocomplete="off"
+                     placeholder="Karachi" aria-describedby="err-origin">
+              <span class="field-error" id="err-origin" role="alert"></span>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Destination city or port</span>
+              <input class="input" id="destination" name="destination" type="text" autocomplete="off"
+                     placeholder="Dubai" aria-describedby="err-destination">
+              <span class="field-error" id="err-destination" role="alert"></span>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Cargo type</span>
+              <select class="select" id="cargoType" name="cargoType" aria-describedby="err-cargoType">
+                <option value="">Select cargo type</option>
+                <option>General cargo</option>
+                <option>Textiles and apparel</option>
+                <option>Machinery and spare parts</option>
+                <option>Perishable goods</option>
+                <option>Pharmaceuticals</option>
+                <option>Dangerous goods</option>
+                <option>Vehicles</option>
+              </select>
+              <span class="field-error" id="err-cargoType" role="alert"></span>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Approximate weight (kg)</span>
+              <input class="input" id="weight" name="weight" type="number" min="1" step="1"
+                     inputmode="numeric" placeholder="480" aria-describedby="err-weight">
+              <span class="field-error" id="err-weight" role="alert"></span>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Your name</span>
+              <input class="input" id="name" name="name" type="text" autocomplete="name"
+                     placeholder="Full name" aria-describedby="err-name">
+              <span class="field-error" id="err-name" role="alert"></span>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Phone or WhatsApp</span>
+              <input class="input" id="phone" name="phone" type="tel" autocomplete="tel"
+                     placeholder="+92 300 0000000" aria-describedby="err-phone">
+              <span class="field-error" id="err-phone" role="alert"></span>
+            </label>
+
+            <label class="field field--full">
+              <span class="field-label">Email</span>
+              <input class="input" id="email" name="email" type="email" autocomplete="email"
+                     placeholder="you@company.com" aria-describedby="err-email">
+              <span class="field-error" id="err-email" role="alert"></span>
+            </label>
+          </div>
+
+          <div class="form-foot">
+            <button class="btn btn--primary" type="submit">Request a rate</button>
+            <p>We use these details only to price your shipment.</p>
+          </div>
+        </form>
+
+        <div id="rateSuccess" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section class="section" id="faq">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Questions</p>
+        <h2>What shippers ask us first</h2>
+      </div>
+
+      <div class="faq reveal">
+        <details>
+          <summary>How long does transit take?</summary>
+          <p>Karachi to Dubai runs 2 days door to door by air. Karachi to New York is 5 to 7 days by air and 28 to 34 days by sea. Ground moves inside Pakistan take 1 to 3 days. Your quote carries the exact cut-off and delivery date for your lane.</p>
+        </details>
+        <details>
+          <summary>Is my cargo insured?</summary>
+          <p>Carrier liability is capped by convention, at roughly USD 20 per kilo by air and USD 700 per package by sea, which rarely covers the goods. We add all-risk marine cover at 0.4 percent of declared value, invoiced with the freight. Declare the commercial value on the booking, not the cost price.</p>
+        </details>
+        <details>
+          <summary>What will you not carry?</summary>
+          <p>No currency, live animals, narcotics, firearms or ammunition. Lithium batteries, paints, aerosols and perfumes move as dangerous goods, and they need a shipper declaration, certified packing and 3 extra days of lead time.</p>
+        </details>
+        <details>
+          <summary>How does payment work?</summary>
+          <p>New accounts pay before departure by bank transfer in PKR or USD. After three cleared shipments you can apply for 30-day credit, subject to two trade references. Duties and taxes are billed at cost with the receipt attached.</p>
+        </details>
+        <details>
+          <summary>What happens if cargo is damaged?</summary>
+          <p>Write the damage on the delivery receipt before you sign, then send photos within 3 days. We file with the carrier and the insurer, and we give you a claim reference and an expected settlement date within 5 business days.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4>Meridian Freight</h4>
+        <address>
+          <span>Office 402, Progressive Centre, Shahrah-e-Faisal, Karachi 75350, Pakistan</span>
+          <span>Suite 210, 1201 Wilson Avenue, Newark, NJ 07105, United States</span>
+          <a href="tel:+920000000000">+92 000 0000000</a>
+          <a href="mailto:ops@meridianfreight.example">ops@meridianfreight.example</a>
+        </address>
+      </div>
+
+      <div>
+        <h4>Company</h4>
+        <div class="footer-links">
+          <a href="#services">Services</a>
+          <a href="#how">How it works</a>
+          <a href="#track">Track a consignment</a>
+          <a href="#rate">Get a rate</a>
+          <a href="#faq">Questions</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Operating hours</h4>
+        <div class="footer-links">
+          <span>Karachi desk: 09:00 to 18:00 PKT, Monday to Saturday</span>
+          <span>Newark desk: 08:00 to 17:00 EST, Monday to Friday</span>
+          <span>Tracking page updates 24 hours a day</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>Demo site, fictional company. Rates, figures and consignment records shown here are illustrative.</p>
+      <p>Concept demo designed and built by <a href="mailto:ahsaan.ali@example.com">Ahsaan Ali</a></p>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" id="floatWa" href="#" target="_blank" rel="noopener" aria-label="Chat with Meridian Freight on WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.02h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.37c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.22-8.24 8.22Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.14.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.71-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.16 0-.43.06-.65.31-.22.25-.85.84-.85 2.04 0 1.2.87 2.36.99 2.52.12.16 1.71 2.61 4.15 3.66.58.25 1.03.4 1.39.51.58.19 1.11.16 1.53.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29Z"/>
+  </svg>
+</a>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ==============================================================
+     INTEGRATION POINT 1 of 3 — WhatsApp number
+     Replace with the client's number in international format,
+     digits only, no plus sign and no spaces. Example: 923001234567.
+     ============================================================== */
+  var WHATSAPP_NUMBER = '920000000000';
+
+  function waLink(message) {
+    return 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
+  }
+
+  document.getElementById('headerWa').href = waLink('Hi Meridian Freight, I have a question about a shipment');
+  document.getElementById('floatWa').href = waLink('Hi Meridian Freight, I have a question about a shipment');
+
+  /* ==============================================================
+     INTEGRATION POINT 2 of 3 — tracking data source
+     These three records are seeded for the demo. In production,
+     replace lookupConsignment() with a call to the TMS or carrier
+     API, for example:
+       const res = await fetch('/api/consignments/' + id);
+       const data = await res.json();
+     Keep the same shape (stage index plus timestamps) and the
+     rendering below needs no changes.
+     ============================================================== */
+  var STAGES = [
+    'Booked',
+    'Picked up',
+    'In transit',
+    'Arrived at destination hub',
+    'Out for delivery',
+    'Delivered'
+  ];
+
+  var CONSIGNMENTS = {
+    'MF-2481': {
+      service: 'Air freight',
+      origin: 'Karachi, Pakistan',
+      destination: 'Dubai, United Arab Emirates',
+      eta: '6 September 2026',
+      cargo: '480 kg, 6 pieces, textiles',
+      current: 2,
+      times: [
+        '2 Sep 2026, 10:12 PKT',
+        '3 Sep 2026, 08:40 PKT',
+        '4 Sep 2026, 23:15 PKT'
+      ],
+      notes: {
+        1: 'Collected from SITE Area, Karachi',
+        2: 'Departed Jinnah International, flight EK-601'
+      }
+    },
+    'MF-1173': {
+      service: 'Ground transport',
+      origin: 'Newark, New Jersey',
+      destination: 'Columbus, Ohio',
+      eta: '5 September 2026, by 17:00 EDT',
+      cargo: '1,240 kg, 14 pallets, machinery parts',
+      current: 4,
+      times: [
+        '31 Aug 2026, 14:05 EDT',
+        '1 Sep 2026, 09:20 EDT',
+        '2 Sep 2026, 06:15 EDT',
+        '4 Sep 2026, 19:22 EDT',
+        '5 Sep 2026, 06:05 EDT'
+      ],
+      notes: {
+        3: 'Sorted at Columbus hub, dock 7',
+        4: 'On vehicle 41, 6 stops ahead of yours'
+      }
+    },
+    'MF-3096': {
+      service: 'Sea freight',
+      origin: 'Shanghai, China',
+      destination: 'Lahore, Pakistan',
+      eta: 'Delivered 1 September 2026',
+      cargo: '18,600 kg, one 40 ft container',
+      current: 5,
+      times: [
+        '22 Jul 2026, 11:30 CST',
+        '24 Jul 2026, 16:00 CST',
+        '27 Jul 2026, 02:10 CST',
+        '28 Aug 2026, 13:45 PKT',
+        '1 Sep 2026, 07:50 PKT',
+        '1 Sep 2026, 12:36 PKT'
+      ],
+      notes: {
+        2: 'Sailed on MV Ocean Trader, voyage 214E',
+        3: 'Customs cleared at Port Qasim',
+        5: 'Signed for by A. Rehman at gate 2'
+      }
+    }
+  };
+
+  function lookupConsignment(id) {
+    return CONSIGNMENTS[id] || null;
+  }
+
+  /* ---------- helpers ---------- */
+  var motionOK = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (motionOK) document.documentElement.classList.add('motion');
+
+  function esc(value) {
+    return String(value).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function normalizeId(raw) {
+    var v = raw.trim().toUpperCase().replace(/\s+/g, '');
+    if (/^MF\d{4}$/.test(v)) v = 'MF-' + v.slice(2);
+    return v;
+  }
+
+  /* ---------- tracking ---------- */
+  var trackForm = document.getElementById('trackForm');
+  var trackInput = document.getElementById('trackId');
+  var trackError = document.getElementById('trackError');
+  var resultWrap = document.getElementById('resultWrap');
+  var resultCard = document.getElementById('resultCard');
+
+  function stageMarkup(record) {
+    return STAGES.map(function (name, i) {
+      var state = i < record.current ? 'done' : (i === record.current ? 'current' : 'future');
+      var time = record.times[i] || '';
+      var note = record.notes && record.notes[i] ? record.notes[i] : '';
+      var timeLine = time
+        ? '<p class="stage-time">' + esc(time) + '</p>'
+        : '<p class="stage-time">Not reached yet</p>';
+      return '' +
+        '<li class="stage ' + state + '">' +
+          '<span class="stage-rail" aria-hidden="true"><span class="stage-dot"></span></span>' +
+          '<div class="stage-body">' +
+            '<p class="stage-name">' + esc(name) +
+              (state === 'current' ? '<span class="stage-flag">Now</span>' : '') +
+            '</p>' +
+            timeLine +
+            (note ? '<p class="stage-note">' + esc(note) + '</p>' : '') +
+          '</div>' +
+        '</li>';
+    }).join('');
+  }
+
+  function renderFound(id, record) {
+    resultCard.innerHTML = '' +
+      '<div class="result-head">' +
+        '<span class="result-id">' + esc(id) + '</span>' +
+        '<span class="result-service">' + esc(record.service) + '</span>' +
+      '</div>' +
+      '<dl class="result-meta">' +
+        '<div><dt>Origin</dt><dd>' + esc(record.origin) + '</dd></div>' +
+        '<div><dt>Destination</dt><dd>' + esc(record.destination) + '</dd></div>' +
+        '<div><dt>Expected delivery</dt><dd>' + esc(record.eta) + '</dd></div>' +
+      '</dl>' +
+      '<p class="hint" style="margin-top:12px">' + esc(record.cargo) + '</p>' +
+      '<ol class="timeline">' + stageMarkup(record) + '</ol>' +
+      '<div class="result-actions">' +
+        '<a class="btn btn--ghost btn--sm btn--block" target="_blank" rel="noopener" href="' +
+          esc(waLink('Hi, I need an update on consignment ' + id)) +
+        '">Ask about this shipment on WhatsApp</a>' +
+      '</div>';
+  }
+
+  function renderNotFound(id) {
+    resultCard.innerHTML = '' +
+      '<div class="notice">' +
+        '<b>No consignment found for ' + esc(id) + '.</b><br>' +
+        'Check the ID on your booking confirmation, or try one of the samples: MF-2481, MF-1173 or MF-3096.' +
+      '</div>';
+  }
+
+  function openResult() {
+    resultWrap.hidden = false;
+    void resultWrap.offsetHeight; // force reflow so the expansion animates
+    resultWrap.classList.add('open');
+    if (motionOK) {
+      resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  trackForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var id = normalizeId(trackInput.value);
+
+    if (!id) {
+      trackError.textContent = 'Enter a consignment ID to track.';
+      trackError.classList.add('on');
+      trackInput.setAttribute('aria-invalid', 'true');
+      trackInput.focus();
+      return;
+    }
+
+    trackError.textContent = '';
+    trackError.classList.remove('on');
+    trackInput.removeAttribute('aria-invalid');
+
+    var record = lookupConsignment(id);
+    if (record) {
+      renderFound(id, record);
+    } else {
+      renderNotFound(id);
+    }
+    openResult();
+  });
+
+  /* ---------- rate form ---------- */
+  var rateForm = document.getElementById('rateForm');
+  var rateSuccess = document.getElementById('rateSuccess');
+
+  var RULES = [
+    { id: 'origin', message: 'Add the origin city or port.', test: function (v) { return v.length > 1; } },
+    { id: 'destination', message: 'Add the destination city or port.', test: function (v) { return v.length > 1; } },
+    { id: 'cargoType', message: 'Choose a cargo type.', test: function (v) { return v !== ''; } },
+    { id: 'weight', message: 'Enter the weight in kilograms.', test: function (v) { return Number(v) > 0; } },
+    { id: 'name', message: 'Add your name.', test: function (v) { return v.length > 1; } },
+    { id: 'phone', message: 'Add a phone number we can reach.', test: function (v) { return v.replace(/\D/g, '').length >= 9; } },
+    { id: 'email', message: 'Add a valid email address.', test: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); } }
+  ];
+
+  function setFieldError(rule, message) {
+    var field = document.getElementById(rule.id);
+    var box = document.getElementById('err-' + rule.id);
+    if (message) {
+      box.textContent = message;
+      box.classList.add('on');
+      field.setAttribute('aria-invalid', 'true');
+    } else {
+      box.textContent = '';
+      box.classList.remove('on');
+      field.removeAttribute('aria-invalid');
+    }
+  }
+
+  RULES.forEach(function (rule) {
+    var field = document.getElementById(rule.id);
+    field.addEventListener('input', function () {
+      if (field.getAttribute('aria-invalid') === 'true' && rule.test(field.value.trim())) {
+        setFieldError(rule, '');
+      }
+    });
+  });
+
+  rateForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var firstInvalid = null;
+
+    RULES.forEach(function (rule) {
+      var field = document.getElementById(rule.id);
+      var valid = rule.test(field.value.trim());
+      setFieldError(rule, valid ? '' : rule.message);
+      if (!valid && !firstInvalid) firstInvalid = field;
+    });
+
+    if (firstInvalid) {
+      firstInvalid.focus();
+      return;
+    }
+
+    var val = function (id) { return document.getElementById(id).value.trim(); };
+    var origin = val('origin');
+    var destination = val('destination');
+
+    /* ==============================================================
+       INTEGRATION POINT 3 of 3 — form submission endpoint
+       Nothing is sent anywhere in this demo. In production, POST the
+       payload before showing the success state, for example:
+
+         await fetch('https://api.meridianfreight.example/v1/rate-requests', {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify(payload)
+         });
+
+       Handle the failure case by showing an error and keeping the
+       entered values in the form.
+       ============================================================== */
+    var payload = {
+      origin: origin,
+      destination: destination,
+      cargoType: val('cargoType'),
+      weightKg: Number(val('weight')),
+      name: val('name'),
+      phone: val('phone'),
+      email: val('email')
+    };
+    void payload;
+
+    rateForm.hidden = true;
+    rateSuccess.hidden = false;
+    rateSuccess.innerHTML = '' +
+      '<div class="success" role="status">' +
+        '<h3>Rate request received</h3>' +
+        '<p>A written rate for ' + esc(origin) + ' to ' + esc(destination) +
+        ' reaches you within 4 business hours, along with the cut-off time and the name of your coordinator.</p>' +
+        '<button class="btn btn--ghost btn--sm" type="button" id="resetRate">Send another request</button>' +
+      '</div>';
+
+    document.getElementById('resetRate').addEventListener('click', function () {
+      rateForm.reset();
+      RULES.forEach(function (rule) { setFieldError(rule, ''); });
+      rateSuccess.hidden = true;
+      rateSuccess.innerHTML = '';
+      rateForm.hidden = false;
+      document.getElementById('origin').focus();
+    });
+
+    rateSuccess.scrollIntoView({ behavior: motionOK ? 'smooth' : 'auto', block: 'nearest' });
+  });
+
+  /* ---------- scroll reveal (skipped entirely for reduced motion) ---------- */
+  if (motionOK && 'IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -60px 0px', threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(function (el, i) {
+      el.style.transitionDelay = (i % 4) * 60 + 'ms';
+      observer.observe(el);
+    });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+  }
+})();
+</script>
+</body>
+</html>
