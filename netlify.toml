@@ -1,0 +1,24 @@
+# Netlify build settings for this repository.
+#
+# The repo root holds a Node service that Netlify cannot serve, and the only
+# publishable thing here is the static landing page in meridian-freight/.
+# Publishing that folder puts index.html at the site root, so the page is
+# reachable at https://<site>.netlify.app/ rather than at a sub-path.
+#
+# There is no build step: the page is a single self-contained index.html with
+# its CSS and JavaScript inline and no dependencies to install.
+
+[build]
+  publish = "meridian-freight"
+  command = "echo 'Static site, no build step required'"
+
+[build.environment]
+  # Nothing in the published folder needs npm, so skip dependency installation.
+  NPM_FLAGS = "--version"
+
+# The page is a demo with no server behind it; these are safe defaults.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
