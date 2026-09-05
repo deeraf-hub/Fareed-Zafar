@@ -152,7 +152,15 @@ function render(spec) {
     f.name = spec.name || (spec.k === 'v' ? 'Stack' : 'Row');
     f.clipsContent = false;
     f.cornerRadius = 0;
-    f.strokes = [];
+    if (spec.stroke) {
+        f.strokes = [solid(spec.stroke)];
+        f.strokeWeight = 1;
+        if (spec.dashed)
+            f.dashPattern = [4, 4];
+    }
+    else {
+        f.strokes = [];
+    }
     f.fills = spec.bg ? [solid(spec.bg)] : [];
     f.itemSpacing = spec.gap || 0;
     const p = spec.pad || [0, 0, 0, 0];
@@ -321,12 +329,11 @@ function slot(w, h, label, note, tone, iconPaths) {
     ];
     if (note)
         kids.push(T({ s: note, size: 14, lh: 22, color: nc, align: 'CENTER', w: Math.min(w - 64, 520), name: 'Slot brief' }));
-    const f = V({
-        name: 'ASSET SLOT — ' + label, bg: bg, w: w, h: h, gap: 12,
+    return V({
+        name: 'ASSET SLOT — ' + label, bg: bg, stroke: ln, dashed: true,
+        w: w, h: h, gap: 12,
         main: 'CENTER', cross: 'CENTER', pad: [28, 28, 28, 28], kids: kids,
     });
-    f.__stroke = ln;
-    return f;
 }
 function trustItem(label, paths, w) {
     return H({
@@ -753,20 +760,6 @@ function mobilePage() {
         kids: [header, hero, trust, problem, root, shift, meet, why, show, booking, footer],
     });
 }
-// ---------- apply dashed strokes to asset slots after build ----------
-function applySlotStrokes(node, spec) {
-    // Slots are rendered as frames; find them by name prefix and stroke them.
-    if (node.type === 'FRAME' && node.name.indexOf('ASSET SLOT — ') === 0) {
-        const dark = node.name.indexOf('video') >= 0 || node.name.indexOf('Facility image or video') >= 0;
-        node.strokes = [solid(C.phLine)];
-        node.strokeWeight = 1;
-        node.dashPattern = [4, 4];
-    }
-    if ('children' in node) {
-        for (const child of node.children)
-            applySlotStrokes(child, spec);
-    }
-}
 figma.showUI(__html__, { width: PANEL_WIDTH, height: 300 });
 figma.root.setRelaunchData({ build: 'Build the Cueva landing page' });
 figma.ui.onmessage = async (message) => {
@@ -790,7 +783,6 @@ figma.ui.onmessage = async (message) => {
         if (message.desktop) {
             figma.ui.postMessage({ type: 'status', text: 'Building desktop…', tone: 'busy' });
             const d = render(desktopPage());
-            applySlotStrokes(d, desktopPage());
             figma.currentPage.appendChild(d);
             d.x = cursorX;
             d.y = topY;
@@ -800,7 +792,6 @@ figma.ui.onmessage = async (message) => {
         if (message.mobile) {
             figma.ui.postMessage({ type: 'status', text: 'Building mobile…', tone: 'busy' });
             const m = render(mobilePage());
-            applySlotStrokes(m, mobilePage());
             figma.currentPage.appendChild(m);
             m.x = cursorX;
             m.y = topY;

@@ -92,7 +92,8 @@ interface Box {
   cross?: 'MIN' | 'CENTER' | 'MAX'
   stretch?: boolean
   grow?: number
-  wrapChildren?: boolean
+  stroke?: string
+  dashed?: boolean
   kids: Spec[]
 }
 interface Txt {
@@ -181,7 +182,13 @@ function render(spec: Spec): SceneNode {
   f.name = spec.name || (spec.k === 'v' ? 'Stack' : 'Row')
   f.clipsContent = false
   f.cornerRadius = 0
-  f.strokes = []
+  if (spec.stroke) {
+    f.strokes = [solid(spec.stroke)]
+    f.strokeWeight = 1
+    if (spec.dashed) f.dashPattern = [4, 4]
+  } else {
+    f.strokes = []
+  }
   f.fills = spec.bg ? [solid(spec.bg)] : []
   f.itemSpacing = spec.gap || 0
   const p = spec.pad || [0, 0, 0, 0]
@@ -354,12 +361,11 @@ function slot(w: number, h: number, label: string, note: string, tone: 'light' |
     T({ s: label, font: 's', size: 12, lh: 18, ls: 17, color: lc, upper: true, align: 'CENTER', w: Math.min(w - 64, 520), name: 'Slot label' }),
   ]
   if (note) kids.push(T({ s: note, size: 14, lh: 22, color: nc, align: 'CENTER', w: Math.min(w - 64, 520), name: 'Slot brief' }))
-  const f = V({
-    name: 'ASSET SLOT — ' + label, bg: bg, w: w, h: h, gap: 12,
+  return V({
+    name: 'ASSET SLOT — ' + label, bg: bg, stroke: ln, dashed: true,
+    w: w, h: h, gap: 12,
     main: 'CENTER', cross: 'CENTER', pad: [28, 28, 28, 28], kids: kids,
   })
-  ;(f as any).__stroke = ln
-  return f
 }
 function trustItem(label: string, paths: string, w: number): Box {
   return H({
@@ -833,20 +839,6 @@ function mobilePage(): Box {
   })
 }
 
-// ---------- apply dashed strokes to asset slots after build ----------
-function applySlotStrokes(node: SceneNode, spec: Spec): void {
-  // Slots are rendered as frames; find them by name prefix and stroke them.
-  if (node.type === 'FRAME' && node.name.indexOf('ASSET SLOT — ') === 0) {
-    const dark = node.name.indexOf('video') >= 0 || node.name.indexOf('Facility image or video') >= 0
-    node.strokes = [solid(C.phLine)]
-    node.strokeWeight = 1
-    node.dashPattern = [4, 4]
-  }
-  if ('children' in node) {
-    for (const child of node.children) applySlotStrokes(child, spec)
-  }
-}
-
 // ---------- entry ----------
 type UiMessage =
   | { type: 'resize'; height: number }
@@ -880,7 +872,6 @@ figma.ui.onmessage = async (message: UiMessage) => {
     if (message.desktop) {
       figma.ui.postMessage({ type: 'status', text: 'Building desktop…', tone: 'busy' })
       const d = render(desktopPage()) as FrameNode
-      applySlotStrokes(d, desktopPage())
       figma.currentPage.appendChild(d)
       d.x = cursorX; d.y = topY
       made.push(d)
@@ -890,7 +881,6 @@ figma.ui.onmessage = async (message: UiMessage) => {
     if (message.mobile) {
       figma.ui.postMessage({ type: 'status', text: 'Building mobile…', tone: 'busy' })
       const m = render(mobilePage()) as FrameNode
-      applySlotStrokes(m, mobilePage())
       figma.currentPage.appendChild(m)
       m.x = cursorX; m.y = topY
       made.push(m)
