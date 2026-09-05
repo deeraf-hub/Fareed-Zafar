@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "lib": ["es2017", "dom"],
+    "strict": false,
+    "outDir": ".",
+    "typeRoots": ["/tmp/claude-0/-home-user-Fareed-Zafar/64ab5e61-260a-5ceb-b8de-280734553013/scratchpad/node_modules/@figma"],
+    "types": ["plugin-typings"],
+    "skipLibCheck": true
+  },
+  "files": ["code.ts"]
+}
