@@ -1,0 +1,1371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactive storyboard — 60-second product demo</title>
+<meta name="description" content="Interactive storyboard for a 60-second product demo of an AI recruiting and lead-engagement platform.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --chrome-0:#101113;
+  --chrome-1:#141517;
+  --chrome-2:#1a1c1f;
+  --chrome-3:#212327;
+  --chrome-line:#2a2d32;
+  --chrome-line-2:#34383e;
+  --on-chrome:#e9eaec;
+  --on-chrome-mute:#9498a0;
+  --on-chrome-dim:#6d7178;
+
+  --stage-bg:#f6f7f9;
+  --surface:#ffffff;
+  --surface-2:#fafbfc;
+  --line:#e3e6ea;
+  --line-2:#eef0f3;
+  --ink:#15181d;
+  --ink-2:#4a5057;
+  --ink-3:#7b828b;
+
+  --accent:#2563eb;
+  --accent-weak:#eaf0fe;
+  --accent-line:#c3d4fb;
+  --accent-ink:#1d4ed8;
+
+  --ok:#0f7a52;
+  --ok-weak:#e6f4ee;
+
+  --r-sm:8px;
+  --r:12px;
+  --r-lg:16px;
+  --shadow:0 1px 2px rgba(16,24,40,.05), 0 10px 26px -16px rgba(16,24,40,.30);
+
+  --ease:cubic-bezier(.22,.72,.28,1);
+  --t-fast:200ms;
+  --t:260ms;
+  --t-slow:300ms;
+
+  --ui:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+
+  --stage-w:1024;
+  --stage-h:576;
+  --scale:1;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--chrome-0);
+  color:var(--on-chrome);
+  font-family:var(--ui);
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.tnum{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+/* ============================================================
+   PAGE FRAME
+   ============================================================ */
+.wrap{max-width:1120px;margin:0 auto;padding:32px 20px 56px}
+
+.masthead{margin-bottom:22px}
+.masthead h1{
+  margin:0;
+  font-size:clamp(20px,2.6vw,28px);
+  font-weight:600;
+  letter-spacing:-.018em;
+  color:#fff;
+}
+.masthead p{
+  margin:8px 0 0;
+  max-width:64ch;
+  font-size:13px;
+  line-height:1.6;
+  color:var(--on-chrome-mute);
+}
+.masthead .rule{
+  margin-top:18px;height:1px;background:var(--chrome-line);
+}
+
+/* ============================================================
+   PLAYER SHELL
+   ============================================================ */
+.player{
+  background:var(--chrome-1);
+  border:1px solid var(--chrome-line);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+}
+.player-bar{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;
+  border-bottom:1px solid var(--chrome-line);
+  background:var(--chrome-2);
+}
+.player-bar .dots{display:flex;gap:6px}
+.player-bar .dots i{width:9px;height:9px;border-radius:50%;background:var(--chrome-line-2);display:block}
+.player-bar .file{
+  font-size:12px;color:var(--on-chrome-mute);letter-spacing:.01em;
+}
+.player-bar .right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.badge{
+  font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--on-chrome-dim);
+  border:1px solid var(--chrome-line);
+  border-radius:999px;padding:3px 9px;
+}
+
+/* ---- stage ---- */
+.stage-pad{padding:16px 16px 0}
+.stage{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  background:var(--stage-bg);
+  border:1px solid var(--chrome-line);
+  border-radius:var(--r);
+  overflow:hidden;
+}
+.canvas{
+  position:absolute;top:0;left:0;
+  width:1024px;height:576px;
+  transform-origin:0 0;
+  transform:scale(var(--scale));
+}
+.scene{
+  position:absolute;inset:0;
+  opacity:0;visibility:hidden;
+  transition:opacity var(--t-slow) var(--ease), visibility 0s linear var(--t-slow);
+  color:var(--ink);
+}
+.scene.is-on{
+  opacity:1;visibility:visible;
+  transition:opacity var(--t-slow) var(--ease), visibility 0s linear 0s;
+}
+
+/* capture note chip */
+.capture{
+  position:absolute;top:16px;right:16px;z-index:6;
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(20,21,23,.90);
+  color:#e9eaec;
+  font-size:11.5px;letter-spacing:.01em;
+  padding:6px 11px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+}
+.capture .rec{width:7px;height:7px;border-radius:50%;background:#e5484d;display:block}
+
+/* ---- callouts ---- */
+.callout{
+  position:absolute;z-index:7;
+  opacity:0;transform:translateY(4px);
+  transition:opacity var(--t) var(--ease), transform var(--t) var(--ease);
+  pointer-events:none;
+}
+.callout.is-on{opacity:1;transform:translateY(0)}
+.callout .chip{
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  font-size:12px;font-weight:500;letter-spacing:.005em;
+  padding:6px 11px;border-radius:var(--r-sm);
+  white-space:nowrap;
+  box-shadow:var(--shadow);
+}
+.callout .lead{position:absolute;background:var(--accent);}
+.callout[data-dir="down"] .lead{width:1px;left:16px;top:100%;height:var(--len)}
+.callout[data-dir="up"] .lead{width:1px;left:16px;bottom:100%;height:var(--len)}
+.callout[data-dir="left"] .lead{height:1px;right:100%;top:50%;width:var(--len)}
+.callout[data-dir="right"] .lead{height:1px;left:100%;top:50%;width:var(--len)}
+
+/* ============================================================
+   TRANSPORT
+   ============================================================ */
+.transport{padding:14px 16px 4px}
+.caption{
+  min-height:56px;
+  display:flex;align-items:center;
+  padding:12px 16px;
+  margin-bottom:14px;
+  background:var(--chrome-2);
+  border:1px solid var(--chrome-line);
+  border-radius:var(--r);
+}
+.caption p{
+  margin:0;font-size:14.5px;line-height:1.45;color:#dfe1e5;letter-spacing:-.005em;
+}
+.cap-lines{min-width:0}
+.shot{
+  display:block;margin-top:5px;
+  font-size:12px;line-height:1.45;color:var(--on-chrome-dim);
+}
+.caption .who{
+  flex:0 0 auto;margin-right:12px;
+  font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--on-chrome-dim);
+  border-right:1px solid var(--chrome-line);padding-right:12px;align-self:stretch;display:flex;align-items:center;
+}
+
+.controls{display:flex;align-items:center;gap:14px}
+.play{
+  flex:0 0 auto;
+  width:42px;height:42px;border-radius:50%;
+  background:var(--accent);color:#fff;
+  display:grid;place-items:center;
+  transition:background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+.play:hover{background:#1d4ed8}
+.play:active{transform:scale(.96)}
+.play svg{display:block}
+.play.wide{width:auto;height:38px;border-radius:999px;padding:0 16px;font-size:13px;font-weight:500;gap:8px}
+.play.wide span{white-space:nowrap}
+
+.time{
+  flex:0 0 auto;font-size:12.5px;color:var(--on-chrome-mute);letter-spacing:.01em;
+}
+.time b{color:var(--on-chrome);font-weight:500}
+
+.track-zone{flex:1 1 auto;position:relative;padding:14px 0}
+.track{
+  position:relative;height:5px;border-radius:999px;background:var(--chrome-3);cursor:pointer;
+}
+.track .buffer{position:absolute;inset:0;border-radius:999px;background:var(--chrome-line-2);width:100%}
+.track .fill{
+  position:absolute;left:0;top:0;bottom:0;width:0;
+  background:var(--accent);border-radius:999px;
+}
+.track .head{
+  position:absolute;top:50%;left:0;
+  width:13px;height:13px;margin:-6.5px 0 0 -6.5px;
+  border-radius:50%;background:#fff;border:3px solid var(--accent);
+}
+.marker{
+  position:absolute;top:-5px;width:1px;height:15px;background:var(--chrome-1);
+  transform:translateX(-.5px);
+}
+.hit{
+  position:absolute;top:-14px;height:33px;width:34px;transform:translateX(-17px);
+  background:none;
+}
+.hit:hover + .tip, .hit:focus-visible + .tip{opacity:1;transform:translate(-50%,0)}
+.tip{
+  position:absolute;bottom:26px;transform:translate(-50%,4px);
+  opacity:0;transition:opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+  background:var(--chrome-3);border:1px solid var(--chrome-line-2);
+  color:var(--on-chrome);
+  font-size:11.5px;white-space:nowrap;padding:5px 9px;border-radius:6px;
+  pointer-events:none;
+}
+.tip em{font-style:normal;color:var(--on-chrome-dim);margin-left:6px}
+
+/* chapters */
+.chapters{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:8px;
+  padding:8px 16px 16px;
+}
+.chapter{
+  text-align:left;
+  padding:10px 11px;
+  border:1px solid var(--chrome-line);
+  border-radius:var(--r-sm);
+  background:var(--chrome-2);
+  transition:border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.chapter:hover{border-color:var(--chrome-line-2);background:var(--chrome-3)}
+.chapter .n{
+  display:block;font-size:10.5px;letter-spacing:.07em;color:var(--on-chrome-dim);margin-bottom:4px;
+}
+.chapter .l{display:block;font-size:12.5px;color:var(--on-chrome-mute);line-height:1.3}
+.chapter[aria-current="true"]{border-color:var(--accent);background:rgba(37,99,235,.10)}
+.chapter[aria-current="true"] .n{color:#8fb2fb}
+.chapter[aria-current="true"] .l{color:#fff}
+
+.stepper{display:none;gap:8px}
+.stepper button{
+  border:1px solid var(--chrome-line-2);border-radius:999px;padding:8px 14px;font-size:13px;color:var(--on-chrome);
+  transition:background var(--t-fast) var(--ease);
+}
+.stepper button:hover{background:var(--chrome-3)}
+body.reduced .stepper{display:flex}
+
+/* ============================================================
+   NOTES BELOW PLAYER
+   ============================================================ */
+.notes{
+  margin-top:26px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+}
+.note{
+  border:1px solid var(--chrome-line);border-radius:var(--r);
+  background:var(--chrome-1);padding:16px 16px 18px;
+}
+.note h3{margin:0 0 8px;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--on-chrome-dim);font-weight:600}
+.note p{margin:0;font-size:13.5px;line-height:1.6;color:var(--on-chrome-mute)}
+.note b{color:var(--on-chrome);font-weight:500}
+
+.foot{
+  margin-top:34px;padding-top:18px;border-top:1px solid var(--chrome-line);
+  display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between;
+  font-size:13px;color:var(--on-chrome-mute);
+}
+.foot a{color:#93b4fc;text-decoration:none;border-bottom:1px solid rgba(147,180,252,.35)}
+.foot a:hover{color:#b9cefd}
+.foot .rt{font-size:12px;color:var(--on-chrome-dim)}
+
+/* ============================================================
+   SHARED PRODUCT-FRAME PRIMITIVES (light stage)
+   ============================================================ */
+.frame{position:absolute;inset:0;padding:24px}
+.f-head{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
+.f-title{font-size:16px;font-weight:600;letter-spacing:-.012em;color:var(--ink)}
+.f-sub{font-size:12.5px;color:var(--ink-3)}
+.f-right{margin-left:14px;display:flex;align-items:center;gap:8px}
+
+.pill{
+  font-size:11.5px;padding:4px 9px;border-radius:999px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink-2);
+}
+.pill.accent{background:var(--accent-weak);border-color:var(--accent-line);color:var(--accent-ink);font-weight:500}
+.pill.ok{background:var(--ok-weak);border-color:#c6e6d8;color:var(--ok);font-weight:500}
+
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);
+}
+.panel{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.panel-head{
+  padding:12px 14px;border-bottom:1px solid var(--line-2);
+  display:flex;align-items:center;gap:10px;
+  font-size:12.5px;font-weight:600;color:var(--ink);
+}
+.panel-head .sub{margin-left:auto;font-weight:400;font-size:11.5px;color:var(--ink-3)}
+.panel-body{padding:14px;flex:1 1 auto;min-height:0}
+
+.avatar{
+  width:30px;height:30px;border-radius:50%;
+  background:var(--accent-weak);color:var(--accent-ink);
+  font-size:11.5px;font-weight:600;letter-spacing:.02em;
+  display:grid;place-items:center;flex:0 0 auto;
+}
+.avatar.lg{width:40px;height:40px;font-size:14px}
+
+/* ---- pipeline board (beat 1) ---- */
+.board{display:grid;grid-template-columns:repeat(4,232px);gap:16px}
+.col-head{
+  display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:0 2px;
+}
+.col-head .dot{width:6px;height:6px;border-radius:50%;background:var(--ink-3);display:block}
+.col-head[data-c="1"] .dot{background:#98a2b3}
+.col-head[data-c="2"] .dot{background:var(--accent)}
+.col-head[data-c="3"] .dot{background:#7c5cf0}
+.col-head[data-c="4"] .dot{background:var(--ok)}
+.col-head .name{font-size:12.5px;font-weight:600;color:var(--ink)}
+.col-head .count{
+  margin-left:auto;font-size:11px;color:var(--ink-3);
+  border:1px solid var(--line);border-radius:999px;padding:1px 7px;background:var(--surface);
+}
+.col-body{display:flex;flex-direction:column;gap:10px}
+.ccard{
+  display:flex;gap:10px;padding:10px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);
+  opacity:0;transform:translateY(6px);
+  transition:opacity var(--t) var(--ease), transform var(--t) var(--ease);
+}
+.ccard.in{opacity:1;transform:none}
+.ccard .meta{min-width:0}
+.ccard .nm{font-size:12.5px;font-weight:600;color:var(--ink);letter-spacing:-.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ccard .ro{font-size:11px;color:var(--ink-2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ccard .em{font-size:10.5px;color:var(--ink-3);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ---- stage rail (beats 2,3,5) ---- */
+.rail{position:absolute;left:24px;right:24px;bottom:24px}
+.rail-cols{display:grid;grid-template-columns:repeat(4,232px);gap:16px}
+.rail-slot{
+  height:84px;border:1px dashed var(--line);border-radius:var(--r);background:rgba(255,255,255,.5);
+}
+.rail-lab{
+  font-size:11px;color:var(--ink-3);margin-bottom:7px;display:flex;align-items:center;gap:6px;
+}
+.rail-lab.on{color:var(--accent-ink);font-weight:600}
+.rail-move{
+  position:absolute;left:0;bottom:0;width:232px;
+  transition:transform 700ms var(--ease);
+}
+.rail-move .ccard{opacity:1;transform:none}
+
+/* ---- composer (beat 2) ---- */
+.field-row{
+  display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-2);font-size:12.5px;
+}
+.field-row .k{flex:0 0 62px;color:var(--ink-3)}
+.field-row .v{color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.compose-body{
+  padding:12px 0 0;font-size:12.5px;line-height:1.65;color:var(--ink-2);min-height:118px;
+}
+.caret{display:inline-block;width:1.5px;height:13px;background:var(--accent);vertical-align:-2px;margin-left:1px}
+.caret.off{opacity:0}
+.send-row{display:flex;align-items:center;gap:10px;padding-top:12px;border-top:1px solid var(--line-2)}
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--accent);color:#fff;font-size:12.5px;font-weight:500;
+  padding:8px 14px;border-radius:var(--r-sm);
+  transition:transform var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.btn.ghost{background:var(--surface);color:var(--ink-2);border:1px solid var(--line)}
+.btn.pressed{transform:scale(.97)}
+.btn.done{background:var(--ok-weak);color:var(--ok);border:1px solid #c6e6d8}
+.delivery{
+  display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ok);
+  opacity:0;transform:translateY(3px);
+  transition:opacity var(--t) var(--ease), transform var(--t) var(--ease);
+}
+.delivery.in{opacity:1;transform:none}
+.tick{
+  width:16px;height:16px;border-radius:50%;background:var(--ok-weak);display:grid;place-items:center;flex:0 0 auto;
+}
+
+/* ---- reply thread (beat 3) ---- */
+.thread{display:flex;flex-direction:column;gap:8px}
+.bub{
+  max-width:94%;padding:8px 11px;border-radius:var(--r);
+  font-size:12px;line-height:1.5;
+  background:var(--surface-2);border:1px solid var(--line);color:var(--ink);
+  opacity:0;transform:translateY(6px);
+  transition:opacity var(--t) var(--ease), transform var(--t) var(--ease);
+}
+.bub.in{opacity:1;transform:none}
+.bub .who{display:block;font-size:10px;color:var(--ink-3);margin-bottom:3px}
+.bub.out{align-self:flex-end;background:var(--accent-weak);border-color:var(--accent-line)}
+
+.fields{display:flex;flex-direction:column}
+.frow{
+  display:flex;align-items:center;gap:10px;padding:11px 2px;border-bottom:1px solid var(--line-2);
+}
+.frow:last-child{border-bottom:0}
+.frow .k{flex:0 0 132px;font-size:12px;color:var(--ink-3)}
+.frow .v{
+  font-size:12.5px;font-weight:500;color:var(--ink);
+  opacity:0;transform:translateY(3px);
+  transition:opacity var(--t) var(--ease), transform var(--t) var(--ease);
+}
+.frow.filled .v{opacity:1;transform:none}
+.frow .ph{
+  position:absolute;left:0;top:5px;
+  height:9px;width:104px;border-radius:4px;background:var(--line-2);
+  transition:opacity var(--t) var(--ease);
+}
+.frow.filled .ph{opacity:0}
+.frow .vwrap{position:relative;display:flex;align-items:center;min-height:18px;flex:1 1 auto}
+
+/* ---- API panels (beat 4) ---- */
+.api{display:grid;grid-template-columns:1fr 1fr;gap:16px;height:calc(100% - 46px)}
+.code{
+  font-family:var(--mono);font-size:11.5px;line-height:1.75;
+  white-space:pre;overflow:hidden;color:var(--ink-2);
+}
+.code .k{color:#8250df}
+.code .s{color:#0a6b4e}
+.code .n{color:var(--accent-ink);font-variant-numeric:tabular-nums}
+.code .p{color:var(--ink-3)}
+.code .m{color:var(--ink);font-weight:500}
+.cline{
+  opacity:0;transform:translateY(2px);
+  transition:opacity 180ms var(--ease), transform 180ms var(--ease);
+}
+.cline.in{opacity:1;transform:none}
+.verb{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  background:var(--accent);color:#fff;padding:3px 7px;border-radius:5px;letter-spacing:.03em;
+}
+.status{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  background:var(--ok-weak);color:var(--ok);padding:3px 7px;border-radius:5px;
+}
+.score-hi{
+  background:var(--accent-weak);border-radius:4px;padding:1px 5px;margin:0 -2px;
+  box-shadow:inset 0 0 0 1px var(--accent-line);
+}
+
+/* ---- shortlist (beat 5) ---- */
+.tbl{width:976px}
+.rowhead{
+  display:grid;grid-template-columns:34px 1fr 150px 132px 92px 176px;gap:12px;
+  padding:0 13px 9px;
+  font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);
+}
+.rowhead .r{text-align:right}
+.rowcard{
+  display:grid;grid-template-columns:34px 1fr 150px 132px 92px 176px;align-items:center;gap:12px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);
+  padding:6px 12px;margin-bottom:4px;
+  transition:border-color var(--t) var(--ease), background var(--t) var(--ease);
+}
+.rowcard.top{border-color:var(--accent-line);background:var(--accent-weak)}
+.rowcard .avatar{width:26px;height:26px;font-size:10.5px}
+.rowcard .rank{
+  font-size:12.5px;font-weight:600;color:var(--ink-3);font-variant-numeric:tabular-nums;
+}
+.rowcard.top .rank{color:var(--accent-ink)}
+.rowcard .who{display:flex;align-items:center;gap:10px;min-width:0}
+.rowcard .nm{font-size:12.5px;font-weight:600;color:var(--ink)}
+.rowcard .ro{font-size:11px;color:var(--ink-2);margin-top:1px}
+.rowcard .fact{font-size:11.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.rowcard .fact{font-size:12px}
+.score{
+  font-size:17px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em;text-align:right;
+}
+.rowcard.top .score{color:var(--accent-ink)}
+.act{display:flex;justify-content:flex-end}
+.act .btn{opacity:0;transition:opacity var(--t) var(--ease)}
+.act .btn.in{opacity:1}
+
+/* ---- end card (beat 6) ---- */
+.endcard{position:absolute;inset:0;display:grid;place-items:center;background:var(--surface)}
+.endinner{text-align:center;max-width:660px;padding:0 40px}
+.wordmark{
+  display:inline-flex;align-items:center;justify-content:center;gap:12px;
+  border:1px dashed var(--line);border-radius:var(--r);
+  padding:16px 28px;margin-bottom:26px;
+  opacity:0;transform:translateY(6px);
+  transition:opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
+}
+.wordmark.in{opacity:1;transform:none}
+.wordmark .mk{width:22px;height:22px;border-radius:6px;background:var(--accent)}
+.wordmark .tx{font-size:13px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.endline{
+  font-size:26px;font-weight:600;letter-spacing:-.022em;line-height:1.3;color:var(--ink);
+  opacity:0;transform:translateY(6px);
+  transition:opacity var(--t-slow) var(--ease) 80ms, transform var(--t-slow) var(--ease) 80ms;
+}
+.endline.in{opacity:1;transform:none}
+.endrule{
+  width:56px;height:2px;background:var(--accent);margin:22px auto 0;
+  transform:scaleX(0);transform-origin:50% 50%;
+  transition:transform 420ms var(--ease) 160ms;
+}
+.endrule.in{transform:scaleX(1)}
+.credit{
+  position:absolute;right:24px;bottom:20px;
+  font-size:11.5px;color:var(--ink-3);
+  opacity:0;transition:opacity var(--t-slow) var(--ease);
+}
+.credit.in{opacity:1}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:900px){
+  .notes{grid-template-columns:1fr}
+  .chapters{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:640px){
+  .wrap{padding:22px 14px 44px}
+  .stage-pad{padding:12px 12px 0}
+  .transport{padding:12px 12px 2px}
+  .chapters{grid-template-columns:repeat(2,1fr);padding:6px 12px 14px}
+  .controls{flex-wrap:wrap;gap:10px}
+  .track-zone{order:3;flex:1 1 100%;width:100%}
+  .time{margin-left:auto}
+  .caption{min-height:auto}
+  .caption .who{display:none}
+  .player-bar .file{display:none}
+}
+@media (max-width:400px){
+  .wrap{padding:18px 10px 40px}
+  .stage-pad{padding:10px 10px 0}
+  .chapters{grid-template-columns:1fr}
+  .badge{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:1ms !important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <h1>Interactive storyboard: your 60-second product demo.</h1>
+    <p>Final video is recorded in live Zoho CRM, Postman and your application. This page previews the story, pacing and callouts.</p>
+    <div class="rule"></div>
+  </header>
+
+  <main class="player">
+    <div class="player-bar">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="file">product-demo_v1.storyboard</div>
+      <div class="right">
+        <span class="badge">Storyboard</span>
+        <span class="badge tnum">0:58 runtime</span>
+      </div>
+    </div>
+
+    <div class="stage-pad">
+      <div class="stage" id="stage">
+        <div class="canvas" id="canvas">
+
+          <!-- ============ BEAT 1 — PIPELINE ============ -->
+          <section class="scene" data-scene="0" aria-hidden="true">
+            <div class="capture"><span class="rec"></span>Recorded live in Zoho CRM</div>
+            <div class="frame">
+              <div class="f-head">
+                <div class="f-title">Recruiting pipeline</div>
+                <div class="f-sub">Senior Backend Engineer &middot; 12 candidates</div>
+                <div class="f-right"><span class="pill">This week</span><span class="pill accent">Auto-stage on</span></div>
+              </div>
+              <div class="board" id="board"></div>
+            </div>
+          </section>
+
+          <!-- ============ BEAT 2 — ENGAGEMENT ============ -->
+          <section class="scene" data-scene="1" aria-hidden="true">
+            <div class="capture"><span class="rec"></span>Recorded in your application</div>
+            <div class="frame">
+              <div class="f-head">
+                <div class="f-title">Outreach</div>
+                <div class="f-sub">Amara Whitfield &middot; first touch</div>
+                <div class="f-right"><span class="pill">Tone: direct</span></div>
+              </div>
+              <div style="display:grid;grid-template-columns:568px 1fr;gap:16px;height:300px">
+                <div class="panel">
+                  <div class="panel-head">Message composer<span class="sub">Drafted by the platform</span></div>
+                  <div class="panel-body" style="padding-top:4px">
+                    <div class="field-row"><span class="k">To</span><span class="v">amara.whitfield@northmere.io</span></div>
+                    <div class="field-row"><span class="k">Subject</span><span class="v">A backend role close to your payments work</span></div>
+                    <div class="compose-body"><span id="b2-type"></span><span class="caret" id="b2-caret"></span></div>
+                    <div class="send-row">
+                      <span class="btn" id="b2-send">Send message</span>
+                      <span class="btn ghost">Schedule</span>
+                      <span style="margin-left:auto" class="delivery" id="b2-deliver">
+                        <span class="tick"><svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.6 3.2 5.8 8 1" stroke="#0f7a52" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                        Delivered 09:04
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel">
+                  <div class="panel-head">Candidate</div>
+                  <div class="panel-body">
+                    <div style="display:flex;gap:12px;align-items:center">
+                      <div class="avatar lg">AW</div>
+                      <div>
+                        <div style="font-size:14px;font-weight:600;letter-spacing:-.01em">Amara Whitfield</div>
+                        <div style="font-size:11.5px;color:var(--ink-2);margin-top:2px">Senior Backend Engineer</div>
+                      </div>
+                    </div>
+                    <div style="margin-top:16px">
+                      <div class="field-row"><span class="k">Source</span><span class="v">Inbound &middot; careers page</span></div>
+                      <div class="field-row"><span class="k">Added</span><span class="v tnum">14 Mar, 08:51</span></div>
+                      <div class="field-row" style="border-bottom:0"><span class="k">Stage</span><span class="v"><span class="pill accent" id="b2-stage">New</span></span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rail">
+              <div class="rail-cols" id="b2-rail"></div>
+              <div class="rail-move" id="b2-move" style="transform:translateX(0)">
+                <div class="ccard"><div class="avatar">AW</div><div class="meta"><div class="nm">Amara Whitfield</div><div class="ro">Senior Backend Engineer</div><div class="em">amara.whitfield@northmere.io</div></div></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ BEAT 3 — PRE-SCREENING ============ -->
+          <section class="scene" data-scene="2" aria-hidden="true">
+            <div class="capture"><span class="rec"></span>Recorded in your application</div>
+            <div class="frame">
+              <div class="f-head">
+                <div class="f-title">Pre-screening</div>
+                <div class="f-sub">Amara Whitfield &middot; thread thr_20418</div>
+                <div class="f-right"><span class="pill accent">Parsing replies</span></div>
+              </div>
+              <div style="display:grid;grid-template-columns:520px 1fr;gap:16px;height:300px">
+                <div class="panel">
+                  <div class="panel-head">Reply thread<span class="sub">3 messages</span></div>
+                  <div class="panel-body">
+                    <div class="thread" id="b3-thread"></div>
+                  </div>
+                </div>
+                <div class="panel">
+                  <div class="panel-head">Structured profile<span class="sub">Filled from replies</span></div>
+                  <div class="panel-body">
+                    <div class="fields" id="b3-fields"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rail">
+              <div class="rail-cols" id="b3-rail"></div>
+              <div class="rail-move" id="b3-move" style="transform:translateX(248px)">
+                <div class="ccard"><div class="avatar">AW</div><div class="meta"><div class="nm">Amara Whitfield</div><div class="ro">Senior Backend Engineer</div><div class="em">amara.whitfield@northmere.io</div></div></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ BEAT 4 — API ============ -->
+          <section class="scene" data-scene="3" aria-hidden="true">
+            <div class="capture"><span class="rec"></span>Recorded live in Postman</div>
+            <div class="frame">
+              <div class="f-head">
+                <div class="f-title">Screening sync</div>
+                <div class="f-sub">api.yourplatform.example</div>
+                <div class="f-right"><span class="pill tnum">218 ms</span><span class="pill ok">200 OK</span></div>
+              </div>
+              <div class="api">
+                <div class="panel">
+                  <div class="panel-head"><span class="verb">POST</span><span style="font-family:var(--mono);font-size:11.5px;font-weight:400;color:var(--ink-2)">/v1/candidates/cnd_8471/screening</span></div>
+                  <div class="panel-body"><div class="code" id="b4-req"></div></div>
+                </div>
+                <div class="panel">
+                  <div class="panel-head"><span class="status">200 OK</span><span class="sub">application/json</span></div>
+                  <div class="panel-body"><div class="code" id="b4-res"></div></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ BEAT 5 — RANKING ============ -->
+          <section class="scene" data-scene="4" aria-hidden="true">
+            <div class="capture"><span class="rec"></span>Recorded in your application</div>
+            <div class="frame">
+              <div class="f-head">
+                <div class="f-title">Shortlist</div>
+                <div class="f-sub">Sorted by score &middot; 6 of 12 pre-screened</div>
+                <div class="f-right"><span class="pill accent">Top 3 flagged</span></div>
+              </div>
+              <div class="tbl">
+                <div class="rowhead">
+                  <div>#</div><div>Candidate</div><div>Notice</div>
+                  <div>Expectation</div><div class="r">Score</div><div></div>
+                </div>
+                <div id="b5-rows"></div>
+              </div>
+            </div>
+            <div class="rail">
+              <div class="rail-cols" id="b5-rail"></div>
+              <div class="rail-move" id="b5-move" style="transform:translateX(496px)">
+                <div class="ccard"><div class="avatar">AW</div><div class="meta"><div class="nm">Amara Whitfield</div><div class="ro">Senior Backend Engineer</div><div class="em">amara.whitfield@northmere.io</div></div></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============ BEAT 6 — CLOSE ============ -->
+          <section class="scene" data-scene="5" aria-hidden="true">
+            <div class="endcard">
+              <div class="endinner">
+                <div class="wordmark" id="b6-mark"><span class="mk"></span><span class="tx">Your wordmark</span></div>
+                <div class="endline" id="b6-line">From first touch to ranked shortlist, untouched by staff</div>
+                <div class="endrule" id="b6-rule"></div>
+              </div>
+              <div class="credit" id="b6-credit">Demo produced by Ahsaan Ali</div>
+            </div>
+          </section>
+
+          <!-- callouts injected here -->
+          <div id="callouts"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="transport">
+      <div class="caption">
+        <span class="who">Narration</span>
+        <div class="cap-lines">
+          <p id="caption">Every candidate lands in one pipeline, and the platform takes it from there.</p>
+          <span class="shot" id="shot">Wide on the pipeline board, slow push in on the New column.</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="play" id="play" aria-label="Play storyboard">
+          <svg id="play-icon" width="15" height="16" viewBox="0 0 15 16" fill="none" aria-hidden="true"><path d="M2 1.6 13 8 2 14.4V1.6Z" fill="currentColor"/></svg>
+        </button>
+
+        <div class="stepper" id="stepper">
+          <button id="prev">Previous beat</button>
+          <button id="next">Next beat</button>
+        </div>
+
+        <div class="track-zone">
+          <div class="track" id="track" role="slider" tabindex="0" aria-label="Timeline, 0 to 58 seconds" aria-valuemin="0" aria-valuemax="58" aria-valuenow="0" aria-valuetext="0 seconds">
+            <div class="buffer"></div>
+            <div class="fill" id="fill"></div>
+            <div class="head" id="head"></div>
+            <div id="markers"></div>
+          </div>
+        </div>
+
+        <div class="time tnum"><b id="tnow">0:00</b> / 0:58</div>
+      </div>
+
+      <div class="chapters" id="chapters"></div>
+    </div>
+  </main>
+
+  <section class="notes">
+    <div class="note">
+      <h3>What is real in the final cut</h3>
+      <p>Beats 1 and 4 are screen recordings of <b>live Zoho CRM</b> and <b>Postman</b>. Beats 2, 3 and 5 are recorded in <b>your application</b>. This page uses my own neutral interface so nothing here imitates a product you already own.</p>
+    </div>
+    <div class="note">
+      <h3>Pacing</h3>
+      <p>Six beats, <b class="tnum">58</b> seconds of picture, one narration line each. Callouts land one beat after the element they describe so the viewer reads the screen first and the label second.</p>
+    </div>
+    <div class="note">
+      <h3>Data in this preview</h3>
+      <p>Every name, address and number is invented and consistent across beats: the candidate engaged at <b class="tnum">0:08</b> is pre-screened at <b class="tnum">0:18</b>, scored at <b class="tnum">0:28</b> and ranked first at <b class="tnum">0:38</b>.</p>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div>Storyboard designed and built by <a href="mailto:ahsaan.ali@example.com">Ahsaan Ali</a></div>
+    <div class="rt tnum">Six beats &middot; 0:58 &middot; v1</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   1. INVENTED DATA — internally consistent across all beats
+   ============================================================ */
+var HERO = {
+  id:"cnd_8471", initials:"AW", name:"Amara Whitfield",
+  role:"Senior Backend Engineer", email:"amara.whitfield@northmere.io",
+  years:8, notice:30, salary:145000, location:"Austin, TX (remote)", score:94
+};
+
+var PIPELINE = [
+  { key:"new", name:"New", cards:[
+    { i:"AW", n:"Amara Whitfield",   r:"Senior Backend Engineer",  e:"amara.whitfield@northmere.io" },
+    { i:"DO", n:"Devan Osei",        r:"Data Engineer",            e:"devan.osei@quillbridge.co" },
+    { i:"PR", n:"Priya Raghunathan", r:"Product Designer",         e:"priya.r@lanterncove.io" },
+    { i:"MB", n:"Marco Belisario",   r:"DevOps Engineer",          e:"marco.belisario@northmere.io" },
+    { i:"IC", n:"Ines Cardoso",      r:"QA Automation Lead",       e:"ines.cardoso@vantablue.co" }
+  ]},
+  { key:"engaged", name:"Engaged", cards:[
+    { i:"TL", n:"Tobias Lindqvist",  r:"Frontend Engineer",        e:"t.lindqvist@quillbridge.co" },
+    { i:"HS", n:"Halima Sarr",       r:"Machine Learning Engineer",e:"halima.sarr@lanterncove.io" },
+    { i:"RM", n:"Rowan Mbeki",       r:"Platform Engineer",        e:"rowan.mbeki@vantablue.co" }
+  ]},
+  { key:"pre", name:"Pre-screened", cards:[
+    { i:"YT", n:"Yuki Tanabe",       r:"Mobile Engineer",          e:"yuki.tanabe@northmere.io" },
+    { i:"CA", n:"Corin Ashby",       r:"Integration Architect",    e:"corin.ashby@quillbridge.co" }
+  ]},
+  { key:"ranked", name:"Ranked", cards:[
+    { i:"EV", n:"Elena Vasquez",     r:"Security Engineer",        e:"elena.vasquez@quillbridge.co" },
+    { i:"SA", n:"Samuel Adeyemi",    r:"Site Reliability Engineer",e:"samuel.adeyemi@lanterncove.io" }
+  ]}
+];
+
+var STAGES = ["New","Engaged","Pre-screened","Ranked"];
+
+var COMPOSE_TEXT =
+  "Hi Amara, I read the write-up on the payments services you rebuilt at Northmere. " +
+  "We are hiring a Senior Backend Engineer for a team with the same ownership level, " +
+  "Go and Postgres, no on-call rota below two weeks. Worth a short conversation this week?";
+
+var REPLIES = [
+  { who:"Amara Whitfield &middot; 09:41", t:"Eight years, the last five on Go and Postgres at Northmere." },
+  { who:"", t:"My notice period is 30 days, so a mid April start is realistic." },
+  { who:"", t:"Targeting 145,000 base. I am in Austin and would stay remote." }
+];
+
+var FIELDS = [
+  { k:"Experience",         v:"8 years" },
+  { k:"Notice period",      v:"30 days" },
+  { k:"Salary expectation", v:"USD 145,000" },
+  { k:"Location",           v:"Austin, TX (remote)" }
+];
+
+var SHORTLIST = [
+  { i:"AW", n:"Amara Whitfield",  r:"Senior Backend Engineer",   notice:"30 days", exp:"USD 145,000", s:94, hero:true },
+  { i:"HS", n:"Halima Sarr",      r:"Machine Learning Engineer", notice:"45 days", exp:"USD 152,000", s:91 },
+  { i:"DO", n:"Devan Osei",       r:"Data Engineer",             notice:"14 days", exp:"USD 128,000", s:88 },
+  { i:"TL", n:"Tobias Lindqvist", r:"Frontend Engineer",         notice:"60 days", exp:"USD 119,000", s:84 },
+  { i:"RM", n:"Rowan Mbeki",      r:"Platform Engineer",         notice:"30 days", exp:"USD 134,000", s:81 },
+  { i:"EV", n:"Elena Vasquez",    r:"Security Engineer",         notice:"90 days", exp:"USD 141,000", s:77 }
+];
+
+/* ============================================================
+   2. BEAT MAP — start, duration, narration, callouts
+   ============================================================ */
+var BEATS = [
+  { start:0,  dur:8,  label:"Pipeline",
+    narration:"Every candidate lands in one pipeline, and the platform takes it from there.",
+    shot:"Wide on the pipeline board, slow push in on the New column.",
+    callouts:[
+      { at:2.8, x:528, y:300, dir:"up", len:34, text:"Stages advance on their own" },
+      { at:5.4, x:744, y:400, dir:"up", len:320, text:"12 live candidates" }
+    ]},
+  { start:8,  dur:10, label:"Engagement",
+    narration:"Each message is written for one person, in your voice, and sent when they are most likely to read it.",
+    shot:"Cut to the composer, hold on the body copy as it is written, then the card moves.",
+    callouts:[
+      { at:4.0, x:28,  y:384, dir:"up", len:20, text:"Written per candidate, not per campaign" },
+      { at:7.6, x:466, y:384, dir:"up", len:20, text:"Delivery confirmed" }
+    ]},
+  { start:18, dur:10, label:"Pre-screening",
+    narration:"Their answers come back as structured data, so the profile fills itself before a recruiter opens it.",
+    shot:"Split frame: replies land on the left, fields fill on the right.",
+    callouts:[
+      { at:3.6, x:28,  y:384, dir:"up", len:20, text:"Replies in plain language" },
+      { at:7.2, x:600, y:384, dir:"up", len:20, text:"Four fields, no typing" }
+    ]},
+  { start:28, dur:10, label:"API",
+    narration:"Everything syncs through the API, so your CRM is always current.",
+    shot:"Static two-up on request and response, small push in on the score.",
+    callouts:[
+      { at:3.2, x:44,  y:430, dir:"up", len:30, text:"One POST per screening" },
+      { at:7.0, x:540, y:480, dir:"up", len:28, text:"Extracted fields and score come back inline" }
+    ]},
+  { start:38, dur:10, label:"Ranking",
+    narration:"Your recruiter opens one ranked list in the morning instead of a pile of unread threads.",
+    shot:"Wide on the shortlist, then in to the top row for the click.",
+    callouts:[
+      { at:2.8, x:830, y:218, dir:"left", len:34, text:"Ordered by score" },
+      { at:7.4, x:844, y:156, dir:"up",   len:22, text:"One click to interview" }
+    ]},
+  { start:48, dur:10, label:"Close",
+    narration:"From first touch to ranked shortlist, untouched by staff.",
+    shot:"Hold on the end card for the last three seconds, no move.",
+    callouts:[
+      { at:4.6, x:680, y:228, dir:"left", len:44, text:"Your wordmark and colour drop in here" }
+    ]}
+];
+
+var TOTAL = 58;
+
+/* ============================================================
+   3. HELPERS
+   ============================================================ */
+function $(s,r){ return (r||document).querySelector(s); }
+function el(tag,cls,html){ var n=document.createElement(tag); if(cls) n.className=cls; if(html!=null) n.innerHTML=html; return n; }
+function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+function prog(lt,a,b){ return clamp((lt-a)/(b-a),0,1); }
+function fmt(s){ s=Math.max(0,Math.floor(s)); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
+function on(node,cls,yes){ node.classList[yes?"add":"remove"](cls); }
+
+var REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if(REDUCED) document.body.classList.add("reduced");
+
+/* ============================================================
+   4. BUILD STATIC SCENE MARKUP
+   ============================================================ */
+function cardNode(c){
+  var n = el("div","ccard");
+  n.appendChild(el("div","avatar",c.i));
+  var m = el("div","meta");
+  m.appendChild(el("div","nm",c.n));
+  m.appendChild(el("div","ro",c.r));
+  m.appendChild(el("div","em",c.e));
+  n.appendChild(m);
+  return n;
+}
+
+/* beat 1 board */
+var boardCards = [];
+(function buildBoard(){
+  var board = $("#board");
+  PIPELINE.forEach(function(col,ci){
+    var wrap = el("div");
+    var head = el("div","col-head"); head.setAttribute("data-c", ci+1);
+    head.appendChild(el("span","dot"));
+    head.appendChild(el("span","name",col.name));
+    head.appendChild(el("span","count tnum",String(col.cards.length)));
+    wrap.appendChild(head);
+    var body = el("div","col-body");
+    col.cards.forEach(function(c){ var n=cardNode(c); body.appendChild(n); boardCards.push(n); });
+    wrap.appendChild(body);
+    board.appendChild(wrap);
+  });
+})();
+
+/* rails for beats 2, 3, 5 */
+function buildRail(id, activeIndex){
+  var rail = $(id);
+  STAGES.forEach(function(s,i){
+    var col = el("div");
+    var lab = el("div","rail-lab"+(i===activeIndex?" on":""), s);
+    col.appendChild(lab);
+    col.appendChild(el("div","rail-slot"));
+    rail.appendChild(col);
+  });
+}
+buildRail("#b2-rail",1);
+buildRail("#b3-rail",2);
+buildRail("#b5-rail",3);
+
+/* beat 3 thread + fields */
+var b3bubbles=[], b3rows=[];
+(function buildB3(){
+  var th=$("#b3-thread");
+  var outgoing = el("div","bub out in");
+  outgoing.innerHTML = '<span class="who">You &middot; 09:04</span>A backend role close to your payments work';
+  th.appendChild(outgoing); b3bubbles.push(outgoing);
+  REPLIES.forEach(function(r){
+    var b = el("div","bub");
+    b.innerHTML = (r.who ? '<span class="who">'+r.who+'</span>' : '')+r.t;
+    th.appendChild(b); b3bubbles.push(b);
+  });
+  var f=$("#b3-fields");
+  FIELDS.forEach(function(x){
+    var row = el("div","frow");
+    row.appendChild(el("span","k",x.k));
+    var w = el("div","vwrap");
+    w.appendChild(el("span","ph"));
+    w.appendChild(el("span","v",x.v));
+    row.appendChild(w);
+    f.appendChild(row); b3rows.push(row);
+  });
+})();
+
+/* beat 4 code panels */
+var reqLines = [
+  '<span class="p">Host:</span> <span class="m">api.yourplatform.example</span>',
+  '<span class="p">Content-Type:</span> <span class="m">application/json</span>',
+  '<span class="p">Authorization:</span> <span class="m">Bearer sk_live_&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span>',
+  '&nbsp;',
+  '{',
+  '  <span class="k">"source"</span>: <span class="s">"reply_thread"</span>,',
+  '  <span class="k">"thread_id"</span>: <span class="s">"thr_20418"</span>,',
+  '  <span class="k">"parse"</span>: [',
+  '    <span class="s">"experience"</span>, <span class="s">"notice_period"</span>,',
+  '    <span class="s">"salary"</span>, <span class="s">"location"</span>',
+  '  ],',
+  '  <span class="k">"score"</span>: <span class="n">true</span>',
+  '}'
+];
+var resLines = [
+  '{',
+  '  <span class="k">"candidate_id"</span>: <span class="s">"cnd_8471"</span>,',
+  '  <span class="k">"name"</span>: <span class="s">"Amara Whitfield"</span>,',
+  '  <span class="k">"role"</span>: <span class="s">"Senior Backend Engineer"</span>,',
+  '  <span class="k">"stage"</span>: <span class="s">"pre_screened"</span>,',
+  '  <span class="k">"extracted"</span>: {',
+  '    <span class="k">"experience_years"</span>: <span class="n">8</span>,',
+  '    <span class="k">"notice_period_days"</span>: <span class="n">30</span>,',
+  '    <span class="k">"salary_expectation"</span>: <span class="n">145000</span>,',
+  '    <span class="k">"currency"</span>: <span class="s">"USD"</span>,',
+  '    <span class="k">"location"</span>: <span class="s">"Austin, TX"</span>,',
+  '    <span class="k">"remote_ok"</span>: <span class="n">true</span>',
+  '  },',
+  '  <span class="k">"score"</span>: <span class="score-hi n">94</span>,',
+  '  <span class="k">"synced_at"</span>: <span class="s">"2026-03-14T09:47:02Z"</span>',
+  '}'
+];
+var b4req=[], b4res=[];
+(function buildCode(){
+  var a=$("#b4-req"), b=$("#b4-res");
+  reqLines.forEach(function(l){ var n=el("div","cline",l); a.appendChild(n); b4req.push(n); });
+  resLines.forEach(function(l){ var n=el("div","cline",l); b.appendChild(n); b4res.push(n); });
+})();
+
+/* beat 5 rows */
+var b5rows=[], b5btn=null;
+(function buildRows(){
+  var body=$("#b5-rows");
+  SHORTLIST.forEach(function(c,i){
+    var row=el("div","rowcard"+(i<3?" top":""));
+    row.appendChild(el("div","rank tnum",String(i+1)));
+    var who=el("div","who");
+    who.appendChild(el("div","avatar",c.i));
+    var m=el("div");
+    m.appendChild(el("div","nm",c.n));
+    m.appendChild(el("div","ro",c.r));
+    who.appendChild(m);
+    row.appendChild(who);
+    row.appendChild(el("div","fact",c.notice));
+    row.appendChild(el("div","fact",c.exp));
+    row.appendChild(el("div","score tnum",String(c.s)));
+    var act=el("div","act");
+    if(c.hero){
+      b5btn=el("span","btn","Mark for interview");
+      act.appendChild(b5btn);
+    }
+    row.appendChild(act);
+    body.appendChild(row);
+    b5rows.push(row);
+  });
+})();
+
+/* callouts */
+var calloutNodes=[];
+(function buildCallouts(){
+  var host=$("#callouts");
+  BEATS.forEach(function(b,bi){
+    b.callouts.forEach(function(c){
+      var n=el("div","callout");
+      n.setAttribute("data-dir",c.dir);
+      n.style.left=c.x+"px";
+      n.style.top=c.y+"px";
+      n.style.setProperty("--len", c.len+"px");
+      n.appendChild(el("span","chip",c.text));
+      n.appendChild(el("span","lead"));
+      host.appendChild(n);
+      calloutNodes.push({node:n, beat:bi, at:c.at});
+    });
+  });
+})();
+
+/* chapters + markers */
+(function buildTransport(){
+  var ch=$("#chapters"), mk=$("#markers");
+  BEATS.forEach(function(b,i){
+    var btn=el("button","chapter");
+    btn.type="button";
+    btn.setAttribute("aria-current", i===0 ? "true":"false");
+    btn.innerHTML='<span class="n tnum">'+String(i+1)+' &middot; '+fmt(b.start)+'</span><span class="l">'+b.label+'</span>';
+    btn.addEventListener("click", function(){ seek(b.start, true); });
+    ch.appendChild(btn);
+
+    var pct=(b.start/TOTAL)*100;
+    if(i>0){ var line=el("div","marker"); line.style.left=pct+"%"; mk.appendChild(line); }
+    var hit=el("button","hit"); hit.type="button"; hit.style.left=pct+"%";
+    hit.setAttribute("aria-label","Jump to chapter "+(i+1)+", "+b.label);
+    hit.addEventListener("click", function(e){ e.stopPropagation(); seek(b.start, true); });
+    mk.appendChild(hit);
+    var tip=el("div","tip", b.label+'<em class="tnum">'+fmt(b.start)+'</em>');
+    tip.style.left=pct+"%";
+    mk.appendChild(tip);
+  });
+})();
+
+/* ============================================================
+   5. PER-BEAT RENDERERS (deterministic from local time)
+   ============================================================ */
+function renderBeat1(lt){
+  boardCards.forEach(function(n,i){
+    on(n,"in", lt >= 0.25 + i*0.12);
+  });
+}
+
+function renderBeat2(lt){
+  var typeP = prog(lt, 0.6, 5.2);
+  var chars = Math.round(typeP * COMPOSE_TEXT.length);
+  $("#b2-type").textContent = COMPOSE_TEXT.slice(0, chars);
+  on($("#b2-caret"),"off", typeP >= 1);
+  var sent = lt >= 5.9;
+  var btn=$("#b2-send");
+  btn.className = "btn" + (lt>=5.7 && lt<6.05 ? " pressed" : "") + (sent ? " done" : "");
+  btn.textContent = sent ? "Message sent" : "Send message";
+  on($("#b2-deliver"),"in", lt >= 6.6);
+  $("#b2-stage").textContent = lt >= 8.2 ? "Engaged" : "New";
+  $("#b2-move").style.transform = "translateX(" + (lt >= 8.0 ? 248 : 0) + "px)";
+  var labs=$("#b2-rail").querySelectorAll(".rail-lab");
+  on(labs[0],"on", lt < 8.0); on(labs[1],"on", lt >= 8.0);
+}
+
+function renderBeat3(lt){
+  b3bubbles.forEach(function(n,i){
+    if(i===0){ on(n,"in",true); return; }
+    on(n,"in", lt >= 0.5 + (i-1)*1.5);
+  });
+  b3rows.forEach(function(r,i){
+    on(r,"filled", lt >= 1.5 + i*1.35);
+  });
+  $("#b3-move").style.transform = "translateX(" + (lt >= 8.2 ? 496 : 248) + "px)";
+  var labs=$("#b3-rail").querySelectorAll(".rail-lab");
+  on(labs[1],"on", lt < 8.2); on(labs[2],"on", lt >= 8.2);
+}
+
+function renderBeat4(lt){
+  b4req.forEach(function(n,i){ on(n,"in", lt >= 0.4 + i*0.12); });
+  b4res.forEach(function(n,i){ on(n,"in", lt >= 3.2 + i*0.16); });
+}
+
+function renderBeat5(lt){
+  b5rows.forEach(function(r,i){
+    on(r,"top", i<3 && lt >= 1.6);
+  });
+  if(b5btn){
+    on(b5btn,"in", lt >= 3.0);
+    var clicked = lt >= 7.0;
+    b5btn.className = "btn" + (lt>=3.0?" in":"") + (lt>=6.8 && lt<7.15 ? " pressed":"") + (clicked ? " done":"");
+    b5btn.textContent = clicked ? "Interview booked" : "Mark for interview";
+  }
+  $("#b5-move").style.transform = "translateX(" + (lt >= 7.6 ? 744 : 496) + "px)";
+  var labs=$("#b5-rail").querySelectorAll(".rail-lab");
+  on(labs[2],"on", lt < 7.6); on(labs[3],"on", lt >= 7.6);
+}
+
+function renderBeat6(lt){
+  on($("#b6-mark"),"in", lt >= 0.5);
+  on($("#b6-line"),"in", lt >= 1.1);
+  on($("#b6-rule"),"in", lt >= 1.6);
+  on($("#b6-credit"),"in", lt >= 3.0);
+}
+
+var RENDERERS = [renderBeat1, renderBeat2, renderBeat3, renderBeat4, renderBeat5, renderBeat6];
+
+/* ============================================================
+   6. PLAYER CORE
+   ============================================================ */
+var t = 0, playing = false, raf = null, last = 0, currentBeat = -1;
+var scenes = document.querySelectorAll(".scene");
+var chapterBtns = document.querySelectorAll(".chapter");
+
+function beatAt(time){
+  for(var i=BEATS.length-1;i>=0;i--){ if(time >= BEATS[i].start) return i; }
+  return 0;
+}
+
+function render(){
+  var bi = beatAt(t);
+  var b = BEATS[bi];
+  var lt = REDUCED ? b.dur : clamp(t - b.start, 0, b.dur);
+
+  if(bi !== currentBeat){
+    currentBeat = bi;
+    for(var i=0;i<scenes.length;i++){
+      var isOn = (i === bi);
+      on(scenes[i],"is-on",isOn);
+      scenes[i].setAttribute("aria-hidden", isOn ? "false" : "true");
+    }
+    $("#caption").textContent = b.narration;
+    $("#shot").textContent = b.shot;
+    for(var j=0;j<chapterBtns.length;j++){
+      chapterBtns[j].setAttribute("aria-current", j===bi ? "true":"false");
+    }
+  }
+
+  /* every beat renders its own state so scrubbing backwards is exact */
+  for(var k=0;k<RENDERERS.length;k++){
+    if(k===bi) RENDERERS[k](lt);
+    else if(k < bi) RENDERERS[k](BEATS[k].dur);
+    else RENDERERS[k](0);
+  }
+
+  calloutNodes.forEach(function(c){
+    on(c.node,"is-on", c.beat === bi && lt >= c.at);
+  });
+
+  var pct = (t / TOTAL) * 100;
+  $("#fill").style.width = pct + "%";
+  $("#head").style.left = pct + "%";
+  $("#tnow").textContent = fmt(t);
+  var track = $("#track");
+  track.setAttribute("aria-valuenow", Math.floor(t));
+  track.setAttribute("aria-valuetext", fmt(t) + ", " + b.label);
+}
+
+function setPlayIcon(){
+  var btn = $("#play");
+  if(REDUCED){
+    btn.classList.add("wide");
+    btn.innerHTML = '<span>Step through beats</span>';
+    btn.setAttribute("aria-label","Reduced motion is on. Use the beat stepper.");
+    btn.disabled = true;
+    btn.style.opacity = ".55";
+    btn.style.cursor = "default";
+    return;
+  }
+  btn.innerHTML = playing
+    ? '<svg width="14" height="16" viewBox="0 0 14 16" fill="none" aria-hidden="true"><rect x="1.5" y="1.5" width="4" height="13" rx="1.2" fill="currentColor"/><rect x="8.5" y="1.5" width="4" height="13" rx="1.2" fill="currentColor"/></svg>'
+    : '<svg width="15" height="16" viewBox="0 0 15 16" fill="none" aria-hidden="true"><path d="M2 1.6 13 8 2 14.4V1.6Z" fill="currentColor"/></svg>';
+  btn.setAttribute("aria-label", playing ? "Pause storyboard" : "Play storyboard");
+}
+
+function loop(now){
+  if(!playing) return;
+  var dt = (now - last) / 1000;
+  last = now;
+  t += dt;
+  if(t >= TOTAL){ t = TOTAL; pause(); render(); return; }
+  render();
+  raf = requestAnimationFrame(loop);
+}
+
+function play(){
+  if(REDUCED) return;
+  if(t >= TOTAL) t = 0;
+  playing = true; last = performance.now();
+  setPlayIcon();
+  raf = requestAnimationFrame(loop);
+}
+function pause(){
+  playing = false;
+  if(raf) cancelAnimationFrame(raf);
+  setPlayIcon();
+}
+function toggle(){ playing ? pause() : play(); }
+
+function seek(time, keepPlaying){
+  t = clamp(time, 0, TOTAL);
+  if(!keepPlaying) pause();
+  if(playing) last = performance.now();
+  render();
+}
+
+/* transport events */
+$("#play").addEventListener("click", toggle);
+
+var track = $("#track");
+function seekFromEvent(e){
+  var r = track.getBoundingClientRect();
+  var x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+  var time = (x / r.width) * TOTAL;
+  if(REDUCED) time = BEATS[beatAt(clamp(time,0,TOTAL))].start;
+  seek(time, true);
+}
+track.addEventListener("mousedown", function(e){
+  seekFromEvent(e);
+  function move(ev){ seekFromEvent(ev); }
+  function up(){ document.removeEventListener("mousemove",move); document.removeEventListener("mouseup",up); }
+  document.addEventListener("mousemove",move); document.addEventListener("mouseup",up);
+});
+track.addEventListener("touchstart", function(e){ seekFromEvent(e); }, {passive:true});
+track.addEventListener("touchmove", function(e){ seekFromEvent(e); }, {passive:true});
+track.addEventListener("keydown", function(e){
+  if(e.key==="ArrowRight"){ e.preventDefault(); seek(t+1,true); }
+  else if(e.key==="ArrowLeft"){ e.preventDefault(); seek(t-1,true); }
+  else if(e.key==="Home"){ e.preventDefault(); seek(0,true); }
+  else if(e.key==="End"){ e.preventDefault(); seek(TOTAL,true); }
+});
+
+function step(dir){
+  var bi = beatAt(t);
+  var target = clamp(bi + dir, 0, BEATS.length-1);
+  seek(BEATS[target].start, false);
+}
+$("#next").addEventListener("click", function(){ step(1); });
+$("#prev").addEventListener("click", function(){ step(-1); });
+
+document.addEventListener("keydown", function(e){
+  if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+  if(e.code === "Space"){ e.preventDefault(); REDUCED ? step(1) : toggle(); }
+});
+
+/* ============================================================
+   7. STAGE SCALING — fixed 1024x576 design canvas
+   ============================================================ */
+var stage = $("#stage");
+function fit(){
+  var w = stage.clientWidth;
+  document.documentElement.style.setProperty("--scale", (w / 1024).toString());
+}
+if(window.ResizeObserver){ new ResizeObserver(fit).observe(stage); }
+window.addEventListener("resize", fit);
+fit();
+
+/* boot */
+render();
+setPlayIcon();
+
+})();
+</script>
+</body>
+</html>
