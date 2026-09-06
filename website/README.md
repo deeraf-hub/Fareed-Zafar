@@ -40,6 +40,6 @@ This is a static site, so it can be deployed as-is to any static host:
 
 ## Notes
 
-- Images are served directly from Unsplash's CDN (royalty-free, no attribution required).
+- Images live locally in `images/` (original abstract graphics matching the brand palette — see `images/README.md` to swap in real photography later).
 - The contact form validates input in the browser and displays a confirmation message. It is not wired to a backend or email service — connect it to a form provider (e.g. Formspree, Netlify Forms) or your own backend if you need submissions delivered automatically.
 - Payment method selection (JazzCash, EasyPaisa, Cash on Delivery) is collected on the contact form; actual payment processing (merchant account integration) is handled manually by the Supereaze Technologies team after a request is received, since this is a static front-end with no payment gateway credentials.
