@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prestige Estates — AI Lead Response</title>
+<meta name="description" content="A scripted demo of an AI lead qualification system for a real estate brokerage.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ---------- tokens ---------- */
+:root{
+  --bg:#141517;
+  --card:#1C1E21;
+  --card-2:#212428;
+  --line:rgba(255,255,255,.08);
+  --line-soft:rgba(255,255,255,.05);
+  --text:#E7E8EA;
+  --muted:rgba(231,232,234,.60);
+  --muted-2:rgba(231,232,234,.42);
+  --accent:#10B981;
+  --accent-dim:rgba(16,185,129,.14);
+  --wa-green:#075E54;
+  --wa-bubble:#005C4B;
+  --shadow:0 1px 2px rgba(0,0,0,.30), 0 8px 24px rgba(0,0,0,.28);
+  --r:14px;
+  --ease:cubic-bezier(.22,.7,.3,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+/* faint 1px grid */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.020) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.020) 1px, transparent 1px);
+  background-size:36px 36px;
+}
+.wrap{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:0 20px}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.label{
+  font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;
+}
+
+/* ---------- hero ---------- */
+header.hero{padding:88px 0 44px;max-width:820px}
+h1{
+  margin:0;font-size:clamp(32px,5.2vw,54px);line-height:1.06;
+  letter-spacing:-.022em;font-weight:600;
+}
+.sub{margin:18px 0 0;color:var(--muted);font-size:16px;max-width:56ch}
+
+/* ---------- top bar ---------- */
+.bar{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:12px 14px;box-shadow:var(--shadow);
+}
+.bar-title{font-weight:500;font-size:14px;margin-right:6px}
+.bar-sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+button{
+  font:inherit;font-size:13px;color:var(--muted);
+  background:transparent;border:1px solid var(--line);
+  padding:7px 13px;border-radius:9px;cursor:pointer;
+  transition:background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+}
+button:hover{color:var(--text);border-color:rgba(255,255,255,.16)}
+button[aria-pressed="true"]{color:var(--text);background:var(--card-2);border-color:rgba(255,255,255,.18)}
+button.play{color:var(--text);border-color:rgba(255,255,255,.18);min-width:88px}
+.spd{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.spd button{border:0;border-radius:0;padding:7px 11px}
+.spd button+button{border-left:1px solid var(--line)}
+.tag{
+  margin-left:auto;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted-2);border:1px solid var(--line-soft);padding:5px 9px;border-radius:7px;
+}
+
+/* ---------- layout ---------- */
+.split{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:20px;margin-top:20px}
+@media(max-width:900px){.split{grid-template-columns:1fr}}
+.panel{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);box-shadow:var(--shadow);
+}
+.panel-h{padding:14px 16px;border-bottom:1px solid var(--line-soft);display:flex;align-items:center;gap:10px}
+.panel-b{padding:16px}
+.stack{display:flex;flex-direction:column;gap:20px;min-width:0}
+.phone-col,.panel,.panel-b{min-width:0}
+
+/* ---------- phone ---------- */
+.phone-col{position:sticky;top:20px;align-self:start}
+@media(max-width:900px){.phone-col{position:static}}
+.phone{
+  background:#0E0F10;border:1px solid var(--line);border-radius:26px;
+  padding:9px;box-shadow:var(--shadow);
+}
+.screen{border-radius:19px;overflow:hidden;background:#0B141A;display:flex;flex-direction:column;height:600px}
+.wa-head{background:var(--wa-green);padding:11px 13px;display:flex;align-items:center;gap:11px;flex:0 0 auto}
+.avatar{
+  width:36px;height:36px;border-radius:50%;background:#0d7a6c;flex:0 0 auto;
+  display:grid;place-items:center;font-size:13px;font-weight:600;color:#DCE9E6;
+}
+.wa-name{font-size:14.5px;font-weight:500;color:#EDF3F1;line-height:1.25}
+.wa-status{font-size:11.5px;color:rgba(237,243,241,.72);line-height:1.3;min-height:16px}
+.chat{
+  flex:1 1 auto;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:7px;
+  background:#0B141A;
+  background-image:radial-gradient(rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size:18px 18px;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent;
+}
+.chat::-webkit-scrollbar{width:6px}
+.chat::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
+.msg{
+  max-width:82%;padding:7px 10px 6px;border-radius:9px;font-size:13.5px;line-height:1.45;
+  color:#E6EBE9;position:relative;word-wrap:break-word;
+  animation:pop .22s var(--ease) both;
+}
+.msg.them{align-self:flex-start;background:#1F2C34;border-top-left-radius:3px}
+.msg.me{align-self:flex-end;background:var(--wa-bubble);border-top-right-radius:3px}
+.meta{
+  display:block;text-align:right;font-size:10.5px;color:rgba(230,235,233,.55);
+  margin-top:2px;font-variant-numeric:tabular-nums;
+}
+.tick{margin-left:3px;color:#53BDEB;letter-spacing:-2px}
+.day{
+  align-self:center;background:#182229;color:rgba(230,235,233,.62);
+  font-size:11px;padding:4px 11px;border-radius:7px;margin:6px 0;
+  animation:pop .22s var(--ease) both;
+}
+.typing{align-self:flex-start;background:#1F2C34;border-radius:9px;border-top-left-radius:3px;padding:11px 12px;display:flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:rgba(230,235,233,.5);animation:blip 1.15s infinite}
+.typing i:nth-child(2){animation-delay:.18s}
+.typing i:nth-child(3){animation-delay:.36s}
+@keyframes blip{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:.9;transform:translateY(-2px)}}
+@keyframes pop{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* ---------- lead card ---------- */
+.lead-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.lead-name{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.lead-meta{color:var(--muted);font-size:13px}
+.src{border:1px solid var(--line);border-radius:7px;padding:5px 9px;font-size:11.5px;color:var(--muted);height:fit-content}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:10px;overflow:hidden}
+@media(max-width:420px){.fields{grid-template-columns:1fr}}
+.f{background:var(--card);padding:11px 12px;transition:background .3s var(--ease)}
+.f .label{display:block;margin-bottom:3px}
+.f b{font-weight:500;font-size:13.5px;color:var(--muted-2);transition:color .25s var(--ease)}
+.f.on b{color:var(--text)}
+.f.hit{background:var(--accent-dim)}
+
+/* ---------- score ---------- */
+.score-row{display:flex;align-items:baseline;gap:12px}
+.score{font-size:44px;font-weight:600;letter-spacing:-.03em;line-height:1;color:var(--accent)}
+.score-of{color:var(--muted-2);font-size:13px}
+.state{margin-left:auto;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.track{height:4px;background:rgba(255,255,255,.07);border-radius:2px;margin:14px 0 12px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--accent);border-radius:2px;transition:width .5s var(--ease)}
+.rules{font-size:11.5px;line-height:1.65;color:var(--muted-2)}
+
+/* ---------- pipeline ---------- */
+.kanban{min-width:0;display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:8px;overflow-x:auto;padding-bottom:2px}
+.col{background:var(--card-2);border:1px solid var(--line-soft);border-radius:10px;padding:9px;min-height:104px;transition:border-color .3s var(--ease)}
+.col.active{border-color:rgba(16,185,129,.42)}
+.col .label{font-size:10px;display:block;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.col-body{min-height:52px}
+.pcard{
+  background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 9px;
+  font-size:12px;line-height:1.35;box-shadow:0 1px 2px rgba(0,0,0,.3);
+}
+.pcard .pn{font-weight:500}
+.pcard .pb{color:var(--muted-2);font-size:11px;margin-top:2px}
+.pcard.lit{border-color:rgba(16,185,129,.5)}
+
+/* ---------- log ---------- */
+.log{list-style:none;margin:0;padding:0;max-height:220px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent}
+.log::-webkit-scrollbar{width:6px}
+.log::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
+.log li{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--line-soft);font-size:13px;animation:pop .24s var(--ease) both}
+.log li:last-child{border-bottom:0}
+.log time{color:var(--muted-2);font-size:12px;flex:0 0 62px;font-variant-numeric:tabular-nums}
+.log .empty{color:var(--muted-2);font-size:13px;padding:8px 0}
+
+/* ---------- handoff ---------- */
+#handoff{display:none}
+#handoff.show{display:block;animation:pop .28s var(--ease) both}
+.hand-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:10px;overflow:hidden;margin-bottom:14px}
+@media(max-width:560px){.hand-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.hand-grid div{background:var(--card);padding:10px 11px}
+.hand-grid b{display:block;font-weight:500;font-size:13px;margin-top:3px}
+.brief{font-size:13.5px;color:var(--muted);border-left:2px solid var(--accent);padding-left:12px}
+.closing{
+  margin-top:20px;font-size:16px;color:var(--text);opacity:0;
+  transition:opacity .4s var(--ease);letter-spacing:-.01em;
+}
+.closing.show{opacity:1}
+
+/* ---------- production strip ---------- */
+.strip{margin:64px 0 0;padding:26px 0 0;border-top:1px solid var(--line-soft)}
+.nodes{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin-top:16px}
+.node{
+  flex:1 1 170px;background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:12px 13px;font-size:13px;line-height:1.4;
+}
+.node .label{display:block;margin-bottom:4px}
+.arrow{flex:0 0 26px;display:grid;place-items:center;color:var(--muted-2);font-size:12px}
+@media(max-width:700px){.arrow{flex:0 0 100%;height:18px;transform:rotate(90deg)}}
+.caption{margin-top:14px;font-size:13px;color:var(--muted-2)}
+
+/* ---------- footer ---------- */
+footer{margin:56px 0 60px;padding-top:22px;border-top:1px solid var(--line-soft);font-size:13px;color:var(--muted-2)}
+footer a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)}
+footer a:hover{color:var(--text)}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>Your leads message at 11pm.<br>This is who answers.</h1>
+    <p class="sub">Watch a lead go from first WhatsApp message to booked viewing, untouched by staff.</p>
+  </header>
+
+  <div class="bar">
+    <span class="bar-title">Prestige Estates — Lead Response</span>
+    <span class="bar-sep"></span>
+    <button data-sc="hot" aria-pressed="true">Hot Buyer</button>
+    <button data-sc="browser" aria-pressed="false">Browser</button>
+    <button data-sc="quiet" aria-pressed="false">Gone Quiet</button>
+    <span class="bar-sep"></span>
+    <button class="play" id="play">Play</button>
+    <span class="spd">
+      <button data-spd="1" aria-pressed="true">1x</button>
+      <button data-spd="2" aria-pressed="false">2x</button>
+    </span>
+    <span class="tag">Simulated demo</span>
+  </div>
+
+  <div class="split">
+
+    <!-- LEFT: phone -->
+    <div class="phone-col">
+      <div class="phone">
+        <div class="screen">
+          <div class="wa-head">
+            <div class="avatar">PE</div>
+            <div>
+              <div class="wa-name">Prestige Estates</div>
+              <div class="wa-status" id="waStatus">online</div>
+            </div>
+          </div>
+          <div class="chat" id="chat"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: dashboard -->
+    <div class="stack">
+
+      <section class="panel">
+        <div class="panel-h"><span class="label">Lead card</span></div>
+        <div class="panel-b">
+          <div class="lead-top">
+            <div>
+              <div class="lead-name" id="leadName">—</div>
+              <div class="lead-meta num" id="leadPhone">—</div>
+            </div>
+            <div class="src" id="leadSrc">—</div>
+          </div>
+          <div class="fields" id="fields">
+            <div class="f" data-k="intent"><span class="label">Intent</span><b>Not captured</b></div>
+            <div class="f" data-k="ptype"><span class="label">Property type</span><b>Not captured</b></div>
+            <div class="f" data-k="area"><span class="label">Area</span><b>Not captured</b></div>
+            <div class="f" data-k="budget"><span class="label">Budget</span><b>Not captured</b></div>
+            <div class="f" data-k="finance"><span class="label">Financing</span><b>Not captured</b></div>
+            <div class="f" data-k="timeline"><span class="label">Timeline</span><b>Not captured</b></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-h"><span class="label">Qualification</span></div>
+        <div class="panel-b">
+          <div class="score-row">
+            <span class="score num" id="score">0</span>
+            <span class="score-of num">/ 100</span>
+            <span class="state" id="state">Cold</span>
+          </div>
+          <div class="track"><div class="fill" id="fill"></div></div>
+          <p class="rules">
+            Base contact 10 · Intent 15 · Property type 10 · Area 15 · Budget 20 · Financing 15 · Timeline 15, urgency-weighted.
+            Partial answers score partial. No reply in 24h −10. Re-engaged after follow-up +5.<br>
+            Cold 0–39 · Warm 40–74 · Hot 75–100.
+          </p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-h"><span class="label">Pipeline</span></div>
+        <div class="panel-b">
+          <div class="kanban">
+            <div class="col" id="col-new"><span class="label">New lead</span><div class="col-body"></div></div>
+            <div class="col" id="col-qualifying"><span class="label">In qualification</span><div class="col-body"></div></div>
+            <div class="col" id="col-qualified"><span class="label">Qualified</span><div class="col-body"></div></div>
+            <div class="col" id="col-booked"><span class="label">Viewing booked</span><div class="col-body"></div></div>
+            <div class="col" id="col-assigned"><span class="label">Agent assigned</span><div class="col-body"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-h"><span class="label">Activity log</span></div>
+        <div class="panel-b">
+          <ul class="log" id="log"><li class="empty">No activity yet.</li></ul>
+        </div>
+      </section>
+
+      <section class="panel" id="handoff">
+        <div class="panel-h"><span class="label" id="handTitle">Agent handoff</span></div>
+        <div class="panel-b">
+          <div class="hand-grid" id="handGrid"></div>
+          <p class="brief" id="handBrief"></p>
+        </div>
+      </section>
+
+      <p class="closing" id="closing"></p>
+    </div>
+  </div>
+
+  <!-- PRODUCTION STRIP -->
+  <section class="strip">
+    <span class="label">Production stack</span>
+    <div class="nodes">
+      <div class="node"><span class="label">01</span>Meta or website lead</div>
+      <div class="arrow">→</div>
+      <div class="node"><span class="label">02</span>WhatsApp Business API</div>
+      <div class="arrow">→</div>
+      <div class="node"><span class="label">03</span>n8n workflow</div>
+      <div class="arrow">→</div>
+      <div class="node"><span class="label">04</span>LLM qualification</div>
+      <div class="arrow">→</div>
+      <div class="node"><span class="label">05</span>CRM webhook + agent notification</div>
+    </div>
+    <p class="caption">Demo is scripted for reliability. Production runs on this stack.</p>
+  </section>
+
+  <footer>
+    Demo designed and built by Ahsaan Ali —
+    <a href="https://ahsaanstudio.vercel.app" target="_blank" rel="noopener">ahsaanstudio.vercel.app</a>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============ helpers ============ */
+var $ = function(s){ return document.querySelector(s); };
+var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+var chat=$("#chat"), waStatus=$("#waStatus"), logEl=$("#log");
+function scrollChat(){ requestAnimationFrame(function(){ chat.scrollTop = chat.scrollHeight; }); }
+
+/* ============ scenarios ============
+   step types:
+   lead  — incoming lead message (right side, ticks)
+   ai    — assistant reply (left side, typing indicator first)
+   day   — divider inside chat
+   field — fill a lead-card field
+   score — set qualification score
+   stage — move pipeline card
+   log   — activity log entry
+   hand  — render handoff / nurture card
+   end   — closing line under dashboard
+   pause — extra beat
+=================================== */
+
+var SC = {
+
+hot: {
+  lead:{name:"Ayesha Siddiqui", phone:"+92 300 214 8891", src:"Facebook ad · DHA 2-Bed"},
+  steps:[
+    {t:"log",  time:"11:04 PM", text:"Lead created from Facebook ad — campaign: DHA 2-Bed Apartments"},
+    {t:"stage",v:"new"},
+    {t:"lead", time:"11:04 PM", text:"hi, saw your ad for the 2 bed apartment"},
+    {t:"score",v:10},
+    {t:"ai",   time:"11:04 PM", text:"Hello Ayesha, Prestige Estates here. Happy to help with the 2-bed. Are you looking to buy or rent?"},
+    {t:"log",  time:"11:04 PM", text:"First response sent in 38 seconds"},
+    {t:"lead", time:"11:05 PM", text:"buy"},
+    {t:"field",k:"intent",v:"Buy"},
+    {t:"field",k:"ptype", v:"2-bed apartment"},
+    {t:"score",v:35},
+    {t:"stage",v:"qualifying"},
+    {t:"log",  time:"11:05 PM", text:"Intent extracted: Buy"},
+    {t:"ai",   time:"11:05 PM", text:"Noted. Which area are you looking at?"},
+    {t:"lead", time:"11:06 PM", text:"dha phase 6, clifton bhi chalega"},
+    {t:"field",k:"area",v:"DHA Phase 6, Clifton"},
+    {t:"score",v:50},
+    {t:"log",  time:"11:06 PM", text:"Area extracted: DHA Phase 6, Clifton (secondary)"},
+    {t:"ai",   time:"11:06 PM", text:"Both are good right now. What budget are you working with?"},
+    {t:"lead", time:"11:08 PM", text:"around 2.5 cr, thora upar ja sakta hun"},
+    {t:"field",k:"budget",v:"PKR 2.5 Cr, flexible"},
+    {t:"score",v:65},
+    {t:"log",  time:"11:08 PM", text:"Budget extracted: PKR 2.5 Cr — partial score, range not fixed"},
+    {t:"ai",   time:"11:08 PM", text:"Understood. Cash, or will you be financing?"},
+    {t:"lead", time:"11:09 PM", text:"cash"},
+    {t:"field",k:"finance",v:"Cash"},
+    {t:"score",v:80},
+    {t:"ai",   time:"11:09 PM", text:"And how soon do you want to move?"},
+    {t:"lead", time:"11:11 PM", text:"within a month if i find the right one"},
+    {t:"field",k:"timeline",v:"Within 30 days"},
+    {t:"score",v:95},
+    {t:"stage",v:"qualified"},
+    {t:"log",  time:"11:11 PM", text:"Score 95 — Hot. Qualification complete"},
+    {t:"ai",   time:"11:12 PM", text:"So: 2-bed to buy, DHA Phase 6 or Clifton, around 2.5 crore, cash, inside a month. Have I got that right?"},
+    {t:"lead", time:"11:13 PM", text:"yes bilkul"},
+    {t:"ai",   time:"11:14 PM", text:"Two units fit that. I can show you both. Tomorrow 5:00 PM, or Saturday 11:30 AM?"},
+    {t:"lead", time:"11:16 PM", text:"saturday 11:30 works"},
+    {t:"ai",   time:"11:17 PM", text:"Booked, Saturday 11:30 AM. Bilal from our team will send the address in the morning."},
+    {t:"stage",v:"booked"},
+    {t:"log",  time:"11:17 PM", text:"Viewing booked: Saturday 11:30 AM"},
+    {t:"log",  time:"11:17 PM", text:"Calendar hold created for agent Bilal Ahmed"},
+    {t:"stage",v:"assigned"},
+    {t:"log",  time:"11:18 PM", text:"Handed to agent Bilal with summary"},
+    {t:"hand", title:"Agent handoff — sent to Bilal Ahmed",
+      brief:"Cash buyer, moving inside 30 days, no chain. Wants a 2-bed in DHA Phase 6, will look at Clifton, around 2.5 crore with a little room above.\nViewing confirmed Saturday 11:30 AM. Send the address before 9 AM and open with the Phase 6 unit."},
+    {t:"end", text:"Answered in 38 seconds. Six questions, no repeats. Viewing booked at 11:17 PM, with nobody in the office."}
+  ]
+},
+
+browser: {
+  lead:{name:"Imran Qureshi", phone:"+92 321 470 5512", src:"Facebook ad · Bahria Homes"},
+  steps:[
+    {t:"log",  time:"9:38 PM", text:"Lead created from Facebook ad — campaign: Bahria Town Homes"},
+    {t:"stage",v:"new"},
+    {t:"lead", time:"9:38 PM", text:"hi just checking prices in bahria town"},
+    {t:"score",v:10},
+    {t:"ai",   time:"9:39 PM", text:"Hello Imran, Prestige Estates here. Happy to share prices. House or apartment?"},
+    {t:"log",  time:"9:39 PM", text:"First response sent in 24 seconds"},
+    {t:"lead", time:"9:39 PM", text:"house, 5 marla"},
+    {t:"field",k:"ptype",v:"5 Marla house"},
+    {t:"field",k:"area", v:"Bahria Town"},
+    {t:"score",v:35},
+    {t:"stage",v:"qualifying"},
+    {t:"log",  time:"9:39 PM", text:"Area extracted: Bahria Town · Type: 5 Marla house"},
+    {t:"ai",   time:"9:40 PM", text:"5 marla in Bahria is closing between 2.2 and 2.8 crore right now. Precinct and condition move it either way."},
+    {t:"lead", time:"9:41 PM", text:"achha. abhi bas dekh raha hun"},
+    {t:"log",  time:"9:41 PM", text:"Signal detected: browsing, no active purchase"},
+    {t:"ai",   time:"9:41 PM", text:"That is fine. Are you thinking of buying eventually, or renting?"},
+    {t:"lead", time:"9:43 PM", text:"buy but next year maybe"},
+    {t:"field",k:"intent",v:"Buy"},
+    {t:"field",k:"timeline",v:"12 months, soft"},
+    {t:"score",v:52},
+    {t:"log",  time:"9:43 PM", text:"Timeline extracted: ~12 months — urgency weight 2 of 15"},
+    {t:"log",  time:"9:43 PM", text:"Viewing offer suppressed — rule: timeline beyond 90 days"},
+    {t:"ai",   time:"9:44 PM", text:"Good to know. I can send you 5 marla Bahria listings once a week, with what they actually closed at. No calls unless you ask for one."},
+    {t:"lead", time:"9:45 PM", text:"yes that works"},
+    {t:"ai",   time:"9:45 PM", text:"Done, first one comes Monday. Message here whenever your plans move."},
+    {t:"log",  time:"9:45 PM", text:"Nurture scheduled: weekly listings, Mondays 10:00 AM"},
+    {t:"log",  time:"9:45 PM", text:"Re-score trigger armed on any reply"},
+    {t:"log",  time:"9:45 PM", text:"No agent assigned — lead held in qualification"},
+    {t:"hand", title:"Nurture scheduled — no agent assigned",
+      brief:"Not a buyer yet, and treating him like one would lose him. Price-aware, 5 marla Bahria, roughly a year out.\nWeekly listings until he moves. He gets re-scored the moment he replies, and only then does an agent see him."},
+    {t:"end", text:"Answered in 24 seconds. Scored 52, Warm. No viewing pushed. Fifty-two touches scheduled instead."}
+  ]
+},
+
+quiet: {
+  lead:{name:"Sana Malik", phone:"+92 333 908 6420", src:"Facebook ad · Gulshan Listing"},
+  steps:[
+    {t:"log",  time:"10:41 PM", text:"Lead created from Facebook ad — campaign: Gulshan Block 13-D"},
+    {t:"stage",v:"new"},
+    {t:"lead", time:"10:41 PM", text:"hi, interested in the gulshan listing"},
+    {t:"score",v:10},
+    {t:"ai",   time:"10:42 PM", text:"Hello Sana, Prestige Estates here. Is that to buy, or to rent?"},
+    {t:"log",  time:"10:42 PM", text:"First response sent in 31 seconds"},
+    {t:"lead", time:"10:43 PM", text:"buy"},
+    {t:"field",k:"intent",v:"Buy"},
+    {t:"score",v:25},
+    {t:"stage",v:"qualifying"},
+    {t:"log",  time:"10:43 PM", text:"Intent extracted: Buy"},
+    {t:"ai",   time:"10:43 PM", text:"Which part of Gulshan are you set on?"},
+    {t:"lead", time:"10:45 PM", text:"block 13d. budget 1.8 cr tak"},
+    {t:"field",k:"area",  v:"Gulshan Block 13-D"},
+    {t:"field",k:"budget",v:"PKR 1.8 Cr ceiling"},
+    {t:"score",v:60},
+    {t:"log",  time:"10:45 PM", text:"Area extracted: Gulshan Block 13-D"},
+    {t:"log",  time:"10:45 PM", text:"Budget extracted: PKR 1.8 Cr"},
+    {t:"ai",   time:"10:46 PM", text:"Noted. Is 1.8 all-in, or before transfer costs?"},
+    {t:"pause",ms:2600},
+    {t:"log",  time:"10:52 PM", text:"No reply for 6 minutes — conversation marked open"},
+    {t:"pause",ms:1400},
+    {t:"log",  time:"11:46 PM", text:"No reply for 60 minutes. Follow-up scheduled: 24h"},
+    {t:"score",v:50},
+    {t:"log",  time:"11:46 PM", text:"Score adjusted −10 for inactivity. Lead held, not closed"},
+    {t:"pause",ms:1200},
+    {t:"day",  text:"24 hours later"},
+    {t:"ai",   time:"7:12 PM", text:"Hi Sana. Two 3-beds came up in Block 13-D this week, both under 1.8. Want me to send them?"},
+    {t:"log",  time:"7:12 PM", text:"Follow-up sent — referenced stored area and budget"},
+    {t:"lead", time:"7:14 PM", text:"haan bhejo"},
+    {t:"score",v:55},
+    {t:"log",  time:"7:14 PM", text:"Lead re-engaged after 24h. Score +5"},
+    {t:"ai",   time:"7:14 PM", text:"Sending now. One is at 1.72 and ready. The second is 1.65 and needs paint. Cash or financing?"},
+    {t:"lead", time:"7:16 PM", text:"cash. kab dekh sakti hun"},
+    {t:"field",k:"finance",v:"Cash"},
+    {t:"score",v:70},
+    {t:"log",  time:"7:16 PM", text:"Financing extracted: Cash"},
+    {t:"ai",   time:"7:17 PM", text:"Tomorrow 6:00 PM, or Sunday 12:00 PM?"},
+    {t:"lead", time:"7:18 PM", text:"sunday"},
+    {t:"field",k:"timeline",v:"Viewing this week"},
+    {t:"score",v:85},
+    {t:"stage",v:"qualified"},
+    {t:"log",  time:"7:18 PM", text:"Score 85 — Hot. Property type inferred from listing, not scored"},
+    {t:"ai",   time:"7:18 PM", text:"Booked, Sunday 12:00 PM. Bilal will confirm the address on Saturday."},
+    {t:"stage",v:"booked"},
+    {t:"log",  time:"7:18 PM", text:"Viewing booked: Sunday 12:00 PM"},
+    {t:"stage",v:"assigned"},
+    {t:"log",  time:"7:19 PM", text:"Handed to agent Bilal with summary"},
+    {t:"hand", title:"Agent handoff — sent to Bilal Ahmed",
+      brief:"Went quiet after two answers, came back on the 24-hour follow-up. Cash, Gulshan Block 13-D, hard ceiling 1.8 crore.\nViewing Sunday 12:00 PM. Show the 1.72 first. She already knows the 1.65 needs paint, so do not oversell it."},
+    {t:"end", text:"Answered in 31 seconds. Followed up 24 hours later without being asked. Nothing forgotten."}
+  ]
+}
+};
+
+/* ============ engine ============ */
+var runId=0, playing=false, speed=1, current="hot", ptr=0;
+
+function sleep(ms){
+  return new Promise(function(r){ setTimeout(r, ms/speed); });
+}
+
+function reset(){
+  runId++;
+  playing=false;
+  ptr=0;
+  $("#play").textContent="Play";
+  var d=SC[current].lead;
+  $("#leadName").textContent=d.name;
+  $("#leadPhone").textContent=d.phone;
+  $("#leadSrc").textContent=d.src;
+  chat.innerHTML="";
+  waStatus.textContent="online";
+  logEl.innerHTML='<li class="empty">No activity yet.</li>';
+  Array.prototype.forEach.call(document.querySelectorAll(".f"), function(f){
+    f.classList.remove("on","hit");
+    f.querySelector("b").textContent="Not captured";
+  });
+  setScore(0,true);
+  $("#handoff").classList.remove("show");
+  $("#closing").classList.remove("show");
+  $("#closing").textContent="";
+  // rebuild pipeline card in first column
+  Array.prototype.forEach.call(document.querySelectorAll(".col"), function(c){
+    c.classList.remove("active");
+    c.querySelector(".col-body").innerHTML="";
+  });
+  var card=document.createElement("div");
+  card.className="pcard"; card.id="pcard";
+  card.innerHTML='<div class="pn"></div><div class="pb"></div>';
+  card.querySelector(".pn").textContent=d.name;
+  card.querySelector(".pb").textContent=d.src.split(" · ")[0];
+  document.querySelector("#col-new .col-body").appendChild(card);
+}
+
+/* chat */
+function bubble(kind, text, time){
+  var el=document.createElement("div");
+  el.className="msg "+(kind==="lead"?"me":"them");
+  el.textContent=text;
+  var m=document.createElement("span");
+  m.className="meta";
+  m.textContent=time;
+  if(kind==="lead"){
+    var t=document.createElement("span");
+    t.className="tick"; t.textContent="✓✓";
+    m.appendChild(t);
+  }
+  el.appendChild(m);
+  chat.appendChild(el);
+  scrollChat();
+}
+function divider(text){
+  var el=document.createElement("div");
+  el.className="day"; el.textContent=text;
+  chat.appendChild(el);
+  scrollChat();
+}
+function typingOn(){
+  waStatus.textContent="typing…";
+  var el=document.createElement("div");
+  el.className="typing"; el.id="typing";
+  el.innerHTML="<i></i><i></i><i></i>";
+  chat.appendChild(el);
+  scrollChat();
+}
+function typingOff(){
+  waStatus.textContent="online";
+  var el=document.getElementById("typing");
+  if(el) el.remove();
+}
+
+/* fields */
+function setField(k,v){
+  var f=document.querySelector('.f[data-k="'+k+'"]');
+  if(!f) return;
+  f.querySelector("b").textContent=v;
+  f.classList.add("on","hit");
+  setTimeout(function(){ f.classList.remove("hit"); }, 900);
+}
+
+/* score */
+var shown=0;
+function setScore(target, instant){
+  var el=$("#score"), fill=$("#fill"), st=$("#state");
+  function paint(v){
+    el.textContent=v;
+    fill.style.width=v+"%";
+    st.textContent = v>=75 ? "Hot" : (v>=40 ? "Warm" : "Cold");
+  }
+  if(instant||reduced){ shown=target; paint(target); return; }
+  var from=shown, delta=target-from, t0=performance.now(), dur=520;
+  function step(now){
+    var p=Math.min(1,(now-t0)/dur);
+    var e=1-Math.pow(1-p,3);
+    paint(Math.round(from+delta*e));
+    if(p<1) requestAnimationFrame(step); else shown=target;
+  }
+  requestAnimationFrame(step);
+}
+
+/* pipeline move (FLIP) */
+function setStage(col){
+  var card=document.getElementById("pcard");
+  var target=document.querySelector("#col-"+col+" .col-body");
+  if(!card||!target) return;
+  Array.prototype.forEach.call(document.querySelectorAll(".col"), function(c){ c.classList.remove("active"); });
+  document.getElementById("col-"+col).classList.add("active");
+  var a=card.getBoundingClientRect();
+  target.appendChild(card);
+  card.classList.add("lit");
+  if(reduced) return;
+  var b=card.getBoundingClientRect();
+  card.style.transition="none";
+  card.style.transform="translate("+(a.left-b.left)+"px,"+(a.top-b.top)+"px)";
+  requestAnimationFrame(function(){
+    card.style.transition="transform 300ms cubic-bezier(.22,.7,.3,1)";
+    card.style.transform="translate(0,0)";
+  });
+}
+
+/* log */
+function addLog(time,text){
+  var empty=logEl.querySelector(".empty");
+  if(empty) empty.remove();
+  var li=document.createElement("li");
+  var t=document.createElement("time"); t.className="num"; t.textContent=time;
+  var s=document.createElement("span"); s.textContent=text;
+  li.appendChild(t); li.appendChild(s);
+  logEl.appendChild(li);
+  logEl.scrollTop=logEl.scrollHeight;
+}
+
+/* handoff card */
+function showHandoff(title, brief){
+  $("#handTitle").textContent=title;
+  var grid=$("#handGrid"); grid.innerHTML="";
+  var d=SC[current].lead;
+  var rows=[["Name",d.name],["Phone",d.phone],["Source",d.src]];
+  Array.prototype.forEach.call(document.querySelectorAll(".f"), function(f){
+    rows.push([f.querySelector(".label").textContent, f.querySelector("b").textContent]);
+  });
+  rows.forEach(function(r){
+    var cell=document.createElement("div");
+    var l=document.createElement("span"); l.className="label"; l.textContent=r[0];
+    var b=document.createElement("b"); b.textContent=r[1];
+    cell.appendChild(l); cell.appendChild(b);
+    grid.appendChild(cell);
+  });
+  $("#handBrief").textContent=brief;
+  $("#handBrief").style.whiteSpace="pre-line";
+  $("#handoff").classList.add("show");
+}
+
+/* the runner */
+async function run(){
+  var id=++runId;
+  playing=true;
+  $("#play").textContent="Pause";
+  var steps=SC[current].steps;
+  for(var i=ptr;i<steps.length;i++){
+    ptr=i;
+    if(id!==runId) return;
+    var s=steps[i];
+    if(s.t==="lead"){
+      await sleep(700); if(id!==runId) return;
+      bubble("lead", s.text, s.time);
+      await sleep(500);
+    } else if(s.t==="ai"){
+      await sleep(450); if(id!==runId) return;
+      typingOn();
+      await sleep(Math.min(2000, 700 + s.text.length*16)); if(id!==runId){ typingOff(); return; }
+      typingOff();
+      bubble("ai", s.text, s.time);
+      await sleep(450);
+    } else if(s.t==="day"){
+      await sleep(700); divider(s.text); await sleep(900);
+    } else if(s.t==="field"){
+      setField(s.k, s.v); await sleep(320);
+    } else if(s.t==="score"){
+      setScore(s.v); await sleep(340);
+    } else if(s.t==="stage"){
+      setStage(s.v); await sleep(420);
+    } else if(s.t==="log"){
+      addLog(s.time, s.text); await sleep(360);
+    } else if(s.t==="pause"){
+      await sleep(s.ms);
+    } else if(s.t==="hand"){
+      await sleep(500); showHandoff(s.title, s.brief); await sleep(600);
+    } else if(s.t==="end"){
+      await sleep(400);
+      $("#closing").textContent=s.text;
+      $("#closing").classList.add("show");
+    }
+  }
+  if(id!==runId) return;
+  ptr=steps.length;
+  playing=false;
+  $("#play").textContent="Replay";
+}
+
+/* ============ controls ============ */
+$("#play").addEventListener("click", function(){
+  if(playing){ runId++; playing=false; typingOff(); this.textContent="Resume"; return; }
+  if(ptr >= SC[current].steps.length){ reset(); }
+  run();
+});
+
+Array.prototype.forEach.call(document.querySelectorAll("[data-sc]"), function(b){
+  b.addEventListener("click", function(){
+    Array.prototype.forEach.call(document.querySelectorAll("[data-sc]"), function(x){ x.setAttribute("aria-pressed","false"); });
+    b.setAttribute("aria-pressed","true");
+    current=b.getAttribute("data-sc");
+    reset();
+    run();
+  });
+});
+
+Array.prototype.forEach.call(document.querySelectorAll("[data-spd]"), function(b){
+  b.addEventListener("click", function(){
+    Array.prototype.forEach.call(document.querySelectorAll("[data-spd]"), function(x){ x.setAttribute("aria-pressed","false"); });
+    b.setAttribute("aria-pressed","true");
+    speed=parseFloat(b.getAttribute("data-spd"));
+  });
+});
+
+reset();
+})();
+</script>
+</body>
+</html>
