@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+  <script>
+    try {
+      window.localStorage.getItem('x')
+    } catch (e) {
+      const store = new Map()
+      const shim = {
+        getItem: (key) => store.has(key) ? store.get(key) : null,
+        setItem: (key, value) => { store.set(key, String(value)) },
+        removeItem: (key) => { store.delete(key) },
+        clear: () => { store.clear() },
+        key: (index) => Array.from(store.keys())[index] ?? null,
+        get length() { return store.size },
+      }
+      Object.defineProperty(window, 'localStorage', { value: shim, configurable: true })
+    }
+  </script>
+  <style>
+    body { margin: 0; font-family: var(--font-family, Inter, sans-serif); }
+    .intro { font-size: 11px; line-height: 1.5; color: var(--figma-color-text-secondary); }
+    #status { font-size: 11px; line-height: 1.45; }
+    .ok    { color: var(--figma-color-text-success, #1a7f37); }
+    .error { color: var(--figma-color-text-danger, #b3261e); }
+    .busy  { color: var(--figma-color-text-secondary); }
+  </style>
+</head>
+<body>
+  <div id="plugin-root">
+    <fig-content>
+      <p class="intro">
+        Draws the Cueva Homes landing page onto the canvas as auto-layout frames
+        and editable text layers. Image and video slots come in as labelled
+        dashed placeholders.
+      </p>
+      <fig-group name="Breakpoints">
+        <fig-field>
+          <label>Desktop — 1440</label>
+          <fig-switch id="desktop" checked></fig-switch>
+        </fig-field>
+        <fig-field>
+          <label>Mobile — 390</label>
+          <fig-switch id="mobile" checked></fig-switch>
+        </fig-field>
+      </fig-group>
+    </fig-content>
+    <fig-footer>
+      <label id="status">Ready</label>
+      <fig-button id="build" type="submit">Build landing page</fig-button>
+    </fig-footer>
+  </div>
+
+  <script>
+    const post = (message) => parent.postMessage({ pluginMessage: message }, '*')
+    const statusEl = document.getElementById('status')
+    const buildBtn = document.getElementById('build')
+
+    function setStatus(text, tone) {
+      statusEl.textContent = text
+      statusEl.className = tone || ''
+    }
+
+    buildBtn.addEventListener('click', () => {
+      const desktop = document.getElementById('desktop').checked !== false
+      const mobile = document.getElementById('mobile').checked !== false
+      if (!desktop && !mobile) {
+        setStatus('Pick at least one breakpoint.', 'error')
+        return
+      }
+      buildBtn.setAttribute('disabled', 'true')
+      setStatus('Working…', 'busy')
+      post({ type: 'build', desktop: desktop, mobile: mobile })
+    })
+
+    window.onmessage = (event) => {
+      const msg = event.data && event.data.pluginMessage
+      if (!msg || msg.type !== 'status') return
+      setStatus(msg.text, msg.tone)
+      if (msg.tone === 'ok' || msg.tone === 'error') buildBtn.removeAttribute('disabled')
+    }
+
+    const root = document.getElementById('plugin-root')
+    new ResizeObserver(() => {
+      post({ type: 'resize', height: Math.ceil(root.getBoundingClientRect().height) })
+    }).observe(root)
+  </script>
+</body>
+</html>
