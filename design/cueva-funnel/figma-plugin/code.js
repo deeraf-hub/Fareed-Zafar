@@ -195,15 +195,17 @@ function render(spec) {
     return f;
 }
 // ---------- shared graphics ----------
-const ARCH_MARK = (stroke) => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 22" fill="none" stroke="' + stroke +
+const ARCH_MARK = (stroke, w, h) => '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 40 22" fill="none" stroke="' + stroke +
     '" stroke-width="2.4" stroke-linecap="square">' +
     '<path d="M2 21 A18 18 0 0 1 38 21"/><path d="M8 21 A12 12 0 0 1 32 21"/><path d="M14 21 A6 6 0 0 1 26 21"/></svg>';
-const ARCH_FIELD = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" fill="none" stroke="' + C.slate2 +
+// Anchored bottom-centre and cropped at the sides, so the arch always runs past the frame.
+const ARCH_FIELD = (w, h) => '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 600 300"' +
+    ' preserveAspectRatio="xMidYMax slice" fill="none" stroke="' + C.slate2 +
     '" stroke-width="15">' +
     '<path d="M40 300 A260 260 0 0 1 560 300"/><path d="M80 300 A220 220 0 0 1 520 300"/>' +
     '<path d="M120 300 A180 180 0 0 1 480 300"/><path d="M160 300 A140 140 0 0 1 440 300"/>' +
     '<path d="M200 300 A100 100 0 0 1 400 300"/><path d="M240 300 A60 60 0 0 1 360 300"/></svg>';
-const ico = (paths, stroke, w) => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="' + stroke +
+const ico = (paths, stroke, w) => '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + w + '" viewBox="0 0 24 24" fill="none" stroke="' + stroke +
     '" stroke-width="1.5" stroke-linecap="square">' + paths + '</svg>';
 const P_SHIELD = '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>';
 const P_TAG = '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>';
@@ -310,7 +312,7 @@ function btn(label, dark, w, fs, padV, padH, center) {
         bg: dark ? C.meadow : C.slate,
         pad: [padV, padH, padV, padH], gap: 12, cross: 'CENTER',
         main: center ? 'CENTER' : 'MIN',
-        w: w,
+        w: w > 0 ? w : undefined, // 0 means hug — leave the width undeclared
         kids: [
             T({ s: label, font: 's', size: fs, lh: Math.round(fs * 1.4), ls: 6, color: dark ? C.ink : C.paper, upper: true, align: center ? 'CENTER' : 'LEFT', grow: center ? 1 : 0 }),
             S(ico(P_ARROW, dark ? C.ink : C.paper, 18), 18, 18, 'Arrow'),
@@ -344,7 +346,7 @@ function trustItem(label, paths, w) {
         ],
     });
 }
-function numberedRow(n, body, w, lineColor, fs) {
+function numberedRow(n, body, w, fs) {
     return H({
         name: 'Row ' + n, gap: 20, pad: [22, 0, 22, 0], w: w,
         kids: [
@@ -394,13 +396,12 @@ function field(label, placeholder, hint, w, isCal) {
 // ---------- desktop page ----------
 function desktopPage() {
     const W = 1440, PAD = 100, INNER = W - PAD * 2; // 1240
-    const half = (INNER - 80) / 2;
     const secPad = [118, PAD, 118, PAD];
     const header = H({
         name: 'Header', bg: C.slate, w: W, pad: [24, PAD, 24, PAD], main: 'SPACE_BETWEEN', cross: 'CENTER',
         kids: [
             H({ name: 'Wordmark', gap: 15, cross: 'CENTER', kids: [
-                    S(ARCH_MARK(C.paper), 42, 24, 'Arch mark (placeholder)'),
+                    S(ARCH_MARK(C.paper, 42, 24), 42, 24, 'Arch mark (placeholder)'),
                     T({ s: 'CUEVA', font: 's', size: 19, lh: 26, ls: 34, color: C.paper }),
                 ] }),
             H({ name: 'Right', gap: 30, cross: 'CENTER', kids: [
@@ -410,27 +411,28 @@ function desktopPage() {
         ],
     });
     const hero = V({
-        name: '01 Hero', bg: C.slate, w: W, pad: [92, PAD, 84, PAD], gap: 0,
+        name: '01 Hero', bg: C.slate, w: W, pad: [92, PAD, 84, PAD], gap: 50,
         kids: [
             V({ name: 'Hero copy', gap: 26, w: 1000, kids: [
                     eyebrow(COPY.eyebrowHero, C.meadow, 22, 12),
                     T({ s: COPY.h1, font: 'display', size: 66, lh: 70, ls: -1.8, color: C.paper, w: 1000, spans: H1_SPANS, name: 'H1' }),
                     T({ s: COPY.heroSub, size: 19, lh: 32, color: C.bodyDark, w: 760, name: 'Sub' }),
                 ] }),
-            R({ w: 1, h: 50, name: 'spacer' }),
-            slot(INNER, 540, 'Hero video — 30 second silent loop, autoplay', 'A CUEVA suite being crane-installed, overlaid with a callout badge.', 'dark', P_PLAY),
-            R({ w: 1, h: 20, name: 'spacer' }),
-            H({ name: 'Badge', bg: C.meadow, pad: [13, 22, 13, 22], kids: [
-                    T({ s: COPY.badge, font: 's', size: 12, lh: 18, ls: 13, color: C.ink, upper: true }),
+            V({ name: 'Hero media & actions', gap: 20, w: INNER, kids: [
+                    slot(INNER, 540, 'Hero video — 30 second silent loop, autoplay', 'A CUEVA suite being crane-installed, overlaid with a callout badge.', 'dark', P_PLAY),
+                    V({ name: 'Hero actions', gap: 22, kids: [
+                            H({ name: 'Badge', bg: C.meadow, pad: [13, 22, 13, 22], kids: [
+                                    T({ s: COPY.badge, font: 's', size: 12, lh: 18, ls: 13, color: C.ink, upper: true }),
+                                ] }),
+                            btn(COPY.ctaMain, true, 0, 16, 24, 46, false),
+                        ] }),
                 ] }),
-            R({ w: 1, h: 22, name: 'spacer' }),
-            btn(COPY.ctaMain, true, 0, 16, 24, 46, false),
         ],
     });
     const trust = V({
         name: '02 Trust strip', bg: C.sage, w: W, pad: [40, PAD, 40, PAD], gap: 22,
         kids: [
-            H({ name: 'Certifications', gap: 30, w: INNER, kids: COPY.trust.map((t, i) => trustItem(t, [P_SHIELD, P_TAG, P_HOME, P_RAIN][i], (INNER - 90) / 4)) }),
+            H({ name: 'Certifications', gap: 32, w: INNER, kids: COPY.trust.map((t, i) => trustItem(t, [P_SHIELD, P_TAG, P_HOME, P_RAIN][i], (INNER - 96) / 4)) }),
             T({ s: 'Placeholder icons — replace each with the supplied certification logo from the brand media folder.', size: 12, lh: 18, color: C.muted }),
         ],
     });
@@ -459,42 +461,44 @@ function desktopPage() {
                             rule(640, C.lineSage),
                             T({ s: COPY.h2Root, font: 'display', size: 46, lh: 52, ls: -1.2, color: C.ink, w: 640, name: 'H2' }),
                         ].concat(COPY.pains.map((p, i) => {
-                            const row = numberedRow('0' + (i + 1), p, 640, C.lineSage, 17);
+                            const row = numberedRow('0' + (i + 1), p, 640, 17);
                             return V({ name: 'Item', w: 640, kids: [rule(640, C.lineSage), row] });
                         })).concat([rule(640, C.lineSage)]) }),
                 ] })],
     });
     const shift = V({
-        name: '05 The shift', bg: C.slate, w: W, pad: [112, PAD, 112, PAD], gap: 0, cross: 'CENTER',
+        name: '05 The shift', bg: C.slate, w: W, pad: [112, PAD, 112, PAD], gap: 48, cross: 'CENTER',
         kids: [
             V({ name: 'Head', gap: 22, cross: 'CENTER', w: 900, kids: [
                     eyebrow('The Cueva Difference', C.meadow, 22, 12),
                     T({ s: COPY.h2Shift, font: 'display', size: 52, lh: 58, ls: -1.2, color: C.paper, w: 880, align: 'CENTER', name: 'H2' }),
                 ] }),
-            R({ w: 1, h: 48, name: 'spacer' }),
-            slot(INNER, 460, 'Section image or video', 'CUEVA homes in production — interior of the Nanaimo indoor facility, or the build-process video.', 'dark', P_IMG),
-            R({ w: 1, h: 54, name: 'spacer' }),
-            V({ name: 'Statements', gap: 0, w: INNER, kids: COPY.shift.map((s) => V({ name: 'Statement', w: INNER, kids: [
-                        rule(INNER, C.lineDark),
-                        V({ pad: [26, 0, 26, 0], w: INNER, kids: [T({ s: s, size: 18, lh: 32, color: C.bodyDark, w: INNER })] }),
-                    ] })).concat([rule(INNER, C.lineDark)]) }),
+            V({ name: 'Media & statements', gap: 54, w: INNER, kids: [
+                    slot(INNER, 460, 'Section image or video', 'CUEVA homes in production — interior of the Nanaimo indoor facility, or the build-process video.', 'dark', P_IMG),
+                    V({ name: 'Statements', gap: 0, w: INNER, kids: COPY.shift.map((s) => V({ name: 'Statement', w: INNER, kids: [
+                                rule(INNER, C.lineDark),
+                                V({ pad: [26, 0, 26, 0], w: INNER, kids: [T({ s: s, size: 18, lh: 32, color: C.bodyDark, w: INNER })] }),
+                            ] })).concat([rule(INNER, C.lineDark)]) }),
+                ] }),
         ],
     });
+    // Edge to edge: 720 + 360 + 360 fills the full 1440 row exactly.
+    const CELL_IMG = 720, CELL = 360, CELL_TXT = CELL - 68;
     const meetCells = [
-        slot(620, 300, 'Cueva Homes — exterior', '', 'light', P_IMG),
-        V({ name: 'Statement 01', bg: C.sage, w: 310, h: 300, pad: [40, 34, 40, 34], main: 'SPACE_BETWEEN', kids: [
+        slot(CELL_IMG, 300, 'Cueva Homes — exterior', '', 'light', P_IMG),
+        V({ name: 'Statement 01', bg: C.sage, w: CELL, h: 300, pad: [40, 34, 40, 34], main: 'SPACE_BETWEEN', kids: [
                 T({ s: '01', font: 'display', size: 30, lh: 36, color: C.serifNum }),
-                T({ s: COPY.meet[0], size: 17, lh: 29, color: C.ink, w: 242 }),
+                T({ s: COPY.meet[0], size: 17, lh: 29, color: C.ink, w: CELL_TXT }),
             ] }),
-        V({ name: 'Arch panel', bg: C.slate, w: 310, h: 300, kids: [S(ARCH_FIELD, 310, 300, 'Arch pattern')] }),
-        V({ name: 'Statement 02', bg: C.slate, w: 310, h: 300, pad: [40, 34, 40, 34], main: 'SPACE_BETWEEN', kids: [
+        V({ name: 'Arch panel', bg: C.slate, w: CELL, h: 300, kids: [S(ARCH_FIELD(CELL, 300), CELL, 300, 'Arch pattern')] }),
+        V({ name: 'Statement 02', bg: C.slate, w: CELL, h: 300, pad: [40, 34, 40, 34], main: 'SPACE_BETWEEN', kids: [
                 T({ s: '02', font: 'display', size: 30, lh: 36, color: C.meadow }),
-                T({ s: COPY.meet[1], size: 17, lh: 29, color: C.bodyDark, w: 242 }),
+                T({ s: COPY.meet[1], size: 17, lh: 29, color: C.bodyDark, w: CELL_TXT }),
             ] }),
-        slot(620, 300, 'Nanaimo facility — interior', '', 'light', P_IMG),
-        V({ name: 'Statement 03', bg: C.sage, w: 310, h: 300, pad: [40, 34, 40, 34], main: 'SPACE_BETWEEN', kids: [
+        slot(CELL_IMG, 300, 'Nanaimo facility — interior', '', 'light', P_IMG),
+        V({ name: 'Statement 03', bg: C.sage, w: CELL, h: 300, pad: [40, 34, 40, 34], main: 'SPACE_BETWEEN', kids: [
                 T({ s: '03', font: 'display', size: 30, lh: 36, color: C.serifNum }),
-                T({ s: COPY.meet[2], size: 17, lh: 29, color: C.ink, w: 242 }),
+                T({ s: COPY.meet[2], size: 17, lh: 29, color: C.ink, w: CELL_TXT }),
             ] }),
     ];
     const meet = V({
@@ -531,15 +535,15 @@ function desktopPage() {
                     eyebrow('The Comparison', C.muted, 22, 12),
                     T({ s: COPY.h2Why, font: 'display', size: 48, lh: 54, ls: -1.2, color: C.ink, w: 900, align: 'CENTER', name: 'H2' }),
                 ] }),
-            V({ name: 'Grid', w: INNER, gap: 1, bg: C.line, kids: [
-                    H({ w: INNER, gap: 1, kids: [whyCard(0), whyCard(1)] }),
-                    H({ w: INNER, gap: 1, kids: [whyCard(2), whyCard(3)] }),
+            V({ name: 'Grid', w: INNER, gap: 2, bg: C.line, kids: [
+                    H({ w: INNER, gap: 2, kids: [whyCard(0), whyCard(1)] }),
+                    H({ w: INNER, gap: 2, kids: [whyCard(2), whyCard(3)] }),
                 ] }),
         ],
     });
     const show = V({
         name: '08 Show home', bg: C.sage, w: W, pad: secPad,
-        kids: [H({ name: 'Split', gap: 80, w: INNER, cross: 'CENTER', kids: [
+        kids: [H({ name: 'Split', gap: 80, w: INNER, kids: [
                     V({ name: 'Copy', gap: 26, w: 580, kids: [
                             eyebrow('See It For Yourself', C.muted, 22, 12),
                             rule(580, C.lineSage),
@@ -581,7 +585,7 @@ function desktopPage() {
         kids: [
             H({ name: 'Top', w: INNER, main: 'SPACE_BETWEEN', cross: 'CENTER', kids: [
                     H({ gap: 15, cross: 'CENTER', kids: [
-                            S(ARCH_MARK(C.paper), 40, 23, 'Arch mark (placeholder)'),
+                            S(ARCH_MARK(C.paper, 40, 23), 40, 23, 'Arch mark (placeholder)'),
                             T({ s: 'CUEVA', font: 's', size: 18, lh: 25, ls: 34, color: C.paper }),
                         ] }),
                     H({ gap: 11, cross: 'CENTER', kids: [
@@ -609,7 +613,7 @@ function mobilePage() {
         name: 'Header', bg: C.slate, w: W, pad: [16, PAD, 16, PAD], main: 'SPACE_BETWEEN', cross: 'CENTER',
         kids: [
             H({ gap: 11, cross: 'CENTER', kids: [
-                    S(ARCH_MARK(C.paper), 32, 18, 'Arch mark (placeholder)'),
+                    S(ARCH_MARK(C.paper, 32, 18), 32, 18, 'Arch mark (placeholder)'),
                     T({ s: 'CUEVA', font: 's', size: 15, lh: 21, ls: 30, color: C.paper }),
                 ] }),
             btn('Book Tour', true, 0, 12, 16, 18, false),
@@ -653,7 +657,7 @@ function mobilePage() {
             rule(INNER, C.lineSage),
             T({ s: COPY.h2Root, font: 'display', size: 29, lh: 35, color: C.ink, w: INNER, name: 'H2' }),
             slot(INNER, 210, 'Messy on-site build', 'Client note: overlay a red cross mark.', 'sage', P_IMG),
-        ].concat(COPY.pains.map((p, i) => V({ name: 'Item', w: INNER, kids: [rule(INNER, C.lineSage), numberedRow('0' + (i + 1), p, INNER, C.lineSage, 15)] }))).concat([rule(INNER, C.lineSage)]),
+        ].concat(COPY.pains.map((p, i) => V({ name: 'Item', w: INNER, kids: [rule(INNER, C.lineSage), numberedRow('0' + (i + 1), p, INNER, 15)] }))).concat([rule(INNER, C.lineSage)]),
     });
     const shift = V({
         name: '05 The shift', bg: C.slate, w: W, pad: secPad, gap: 18,
@@ -743,7 +747,7 @@ function mobilePage() {
         name: '10 Footer', bg: C.deep, w: W, pad: [36, PAD, 36, PAD], gap: 20,
         kids: [
             H({ gap: 12, cross: 'CENTER', kids: [
-                    S(ARCH_MARK(C.paper), 34, 20, 'Arch mark (placeholder)'),
+                    S(ARCH_MARK(C.paper, 34, 20), 34, 20, 'Arch mark (placeholder)'),
                     T({ s: 'CUEVA', font: 's', size: 16, lh: 22, ls: 32, color: C.paper }),
                 ] }),
             H({ gap: 10, cross: 'CENTER', kids: [
