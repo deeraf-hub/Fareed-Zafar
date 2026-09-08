@@ -1,0 +1,1422 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shortlist, hiring console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#F2F5F3; --surface:#FFFFFF;
+  --text:#1C2521; --text2:#5A6661;
+  --pine:#1D5E4A; --pine-h:#164437;
+  --line:#DDE3E0;
+  --wait:#C07A1E; --sched:#2E6DA4; --fwd:#1D5E4A; --drop:#9B3B3B; --stale:#7A7F7C;
+  --nav:216px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--canvas); color:var(--text);
+  font-family:"Instrument Sans","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:13px; line-height:1.45; -webkit-font-smoothing:antialiased;
+  font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-0.01em}
+h1{font-size:26px;letter-spacing:-0.02em}
+h2{font-size:17px}
+h3{font-size:14px}
+p{margin:0 0 10px}
+a{color:var(--pine);text-decoration:none}
+a:hover{text-decoration:underline}
+button,input,select,textarea{font:inherit;color:inherit;font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--pine);outline-offset:2px;border-radius:2px}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;letter-spacing:-0.01em;color:var(--text2)}
+.sec{color:var(--text2)}
+.num{font-variant-numeric:tabular-nums}
+.prose{max-width:66ch}
+
+/* buttons */
+.btn{background:var(--pine);color:#fff;border:1px solid var(--pine);padding:7px 13px;border-radius:3px;cursor:pointer;font-weight:500}
+.btn:hover{background:var(--pine-h);border-color:var(--pine-h)}
+.btn.sm{padding:4px 9px;font-size:12px}
+.btn.ghost{background:transparent;color:var(--text);border-color:var(--line)}
+.btn.ghost:hover{background:var(--canvas);border-color:var(--text2)}
+.btn.danger{background:transparent;color:var(--drop);border-color:var(--drop)}
+.btn.danger:hover{background:var(--drop);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.link{background:none;border:0;padding:0;color:var(--pine);cursor:pointer;font-weight:500}
+.link:hover{text-decoration:underline}
+
+/* shell */
+.app{display:grid;grid-template-columns:var(--nav) 1fr;min-height:100vh}
+.nav{background:var(--surface);border-right:1px solid var(--line);padding:16px 12px;display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh}
+.brand{font-weight:700;letter-spacing:-0.03em;font-size:16px;padding:0 8px 14px}
+.nav a.item{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-radius:3px;color:var(--text);font-weight:500}
+.nav a.item:hover{background:var(--canvas);text-decoration:none}
+.nav a.item[aria-current="page"]{background:var(--canvas);color:var(--pine)}
+.nav .grp{font-size:11px;color:var(--text2);padding:14px 8px 4px;font-weight:600}
+.nav .who{margin-top:auto;border-top:1px solid var(--line);padding:12px 8px 0;color:var(--text2);font-size:12px}
+.main{min-width:0}
+.top{position:sticky;top:0;z-index:5;background:var(--canvas);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:12px 22px}
+.top .crumb{font-weight:600;font-size:15px}
+.kbd{border:1px solid var(--line);background:var(--surface);border-radius:3px;padding:2px 6px;font-size:11px;color:var(--text2)}
+.wrap{padding:20px 22px 60px;max-width:1240px}
+
+/* panels + rows */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:4px}
+.panel + .panel{margin-top:16px}
+.ph{display:flex;align-items:baseline;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line)}
+.ph h2{font-size:13px}
+.ph .count{color:var(--text2);font-size:12px}
+.ph .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.row{display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row:hover{background:var(--canvas)}
+.row .grow{flex:1;min-width:0}
+.row .t{font-weight:500}
+.row .s{color:var(--text2);font-size:12px}
+.trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cols3{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.stack{display:flex;flex-direction:column;gap:16px}
+
+/* status */
+.st{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.card .st{white-space:normal;align-items:flex-start}
+.card .dot{margin-top:5px}
+.dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px;background:var(--stale)}
+.d-wait{background:var(--wait)} .d-sched{background:var(--sched)} .d-fwd{background:var(--fwd)}
+.d-drop{background:var(--drop)} .d-stale{background:var(--stale)}
+.bar{border-left:2px solid var(--stale);padding-left:10px}
+.b-wait{border-color:var(--wait)} .b-sched{border-color:var(--sched)} .b-fwd{border-color:var(--fwd)}
+.b-drop{border-color:var(--drop)} .b-stale{border-color:var(--stale)}
+
+/* tables */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-weight:600;font-size:11.5px;color:var(--text2);padding:8px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--canvas)}
+td.r,th.r{text-align:right}
+.sortable{cursor:pointer;user-select:none}
+.sortable:hover{color:var(--text)}
+
+/* forms */
+label.f{display:block;font-size:12px;font-weight:600;margin-bottom:4px}
+input[type=text],input[type=date],input[type=email],select,textarea{
+  width:100%;background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:6px 8px}
+textarea{min-height:74px;resize:vertical;line-height:1.5}
+.field{margin-bottom:14px}
+.hint{color:var(--text2);font-size:12px;margin-top:4px}
+.err{color:var(--drop);font-size:12px;margin-top:4px}
+fieldset{border:0;padding:0;margin:0}
+.scale{display:flex;gap:6px;flex-wrap:wrap}
+.scale label{border:1px solid var(--line);border-radius:3px;padding:4px 11px;cursor:pointer;background:var(--surface)}
+.scale input{position:absolute;opacity:0;width:0;height:0}
+.scale input:checked + span{font-weight:700}
+.scale label:has(input:checked){border-color:var(--pine);color:var(--pine)}
+.scale label:has(input:focus-visible){outline:2px solid var(--pine);outline-offset:2px}
+
+/* board */
+.board{display:flex;gap:12px;overflow-x:auto;padding-bottom:10px;align-items:flex-start}
+.col{background:var(--surface);border:1px solid var(--line);border-radius:4px;width:224px;flex:0 0 224px;display:flex;flex-direction:column}
+.col.term{width:168px;flex:0 0 168px}
+.col.over{border-color:var(--pine);box-shadow:inset 0 0 0 1px var(--pine)}
+.colh{padding:9px 11px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:7px}
+.colh .n{margin-left:auto;color:var(--text2)}
+.cards{padding:8px;display:flex;flex-direction:column;gap:8px;min-height:64px}
+.card{border:1px solid var(--line);border-radius:3px;padding:9px 10px;background:var(--surface);cursor:grab}
+.card:hover{border-color:var(--text2)}
+.card.drag{opacity:.4}
+.card .nm{font-weight:600}
+.card .mt{color:var(--text2);font-size:12px;margin-top:2px}
+.card .mv{margin-top:7px;display:none}
+.empty{color:var(--text2);padding:14px;text-align:center;font-size:12px}
+
+/* misc blocks */
+.kv{display:grid;grid-template-columns:132px 1fr;gap:6px 14px;padding:14px}
+.kv dt{color:var(--text2)}
+.kv dd{margin:0}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{padding:9px 14px 9px 14px;border-bottom:1px solid var(--line);display:flex;gap:12px}
+.tl li:last-child{border-bottom:0}
+.tl .when{color:var(--text2);width:96px;flex:0 0 96px;font-size:12px}
+.tl .rule{color:var(--text2);font-size:12px;border-left:2px solid var(--line);padding-left:8px;margin-left:-8px}
+.note{border-top:1px solid var(--line);padding:11px 14px}
+.note:first-child{border-top:0}
+.note .meta{color:var(--text2);font-size:12px;margin-bottom:3px}
+.chip{border:1px solid var(--line);border-radius:3px;padding:2px 7px;font-size:12px;white-space:nowrap;display:inline-block}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;padding:12px 14px;border-bottom:1px solid var(--line)}
+.filters .field{margin:0;min-width:150px}
+.gbar{height:9px;background:var(--canvas);border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.gbar i{display:block;height:100%;background:var(--pine)}
+.funnel{padding:14px}
+.funnel .step{display:grid;grid-template-columns:150px 1fr 96px;gap:12px;align-items:center;padding:5px 0}
+.slot{display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left}
+.slot:hover{background:var(--canvas)}
+.slot[aria-pressed="true"]{background:var(--canvas);box-shadow:inset 2px 0 0 var(--pine)}
+.split{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.split > div{border-left:1px solid var(--line);padding:14px}
+.split > div:first-child{border-left:0}
+.cmp{display:grid;grid-template-columns:160px repeat(3,1fr);border-top:1px solid var(--line)}
+.cmp > div{padding:8px 12px;border-left:1px solid var(--line)}
+.cmp > div:first-child{border-left:0;color:var(--text2)}
+.cmp .hd{font-weight:600;color:var(--text)}
+.cmp .diverge{box-shadow:inset 2px 0 0 var(--wait)}
+
+/* dialog, toast, palette */
+.scrim{position:fixed;inset:0;background:rgba(28,37,33,.34);display:flex;align-items:flex-start;justify-content:center;padding:12vh 16px;z-index:40}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:5px;width:100%;max-width:520px}
+.modal .mh{padding:14px 16px;border-bottom:1px solid var(--line)}
+.modal .mb{padding:16px}
+.modal .mf{padding:12px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+.pal input{border:0;border-bottom:1px solid var(--line);border-radius:0;padding:13px 16px;font-size:15px}
+.pal input:focus{outline:none;border-bottom-color:var(--pine)}
+.pal ul{list-style:none;margin:0;padding:6px;max-height:52vh;overflow:auto}
+.pal li button{width:100%;text-align:left;background:none;border:0;padding:8px 10px;border-radius:3px;cursor:pointer;display:flex;gap:10px;align-items:center}
+.pal li[aria-selected="true"] button{background:var(--canvas)}
+.pal .kind{margin-left:auto;color:var(--text2);font-size:12px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--text);color:#fff;padding:9px 15px;border-radius:3px;z-index:60}
+
+/* loading */
+.skel{background:var(--line);border-radius:2px;height:11px;animation:pulse 1.1s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:.9}}
+.boot{animation:rise .34s cubic-bezier(.2,.7,.3,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* cover */
+.cover{max-width:640px;margin:0 auto;padding:72px 20px 96px}
+.cover h1{font-size:38px;margin-bottom:6px}
+.cover .lede{font-size:16px;color:var(--text2);margin-bottom:34px}
+.cover section{border-top:1px solid var(--line);padding-top:20px;margin-top:28px}
+.cover h3{margin-bottom:8px}
+.cover .dec{margin-bottom:18px}
+.cover .dec .q{font-weight:600}
+.cover footer{color:var(--text2);margin-top:34px;border-top:1px solid var(--line);padding-top:16px}
+
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .nav{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px;padding:10px}
+  .nav .grp,.nav .who{display:none}
+  .brand{padding:0 8px 0;align-self:center}
+  .cols2,.cols3,.split{grid-template-columns:1fr}
+  .split > div{border-left:0;border-top:1px solid var(--line)}
+  .cmp{grid-template-columns:1fr 1fr}
+  .wrap{padding:16px 14px 60px}
+  .card{cursor:default}
+  .card .mv{display:block}
+  .kv{grid-template-columns:1fr;gap:2px 0}
+  .kv dd{margin-bottom:8px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="layer"></div>
+<div id="toast" aria-live="polite"></div>
+<script>
+"use strict";
+/* Shortlist. Today in this prototype is Thursday 10 September 2026. */
+
+const TODAY = "Thu 10 Sep";
+const STAGES = [
+  {id:"sourced",   label:"Sourced"},
+  {id:"applied",   label:"Applied"},
+  {id:"screening", label:"Screening call"},
+  {id:"interview", label:"Client or panel interview"},
+  {id:"feedback",  label:"Feedback pending"},
+  {id:"offer",     label:"Offer"},
+  {id:"joined",    label:"Joined", term:true},
+  {id:"dropped",   label:"Dropped", term:true}
+];
+const stageLabel = id => (STAGES.find(s => s.id === id) || {label:id}).label;
+
+const ROLES = [
+  {id:"r1", title:"Senior React Developer",     hm:"Ritika Sabharwal",      rec:"Payal Deshmukh",    open:41, target:"2 Oct",  loc:"Bengaluru, hybrid", band:"28.0 to 42.0 LPA"},
+  {id:"r2", title:"DevOps Engineer (AWS)",      hm:"Karan Belliappa",       rec:"Payal Deshmukh",    open:63, target:"19 Sep", loc:"Chennai or remote", band:"24.0 to 34.5 LPA"},
+  {id:"r3", title:"QA Automation Lead",         hm:"Sneha Vaidyanathan",    rec:"Nithya Ramanathan", open:22, target:"24 Oct", loc:"Bengaluru, hybrid", band:"26.0 to 36.0 LPA"},
+  {id:"r4", title:"Product Designer",           hm:"Ahmed Faraz Siddiqui",  rec:"Meghna Bose",       open:17, target:"6 Nov",  loc:"Remote, India",     band:"22.0 to 31.0 LPA"},
+  {id:"r5", title:"Backend Engineer (Node)",    hm:"Ritika Sabharwal",      rec:"Aftab Qureshi",     open:55, target:"26 Sep", loc:"Bengaluru, hybrid", band:"20.0 to 30.0 LPA"},
+  {id:"r6", title:"Data Analyst",               hm:"Devika Menon",          rec:"Sudhanshu Rai",     open:9,  target:"13 Nov", loc:"Pune, hybrid",      band:"14.0 to 21.5 LPA"},
+  {id:"r7", title:"Salesforce Administrator",   hm:"Joseph Alukkas",        rec:"Lila Fernandes",    open:78, target:"29 Aug", loc:"Gurugram, onsite",  band:"18.0 to 26.0 LPA"}
+];
+const role = id => ROLES.find(r => r.id === id);
+
+/* Candidates. Every figure here is meant to survive a recruiter reading it. */
+const CANDIDATES = [
+{id:"CAN-2291", name:"Zoya Kaifi", title:"Senior Frontend Engineer", co:"Zeta Suite", exp:7.5, role:"r1", stage:"feedback",
+ loc:"Bengaluru", relocate:"Already local", notice:60, cur:26.4, exp_ctc:33.6, src:"LinkedIn", owner:"Payal Deshmukh",
+ email:"zoya.kaifi@fastmail.in", phone:"+91 98453 21107", last:"8 Sep", waiting:"Panel is split, your call",
+ skills:["React","TypeScript","Design systems","Web performance"],
+ notes:[
+  {by:"Payal Deshmukh", on:"18 Aug", text:"Strong on system design, weak on testing. Worth a second round."},
+  {by:"Payal Deshmukh", on:"10 Sep", text:"Vikram is a no, Ritika is a clear yes, Anand wrote lean hire and will not say the word out loud. Not going back to her until I have a plan."}],
+ tl:[
+  {on:"14 Aug", text:"Sourced from LinkedIn by Payal Deshmukh"},
+  {on:"18 Aug", text:"Screening call, recommended to advance"},
+  {on:"8 Sep",  text:"Panel interview with Ritika Sabharwal, Vikram Nanjappa, Anand Sreenivasan"},
+  {on:"10 Sep", text:"Third scorecard in, panel does not agree", rule:"Rule: notify the recruiter when a panel splits"}]},
+
+{id:"CAN-2274", name:"Harshvardhan Pillai", title:"Frontend Lead", co:"Postman", exp:9, role:"r1", stage:"offer",
+ loc:"Bengaluru", relocate:"Already local", notice:"Serving notice, last day 26 Sep", cur:31.8, exp_ctc:42.5, src:"Referral, Dinesh Kumaraswamy (Platform)", owner:"Payal Deshmukh",
+ email:"h.pillai@hey.com", phone:"+91 99016 44820", last:"4 Sep", waiting:"Offer sent 4 Sep, no reply in 6 days",
+ skills:["React","Next.js","Team lead","Hiring"],
+ notes:[
+  {by:"Payal Deshmukh", on:"4 Sep", text:"Offer went out Friday evening. Nothing since, and he read the mail twice on Monday."},
+  {by:"Ritika Sabharwal", on:"5 Sep", text:"Counteroffered by current employer, following up Monday."}],
+ tl:[
+  {on:"29 Jul", text:"Referred by Dinesh Kumaraswamy"},
+  {on:"5 Aug",  text:"Screening call, recommended to advance"},
+  {on:"20 Aug", text:"Panel interview, 3 of 3 said hire"},
+  {on:"4 Sep",  text:"Offer sent, 39.75 LPA fixed plus 4.5 LPA variable"},
+  {on:"9 Sep",  text:"Follow up mail queued for tomorrow", rule:"Rule: chase an unanswered offer after 5 days"}]},
+
+{id:"CAN-2310", name:"Aparna Bhattacharya", title:"React Developer", co:"Innovaccer", exp:5, role:"r1", stage:"screening",
+ loc:"Noida", relocate:"Will relocate to Bengaluru", notice:90, cur:18.4, exp_ctc:24.2, src:"Naukri", owner:"Payal Deshmukh",
+ email:"aparna.b93@gmail.com", phone:"+91 87506 71934", last:"9 Sep", waiting:"",
+ skills:["React","Redux","Jest","Node basics"],
+ notes:[{by:"Payal Deshmukh", on:"9 Sep", text:"90 day notice is the problem, not the skills. Asked her to check whether she can buy it down to 45."}],
+ tl:[{on:"3 Sep", text:"Applied through Naukri"},{on:"9 Sep", text:"Screening call, recommended to advance"},{on:"11 Sep", text:"Panel interview scheduled, 11:00"}]},
+
+{id:"CAN-2318", name:"Faizan Ahmed Khan", title:"SDE II", co:"Groww", exp:4, role:"r1", stage:"applied",
+ loc:"Bengaluru", relocate:"Already local", notice:30, cur:21.6, exp_ctc:27.5, src:"Instahyre", owner:"Payal Deshmukh",
+ email:"faizan.khan@outlook.com", phone:"+91 90084 12276", last:"7 Sep", waiting:"Screening call not booked",
+ skills:["React","GraphQL","Node"],
+ notes:[{by:"Payal Deshmukh", on:"7 Sep", text:"Four years against a senior brief. Worth one call because the Groww frontend bar is high."}],
+ tl:[{on:"7 Sep", text:"Applied through Instahyre"}]},
+
+{id:"CAN-2119", name:"Sarthak Anand", title:"Staff Engineer, Developer Platform", co:"Chargebee", exp:8, role:"r2", stage:"sourced",
+ loc:"Chennai", relocate:"Already local", notice:60, cur:34.5, exp_ctc:41.5, src:"LinkedIn", owner:"Payal Deshmukh",
+ email:"sarthak.anand@proton.me", phone:"+91 93800 55214", last:"6 Sep", waiting:"",
+ crossFit:{from:"r1", why:"Rejected for Senior React Developer on 21 Aug. The panel liked him and said he wants to own build tooling and CI more than product UI, which is this role."},
+ skills:["AWS","Terraform","Buildkite","Kubernetes","Node"],
+ notes:[
+  {by:"Ritika Sabharwal", on:"21 Aug", text:"Not for the React role. He spent forty minutes on our build pipeline and ten on the UI question. Put him in front of Karan."},
+  {by:"Payal Deshmukh", on:"6 Sep", text:"Re-opened against DevOps. He knows we passed once, so I said it plainly rather than pretending it was a fresh approach."}],
+ tl:[
+  {on:"4 Aug",  text:"Sourced from LinkedIn for Senior React Developer"},
+  {on:"21 Aug", text:"Moved to Dropped for Senior React Developer, not a fit for the brief"},
+  {on:"6 Sep",  text:"Re-opened against DevOps Engineer (AWS)"}]},
+
+{id:"CAN-2166", name:"Nikhil Warrier", title:"DevOps Engineer", co:"Freshworks", exp:6, role:"r2", stage:"interview",
+ loc:"Chennai", relocate:"Already local", notice:60, cur:23.5, exp_ctc:30.8, src:"LinkedIn", owner:"Payal Deshmukh",
+ email:"nikhil.warrier@gmail.com", phone:"+91 94440 87613", last:"9 Sep", waiting:"",
+ skills:["AWS","Terraform","Jenkins","Python"],
+ notes:[{by:"Payal Deshmukh", on:"9 Sep", text:"Asked about remote policy twice, might be the dealbreaker."}],
+ tl:[{on:"11 Aug", text:"Sourced from LinkedIn"},{on:"19 Aug", text:"Screening call, recommended to advance"},{on:"10 Sep", text:"Panel interview today, 16:00"}]},
+
+{id:"CAN-2189", name:"Preethi Raghunathan", title:"Site Reliability Engineer", co:"Zoho", exp:5.5, role:"r2", stage:"screening",
+ loc:"Chennai", relocate:"Will relocate", notice:30, cur:19.8, exp_ctc:26.4, src:"Careers page", owner:"Payal Deshmukh",
+ email:"preethi.r@zohomail.in", phone:"+91 90031 22458", last:"5 Sep", waiting:"Screening scorecard not submitted",
+ skills:["Linux","AWS","Prometheus","Bash"],
+ notes:[{by:"Payal Deshmukh", on:"5 Sep", text:"Good call. I have not written the scorecard yet, which is why she is still sitting here."}],
+ tl:[{on:"28 Aug", text:"Applied through the careers page"},{on:"5 Sep", text:"Screening call held, scorecard pending"}]},
+
+{id:"CAN-2151", name:"Adeel Mirza", title:"Cloud Infrastructure Engineer", co:"Emirates NBD", exp:7, role:"r2", stage:"applied",
+ loc:"Dubai", relocate:"Moving back to India in November", notice:"Immediate joiner from 12 Nov", cur:38.2, exp_ctc:35.4, src:"Referral, Preeti Sundaram (Finance)", owner:"Payal Deshmukh",
+ email:"adeel.mirza@icloud.com", phone:"+971 50 447 2216", last:"2 Sep", waiting:"",
+ skills:["AWS","Azure","Terraform","FinOps"],
+ notes:[{by:"Payal Deshmukh", on:"2 Sep", text:"Taking a cut to move home, so the number is not the risk here. November start is, given we want this closed by the 19th."}],
+ tl:[{on:"2 Sep", text:"Referred by Preeti Sundaram"}]},
+
+{id:"CAN-2242", name:"Bhavana Kulkarni", title:"Senior SDET", co:"Tekion", exp:8, role:"r3", stage:"interview",
+ loc:"Bengaluru", relocate:"Already local", notice:60, cur:27.2, exp_ctc:35.5, src:"LinkedIn", owner:"Nithya Ramanathan",
+ email:"bhavana.kulkarni@gmail.com", phone:"+91 80889 33471", last:"10 Sep", waiting:"",
+ skills:["Playwright","Java","CI pipelines","Team lead"],
+ notes:[{by:"Nithya Ramanathan", on:"3 Sep", text:"Has run a team of four. That is the part of this brief the other three cannot cover."}],
+ tl:[{on:"25 Aug", text:"Sourced from LinkedIn"},{on:"3 Sep", text:"Screening call, recommended to advance"},{on:"10 Sep", text:"Panel interview today, 12:00"}]},
+
+{id:"CAN-2255", name:"Joel Mathew Thomas", title:"SDET", co:"Gainsight", exp:6, role:"r3", stage:"feedback",
+ loc:"Hyderabad", relocate:"Will relocate", notice:45, cur:22.9, exp_ctc:29.4, src:"Naukri", owner:"Nithya Ramanathan",
+ email:"joel.thomas@gmail.com", phone:"+91 96529 74130", last:"8 Sep", waiting:"Panel feedback, 1 of 2 in",
+ skills:["Selenium","Playwright","Python","API testing"],
+ notes:[{by:"Nithya Ramanathan", on:"8 Sep", text:"Sneha liked him. Waiting on Ismail, who is out until Thursday."}],
+ tl:[{on:"20 Aug", text:"Applied through Naukri"},{on:"27 Aug", text:"Screening call, recommended to advance"},{on:"8 Sep", text:"Panel interview held"}]},
+
+{id:"CAN-2203", name:"Fatima Zehra", title:"Senior QA Engineer", co:"Publicis Sapient", exp:6, role:"r3", stage:"applied",
+ loc:"Gurugram", relocate:"Will not relocate, remote only", notice:30, cur:20.4, exp_ctc:26.8, src:"Instahyre", owner:"Nithya Ramanathan",
+ email:"fatima.zehra@gmail.com", phone:"+91 99118 60274", last:"6 Sep", waiting:"Screening call not booked",
+ skills:["Cypress","JavaScript","Test strategy"],
+ notes:[{by:"Nithya Ramanathan", on:"6 Sep", text:"Remote only against a hybrid brief. Checking with Sneha before I spend a call on it."}],
+ tl:[{on:"6 Sep", text:"Applied through Instahyre"}]},
+
+{id:"CAN-2301", name:"Ritwika Ghoshal", title:"Product Designer", co:"Jupiter", exp:6, role:"r4", stage:"screening",
+ loc:"Bengaluru", relocate:"Already local", notice:30, cur:21.3, exp_ctc:28.4, src:"Referral, Neha Kariappa (Design)", owner:"Meghna Bose",
+ email:"ritwika.ghoshal@gmail.com", phone:"+91 78299 10465", last:"9 Sep", waiting:"",
+ skills:["Product design","Figma","Research","Design systems"],
+ notes:[{by:"Meghna Bose", on:"9 Sep", text:"Portfolio is research led. Ahmed wants to see one end to end flow she shipped, asked her to bring it."}],
+ tl:[{on:"1 Sep", text:"Referred by Neha Kariappa"},{on:"9 Sep", text:"Screening call, recommended to advance"}]},
+
+{id:"CAN-2299", name:"Devansh Kothari", title:"Senior Product Designer", co:"Razorpay", exp:7, role:"r4", stage:"interview",
+ loc:"Bengaluru", relocate:"Already local", notice:"Serving notice, last day 3 Oct", cur:24.8, exp_ctc:30.5, src:"LinkedIn", owner:"Meghna Bose",
+ email:"devansh.kothari@hey.com", phone:"+91 99720 38851", last:"10 Sep", waiting:"",
+ skills:["Product design","Prototyping","Figma","Fintech"],
+ notes:[{by:"Meghna Bose", on:"8 Sep", text:"Serving notice, so he is the only one on this role who can start inside the target."}],
+ tl:[{on:"22 Aug", text:"Sourced from LinkedIn"},{on:"29 Aug", text:"Screening call, recommended to advance"},{on:"10 Sep", text:"Portfolio review today, 10:30"}]},
+
+{id:"CAN-2287", name:"Aisha Farooqui", title:"Product Designer", co:"Swiggy", exp:5, role:"r4", stage:"sourced",
+ loc:"Bengaluru", relocate:"Already local", notice:"Unknown", cur:null, exp_ctc:null, src:"LinkedIn", owner:"Meghna Bose",
+ email:"aisha.farooqui@gmail.com", phone:"", last:"14 Aug", waiting:"No reply since 14 August",
+ skills:["Product design","Illustration","Figma"],
+ notes:[{by:"Meghna Bose", on:"3 Sep", text:"Three messages, no reply, profile still shows Swiggy. She has gone completely silent, I am not sending a fourth."}],
+ tl:[
+  {on:"14 Aug", text:"First outreach sent, Cold approach, senior IC"},
+  {on:"21 Aug", text:"Follow up 1 sent, no reply"},
+  {on:"29 Aug", text:"Follow up 2 sent, no reply"},
+  {on:"9 Sep",  text:"Flagged for Dropped after 3 unanswered follow ups", rule:"Rule: drop after 3 unanswered follow ups"}]},
+
+{id:"CAN-2178", name:"Sandeep Yeleswarapu", title:"Backend Engineer", co:"Hasura", exp:5, role:"r5", stage:"offer",
+ loc:"Hyderabad", relocate:"Will relocate to Bengaluru", notice:45, cur:20.7, exp_ctc:27.5, src:"Referral, Anand Sreenivasan (Backend)", owner:"Aftab Qureshi",
+ email:"sandeep.y@fastmail.com", phone:"+91 90105 27364", last:"9 Sep", waiting:"Offer waiting on VP Finance approval since 8 Sep",
+ skills:["Node","PostgreSQL","GraphQL","AWS"],
+ notes:[{by:"Aftab Qureshi", on:"9 Sep", text:"Approval has sat with Finance two days. He asked for a date today, I gave him Friday."}],
+ tl:[
+  {on:"12 Aug", text:"Referred by Anand Sreenivasan"},
+  {on:"19 Aug", text:"Screening call, recommended to advance"},
+  {on:"2 Sep",  text:"Panel interview, 2 of 3 said hire, 1 said lean hire"},
+  {on:"8 Sep",  text:"Offer raised at 26.25 LPA fixed, sent for approval"}]},
+
+{id:"CAN-2231", name:"Kritika Sen", title:"Node Developer", co:"Meesho", exp:4.5, role:"r5", stage:"screening",
+ loc:"Bengaluru", relocate:"Already local", notice:60, cur:17.9, exp_ctc:23.5, src:"Naukri", owner:"Aftab Qureshi",
+ email:"kritika.sen@gmail.com", phone:"+91 81474 03398", last:"4 Sep", waiting:"In Screening call for 6 days",
+ skills:["Node","Express","MongoDB"],
+ notes:[{by:"Aftab Qureshi", on:"4 Sep", text:"Call went fine, nothing memorable. I keep pushing her down the list, which is not a decision."}],
+ tl:[{on:"30 Aug", text:"Applied through Naukri"},{on:"4 Sep", text:"Screening call held, scorecard pending"},{on:"9 Sep", text:"Flagged after 5 days in Screening call", rule:"Rule: flag after 5 days in Screening call"}]},
+
+{id:"CAN-2320", name:"Rohan Deshpande", title:"Backend Engineer", co:"Zetwerk", exp:3, role:"r5", stage:"applied",
+ loc:"Pune", relocate:"Will relocate", notice:30, cur:14.2, exp_ctc:18.5, src:"Careers page", owner:"Aftab Qureshi",
+ email:"rohan.deshpande@gmail.com", phone:"+91 70309 88512", last:"8 Sep", waiting:"",
+ skills:["Node","TypeScript","MySQL"],
+ notes:[{by:"Aftab Qureshi", on:"8 Sep", text:"Under the experience bar but the number works. Worth a call if the senior pipeline stays thin."}],
+ tl:[{on:"8 Sep", text:"Applied through the careers page"}]},
+
+{id:"CAN-2265", name:"Ananya Iyer", title:"Data Analyst", co:"Porter", exp:3.5, role:"r6", stage:"screening",
+ loc:"Pune", relocate:"Already local", notice:30, cur:12.8, exp_ctc:17.4, src:"LinkedIn", owner:"Sudhanshu Rai",
+ email:"ananya.iyer@gmail.com", phone:"+91 96736 21094", last:"9 Sep", waiting:"",
+ skills:["SQL","Python","Looker","Experiment analysis"],
+ notes:[{by:"Sudhanshu Rai", on:"9 Sep", text:"Clean SQL answers. Devika wants to meet her this week rather than next."}],
+ tl:[{on:"5 Sep", text:"Sourced from LinkedIn"},{on:"9 Sep", text:"Screening call, recommended to advance"}]},
+
+{id:"CAN-2312", name:"Mohammed Ashfaq", title:"Analytics Engineer", co:"PhonePe", exp:4, role:"r6", stage:"applied",
+ loc:"Bengaluru", relocate:"Will not relocate, remote only", notice:60, cur:16.5, exp_ctc:21.4, src:"Instahyre", owner:"Sudhanshu Rai",
+ email:"m.ashfaq@gmail.com", phone:"+91 89043 55172", last:"7 Sep", waiting:"Screening call not booked",
+ skills:["dbt","SQL","Airflow","Python"],
+ notes:[{by:"Sudhanshu Rai", on:"7 Sep", text:"Over the band and remote only. Two problems, and the band is the one I cannot move."}],
+ tl:[{on:"7 Sep", text:"Applied through Instahyre"}]},
+
+{id:"CAN-2140", name:"Jaspreet Kaur Bhatia", title:"Salesforce Administrator", co:"Wipro", exp:7, role:"r7", stage:"interview",
+ loc:"Gurugram", relocate:"Already local", notice:90, cur:16.8, exp_ctc:22.8, src:"Naukri", owner:"Lila Fernandes",
+ email:"jaspreet.bhatia@gmail.com", phone:"+91 98105 47739", last:"9 Sep", waiting:"",
+ skills:["Salesforce Admin","Flows","Apex basics","Reporting"],
+ notes:[{by:"Lila Fernandes", on:"9 Sep", text:"Interview went 15 minutes long, Joseph stayed on. 90 day notice against a role that is already 78 days open is the whole problem."}],
+ tl:[{on:"18 Aug", text:"Applied through Naukri"},{on:"26 Aug", text:"Screening call, recommended to advance"},{on:"9 Sep", text:"Panel interview held yesterday, 15:00"}]},
+
+{id:"CAN-2098", name:"Vinod Chandrasekaran", title:"Salesforce Consultant", co:"Accenture", exp:9, role:"r7", stage:"feedback",
+ loc:"Gurugram", relocate:"Already local", notice:"Serving notice, last day 30 Sep", cur:19.6, exp_ctc:25.5, src:"Referral, Joseph Alukkas", owner:"Lila Fernandes",
+ email:"vinod.chandra@outlook.com", phone:"+91 99711 20863", last:"9 Sep", waiting:"Panel feedback, 3 days late",
+ skills:["Salesforce","Sales Cloud","Integrations","Stakeholder management"],
+ notes:[{by:"Lila Fernandes", on:"9 Sep", text:"Counteroffered by current employer, following up Monday. He says the counter is money only and he still wants out."}],
+ tl:[{on:"1 Aug", text:"Referred by Joseph Alukkas"},{on:"11 Aug", text:"Screening call, recommended to advance"},{on:"7 Sep", text:"Panel interview held"},{on:"9 Sep", text:"Feedback reminder sent to Joseph Alukkas", rule:"Rule: remind when feedback is 2 days late"}]},
+
+{id:"CAN-2073", name:"Tanvi Ranadive", title:"Salesforce Administrator", co:"LTIMindtree", exp:5, role:"r7", stage:"joined",
+ loc:"Gurugram", relocate:"Already local", notice:"Joined 1 Sep", cur:15.2, exp_ctc:20.4, src:"LinkedIn", owner:"Lila Fernandes",
+ email:"tanvi.ranadive@gmail.com", phone:"+91 98713 05528", last:"1 Sep", waiting:"",
+ skills:["Salesforce Admin","Flows","Data loader"],
+ notes:[{by:"Lila Fernandes", on:"1 Sep", text:"Joined on time. Second Salesforce hire on this req, the first one is still open."}],
+ tl:[{on:"3 Jul", text:"Sourced from LinkedIn"},{on:"29 Jul", text:"Offer accepted at 19.85 LPA"},{on:"1 Sep", text:"Joined"}]},
+
+{id:"CAN-2044", name:"Girish Nadkarni", title:"Engineering Manager", co:"Swiggy", exp:11, role:"r1", stage:"dropped",
+ loc:"Bengaluru", relocate:"Already local", notice:90, cur:47.6, exp_ctc:57.5, src:"LinkedIn", owner:"Payal Deshmukh",
+ email:"girish.nadkarni@gmail.com", phone:"+91 99807 41230", last:"12 Aug", waiting:"",
+ skills:["Engineering management","React","Hiring"],
+ notes:[{by:"Payal Deshmukh", on:"12 Aug", text:"Wants a manager title and 57.5. We are hiring an IC at 42.0 top of band. Keep warm for when the EM req opens."}],
+ tl:[{on:"5 Aug", text:"Sourced from LinkedIn"},{on:"12 Aug", text:"Moved to Dropped, compensation and scope both outside the brief"}]},
+
+{id:"CAN-2019", name:"Shalini Prabhu", title:"QA Engineer", co:"Rapido", exp:4, role:"r3", stage:"dropped",
+ loc:"Bengaluru", relocate:"Already local", notice:30, cur:13.4, exp_ctc:18.2, src:"Naukri", owner:"Nithya Ramanathan",
+ email:"shalini.prabhu@gmail.com", phone:"+91 90355 76641", last:"24 Jul", waiting:"",
+ skills:["Manual testing","Selenium basics"],
+ notes:[{by:"Nithya Ramanathan", on:"24 Jul", text:"No automation depth for a lead brief. Fine for a mid QA req later."}],
+ tl:[{on:"18 Jul", text:"Applied through Naukri"},{on:"24 Jul", text:"Moved to Dropped, not enough automation depth"}]}
+];
+
+const INTERVIEWS = [
+  {day:"Wed 9 Sep",  when:"15:00", cand:"CAN-2140", role:"r7", panel:["Joseph Alukkas","Ridhima Sethi"], kind:"Panel interview", state:"done"},
+  {day:"Thu 10 Sep", when:"10:30", cand:"CAN-2299", role:"r4", panel:["Ahmed Faraz Siddiqui","Neha Kariappa"], kind:"Portfolio review", state:"today"},
+  {day:"Thu 10 Sep", when:"12:00", cand:"CAN-2242", role:"r3", panel:["Sneha Vaidyanathan"], kind:"Panel interview", state:"today"},
+  {day:"Thu 10 Sep", when:"16:00", cand:"CAN-2166", role:"r2", panel:["Karan Belliappa","Ismail Sait"], kind:"Panel interview", state:"today"},
+  {day:"Fri 11 Sep", when:"11:00", cand:"CAN-2310", role:"r1", panel:["Ritika Sabharwal","Vikram Nanjappa"], kind:"Panel interview", state:"upcoming"}
+];
+
+const OFFERS = [
+  {cand:"CAN-2274", role:"r1", fixed:39.75, variable:4.5, joining:"6 Oct", status:"Sent, no response",
+   sentOn:"4 Sep", chain:[{who:"Ritika Sabharwal, hiring manager", state:"Approved 2 Sep"},{who:"Devika Menon, HR head", state:"Approved 3 Sep"},{who:"Rakesh Iyengar, VP Finance", state:"Approved 4 Sep"}],
+   note:"Six days with no reply and a counteroffer in play. Call, do not mail."},
+  {cand:"CAN-2178", role:"r5", fixed:26.25, variable:2.75, joining:"27 Oct", status:"Waiting on approval",
+   sentOn:null, chain:[{who:"Ritika Sabharwal, hiring manager", state:"Approved 8 Sep"},{who:"Devika Menon, HR head", state:"Approved 8 Sep"},{who:"Rakesh Iyengar, VP Finance", state:"Waiting since 8 Sep"}],
+   note:"26.25 is 1.25 over the band midpoint, which is why Finance is holding it."},
+  {cand:"CAN-2073", role:"r7", fixed:19.85, variable:1.6, joining:"1 Sep", status:"Accepted, joined",
+   sentOn:"29 Jul", chain:[{who:"Joseph Alukkas, hiring manager", state:"Approved 24 Jul"},{who:"Devika Menon, HR head", state:"Approved 25 Jul"},{who:"Rakesh Iyengar, VP Finance", state:"Approved 28 Jul"}],
+   note:"Accepted in 36 hours, joined on the agreed date."}
+];
+
+/* Panel feedback. Zoya is the split one, and the split is the point. */
+const FEEDBACK = {
+  "CAN-2291":{
+   role:"r1",
+   panel:[
+    {who:"Ritika Sabharwal", part:"Hiring manager", on:"8 Sep", verdict:"Hire",
+     scores:{"System design":4,"Coding":4,"React depth":5,"Testing":2,"Communication":4},
+     text:"She rebuilt our render path on the whiteboard in ten minutes and found the memo boundary I was fishing for. Testing answers were thin, and I can live with that in someone who owns the component library."},
+    {who:"Vikram Nanjappa", part:"Senior engineer", on:"8 Sep", verdict:"No hire",
+     scores:{"System design":3,"Coding":3,"React depth":4,"Testing":1,"Communication":3},
+     text:"She could not describe how she would test the thing she had just designed. On a team of four that is not a gap someone else absorbs. I would want a second coding round before anyone talks about an offer."},
+    {who:"Anand Sreenivasan", part:"Backend engineer", on:"10 Sep", verdict:"Lean hire",
+     scores:{"System design":4,"Coding":3,"React depth":4,"Testing":2,"Communication":5},
+     text:"Best communicator of the four we have run. Testing is a real gap but it is teachable, and she said so herself rather than bluffing. I lean yes with a testing question in a follow up round."}],
+   dims:["System design","Coding","React depth","Testing","Communication"],
+   split:"Testing"},
+  "CAN-2178":{
+   role:"r5",
+   panel:[
+    {who:"Ritika Sabharwal", part:"Hiring manager", on:"2 Sep", verdict:"Hire",
+     scores:{"System design":4,"Coding":4,"Databases":5,"Communication":4},
+     text:"Query plans without prompting. Ready for the work we have this quarter."},
+    {who:"Anand Sreenivasan", part:"Backend engineer", on:"2 Sep", verdict:"Hire",
+     scores:{"System design":4,"Coding":5,"Databases":4,"Communication":3},
+     text:"Cleanest code of the round. Quiet, so ask him direct questions rather than open ones."},
+    {who:"Meera Raghavan", part:"Platform engineer", on:"3 Sep", verdict:"Lean hire",
+     scores:{"System design":3,"Coding":4,"Databases":4,"Communication":3},
+     text:"Solid, not exceptional. At 26.25 I would still take him."}],
+   dims:["System design","Coding","Databases","Communication"],
+   split:null}
+};
+
+const PANEL_AVAIL = [
+  {who:"Karan Belliappa", role:"Hiring manager, DevOps", slots:{"Thu 10 Sep":["09:30","16:00"],"Fri 11 Sep":["11:00","14:30"],"Mon 14 Sep":["10:00","15:30"]}},
+  {who:"Ismail Sait",     role:"Senior SRE",             slots:{"Thu 10 Sep":["16:00"],"Fri 11 Sep":["09:30","14:30"],"Mon 14 Sep":["10:00"]}},
+  {who:"Meera Raghavan",  role:"Platform engineer",      slots:{"Thu 10 Sep":["11:00"],"Fri 11 Sep":["11:00","16:30"],"Mon 14 Sep":["15:30"]}}
+];
+const SLOT_GRID = [
+  {day:"Thu 10 Sep", time:"16:00", free:["Karan Belliappa","Ismail Sait"], clash:"Ismail Sait is already on the 16:00 panel for Joel Mathew Thomas"},
+  {day:"Fri 11 Sep", time:"11:00", free:["Karan Belliappa","Meera Raghavan"], clash:null},
+  {day:"Fri 11 Sep", time:"14:30", free:["Karan Belliappa","Ismail Sait"], clash:null},
+  {day:"Mon 14 Sep", time:"10:00", free:["Karan Belliappa","Ismail Sait"], clash:null},
+  {day:"Mon 14 Sep", time:"15:30", free:["Karan Belliappa","Meera Raghavan"], clash:null}
+];
+
+const TEMPLATES = [
+  {id:"t1", name:"Cold approach, senior IC", sent:184, replies:41, rate:22.3, step:1,
+   body:"Hi {first_name},\n\nYou have spent four years on {company}'s web platform, and we are hiring one senior person to own ours. Team of four, Bengaluru hybrid, band is 28.0 to 42.0 LPA.\n\nWorth fifteen minutes this week?\n\nPayal"},
+  {id:"t2", name:"Cold approach, generic", sent:212, replies:19, rate:9.0, step:1,
+   body:"Hi {first_name},\n\nI came across your profile and thought you might be a good fit for an opening we have. Let me know if you would like to hear more.\n\nPayal"},
+  {id:"t3", name:"Referral warm intro", sent:47, replies:23, rate:48.9, step:1,
+   body:"Hi {first_name},\n\n{referrer} suggested I write to you. They work on our platform team and thought the {role_title} role would land well with you.\n\nHappy to send the brief before you decide either way.\n\nPayal"},
+  {id:"t4", name:"Follow up 1, no reply", sent:151, replies:22, rate:14.6, step:2,
+   body:"Hi {first_name},\n\nBringing my note back up in case it got buried. Still open, still worth a short call.\n\nPayal"},
+  {id:"t5", name:"Follow up 2, closing the loop", sent:96, replies:11, rate:11.5, step:3,
+   body:"Hi {first_name},\n\nLast note from me on this one. If the timing is wrong, say so and I will come back when something closer opens up.\n\nPayal"}
+];
+const SEQUENCE = [
+  {cand:"CAN-2287", name:"Aisha Farooqui", step:3, of:3, lastSent:"29 Aug", state:"No reply, flagged for Dropped"},
+  {cand:"CAN-2119", name:"Sarthak Anand",  step:1, of:3, lastSent:"6 Sep",  state:"Replied, call booked"},
+  {cand:"CAN-2318", name:"Faizan Ahmed Khan", step:2, of:3, lastSent:"7 Sep", state:"Opened twice, no reply"},
+  {cand:"CAN-2151", name:"Adeel Mirza",    step:1, of:3, lastSent:"2 Sep",  state:"Replied, sent the brief"},
+  {cand:"CAN-2312", name:"Mohammed Ashfaq", step:2, of:3, lastSent:"7 Sep", state:"No reply"}
+];
+
+const RULES = [
+  {id:"ru1", on:true, name:"Flag after 5 days in Screening call",
+   when:"A candidate sits in Screening call for 5 days", then:"Notify the recruiter who owns them",
+   fired:14, last:"9 Sep, Kritika Sen"},
+  {id:"ru2", on:true, name:"Remind when feedback is 2 days late",
+   when:"Interview feedback is 2 days past the interview", then:"Send a reminder to the interviewer",
+   fired:31, last:"9 Sep, Joseph Alukkas about Vinod Chandrasekaran"},
+  {id:"ru3", on:true, name:"Drop after 3 unanswered follow ups",
+   when:"A candidate has 3 outreach steps with no reply", then:"Flag for Dropped and tell the recruiter",
+   fired:22, last:"9 Sep, Aisha Farooqui"},
+  {id:"ru4", on:true, name:"Chase an unanswered offer after 5 days",
+   when:"An offer is sent and unanswered for 5 days", then:"Notify the recruiter and the hiring manager",
+   fired:6, last:"9 Sep, Harshvardhan Pillai"},
+  {id:"ru5", on:false, name:"Ask for a referral when someone is dropped after a panel",
+   when:"A candidate is dropped after reaching panel interview", then:"Notify the recruiter who owns them",
+   fired:0, last:"Not fired yet, turned off by Nithya Ramanathan on 2 Sep"}
+];
+
+const REPORTS = {
+  tth:[{r:"Data Analyst", d:21, n:3},{r:"Product Designer", d:29, n:4},{r:"Senior React Developer", d:34, n:6},
+       {r:"QA Automation Lead", d:38, n:2},{r:"Backend Engineer (Node)", d:41, n:5},{r:"DevOps Engineer (AWS)", d:52, n:3},
+       {r:"Salesforce Administrator", d:61, n:2}],
+  src:[{s:"Referral from an employee", hires:9, cands:63, rate:14.3},{s:"LinkedIn", hires:7, cands:214, rate:3.3},
+       {s:"Naukri", hires:5, cands:308, rate:1.6},{s:"Instahyre", hires:3, cands:97, rate:3.1},
+       {s:"Careers page", hires:1, cands:126, rate:0.8}],
+  funnel:[{s:"Sourced",n:412},{s:"Applied",n:168},{s:"Screening call",n:96},{s:"Client or panel interview",n:51},
+          {s:"Feedback pending",n:44},{s:"Offer",n:19},{s:"Joined",n:14}],
+  offers:{sent:19, accepted:14, declined:4, open:1, rate:73.7, medianDays:2.4}
+};
+
+const SAVED = [
+  {id:"s1", name:"React, under 60 days notice", f:{q:"react", notice:"60", loc:"", src:"", maxExp:""}},
+  {id:"s2", name:"Referrals, last 90 days", f:{q:"", notice:"", loc:"", src:"Referral", maxExp:""}},
+  {id:"s3", name:"Chennai, under 32.0 LPA", f:{q:"", notice:"", loc:"Chennai", src:"", maxExp:"32"}}
+];
+
+/* ---------- state ---------- */
+const state = {
+  cands: CANDIDATES.map(c => Object.assign({}, c)),
+  rules: RULES.map(r => Object.assign({}, r)),
+  forms: {},            /* form values kept for the session */
+  filters:{q:"",notice:"",loc:"",src:"",maxExp:""},
+  activeSaved:null,
+  rolesSort:{key:"open", dir:"desc"},
+  booted:false
+};
+const byId = id => state.cands.find(c => c.id === id);
+const inRole = rid => state.cands.filter(c => c.role === rid);
+const stageCount = (rid, sid) => inRole(rid).filter(c => c.stage === sid).length;
+const activeCount = rid => inRole(rid).filter(c => c.stage !== "joined" && c.stage !== "dropped").length;
+
+/* ---------- helpers ---------- */
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const lpa = n => n == null ? "Not shared" : (Math.round(n*100)%10 === 0 ? n.toFixed(1) : n.toFixed(2)) + " LPA";
+const MON = {Jul:6, Aug:7, Sep:8, Oct:9, Nov:10};
+function daysAgo(d){
+  if(!d) return 999;
+  const p = String(d).replace(/^[A-Za-z]{3}\s/,"").split(" ");
+  const dt = new Date(2026, MON[p[1]], +p[0]);
+  return Math.round((new Date(2026,8,10) - dt) / 86400000);
+}
+const noticeText = c => typeof c.notice === "number" ? c.notice + " day notice" : c.notice;
+function statusOf(c){
+  if(c.stage === "dropped") return {cls:"drop", label:"Dropped"};
+  if(c.stage === "joined")  return {cls:"fwd",  label:"Joined"};
+  if(c.waiting)             return {cls:"wait", label:c.waiting};
+  if(daysAgo(c.last) > 7)   return {cls:"stale", label:"No movement in " + daysAgo(c.last) + " days"};
+  if(INTERVIEWS.some(i => i.cand === c.id && i.state !== "done")) return {cls:"sched", label:"Interview booked"};
+  return {cls:"fwd", label:"Moving forward"};
+}
+const st = (cls, label) => '<span class="st"><span class="dot d-' + cls + '"></span>' + esc(label) + "</span>";
+const link = (href, text, cls) => '<a href="#' + href + '"' + (cls ? ' class="' + cls + '"' : "") + ">" + esc(text) + "</a>";
+const candLink = c => link("/candidate/" + c.id, c.name);
+
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.innerHTML = '<div class="toast">' + esc(msg) + "</div>";
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { t.innerHTML = ""; }, 3200);
+}
+function closeLayer(){ document.getElementById("layer").innerHTML = ""; }
+function confirmDialog(o){
+  const l = document.getElementById("layer");
+  l.innerHTML = '<div class="scrim" role="dialog" aria-modal="true" aria-labelledby="cdt"><div class="modal">' +
+    '<div class="mh"><h2 id="cdt">' + esc(o.title) + '</h2></div>' +
+    '<div class="mb prose">' + o.body + "</div>" +
+    '<div class="mf"><button class="btn ghost" data-act="cancel">Keep in pipeline</button>' +
+    '<button class="btn danger" data-act="go">' + esc(o.confirm) + "</button></div></div></div>";
+  l.querySelector('[data-act="cancel"]').onclick = closeLayer;
+  l.querySelector('[data-act="go"]').onclick = () => { closeLayer(); o.onConfirm(); };
+  l.querySelector('[data-act="go"]').focus();
+}
+
+/* ---------- routing ---------- */
+const routes = {
+  "": screenCover, "/": screenCover,
+  "/today": screenToday, "/roles": screenRoles, "/role": screenPipeline,
+  "/candidate": screenCandidate, "/scorecard": screenScorecard, "/schedule": screenSchedule,
+  "/feedback": screenFeedback, "/offers": screenOffers, "/talent": screenTalent,
+  "/outreach": screenOutreach, "/rules": screenRules, "/reports": screenReports,
+  "/broken": screenError
+};
+const NAVITEMS = [
+  {h:"/today", t:"Today"}, {h:"/roles", t:"Roles"}, {h:"/talent", t:"Talent pool"},
+  {h:"/outreach", t:"Outreach"}, {h:"/rules", t:"Automation rules"}, {h:"/reports", t:"Reports"}
+];
+
+function parse(){
+  const raw = location.hash.replace(/^#/, "");
+  const parts = raw.split("/").filter(Boolean);
+  return {base:"/" + (parts[0] || ""), arg:parts[1] || null, raw:raw};
+}
+function render(){
+  const r = parse();
+  const fn = routes[r.base] || screenNotFound;
+  if(fn === screenCover){
+    document.getElementById("root").innerHTML = '<div class="boot">' + screenCover() + "</div>";
+    window.scrollTo(0,0); wire(); return;
+  }
+  if(!state.booted){ bootThenRender(); return; }
+  const head = {"/today":"Today", "/roles":"Roles", "/talent":"Talent pool", "/outreach":"Outreach",
+    "/rules":"Automation rules", "/reports":"Reports", "/offers":"Offers", "/schedule":"Interview scheduling",
+    "/scorecard":"Screening scorecard", "/feedback":"Panel feedback", "/broken":"Interview scheduling",
+    "/candidate":"Candidate"}[r.base] || (r.base === "/role" && role(r.arg) ? role(r.arg).title : "Shortlist");
+  const nav = NAVITEMS.map(n => '<a class="item" href="#' + n.h + '"' + (n.h === r.base ? ' aria-current="page"' : "") +
+      ">" + esc(n.t) + (n.h === "/today" ? '<span class="sec num">' + todayQueue().length + "</span>" : "") + "</a>").join("");
+  const roleNav = ROLES.map(x => '<a class="item" href="#/role/' + x.id + '"' +
+      (r.base === "/role" && r.arg === x.id ? ' aria-current="page"' : "") + '><span class="trunc">' + esc(x.title) +
+      '</span><span class="sec num">' + activeCount(x.id) + "</span></a>").join("");
+  document.getElementById("root").innerHTML =
+    '<div class="app"><nav class="nav" aria-label="Main">' +
+      '<div class="brand">Shortlist</div>' + nav +
+      '<div class="grp">Open roles</div>' + roleNav +
+      '<div class="who">Payal Deshmukh<br>Recruiter, engineering</div>' +
+    "</nav><div class=\"main\">" +
+      '<header class="top"><span class="crumb">' + esc(head || " ") + '</span>' +
+      '<span class="sec">' + TODAY + '</span>' +
+      '<button class="btn ghost sm" style="margin-left:auto" data-open-palette>Search candidates, roles, actions <span class="kbd">Cmd K</span></button>' +
+      "</header><div class=\"wrap\" id=\"view\">" + fn(r.arg) + "</div></div></div>";
+  window.scrollTo(0,0);
+  wire();
+}
+function bootThenRender(){
+  document.getElementById("root").innerHTML =
+    '<div class="app"><nav class="nav"><div class="brand">Shortlist</div></nav><div class="main">' +
+    '<header class="top"><span class="crumb">Loading your day</span></header><div class="wrap">' +
+    '<div class="panel"><div class="ph"><h2>Today</h2><span class="count">Pulling interviews, scorecards and offers</span></div>' +
+    Array.from({length:5}, (_, i) => '<div class="row"><div class="grow"><div class="skel" style="width:' +
+      (58 - i*6) + '%"></div></div><div class="skel" style="width:64px"></div></div>').join("") +
+    "</div></div></div></div>";
+  setTimeout(() => { state.booted = true; render(); }, 620);
+}
+
+/* ---------- cover ---------- */
+function screenCover(){
+  return '<div class="cover">' +
+   "<h1>Shortlist</h1>" +
+   '<p class="lede">A hiring console for a six person recruiting team running twelve open roles, sourcing through joining date.</p>' +
+   "<section><h3>The problem</h3><p class=\"prose\">Payal has 40 candidates in play across seven roles. Her morning is not a browsing session, it is a queue: whose feedback is late, which interview is at 10:30, which offer has gone quiet. Every tool she has shows her a pipeline. None of them tell her what she has to clear before lunch.</p></section>" +
+   "<section><h3>The constraint</h3><p class=\"prose\">One person, one week, fourteen screens that had to be clickable rather than described. The data had to survive being read by a recruiter, so notice periods, compensation and sources are the kind that show up in a real pipeline, not the kind that fill a mockup.</p></section>" +
+   "<section><h3>Three decisions</h3>" +
+   '<div class="dec"><p class="q">Colour only carries status.</p><p class="prose">Five status colours, five meanings, used nowhere else. A screen with nothing wrong on it is grey and green. When Payal sees amber she is looking at something waiting on her, not at decoration.</p></div>' +
+   '<div class="dec"><p class="q">Today is a queue, not a dashboard.</p><p class="prose">The first version opened with four stat cards. They looked like a product and told her nothing she could act on, so they are gone. Every row on Today has something she can do to it right now.</p></div>' +
+   '<div class="dec"><p class="q">One state, so counts never disagree.</p><p class="prose">Dragging a card on the pipeline board changes the stage count on the role list, the sidebar and Today in the same frame. Two numbers that disagree is how a prototype tells you it is a prototype.</p></div>' +
+   "</section>" +
+   '<p style="margin-top:30px"><a class="btn" href="#/today" style="display:inline-block">Open the console</a></p>' +
+   "<footer>Scoped, designed and built by one person. Sample data throughout, no real candidates.</footer></div>";
+}
+function screenNotFound(){
+  return '<div class="panel"><div class="ph"><h2>That screen does not exist</h2></div>' +
+    '<div class="mb" style="padding:16px"><p class="prose">The address bar has ' + esc(parse().raw) +
+    ' in it, and nothing in Shortlist answers to that. Go back to Today and pick up the queue.</p>' +
+    '<a class="btn" href="#/today">Go to Today</a></div></div>';
+}
+
+/* ---------- today ---------- */
+function todayQueue(){
+  return state.cands.filter(c => c.waiting && c.stage !== "dropped" && c.stage !== "joined");
+}
+function screenToday(){
+  const today = INTERVIEWS.filter(i => i.state === "today");
+  const other = INTERVIEWS.filter(i => i.state !== "today");
+  const queue = todayQueue();
+  const pending = OFFERS.filter(o => o.status !== "Accepted, joined");
+  const behind = ROLES.filter(r => r.id === "r7" || r.id === "r2");
+
+  const ivRows = today.map(i => {
+    const c = byId(i.cand);
+    return '<div class="row"><span class="num sec" style="width:44px">' + i.when + "</span>" +
+      '<div class="grow"><div class="t">' + candLink(c) + '</div><div class="s">' + esc(i.kind) + ", " +
+      esc(role(i.role).title) + ", " + esc(i.panel.join(" and ")) + "</div></div>" +
+      st("sched","Scheduled") + '<a class="btn ghost sm" href="#/candidate/' + c.id + '">Open profile</a></div>';
+  }).join("") || '<div class="empty">No interviews today. Book one from a candidate profile.</div>';
+
+  const qRows = queue.map(c => {
+    const s = statusOf(c);
+    return '<div class="row"><div class="grow bar b-' + s.cls + '"><div class="t">' + candLink(c) +
+      ' <span class="sec">' + esc(role(c.role).title) + '</span></div><div class="s">' + esc(c.waiting) + "</div></div>" +
+      todayAction(c) + "</div>";
+  }).join("");
+
+  const oRows = pending.map(o => {
+    const c = byId(o.cand);
+    const wait = o.status === "Waiting on approval";
+    return '<div class="row"><div class="grow bar b-wait"><div class="t">' + candLink(c) + "</div>" +
+      '<div class="s">' + esc(role(o.role).title) + ", " + lpa(o.fixed) + " fixed, " + esc(o.status.toLowerCase()) + "</div></div>" +
+      '<a class="btn ghost sm" href="#/offers">' + (wait ? "Chase approval" : "Open offer") + "</a></div>";
+  }).join("");
+
+  const bRows = behind.map(r => {
+    const c = inRole(r.id);
+    return '<div class="row"><div class="grow bar b-stale"><div class="t">' + link("/role/" + r.id, r.title) + "</div>" +
+      '<div class="s">' + r.open + " days open, target was " + esc(r.target) + ", " + c.filter(x => x.stage === "offer").length +
+      " at offer and " + c.filter(x => x.stage === "interview").length + " in interview</div></div>" +
+      '<a class="btn ghost sm" href="#/role/' + r.id + '">Open pipeline</a></div>';
+  }).join("");
+
+  return '<div class="stack">' +
+    '<div class="panel"><div class="ph"><h2>Interviews today</h2><span class="count num">' + today.length +
+      '</span><div class="right"><a class="link" href="#/schedule">Book an interview</a></div></div>' + ivRows +
+      other.map(i => {
+        const c = byId(i.cand);
+        return '<div class="row"><span class="sec" style="width:96px">' + esc(i.day) + " " + i.when + "</span>" +
+          '<div class="grow s">' + esc(i.state === "done" ? "Held, " : "Booked, ") + esc(c.name) + ", " + esc(role(i.role).title) + "</div>" +
+          (i.state === "done" ? '<a class="link" href="#/feedback/' + c.id + '">Read feedback</a>' : "") + "</div>";
+      }).join("") + "</div>" +
+    '<div class="cols2">' +
+      '<div class="panel"><div class="ph"><h2>Waiting on you</h2><span class="count num">' + queue.length + "</span></div>" + qRows + "</div>" +
+      '<div class="stack">' +
+        '<div class="panel"><div class="ph"><h2>Offers pending</h2><span class="count num">' + pending.length + "</span></div>" + oRows + "</div>" +
+        '<div class="panel"><div class="ph"><h2>Roles behind target</h2><span class="count num">' + behind.length + "</span></div>" + bRows + "</div>" +
+      "</div>" +
+    "</div></div>";
+}
+function todayAction(c){
+  if(/scorecard/i.test(c.waiting)) return '<a class="btn ghost sm" href="#/scorecard/' + c.id + '">Write scorecard</a>';
+  if(/split/i.test(c.waiting))     return '<a class="btn ghost sm" href="#/feedback/' + c.id + '">Compare feedback</a>';
+  if(/feedback/i.test(c.waiting))  return '<a class="btn ghost sm" href="#/feedback/' + c.id + '">Chase feedback</a>';
+  if(/not booked/i.test(c.waiting)) return '<a class="btn ghost sm" href="#/schedule/' + c.id + '">Book a call</a>';
+  if(/Offer/i.test(c.waiting))     return '<a class="btn ghost sm" href="#/offers">Open offer</a>';
+  if(/No reply/i.test(c.waiting))  return '<a class="btn ghost sm" href="#/outreach">Open sequence</a>';
+  return '<a class="btn ghost sm" href="#/candidate/' + c.id + '">Open profile</a>';
+}
+
+/* ---------- roles ---------- */
+function screenRoles(){
+  const cols = [{k:"title",t:"Role"},{k:"hm",t:"Hiring manager"},{k:"open",t:"Days open",r:true},
+    {k:"active",t:"In play",r:true},{k:"screening",t:"Screening",r:true},{k:"interview",t:"Interview",r:true},
+    {k:"offer",t:"Offer",r:true},{k:"target",t:"Target close"}];
+  const rows = ROLES.map(r => ({
+    r:r, active:activeCount(r.id), screening:stageCount(r.id,"screening"),
+    interview:stageCount(r.id,"interview") + stageCount(r.id,"feedback"), offer:stageCount(r.id,"offer")
+  }));
+  const s = state.rolesSort;
+  rows.sort((a,b) => {
+    const va = s.key in a ? a[s.key] : a.r[s.key], vb = s.key in b ? b[s.key] : b.r[s.key];
+    const c = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb));
+    return s.dir === "asc" ? c : -c;
+  });
+  const head = cols.map(c => '<th class="sortable' + (c.r ? " r" : "") + '" data-sort="' + c.k + '">' + c.t +
+    (s.key === c.k ? ' <span class="sec">' + (s.dir === "asc" ? "\u2191" : "\u2193") + "</span>" : "") + "</th>").join("");
+  const body = rows.map(x => {
+    const late = x.r.open > 55;
+    return "<tr><td>" + link("/role/" + x.r.id, x.r.title) + '<div class="s sec">' + esc(x.r.loc) + ", " + esc(x.r.band) + "</div></td>" +
+      "<td>" + esc(x.r.hm) + '<div class="s sec">' + esc(x.r.rec) + "</div></td>" +
+      '<td class="r num">' + x.r.open + "</td>" +
+      '<td class="r num">' + x.active + "</td><td class=\"r num\">" + x.screening + '</td><td class="r num">' + x.interview +
+      '</td><td class="r num">' + x.offer + "</td>" +
+      "<td>" + st(late ? "stale" : "fwd", x.r.target + (late ? ", missed" : "")) + "</td></tr>";
+  }).join("");
+  return '<div class="panel"><div class="ph"><h2>Open roles</h2><span class="count num">' + ROLES.length +
+    ' roles, ' + state.cands.filter(c => c.stage !== "joined" && c.stage !== "dropped").length +
+    ' candidates in play</span></div><table><thead><tr>' + head + "</tr></thead><tbody>" + body + "</tbody></table></div>";
+}
+
+/* ---------- role pipeline board ---------- */
+function screenPipeline(rid){
+  const r = role(rid) || ROLES[0];
+  const cols = STAGES.map(s => {
+    const list = inRole(r.id).filter(c => c.stage === s.id);
+    const cards = list.map(c => {
+      const stat = statusOf(c);
+      return '<article class="card" draggable="true" data-card="' + c.id + '" tabindex="0" aria-label="' +
+        esc(c.name + ", " + stageLabel(c.stage)) + '">' +
+        '<div class="nm">' + esc(c.name) + "</div>" +
+        '<div class="mt">' + esc(c.co) + ", " + c.exp + " yrs</div>" +
+        '<div class="mt">' + esc(noticeText(c)) + ", " + lpa(c.exp_ctc) + "</div>" +
+        '<div class="mt" style="margin-top:6px">' + st(stat.cls, stat.label) + "</div>" +
+        '<div class="mv"><select data-move="' + c.id + '" aria-label="Move ' + esc(c.name) + ' to another stage">' +
+          STAGES.map(x => '<option value="' + x.id + '"' + (x.id === c.stage ? " selected" : "") + ">" + x.label + "</option>").join("") +
+        "</select></div></article>";
+    }).join("") || '<div class="empty">' + (s.id === "sourced" ? "Nothing sourced yet. Add names from the talent pool." : "Nothing here. Drag a card across when it moves.") + "</div>";
+    return '<section class="col' + (s.term ? " term" : "") + '" data-col="' + s.id + '">' +
+      '<div class="colh"><span class="dot d-' + colDot(s.id) + '"></span><strong>' + s.label +
+      '</strong><span class="n num" data-n="' + s.id + '">' + list.length + "</span></div>" +
+      '<div class="cards">' + cards + "</div></section>";
+  }).join("");
+  return '<div class="panel" style="margin-bottom:16px"><div class="ph"><h2>' + esc(r.title) + "</h2>" +
+    '<span class="count">' + esc(r.hm) + ", " + r.open + " days open, target " + esc(r.target) + ", " + esc(r.band) + "</span>" +
+    '<div class="right"><a class="btn ghost sm" href="#/schedule">Book an interview</a></div></div></div>' +
+    '<p class="sec" style="margin-bottom:10px">Drag a card to another column to move the candidate. On a narrow screen, use the stage list on the card.</p>' +
+    '<div class="board" id="board">' + cols + "</div>";
+}
+function colDot(id){
+  return ({sourced:"stale", applied:"stale", screening:"wait", interview:"sched",
+    feedback:"wait", offer:"fwd", joined:"fwd", dropped:"drop"})[id];
+}
+function moveCandidate(id, stage){
+  const c = byId(id);
+  if(!c || c.stage === stage) return;
+  const from = stageLabel(c.stage);
+  c.stage = stage;
+  if(stage === "offer" || stage === "joined" || stage === "dropped") c.waiting = "";
+  c.last = TODAY.replace("Thu ", "");
+  c.tl = (c.tl || []).concat([{on:"10 Sep", text:"Moved from " + from + " to " + stageLabel(stage) + " by Payal Deshmukh"}]);
+  render();
+  toast("Moved to " + stageLabel(stage).toLowerCase());
+}
+
+/* ---------- candidate profile ---------- */
+function screenCandidate(id){
+  const c = byId(id);
+  if(!c) return screenNotFound();
+  const s = statusOf(c);
+  const r = role(c.role);
+  const cross = c.crossFit ? '<div class="panel" style="margin-bottom:16px"><div class="row bar b-wait" style="border-bottom:0">' +
+    '<div class="grow"><div class="t">Rejected for ' + esc(role(c.crossFit.from).title) + ", open against " + esc(r.title) + "</div>" +
+    '<div class="s">' + esc(c.crossFit.why) + "</div></div>" +
+    '<a class="btn ghost sm" href="#/role/' + c.crossFit.from + '">See the old pipeline</a></div></div>' : "";
+  const notes = (state.forms["note_" + c.id] ? [{by:"Payal Deshmukh", on:"10 Sep", text:state.forms["note_" + c.id]}] : [])
+    .concat(c.notes).map(n => '<div class="note"><div class="meta">' + esc(n.by) + ", " + esc(n.on) + "</div>" + esc(n.text) + "</div>").join("");
+  const tl = (c.tl || []).slice().reverse().map(t => '<li><span class="when">' + esc(t.on) + "</span>" +
+    '<span class="grow' + (t.rule ? " rule" : "") + '">' + esc(t.text) + (t.rule ? '<br><span class="sec">' + esc(t.rule) + "</span>" : "") + "</span></li>").join("");
+  const hasFeedback = !!FEEDBACK[c.id];
+  return cross +
+   '<div class="panel" style="margin-bottom:16px"><div class="ph"><h2>' + esc(c.name) + '</h2><span class="mono">' + c.id + "</span>" +
+   '<span class="count">' + esc(c.title) + ", " + esc(c.co) + ", " + c.exp + " years</span>" +
+   '<div class="right">' + st(s.cls, s.label) + "</div></div>" +
+   '<div class="row" style="gap:8px;flex-wrap:wrap">' +
+     '<a class="btn sm" href="#/scorecard/' + c.id + '">Write scorecard</a>' +
+     '<a class="btn ghost sm" href="#/schedule/' + c.id + '">Book an interview</a>' +
+     (hasFeedback ? '<a class="btn ghost sm" href="#/feedback/' + c.id + '">Compare feedback</a>' : "") +
+     '<button class="btn ghost sm" data-move-to="offer" data-id="' + c.id + '">Move to offer</button>' +
+     '<button class="btn danger sm" data-drop="' + c.id + '">Move to dropped</button>' +
+   "</div></div>" +
+   '<div class="cols3"><div class="stack">' +
+     '<div class="panel"><div class="ph"><h2>Details</h2><span class="count">' + esc(r.title) + ", " + stageLabel(c.stage) + "</span></div>" +
+     '<dl class="kv">' +
+       "<dt>Current role</dt><dd>" + esc(c.title) + ", " + esc(c.co) + "</dd>" +
+       "<dt>Experience</dt><dd>" + c.exp + " years</dd>" +
+       "<dt>Location</dt><dd>" + esc(c.loc) + ", " + esc(c.relocate.toLowerCase()) + "</dd>" +
+       "<dt>Notice period</dt><dd>" + esc(noticeText(c)) + "</dd>" +
+       "<dt>Current pay</dt><dd>" + lpa(c.cur) + "</dd>" +
+       "<dt>Expected pay</dt><dd>" + lpa(c.exp_ctc) + (c.cur && c.exp_ctc ? '<span class="sec">, up ' + Math.round((c.exp_ctc/c.cur - 1)*100) + " percent</span>" : "") + "</dd>" +
+       "<dt>Source</dt><dd>" + esc(c.src) + "</dd>" +
+       "<dt>Owner</dt><dd>" + esc(c.owner) + "</dd>" +
+       "<dt>Email</dt><dd>" + esc(c.email || "Not shared") + "</dd>" +
+       "<dt>Phone</dt><dd>" + esc(c.phone || "Not shared") + "</dd>" +
+       "<dt>Last contact</dt><dd>" + esc(c.last) + ", " + daysAgo(c.last) + " days ago</dd>" +
+     "</dl></div>" +
+     '<div class="panel"><div class="ph"><h2>Resume highlights</h2></div>' +
+       '<div class="chips" style="padding:14px">' + c.skills.map(k => '<span class="chip">' + esc(k) + "</span>").join("") + "</div></div>" +
+     '<div class="panel"><div class="ph"><h2>Activity</h2><span class="count num">' + (c.tl || []).length + " entries</span></div>" +
+       '<ul class="tl">' + tl + "</ul></div>" +
+   "</div>" +
+   '<div class="panel" style="align-self:start"><div class="ph"><h2>Internal notes</h2><span class="count">Team only</span></div>' +
+     '<form data-form="note" data-id="' + c.id + '" style="padding:14px;border-bottom:1px solid var(--line)">' +
+       '<label class="f" for="nt">Add a note</label>' +
+       '<textarea id="nt" name="text" placeholder="What did you learn, and what happens next?">' + esc(state.forms["note_draft_" + c.id] || "") + "</textarea>" +
+       '<div style="margin-top:8px"><button class="btn sm" type="submit">Add note</button></div></form>' +
+     notes + "</div></div>";
+}
+
+/* ---------- screening scorecard ---------- */
+const SC_DIMS = ["Communication","Relevant experience","Salary fit","Notice period","Interest level"];
+function screenScorecard(id){
+  const c = byId(id) || state.cands.find(x => x.waiting && /scorecard/i.test(x.waiting)) || state.cands[0];
+  const f = state.forms["sc_" + c.id] || {};
+  const saved = state.forms["sc_done_" + c.id];
+  const scale = (dim) => '<div class="field"><label class="f">' + dim + "</label>" +
+    '<div class="scale">' + [1,2,3,4,5].map(n => '<label><input type="radio" name="' + dim + '" value="' + n + '"' +
+      (String(f[dim]) === String(n) ? " checked" : "") + '><span>' + n + "</span></label>").join("") + "</div></div>";
+  return '<div class="panel" style="margin-bottom:16px"><div class="ph"><h2>Screening scorecard</h2>' +
+    '<span class="count">' + esc(c.name) + ", " + esc(role(c.role).title) + ", call held " + esc(c.last) + "</span>" +
+    '<div class="right"><a class="link" href="#/candidate/' + c.id + '">Open profile</a></div></div>' +
+    '<div class="row"><div class="grow s">' + esc(c.title) + ", " + esc(c.co) + ", " + esc(noticeText(c)) + ", " +
+      lpa(c.cur) + " now, " + lpa(c.exp_ctc) + " expected</div></div></div>" +
+    (saved ? '<div class="panel" style="margin-bottom:16px"><div class="row bar b-fwd"><div class="grow"><div class="t">Scorecard saved</div>' +
+      '<div class="s">' + esc(saved) + "</div></div></div></div>" : "") +
+    '<form class="panel" data-form="scorecard" data-id="' + c.id + '">' +
+    '<div class="ph"><h2>Rate the call, 1 is poor and 5 is strong</h2></div>' +
+    '<div style="padding:14px">' + SC_DIMS.map(scale).join("") +
+    '<div class="field"><label class="f" for="rec">Recommendation</label><select id="rec" name="rec">' +
+      ["Advance to panel interview","Hold for another role","Do not advance"].map(o =>
+        '<option' + (f.rec === o ? " selected" : "") + ">" + o + "</option>").join("") + "</select></div>" +
+    '<div class="field"><label class="f" for="cm">Why, in your words</label>' +
+      '<textarea id="cm" name="comment" aria-describedby="cmh">' + esc(f.comment || "") + "</textarea>" +
+      '<div class="hint" id="cmh">Required. The panel reads this before the interview, so write what they need, not a summary of the call.</div>' +
+      '<div class="err" id="cmerr" hidden>Add a comment before saving. The panel cannot prepare from scores alone.</div></div>' +
+    '<button class="btn" type="submit">Save scorecard</button></div></form>';
+}
+
+/* ---------- interview scheduling ---------- */
+function screenSchedule(id){
+  const c = byId(id) || byId("CAN-2166");
+  const f = state.forms["sched_" + c.id] || {slot:null, who:["Karan Belliappa","Ismail Sait"]};
+  const slots = SLOT_GRID.map((s, i) => {
+    const picked = f.slot === i;
+    return '<button class="slot" type="button" data-slot="' + i + '" aria-pressed="' + (picked ? "true" : "false") + '">' +
+      '<span class="num" style="width:112px">' + esc(s.day) + " " + s.time + "</span>" +
+      '<span class="grow">' + esc(s.free.join(" and ")) + " free</span>" +
+      (s.clash ? st("wait", "Conflict") : st("fwd", "Clear")) + "</button>";
+  }).join("");
+  const chosen = f.slot != null ? SLOT_GRID[f.slot] : null;
+  const clash = chosen && chosen.clash;
+  const people = PANEL_AVAIL.map(p => '<label class="chip" style="display:flex;gap:7px;align-items:center">' +
+    '<input type="checkbox" name="who" value="' + esc(p.who) + '"' + (f.who.indexOf(p.who) > -1 ? " checked" : "") + ">" +
+    esc(p.who) + ' <span class="sec">' + esc(p.role) + "</span></label>").join("");
+  const avail = PANEL_AVAIL.map(p => "<tr><td>" + esc(p.who) + '<div class="s sec">' + esc(p.role) + "</div></td>" +
+    ["Thu 10 Sep","Fri 11 Sep","Mon 14 Sep"].map(d => "<td>" + (p.slots[d] || []).map(t => '<span class="chip">' + t + "</span>").join(" ") + "</td>").join("") + "</tr>").join("");
+  return '<div class="panel" style="margin-bottom:16px"><div class="ph"><h2>Book an interview</h2>' +
+    '<span class="count">' + esc(c.name) + ", " + esc(role(c.role).title) + ", " + esc(noticeText(c)) + "</span>" +
+    '<div class="right"><a class="link" href="#/candidate/' + c.id + '">Open profile</a></div></div></div>' +
+    '<div class="cols2"><form class="panel" data-form="schedule" data-id="' + c.id + '">' +
+      '<div class="ph"><h2>Pick a slot</h2><span class="count">Panel availability, next three working days</span></div>' + slots +
+      '<div style="padding:14px">' +
+        (clash ? '<div class="bar b-wait" style="margin-bottom:12px"><div class="t">Two interviewers are double booked</div>' +
+          '<div class="s">' + esc(chosen.clash) + '. Pick another slot, or drop Ismail Sait from this panel and book anyway.</div></div>' : "") +
+        '<div class="field"><label class="f">Interviewers</label><div class="chips">' + people + "</div></div>" +
+        '<div class="field"><label class="f" for="kind">Interview type</label><select id="kind" name="kind">' +
+          ["Panel interview","Portfolio review","Client interview","Second round, deep dive"].map(o =>
+            '<option' + (f.kind === o ? " selected" : "") + ">" + o + "</option>").join("") + "</select></div>" +
+        '<div class="err" id="sloterr" hidden>Pick a slot before sending the invite.</div>' +
+        '<button class="btn" type="submit">Send interview invite</button>' +
+        (state.forms["sched_done_" + c.id] ? '<p class="hint" style="margin-top:10px">' + esc(state.forms["sched_done_" + c.id]) + "</p>" : "") +
+      "</div></form>" +
+      '<div class="panel" style="align-self:start"><div class="ph"><h2>Panel availability</h2></div>' +
+      "<table><thead><tr><th>Interviewer</th><th>Thu 10 Sep</th><th>Fri 11 Sep</th><th>Mon 14 Sep</th></tr></thead><tbody>" +
+      avail + "</tbody></table></div></div>";
+}
+
+/* ---------- feedback comparison ---------- */
+function screenFeedback(id){
+  const key = FEEDBACK[id] ? id : "CAN-2291";
+  const fb = FEEDBACK[key], c = byId(key);
+  const heads = fb.panel.map(p => '<div class="hd">' + esc(p.who) + '<div class="s sec">' + esc(p.part) + ", " + esc(p.on) + "</div></div>").join("");
+  const verdicts = fb.panel.map(p => "<div>" + st(p.verdict === "No hire" ? "drop" : p.verdict === "Hire" ? "fwd" : "wait", p.verdict) + "</div>").join("");
+  const rows = fb.dims.map(d => {
+    const vals = fb.panel.map(p => p.scores[d]);
+    const spread = Math.max.apply(null, vals) - Math.min.apply(null, vals);
+    return "<div>" + esc(d) + (spread >= 2 ? '<div class="s sec">Spread of ' + spread + "</div>" : "") + "</div>" +
+      vals.map(v => '<div class="num' + (spread >= 2 ? " diverge" : "") + '">' + v + "</div>").join("");
+  }).join("");
+  const texts = fb.panel.map(p => "<div><p class=\"prose\" style=\"margin:0\">" + esc(p.text) + "</p></div>").join("");
+  const other = Object.keys(FEEDBACK).map(k => '<a class="chip" href="#/feedback/' + k + '"' +
+    (k === key ? ' style="border-color:#1D5E4A;color:#1D5E4A"' : "") + ">" + esc(byId(k).name) + "</a>").join("");
+  return '<div class="panel" style="margin-bottom:16px"><div class="ph"><h2>Panel feedback, ' + esc(c.name) + "</h2>" +
+    '<span class="count">' + esc(role(fb.role).title) + ", 3 interviewers" + (fb.split ? ", split on " + fb.split.toLowerCase() : ", agreed") + "</span>" +
+    '<div class="right">' + other + "</div></div>" +
+    '<div class="row"><div class="grow s">' + (fb.split ?
+      "No average is shown. Two of three would hire her and the third would not, and an average of 3.4 would hide exactly the thing you have to decide." :
+      "All three would hire. The scores are here so you can see how thin the agreement is on any single dimension.") +
+    "</div></div></div>" +
+    '<div class="panel"><div class="cmp"><div></div>' + heads + "</div>" +
+    '<div class="cmp"><div>Verdict</div>' + verdicts + "</div>" +
+    '<div class="cmp">' + rows + "</div>" +
+    '<div class="cmp"><div>In their words</div>' + texts + "</div>" +
+    (fb.split ? '<div class="row bar b-wait" style="margin:14px"><div class="grow"><div class="t">The disagreement is ' +
+      esc(fb.split.toLowerCase()) + ', not the candidate</div><div class="s">Ritika would coach it, Vikram would not carry it on a team of four. ' +
+      'A 45 minute testing round answers it, and nobody has to trade a score.</div></div>' +
+      '<a class="btn ghost sm" href="#/schedule/' + key + '">Book a follow up round</a></div>' : "") +
+    "</div>";
+}
+
+/* ---------- offers ---------- */
+function screenOffers(){
+  const cards = OFFERS.map(o => {
+    const c = byId(o.cand);
+    const cls = o.status === "Accepted, joined" ? "fwd" : "wait";
+    const total = o.fixed + o.variable;
+    const chain = o.chain.map(a => '<div class="row"><div class="grow"><div class="t">' + esc(a.who) + "</div></div>" +
+      st(/Waiting/.test(a.state) ? "wait" : "fwd", a.state) + "</div>").join("");
+    return '<div class="panel"><div class="ph"><h2>' + esc(c.name) + '</h2><span class="mono">' + c.id + "</span>" +
+      '<span class="count">' + esc(role(o.role).title) + "</span>" +
+      '<div class="right">' + st(cls, o.status) + "</div></div>" +
+      '<div class="cols2" style="gap:0">' +
+        '<div><dl class="kv"><dt>Fixed</dt><dd class="num">' + lpa(o.fixed) + "</dd>" +
+        "<dt>Variable</dt><dd class=\"num\">" + lpa(o.variable) + "</dd>" +
+        '<dt>Total</dt><dd class="num">' + lpa(total) + "</dd>" +
+        "<dt>Against current</dt><dd class=\"num\">" + lpa(c.cur) + ", up " + Math.round((total/c.cur - 1)*100) + " percent</dd>" +
+        "<dt>Asked for</dt><dd class=\"num\">" + lpa(c.exp_ctc) + "</dd>" +
+        "<dt>Joining date</dt><dd>" + esc(o.joining) + "</dd>" +
+        "<dt>Notice</dt><dd>" + esc(noticeText(c)) + "</dd>" +
+        (o.sentOn ? "<dt>Sent</dt><dd>" + esc(o.sentOn) + "</dd>" : "") + "</dl></div>" +
+        '<div style="border-left:1px solid var(--line)"><div class="ph" style="border-bottom:1px solid var(--line)"><h2>Approval chain</h2></div>' +
+        chain + '<div class="note"><div class="meta">Note</div>' + esc(o.note) + "</div></div>" +
+      "</div>" +
+      '<div class="row" style="gap:8px">' +
+        (o.status === "Waiting on approval" ? '<button class="btn sm" data-nudge="' + esc(c.name) + '">Chase approval</button>' : "") +
+        (o.status === "Sent, no response" ? '<button class="btn sm" data-nudge="' + esc(c.name) + '">Call the candidate</button>' : "") +
+        '<a class="btn ghost sm" href="#/candidate/' + c.id + '">Open profile</a></div></div>';
+  }).join("");
+  return '<div class="stack">' + cards + "</div>";
+}
+
+/* ---------- talent pool ---------- */
+function matches(c){
+  const f = state.filters, q = f.q.trim().toLowerCase();
+  if(q && !(c.name + " " + c.title + " " + c.co + " " + c.skills.join(" ") + " " + c.id).toLowerCase().includes(q)) return false;
+  if(f.notice){
+    const n = typeof c.notice === "number" ? c.notice : (/Immediate|Serving/.test(c.notice) ? 0 : 999);
+    if(n > +f.notice) return false;
+  }
+  if(f.loc && c.loc !== f.loc) return false;
+  if(f.src && !c.src.startsWith(f.src)) return false;
+  if(f.maxExp && (c.exp_ctc == null || c.exp_ctc > +f.maxExp)) return false;
+  return true;
+}
+function screenTalent(){
+  const f = state.filters;
+  const list = state.cands.filter(matches).sort((a, b) => daysAgo(a.last) - daysAgo(b.last));
+  const locs = Array.from(new Set(state.cands.map(c => c.loc))).sort();
+  const opt = (v, cur, label) => '<option value="' + esc(v) + '"' + (cur === v ? " selected" : "") + ">" + esc(label || v) + "</option>";
+  const rows = list.map(c => {
+    const s = statusOf(c);
+    return "<tr><td>" + candLink(c) + '<div class="s sec">' + esc(c.title) + ", " + esc(c.co) + "</div></td>" +
+      "<td>" + esc(role(c.role).title) + '<div class="s sec">' + stageLabel(c.stage) + "</div></td>" +
+      '<td class="r num">' + c.exp + "</td>" +
+      "<td>" + esc(noticeText(c)) + "</td>" +
+      '<td class="r num">' + lpa(c.exp_ctc) + "</td>" +
+      "<td>" + esc(c.loc) + '<div class="s sec">' + esc(c.relocate) + "</div></td>" +
+      "<td>" + esc(c.src.split(",")[0]) + "</td>" +
+      "<td>" + esc(c.last) + '<div class="s sec">' + daysAgo(c.last) + " days ago</div></td>" +
+      "<td>" + st(s.cls, s.label) + "</td></tr>";
+  }).join("");
+  const empty = '<div class="empty" style="padding:34px"><p><strong>No candidate matches those filters.</strong></p>' +
+    '<p>Widen the notice period or clear the location, then save the search if it is one you run often.</p>' +
+    '<button class="btn ghost sm" data-clear-filters>Clear filters</button></div>';
+  const saved = SAVED.map(s => '<button class="chip" data-saved="' + s.id + '"' +
+    (state.activeSaved === s.id ? ' style="border-color:#1D5E4A;color:#1D5E4A"' : "") + ">" + esc(s.name) + "</button>").join("");
+  return '<div class="panel"><div class="ph"><h2>Talent pool</h2><span class="count num">' + list.length + " of " +
+    state.cands.length + ' candidates</span><div class="right chips">' + saved +
+    '<button class="chip" data-save-current>Save this search</button></div></div>' +
+    '<form class="filters" data-form="filters">' +
+      '<div class="field" style="min-width:220px"><label class="f" for="fq">Name, skill or company</label>' +
+        '<input id="fq" name="q" type="text" value="' + esc(f.q) + '" placeholder="react, playwright, Razorpay"></div>' +
+      '<div class="field"><label class="f" for="fn">Notice period, up to</label><select id="fn" name="notice">' +
+        opt("", f.notice, "Any") + opt("0", f.notice, "Immediate or serving notice") + opt("30", f.notice, "30 days") +
+        opt("45", f.notice, "45 days") + opt("60", f.notice, "60 days") + opt("90", f.notice, "90 days") + "</select></div>" +
+      '<div class="field"><label class="f" for="fl">Location</label><select id="fl" name="loc">' +
+        opt("", f.loc, "Any") + locs.map(l => opt(l, f.loc)).join("") + "</select></div>" +
+      '<div class="field"><label class="f" for="fs">Source</label><select id="fs" name="src">' +
+        opt("", f.src, "Any") + ["LinkedIn","Naukri","Referral","Careers page","Instahyre"].map(x => opt(x, f.src)).join("") + "</select></div>" +
+      '<div class="field"><label class="f" for="fe">Expected pay, up to</label><select id="fe" name="maxExp">' +
+        opt("", f.maxExp, "Any") + ["20","25","30","32","40"].map(x => opt(x, f.maxExp, x + ".0 LPA")).join("") + "</select></div>" +
+      '<button class="btn sm" type="submit">Apply filters</button>' +
+      '<button class="btn ghost sm" type="button" data-clear-filters>Clear</button>' +
+    "</form>" +
+    (list.length ? "<table><thead><tr><th>Candidate</th><th>Role and stage</th><th class=\"r\">Years</th><th>Notice</th>" +
+      '<th class="r">Expected</th><th>Location</th><th>Source</th><th>Last contact</th><th>Status</th></tr></thead><tbody>' +
+      rows + "</tbody></table>" : empty) + "</div>";
+}
+
+/* ---------- outreach ---------- */
+function screenOutreach(){
+  const sel = state.forms.tpl || "t1";
+  const t = TEMPLATES.find(x => x.id === sel);
+  const rows = TEMPLATES.map(x => "<tr" + (x.id === sel ? ' style="background:var(--canvas)"' : "") + "><td>" +
+    '<button class="link" data-tpl="' + x.id + '">' + esc(x.name) + "</button>" +
+    '<div class="s sec">Step ' + x.step + " of 3</div></td>" +
+    '<td class="r num">' + x.sent + '</td><td class="r num">' + x.replies + "</td>" +
+    '<td class="r num">' + x.rate.toFixed(1) + "</td></tr>").join("");
+  const seq = SEQUENCE.map(s => {
+    const late = /No reply|no reply/.test(s.state);
+    return '<div class="row"><div class="grow bar b-' + (late ? "wait" : "fwd") + '"><div class="t">' +
+      link("/candidate/" + s.cand, s.name) + '</div><div class="s">Step ' + s.step + " of " + s.of +
+      ", last sent " + esc(s.lastSent) + ", " + esc(s.state.toLowerCase()) + "</div></div>" +
+      '<a class="btn ghost sm" href="#/candidate/' + s.cand + '">Open profile</a></div>';
+  }).join("");
+  return '<div class="stack">' +
+    '<div class="panel"><div class="ph"><h2>Templates</h2><span class="count">Reply rate, last 90 days</span></div>' +
+    '<table><thead><tr><th>Template</th><th class="r">Sent</th><th class="r">Replies</th><th class="r">Reply rate, percent</th></tr></thead><tbody>' +
+    rows + "</tbody></table></div>" +
+    '<div class="cols2">' +
+    '<div class="panel"><div class="ph"><h2>' + esc(t.name) + '</h2><span class="count num">' + t.rate.toFixed(1) + " percent reply rate</span></div>" +
+      '<pre style="margin:0;padding:14px;white-space:pre-wrap;font:inherit;line-height:1.6">' + esc(t.body) + "</pre>" +
+      '<div class="row"><div class="grow s">' + esc(t.id === "t2" ?
+        "The generic note gets 9.0 percent against 22.3 for the same role written specifically. It is still in rotation because nobody has retired it." :
+        "Merge fields fill from the candidate record when the step sends.") + "</div>" +
+      '<button class="btn ghost sm" data-nudge="' + esc(t.name) + '">Use this template</button></div></div>' +
+    '<div class="panel" style="align-self:start"><div class="ph"><h2>Sequence</h2><span class="count num">' +
+      SEQUENCE.length + " candidates in flight</span></div>" + seq + "</div></div></div>";
+}
+
+/* ---------- automation rules ---------- */
+function screenRules(){
+  const rows = state.rules.map(r => '<div class="row"><div class="grow bar b-' + (r.on ? "fwd" : "stale") + '">' +
+    '<div class="t">' + esc(r.name) + "</div>" +
+    '<div class="s">When ' + esc(r.when.toLowerCase()) + ", " + esc(r.then.toLowerCase()) + "</div>" +
+    '<div class="s sec">Fired ' + r.fired + " times, last on " + esc(r.last) + "</div></div>" +
+    '<button class="btn ghost sm" data-rule="' + r.id + '">' + (r.on ? "Turn off" : "Turn on") + "</button></div>").join("");
+  const f = state.forms.rule || {};
+  return '<div class="stack">' +
+    '<div class="panel"><div class="ph"><h2>Rules</h2><span class="count num">' +
+      state.rules.filter(r => r.on).length + " of " + state.rules.length + " on</span></div>" + rows +
+      '<div class="row"><div class="grow s">Every rule that fires writes a line into the candidate activity timeline, so you can see why a candidate moved without asking anyone.</div></div></div>' +
+    '<form class="panel" data-form="rule"><div class="ph"><h2>Add a rule</h2></div><div style="padding:14px">' +
+      '<div class="cols2"><div class="field"><label class="f" for="rw">When this happens</label><select id="rw" name="when">' +
+        ["A candidate sits in a stage too long","Interview feedback is late","An outreach step goes unanswered","An offer is unanswered"]
+          .map(o => '<option' + (f.when === o ? " selected" : "") + ">" + o + "</option>").join("") + "</select></div>" +
+      '<div class="field"><label class="f" for="rd">For this long</label><select id="rd" name="days">' +
+        ["2 days","3 days","5 days","7 days","10 days"].map(o => '<option' + (f.days === o ? " selected" : "") + ">" + o + "</option>").join("") + "</select></div></div>" +
+      '<div class="field"><label class="f" for="rt">Then do this</label><select id="rt" name="then">' +
+        ["Notify the recruiter who owns them","Send a reminder to the interviewer","Flag for Dropped and tell the recruiter","Notify the recruiter and the hiring manager"]
+          .map(o => '<option' + (f.then === o ? " selected" : "") + ">" + o + "</option>").join("") + "</select></div>" +
+      '<div class="field"><label class="f" for="rn">Rule name</label><input id="rn" name="name" type="text" value="' +
+        esc(f.name || "") + '" placeholder="Flag after 5 days in Screening call"></div>' +
+      '<div class="err" id="rerr" hidden>Give the rule a name. Nobody can audit a rule called untitled.</div>' +
+      '<button class="btn" type="submit">Add rule</button></div></form></div>';
+}
+
+/* ---------- reports ---------- */
+function screenReports(){
+  const maxD = 61;
+  const tth = REPORTS.tth.map(x => '<div class="step"><div class="trunc">' + esc(x.r) + "</div>" +
+    '<div class="gbar"><i style="width:' + Math.round(x.d/maxD*100) + '%"></i></div>' +
+    '<div class="num sec">' + x.d + " days, " + x.n + " hires</div></div>").join("");
+  const maxF = 412;
+  const fn = REPORTS.funnel.map((x, i, a) => {
+    const cur = x.n;
+    const p = i ? Math.round(cur / a[i-1].n * 100) : 100;
+    return '<div class="step"><div class="trunc">' + esc(x.s) + "</div>" +
+      '<div class="gbar"><i style="width:' + Math.round(cur/maxF*100) + '%"></i></div>' +
+      '<div class="num sec">' + cur + (i ? ", " + p + " percent" : "") + "</div></div>";
+  }).join("");
+  const src = REPORTS.src.map(x => "<tr><td>" + esc(x.s) + '</td><td class="r num">' + x.cands +
+    '</td><td class="r num">' + x.hires + '</td><td class="r num">' + x.rate.toFixed(1) + "</td></tr>").join("");
+  const o = REPORTS.offers;
+  return '<div class="stack">' +
+    '<div class="cols2">' +
+      '<div class="panel"><div class="ph"><h2>Time to hire</h2><span class="count">Sourced to accepted, 25 hires this year</span></div>' +
+      '<div class="funnel">' + tth + "</div>" +
+      '<div class="row"><div class="grow s">Salesforce Administrator at 61 days is the outlier, and both hires on it came from Naukri after the referral route ran dry.</div></div></div>' +
+      '<div class="panel"><div class="ph"><h2>Stage conversion</h2><span class="count">All roles, last 12 months</span></div>' +
+      '<div class="funnel">' + fn + "</div>" +
+      '<div class="row"><div class="grow s">Sourced to applied is where the loss is. Nine in ten people we source never reply, which is what the outreach templates are for.</div></div></div>' +
+    "</div>" +
+    '<div class="cols2">' +
+      '<div class="panel"><div class="ph"><h2>Where good candidates come from</h2><span class="count">Hires against candidates seen</span></div>' +
+      '<table><thead><tr><th>Source</th><th class="r">Candidates</th><th class="r">Hires</th><th class="r">Hit rate, percent</th></tr></thead><tbody>' +
+      src + "</tbody></table>" +
+      '<div class="row"><div class="grow s">Referrals are 8 percent of the funnel and 36 percent of the hires. Naukri is the opposite, and it is where most of the screening time goes.</div></div></div>' +
+      '<div class="panel"><div class="ph"><h2>Offer acceptance</h2><span class="count">Last 12 months</span></div>' +
+      '<dl class="kv"><dt>Offers sent</dt><dd class="num">' + o.sent + "</dd>" +
+      '<dt>Accepted</dt><dd class="num">' + o.accepted + "</dd>" +
+      '<dt>Declined</dt><dd class="num">' + o.declined + "</dd>" +
+      '<dt>Open</dt><dd class="num">' + o.open + "</dd>" +
+      '<dt>Acceptance rate</dt><dd class="num">' + o.rate + " percent</dd>" +
+      '<dt>Median days to answer</dt><dd class="num">' + o.medianDays + "</dd></dl>" +
+      '<div class="row"><div class="grow s">Three of the four declines were counteroffers from the current employer, all of them at 60 days notice or longer.</div></div></div>' +
+    "</div></div>";
+}
+
+/* ---------- error state ---------- */
+function screenError(){
+  return '<div class="panel"><div class="ph"><h2>The invite did not send</h2></div>' +
+    '<div style="padding:16px"><div class="bar b-drop" style="margin-bottom:14px"><div class="t">Google Calendar rejected the invite for Nikhil Warrier</div>' +
+    '<div class="s">Ismail Sait has no calendar on our domain, so the 16:00 slot could not be written. Nobody has been emailed.</div></div>' +
+    '<p class="prose">Book the slot without him, or ask IT to add him, then send the invite again.</p>' +
+    '<a class="btn" href="#/schedule/CAN-2166">Back to booking</a></div></div>';
+}
+
+/* ---------- command palette ---------- */
+const ACTIONS = [
+  {t:"Go to Today", h:"#/today", k:"Screen"},
+  {t:"Go to Roles", h:"#/roles", k:"Screen"},
+  {t:"Go to Talent pool", h:"#/talent", k:"Screen"},
+  {t:"Go to Outreach", h:"#/outreach", k:"Screen"},
+  {t:"Go to Automation rules", h:"#/rules", k:"Screen"},
+  {t:"Go to Reports", h:"#/reports", k:"Screen"},
+  {t:"Go to Offers", h:"#/offers", k:"Screen"},
+  {t:"Book an interview", h:"#/schedule", k:"Action"},
+  {t:"Write a screening scorecard", h:"#/scorecard", k:"Action"},
+  {t:"Compare panel feedback for Zoya Kaifi", h:"#/feedback/CAN-2291", k:"Action"}
+];
+function paletteItems(q){
+  const s = q.trim().toLowerCase();
+  const out = [];
+  ACTIONS.forEach(a => { if(!s || a.t.toLowerCase().includes(s)) out.push({t:a.t, s:"", h:a.h, k:a.k}); });
+  ROLES.forEach(r => { if(!s || r.title.toLowerCase().includes(s) || r.hm.toLowerCase().includes(s))
+    out.push({t:r.title, s:r.hm + ", " + activeCount(r.id) + " in play", h:"#/role/" + r.id, k:"Role"}); });
+  state.cands.forEach(c => { if(!s || (c.name + " " + c.co + " " + c.id + " " + c.skills.join(" ")).toLowerCase().includes(s))
+    out.push({t:c.name, s:c.title + ", " + c.co + ", " + stageLabel(c.stage), h:"#/candidate/" + c.id, k:"Candidate"}); });
+  return out.slice(0, 40);
+}
+function openPalette(){
+  const l = document.getElementById("layer");
+  l.innerHTML = '<div class="scrim"><div class="modal pal" role="dialog" aria-modal="true" aria-label="Search">' +
+    '<input id="palq" type="text" placeholder="Search candidates, roles and actions" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="pallist">' +
+    '<ul id="pallist" role="listbox"></ul></div></div>';
+  const inp = l.querySelector("#palq"), list = l.querySelector("#pallist");
+  let idx = 0, items = [];
+  function draw(){
+    items = paletteItems(inp.value);
+    list.innerHTML = items.length ? items.map((it, i) => '<li role="option" aria-selected="' + (i === idx) + '">' +
+      '<button data-go="' + it.h + '"><span>' + esc(it.t) + (it.s ? ' <span class="sec">' + esc(it.s) + "</span>" : "") +
+      '</span><span class="kind">' + it.k + "</span></button></li>").join("") :
+      '<li><div class="empty">Nothing matches that. Try a company name, a skill or a candidate ID.</div></li>';
+  }
+  draw();
+  inp.addEventListener("input", () => { idx = 0; draw(); });
+  inp.addEventListener("keydown", e => {
+    if(e.key === "ArrowDown"){ e.preventDefault(); idx = Math.min(idx + 1, items.length - 1); draw(); }
+    else if(e.key === "ArrowUp"){ e.preventDefault(); idx = Math.max(idx - 1, 0); draw(); }
+    else if(e.key === "Enter" && items[idx]){ e.preventDefault(); location.hash = items[idx].h; closeLayer(); }
+    else if(e.key === "Escape"){ closeLayer(); }
+  });
+  list.addEventListener("click", e => {
+    const b = e.target.closest("[data-go]");
+    if(b){ location.hash = b.getAttribute("data-go"); closeLayer(); }
+  });
+  l.querySelector(".scrim").addEventListener("mousedown", e => { if(e.target.classList.contains("scrim")) closeLayer(); });
+  inp.focus();
+}
+
+/* ---------- wiring ---------- */
+function wire(){
+  const v = document.getElementById("root");
+
+  v.querySelectorAll("[data-open-palette]").forEach(b => b.onclick = openPalette);
+
+  /* roles sorting */
+  v.querySelectorAll("[data-sort]").forEach(th => th.onclick = () => {
+    const k = th.getAttribute("data-sort");
+    state.rolesSort = {key:k, dir: state.rolesSort.key === k && state.rolesSort.dir === "desc" ? "asc" : "desc"};
+    render();
+  });
+
+  /* board drag and drop */
+  const board = document.getElementById("board");
+  if(board){
+    board.querySelectorAll(".card").forEach(card => {
+      card.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("text/plain", card.getAttribute("data-card"));
+        e.dataTransfer.effectAllowed = "move";
+        card.classList.add("drag");
+      });
+      card.addEventListener("dragend", () => card.classList.remove("drag"));
+    });
+    board.querySelectorAll(".col").forEach(col => {
+      col.addEventListener("dragover", e => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; col.classList.add("over"); });
+      col.addEventListener("dragleave", () => col.classList.remove("over"));
+      col.addEventListener("drop", e => {
+        e.preventDefault(); col.classList.remove("over");
+        moveCandidate(e.dataTransfer.getData("text/plain"), col.getAttribute("data-col"));
+      });
+    });
+    board.querySelectorAll("[data-move]").forEach(sel => sel.onchange = () => moveCandidate(sel.getAttribute("data-move"), sel.value));
+  }
+
+  /* profile actions */
+  v.querySelectorAll("[data-move-to]").forEach(b => b.onclick = () => moveCandidate(b.getAttribute("data-id"), b.getAttribute("data-move-to")));
+  v.querySelectorAll("[data-drop]").forEach(b => b.onclick = () => {
+    const c = byId(b.getAttribute("data-drop"));
+    confirmDialog({
+      title:"Move " + c.name + " to dropped?",
+      body:"<p class=\"prose\">She stays in the talent pool and keeps her history, and " + esc(role(c.role).title) +
+        " loses a candidate at " + stageLabel(c.stage).toLowerCase() + ". Anyone on the team can re-open her against another role later.</p>",
+      confirm:"Move to dropped",
+      onConfirm:() => moveCandidate(c.id, "dropped")
+    });
+  });
+
+  /* rules */
+  v.querySelectorAll("[data-rule]").forEach(b => b.onclick = () => {
+    const r = state.rules.find(x => x.id === b.getAttribute("data-rule"));
+    r.on = !r.on; render(); toast(r.on ? "Rule turned on" : "Rule turned off");
+  });
+
+  /* talent pool */
+  v.querySelectorAll("[data-clear-filters]").forEach(b => b.onclick = () => {
+    state.filters = {q:"",notice:"",loc:"",src:"",maxExp:""}; state.activeSaved = null; render(); toast("Filters cleared");
+  });
+  v.querySelectorAll("[data-saved]").forEach(b => b.onclick = () => {
+    const s = SAVED.find(x => x.id === b.getAttribute("data-saved"));
+    state.filters = Object.assign({}, s.f); state.activeSaved = s.id; render(); toast("Saved search applied, " + s.name.toLowerCase());
+  });
+  v.querySelectorAll("[data-save-current]").forEach(b => b.onclick = () => {
+    const f = state.filters;
+    const name = [f.q, f.loc, f.src, f.notice ? "under " + f.notice + " days" : "", f.maxExp ? "under " + f.maxExp + ".0 LPA" : ""]
+      .filter(Boolean).join(", ") || "Everyone";
+    if(!SAVED.some(s => s.name === name)){ SAVED.push({id:"s" + (SAVED.length + 1), name:name, f:Object.assign({}, f)}); }
+    render(); toast("Search saved as " + name.toLowerCase());
+  });
+
+  /* outreach template picker */
+  v.querySelectorAll("[data-tpl]").forEach(b => b.onclick = () => { state.forms.tpl = b.getAttribute("data-tpl"); render(); });
+  v.querySelectorAll("[data-nudge]").forEach(b => b.onclick = () => toast(b.textContent.trim() + " noted for " + b.getAttribute("data-nudge")));
+
+  /* scheduling slots */
+  v.querySelectorAll("[data-slot]").forEach(b => b.onclick = () => {
+    const form = b.closest("form"), id = form.getAttribute("data-id");
+    const f = state.forms["sched_" + id] || {slot:null, who:["Karan Belliappa","Ismail Sait"]};
+    f.slot = +b.getAttribute("data-slot");
+    f.who = Array.from(form.querySelectorAll('input[name="who"]:checked')).map(x => x.value);
+    f.kind = form.querySelector("#kind").value;
+    state.forms["sched_" + id] = f; render();
+  });
+
+  /* notes draft kept for the session */
+  const nt = v.querySelector('form[data-form="note"] textarea');
+  if(nt) nt.addEventListener("input", () => { state.forms["note_draft_" + nt.closest("form").getAttribute("data-id")] = nt.value; });
+
+  /* forms */
+  v.querySelectorAll("form[data-form]").forEach(form => form.addEventListener("submit", e => {
+    e.preventDefault();
+    const kind = form.getAttribute("data-form"), id = form.getAttribute("data-id");
+    const fd = new FormData(form);
+    if(kind === "filters"){
+      state.filters = {q:fd.get("q") || "", notice:fd.get("notice") || "", loc:fd.get("loc") || "",
+        src:fd.get("src") || "", maxExp:fd.get("maxExp") || ""};
+      state.activeSaved = null; render(); toast("Filters applied"); return;
+    }
+    if(kind === "note"){
+      const text = (fd.get("text") || "").toString().trim();
+      if(!text){ toast("Write something before adding the note"); return; }
+      const c = byId(id);
+      c.notes = [{by:"Payal Deshmukh", on:"10 Sep", text:text}].concat(c.notes);
+      state.forms["note_draft_" + id] = ""; render(); toast("Note added"); return;
+    }
+    if(kind === "scorecard"){
+      const comment = (fd.get("comment") || "").toString().trim();
+      const f = {rec:fd.get("rec"), comment:comment};
+      SC_DIMS.forEach(d => f[d] = fd.get(d));
+      state.forms["sc_" + id] = f;
+      const err = form.querySelector("#cmerr");
+      if(!comment){ err.hidden = false; form.querySelector("#cm").focus(); return; }
+      err.hidden = true;
+      const c = byId(id);
+      c.waiting = "";
+      c.tl = (c.tl || []).concat([{on:"10 Sep", text:"Screening scorecard saved by Payal Deshmukh, " + f.rec.toLowerCase()}]);
+      state.forms["sc_done_" + id] = f.rec + ", saved 10 Sep by Payal Deshmukh";
+      if(f.rec === "Advance to panel interview" && c.stage === "screening") c.stage = "interview";
+      render(); toast("Scorecard saved"); return;
+    }
+    if(kind === "schedule"){
+      const f = state.forms["sched_" + id] || {slot:null, who:[]};
+      f.who = fd.getAll("who"); f.kind = fd.get("kind");
+      state.forms["sched_" + id] = f;
+      const err = form.querySelector("#sloterr");
+      if(f.slot == null){ err.hidden = false; return; }
+      err.hidden = true;
+      const s = SLOT_GRID[f.slot];
+      if(s.clash && f.who.indexOf("Ismail Sait") > -1){ location.hash = "#/broken"; return; }
+      const c = byId(id);
+      c.waiting = "";
+      c.tl = (c.tl || []).concat([{on:"10 Sep", text:f.kind + " booked for " + s.day + " " + s.time + " with " + f.who.join(" and ")}]);
+      state.forms["sched_done_" + id] = "Invite sent for " + s.day + " " + s.time + " to " + f.who.join(" and ") + ".";
+      render(); toast("Interview invite sent"); return;
+    }
+    if(kind === "rule"){
+      const name = (fd.get("name") || "").toString().trim();
+      state.forms.rule = {when:fd.get("when"), days:fd.get("days"), then:fd.get("then"), name:name};
+      const err = form.querySelector("#rerr");
+      if(!name){ err.hidden = false; form.querySelector("#rn").focus(); return; }
+      err.hidden = true;
+      state.rules.push({id:"ru" + (state.rules.length + 1), on:true, name:name,
+        when:fd.get("when") + " for " + fd.get("days"), then:fd.get("then"), fired:0, last:"Not fired yet"});
+      state.forms.rule = {}; render(); toast("Rule added");
+      return;
+    }
+  }));
+}
+
+/* ---------- boot ---------- */
+document.addEventListener("keydown", e => {
+  if((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k"){
+    e.preventDefault();
+    if(parse().base === "/" || parse().base === "") location.hash = "#/today";
+    openPalette();
+  }
+  if(e.key === "Escape") closeLayer();
+});
+window.addEventListener("hashchange", render);
+render();
+</script>
+</body>
+</html>
