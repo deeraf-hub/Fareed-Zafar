@@ -85,6 +85,8 @@ button,input,select,textarea{font:inherit;color:inherit;font-variant-numeric:tab
 
 /* status */
 .st{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.card .st{white-space:normal;align-items:flex-start}
+.card .dot{margin-top:5px}
 .dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px;background:var(--stale)}
 .d-wait{background:var(--wait)} .d-sched{background:var(--sched)} .d-fwd{background:var(--fwd)}
 .d-drop{background:var(--drop)} .d-stale{background:var(--stale)}
@@ -651,7 +653,9 @@ function render(){
   }
   if(!state.booted){ bootThenRender(); return; }
   const head = {"/today":"Today", "/roles":"Roles", "/talent":"Talent pool", "/outreach":"Outreach",
-    "/rules":"Automation rules", "/reports":"Reports"}[r.base] || "";
+    "/rules":"Automation rules", "/reports":"Reports", "/offers":"Offers", "/schedule":"Interview scheduling",
+    "/scorecard":"Screening scorecard", "/feedback":"Panel feedback", "/broken":"Interview scheduling",
+    "/candidate":"Candidate"}[r.base] || (r.base === "/role" && role(r.arg) ? role(r.arg).title : "Shortlist");
   const nav = NAVITEMS.map(n => '<a class="item" href="#' + n.h + '"' + (n.h === r.base ? ' aria-current="page"' : "") +
       ">" + esc(n.t) + (n.h === "/today" ? '<span class="sec num">' + todayQueue().length + "</span>" : "") + "</a>").join("");
   const roleNav = ROLES.map(x => '<a class="item" href="#/role/' + x.id + '"' +
