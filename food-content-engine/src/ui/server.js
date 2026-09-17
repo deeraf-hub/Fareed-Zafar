@@ -474,7 +474,14 @@ export function createUiServer({ config, brand, ix }) {
       }
       if (p.startsWith("/frames/")) return sendFile(req, res, config.framesDir, decodeURIComponent(p.slice("/frames/".length)));
       if (p.startsWith("/output/")) return sendFile(req, res, config.outputDir, decodeURIComponent(p.slice("/output/".length)), { download: url.searchParams.has("download") });
-      if (p === "/" || p === "/index.html") return sendFile(req, res, here, "index.html");
+      if (p === "/" || p === "/index.html") {
+        // index.html is authored as a fragment (title/style/markup/script) so the same
+        // file can be published as a static snapshot; wrap it in a full document here.
+        const frag = fs.readFileSync(path.join(here, "index.html"), "utf8");
+        const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>${frag}</body></html>`;
+        res.writeHead(200, { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" });
+        return res.end(html);
+      }
       if (p === "/snapshot.json") return json(res, 200, await buildSnapshotData({ config, brand: brandKit, ix, api }));
       return json(res, 404, { error: "not found" });
     } catch (err) {
