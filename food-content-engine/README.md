@@ -3,6 +3,7 @@
 An AI-assisted content production pipeline for a high-volume food and fitness brand. It turns a large archive of recipe footage into a **searchable, tagged library** and then into **many platform-ready cuts per recipe** with very little manual editing.
 
 ```
+                     fce ui  (web app over everything below)
 raw footage ──▶ fce ingest ──▶ fce analyze ──▶ fce search / unused / report
                  (metadata)     (shots, keyframes,        │
                                  AI tags, FTS index)      ▼
@@ -39,6 +40,7 @@ The five written deliverables live in [`docs/`](docs/):
 | `fce render` | ffmpeg draft: conforms every segment to 9:16 / 1:1 / 16:9, hard cuts, burned-in brand captions, optional music bed, loudness-normalised to -14 LUFS. Also writes `render.sh` you can tweak. |
 | `fce qc` | Checklist: duration, frame, fps, size, loudness, true peak, caption coverage, safe zones, pacing, unique shots, hook present, AI B-roll share, AI never on the hero. |
 | `fce broll` | Turns the gaps in a plan (or `--need "…"`) into image + motion prompt sheets that match the brand's visual style, with a real reference frame from the library. |
+| `fce ui` | The same engine as a local web app at `http://127.0.0.1:4310`: dashboard with the coverage matrix and a one-form "Make variants", library browser with keyframe scrub and tag editing, plain-English search, plan editor (swap shots, nudge in/out, edit captions with brand lint, safe-zone preview, QC), report, brand kit editor with live caption preview, B-roll sheets, job progress. `fce ui --snapshot review.html` writes a read-only single-file copy to share. |
 
 Everything reads from one file, [`brand/brand-kit.json`](brand/brand-kit.json): colours, fonts, caption style, pacing, transitions, platform specs, safe zones, voice, hook formulas, AI B-roll rules.
 
@@ -64,6 +66,7 @@ fce analyze                                # first pass over the archive; increm
 fce search "close-up shots of pouring sauce"
 fce variants --recipe grilled-chicken-bowl --info "protein_grams=42,calories=520,minutes=20,portions=4" --render
 open output/
+fce ui                                     # or do all of the above from the browser
 ```
 
 (`npm link` inside `food-content-engine/` puts `fce` on your PATH.)
@@ -85,7 +88,8 @@ The model defaults to `claude-opus-5` (`ai.model` in `fce.config.json`). A decli
 food-content-engine/
 ├── bin/fce.js            CLI entry
 ├── src/                  engine (config, ffmpeg, db, taxonomy, ai, ingest, analyze, search,
-│   └── exporters/          planner, copy, variants, qc, report, broll; edl/csv/captions/render)
+│   ├── exporters/          planner, copy, variants, qc, report, broll; edl/csv/captions/render)
+│   └── ui/                 web app: server.js (JSON API + jobs), index.html (single-page app), snapshot.js
 ├── brand/brand-kit.json  the brand system (fonts + LUT files go next to it, git-ignored)
 ├── templates/*.json      six edit templates; add your own
 ├── docs/                 the deliverables

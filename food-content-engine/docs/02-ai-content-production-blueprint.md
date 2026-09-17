@@ -50,6 +50,7 @@ The blueprint describes the complete system: architecture, tool stack, what is a
 | Renderer | ffmpeg | Conforms to platform frame, hard cuts, burned-in captions, music bed, -14 LUFS |
 | QC | `fce qc` | 15 automated checks per platform |
 | B-roll | `fce broll` | Prompt sheets for image → video generators, matched to a real reference frame |
+| Web app | `fce ui` (server + single-page app) | Dashboard, library, search, plan editing, QC, report, brand kit and B-roll in the browser; jobs run in the background; `--snapshot` exports a shareable read-only copy |
 
 ---
 

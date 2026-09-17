@@ -45,7 +45,13 @@ Set the API key in the shell profile (`export ANTHROPIC_API_KEY=sk-ant-…`) or 
 * Drop the caption/title font files into `food-content-engine/brand/fonts/` (`Montserrat-ExtraBold.ttf` etc.). The renderer looks there; if a font is missing it falls back to a system font, so check the first render.
 * Drop the brand LUT into `brand/luts/` for the NLE (the draft renderer does not apply LUTs).
 
-### 1.5 Nightly automation (optional)
+### 1.5 The web app (optional, recommended for non-terminal users)
+```bash
+cd ~/BrandContent && fce ui          # opens the engine at http://127.0.0.1:4310
+```
+Everything in the SOPs below can be done from the browser instead of the terminal: the Dashboard shows coverage per recipe and has the **Make variants** form; Library browses clips and shots (hover a thumbnail to scrub its keyframes, edit tags on the clip page); Search takes plain-English queries; a plan page lets you swap shots, nudge in/out, edit captions with the brand's length rules, preview with safe zones, render and run QC; Brand kit edits `brand-kit.json` with a live caption preview; B-roll writes prompt sheets. Long actions (analyze, render, variants) run as jobs you can watch in the Jobs drawer. `fce ui --snapshot review.html` writes a single read-only HTML file of the whole app with the current library, for sharing with someone who does not have the engine installed.
+
+### 1.6 Nightly automation (optional)
 macOS/Linux `crontab -e`:
 ```
 30 2 * * * cd ~/BrandContent && /usr/local/bin/fce ingest && /usr/local/bin/fce analyze >> ~/BrandContent/nightly.log 2>&1
