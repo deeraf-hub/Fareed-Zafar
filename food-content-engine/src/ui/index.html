@@ -1,0 +1,789 @@
+<title>Food Content Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F5F4F0; --card:#FFFFFF; --card-2:#EEEDE7; --line:rgba(22,22,26,.10); --line-strong:rgba(22,22,26,.18);
+  --text:#17171A; --muted:#66666E; --faint:#9A9AA2; --accent:#FF6B35; --accent-ink:#FFFFFF; --accent-soft:rgba(255,107,53,.12);
+  --gold:#C99700; --pass:#2A9D62; --warn:#B8800E; --fail:#D14343; --info:#2F6FCB; --pass-soft:rgba(42,157,98,.14); --warn-soft:rgba(184,128,14,.16); --fail-soft:rgba(209,67,67,.14);
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --radius:10px; --shadow:0 12px 40px rgba(0,0,0,.18); --side:224px; --top:52px;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#111114; --card:#1A1A1F; --card-2:#212127; --line:rgba(255,255,255,.09); --line-strong:rgba(255,255,255,.18);
+  --text:#EDEDF0; --muted:#A3A3AB; --faint:#6C6C76; --accent:#FF6B35; --accent-ink:#151515; --accent-soft:rgba(255,107,53,.16);
+  --gold:#FFD23F; --pass:#3DBE7A; --warn:#E0A526; --fail:#E5484D; --info:#6AA0F0; --pass-soft:rgba(61,190,122,.16); --warn-soft:rgba(224,165,38,.18); --fail-soft:rgba(229,72,77,.16); --shadow:0 12px 40px rgba(0,0,0,.5);
+}}
+:root[data-theme="dark"]{
+  --bg:#111114; --card:#1A1A1F; --card-2:#212127; --line:rgba(255,255,255,.09); --line-strong:rgba(255,255,255,.18);
+  --text:#EDEDF0; --muted:#A3A3AB; --faint:#6C6C76; --accent:#FF6B35; --accent-ink:#151515; --accent-soft:rgba(255,107,53,.16);
+  --gold:#FFD23F; --pass:#3DBE7A; --warn:#E0A526; --fail:#E5484D; --info:#6AA0F0; --pass-soft:rgba(61,190,122,.16); --warn-soft:rgba(224,165,38,.18); --fail-soft:rgba(229,72,77,.16); --shadow:0 12px 40px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box} [hidden]{display:none!important} html,body{height:100%} body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit} button,input,select,textarea{font:inherit;color:inherit} img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.app{display:grid;grid-template-columns:var(--side) 1fr;min-height:100%}
+.side{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;border-right:1px solid var(--line);background:var(--card);padding:14px 12px;gap:6px}
+.side .proj{padding:6px 8px 12px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.side .proj b{display:block;font-size:15px} .side .proj small{display:block;color:var(--muted);font-family:var(--mono);font-size:11px;word-break:break-all;margin-top:2px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--muted);font-weight:500}
+.nav a:hover{background:var(--card-2);color:var(--text)} .nav a.is-active{background:var(--accent-soft);color:var(--text);box-shadow:inset 3px 0 0 var(--accent)}
+.nav a svg{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.side .foot{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:10px;border-top:1px solid var(--line)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;border:1px solid var(--line-strong);font-size:12px;color:var(--muted);white-space:nowrap}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--faint);flex:none} .pill.ok i{background:var(--pass)} .pill.warn i{background:var(--warn)} .pill.bad i{background:var(--fail)}
+main{min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:20;height:var(--top);display:flex;align-items:center;gap:12px;padding:0 24px;background:var(--bg);border-bottom:1px solid var(--line)}
+.topbar h1{font-size:16px;font-weight:600;margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.snapbanner{background:var(--warn-soft);color:var(--text);border-bottom:1px solid var(--line);padding:8px 24px;font-size:13px}
+#view{padding:20px 24px 40px;max-width:1400px;width:100%;outline:none}
+h2{font-size:18px;font-weight:600;margin:0 0 12px;text-wrap:balance} h3{font-size:14px;font-weight:600;margin:0 0 8px} .eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)} .faint{color:var(--faint)} .mono{font-family:var(--mono);font-size:12px} .num{font-variant-numeric:tabular-nums} .small{font-size:12px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap} .row.between{justify-content:space-between} .stack{display:flex;flex-direction:column;gap:10px}
+.grid{display:grid;gap:14px} .grid>*{min-width:0} .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))} .grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))} .grid.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))} .grid.side-8-4{grid-template-columns:minmax(0,5fr) minmax(300px,2fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.card.flush{padding:0;overflow:hidden} .card>h3{margin-bottom:10px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;text-decoration:none;display:block}
+.tile b{display:block;font-size:24px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1} .tile span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:4px;font-weight:600} .tile small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:8px;border:1px solid var(--line-strong);background:var(--card);cursor:pointer;font-weight:500;font-size:13px;line-height:1.2;text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--card-2)} .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)} .btn.primary:hover{filter:brightness(1.05)}
+.btn.ghost{border-color:transparent;background:transparent} .btn.ghost:hover{background:var(--card-2)} .btn.sm{padding:4px 9px;font-size:12px} .btn.danger{color:var(--fail)} .btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-size:12px;border:1px solid var(--line-strong);background:var(--card);cursor:default;white-space:nowrap}
+.chip.on{background:var(--accent-soft);border-color:var(--accent)} .chip button{border:0;background:none;padding:0;cursor:pointer;color:var(--muted);line-height:1} .chip[role=button],.chip.click{cursor:pointer}
+.chip.stage{border-color:transparent;background:color-mix(in srgb,var(--stage) 22%,var(--card));color:var(--text)} .chip.stage::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--stage)}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;letter-spacing:.02em}
+.badge.pass{background:var(--pass-soft);color:var(--pass)} .badge.warn{background:var(--warn-soft);color:var(--warn)} .badge.fail{background:var(--fail-soft);color:var(--fail)} .badge.neutral{background:var(--card-2);color:var(--muted)} .badge.gold{background:color-mix(in srgb,var(--gold) 20%,transparent);color:var(--gold)} .badge.ai{background:color-mix(in srgb,#8b7cf6 22%,transparent);color:#8b7cf6}
+.table-wrap{overflow-x:auto} table{width:100%;border-collapse:collapse;font-size:13px} th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;background:var(--card)}
+td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle} tr:last-child td{border-bottom:0} td.num,th.num{text-align:right;font-variant-numeric:tabular-nums} tbody tr:hover td{background:color-mix(in srgb,var(--card-2) 60%,transparent)} tr.click{cursor:pointer}
+.thumb{width:72px;aspect-ratio:4/3;border-radius:6px;background:#0a0a0a;object-fit:cover;flex:none} .ph{display:flex;align-items:center;justify-content:center;font:500 11px var(--mono);color:#fff;text-align:center;padding:4px;background:color-mix(in srgb,var(--stage,#555) 55%,#0a0a0a)}
+.tile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(184px,1fr));gap:12px}
+.shot{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;cursor:pointer;text-align:left;padding:0}
+.shot .pic{position:relative;aspect-ratio:4/3;background:#0a0a0a} .shot .pic img{width:100%;height:100%;object-fit:cover} .shot .pic .dur{position:absolute;right:6px;bottom:6px;background:rgba(0,0,0,.7);color:#fff;font:500 11px/1 var(--mono);padding:3px 5px;border-radius:4px}
+.shot .pic .rank{position:absolute;left:6px;top:6px;background:rgba(0,0,0,.7);color:#fff;font:600 11px/1 var(--mono);padding:3px 6px;border-radius:4px}
+.shot .pic .dots{position:absolute;left:0;right:0;bottom:6px;display:flex;justify-content:center;gap:4px} .shot .pic .dots i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.4)} .shot .pic .dots i.on{background:#fff}
+.shot.dead .pic{filter:grayscale(1) brightness(.6)} .shot.dead .pic::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent 0 10px,rgba(255,255,255,.12) 10px 12px)}
+.shot .meta{padding:8px 10px;display:flex;flex-direction:column;gap:5px;min-width:0} .shot .meta .t{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .shot .meta .s{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shot .flags{display:flex;gap:4px;flex-wrap:wrap} .shot.selected{outline:2px solid var(--accent);outline-offset:-2px}
+.q{display:inline-flex;gap:2px} .q i{width:6px;height:6px;border-radius:50%;background:var(--line-strong)} .q i.on{background:var(--gold)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center} .filters select{width:auto;max-width:100%}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0} .field label{font-size:12px;color:var(--muted);font-weight:500}
+input[type=text],input[type=number],input[type=search],select,textarea{padding:7px 10px;border-radius:8px;border:1px solid var(--line-strong);background:var(--card);min-width:0;width:100%}
+textarea{resize:vertical;min-height:64px} input[type=color]{width:34px;height:30px;padding:2px;border:1px solid var(--line-strong);border-radius:6px;background:var(--card)}
+.searchbar{display:flex;gap:8px;align-items:center} .searchbar input{height:44px;font-size:15px}
+.empty{padding:36px 20px;text-align:center;color:var(--muted);border:1px dashed var(--line-strong);border-radius:var(--radius)} .empty strong{color:var(--text);display:block;margin-bottom:6px} .empty.error{border-color:var(--fail);color:var(--text)}
+.skeleton{background:linear-gradient(90deg,var(--card-2),var(--card),var(--card-2));background-size:200% 100%;animation:sk 1.2s linear infinite;border-radius:8px;min-height:80px} @keyframes sk{to{background-position:-200% 0}}
+.meter{height:6px;border-radius:3px;background:var(--card-2);overflow:hidden;position:relative} .meter b{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:3px} .meter.short b{background:var(--warn)}
+.cov{display:inline-flex;gap:4px} .cov i{width:9px;height:9px;border-radius:50%;background:var(--stage,var(--pass));display:inline-block} .cov i.no{background:transparent;border:1.5px solid var(--fail)}
+.timeline{display:flex;height:56px;gap:2px;border-radius:8px;overflow:hidden;background:var(--card-2)} .timeline .seg{position:relative;min-width:3px;background-size:cover;background-position:center;border-top:3px solid var(--slot,var(--muted));cursor:pointer} .timeline .seg.gap{background:repeating-linear-gradient(135deg,var(--fail-soft) 0 8px,transparent 8px 12px);border-top-color:var(--fail)} .timeline .seg:hover{filter:brightness(1.15)} .timeline .seg span{position:absolute;left:4px;bottom:3px;font:500 10px/1 var(--mono);color:#fff;text-shadow:0 1px 2px #000}
+.ruler{display:flex;justify-content:space-between;font:11px var(--mono);color:var(--faint);margin-top:4px}
+.preview{position:relative;background:#0a0a0a;border-radius:var(--radius);overflow:hidden;aspect-ratio:9/16;max-width:100%;margin:0 auto} .preview video,.preview img{width:100%;height:100%;object-fit:contain;display:block} .preview .zone{position:absolute;left:0;right:0;background:rgba(255,80,80,.22);pointer-events:none;border:1px dashed rgba(255,120,120,.7)} .preview .zone.l,.preview .zone.r{top:0;bottom:0;left:auto;right:auto}
+.preview .zone small{position:absolute;left:6px;top:4px;font:10px var(--mono);color:#fff}
+.qc-row{display:grid;grid-template-columns:56px minmax(0,1fr);gap:10px;align-items:start;padding:8px 0;border-bottom:1px solid var(--line)} .qc-row:last-child{border-bottom:0} .qc-row .badge{margin-top:2px}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;font-size:13px} .kv dt{color:var(--muted)} .kv dd{margin:0;min-width:0;word-break:break-word}
+.cap-edit{width:100%;min-width:180px} .counter{font-size:11px;color:var(--muted);font-family:var(--mono)} .counter.over{color:var(--warn)}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;box-shadow:var(--shadow);z-index:60;max-width:min(560px,90vw);font-size:13px} #toast[data-kind=error]{background:var(--fail);color:#fff} #toast[data-kind=ok]{background:var(--pass);color:#fff}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100vw);background:var(--card);border-left:1px solid var(--line);box-shadow:var(--shadow);z-index:50;display:flex;flex-direction:column;padding:16px;gap:10px;overflow:auto}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:55;display:flex;align-items:center;justify-content:center;padding:16px} .modal{background:var(--card);border:1px solid var(--line);border-radius:14px;width:min(1040px,100%);max-height:90vh;overflow:auto;padding:18px;box-shadow:var(--shadow)}
+.job{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px} .job pre{margin:0;font:11px/1.5 var(--mono);color:var(--muted);max-height:120px;overflow:auto;white-space:pre-wrap}
+.jobbtn{position:relative} .jobbtn .n{position:absolute;top:-6px;right:-6px;background:var(--accent);color:var(--accent-ink);font-size:10px;font-weight:600;border-radius:999px;padding:1px 6px}
+.copyblock{position:relative;background:var(--card-2);border-radius:8px;padding:10px 12px;font:12px/1.5 var(--mono);white-space:pre-wrap;word-break:break-word} .copyblock .btn{position:absolute;right:6px;top:6px}
+.swatch{width:30px;height:30px;border-radius:7px;border:1px solid var(--line-strong);flex:none}
+.bar-list{display:flex;flex-direction:column;gap:6px} .bar-list div{display:grid;grid-template-columns:130px 1fr 32px;gap:8px;align-items:center;font-size:12px} .bar-list b{height:8px;border-radius:4px;background:var(--accent);display:block;opacity:.85}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:12px} .tabs button{border:0;background:none;padding:8px 12px;cursor:pointer;color:var(--muted);font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px} .tabs button.on{color:var(--text);border-bottom-color:var(--accent)}
+.stars{display:inline-flex;gap:2px} .stars button{border:0;background:none;padding:0;cursor:pointer;font-size:15px;color:var(--line-strong);line-height:1} .stars button.on{color:var(--gold)}
+.frames3{display:grid;grid-template-columns:repeat(3,1fr);gap:4px} .frames3 img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;background:#0a0a0a}
+.canvas-wrap{display:flex;justify-content:center} canvas{max-width:100%;border-radius:10px;background:#0a0a0a}
+.hint{font-size:12px;color:var(--muted)} code{font-family:var(--mono);font-size:12px;background:var(--card-2);padding:1px 5px;border-radius:4px}
+.tabbar{display:none} #lib-grid .btn{white-space:normal;text-align:left}
+@media (max-width:1200px){.grid.side-8-4{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:960px){
+  .app{grid-template-columns:1fr} .side{display:none} .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--card);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around}
+  .tabbar a{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:var(--muted);text-decoration:none;padding:4px 6px;border-radius:8px;min-width:52px} .tabbar a.is-active{color:var(--accent)} .tabbar a svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  #view{padding:14px 16px 90px} .topbar{padding:0 16px} .snapbanner{padding:8px 16px}
+  .grid.cols-2,.grid.cols-3,.grid.cols-4,.grid.side-8-4{grid-template-columns:minmax(0,1fr)}
+  .tile-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))} .drawer{width:100vw}
+}
+</style>
+<!--FCE_SNAPSHOT-->
+<div class="app">
+  <aside class="side">
+    <div class="proj"><b id="proj-name">Food Content Engine</b><small id="proj-path"></small></div>
+    <nav class="nav" aria-label="Main">
+      <a href="#/dashboard" data-nav="dashboard"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="14" width="8" height="7" rx="1.5"/></svg>Dashboard</a>
+      <a href="#/library" data-nav="library"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M8 5v14"/></svg>Library</a>
+      <a href="#/search" data-nav="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search</a>
+      <a href="#/plans" data-nav="plans"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 20V9"/></svg>Plans</a>
+      <a href="#/report" data-nav="report"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Report</a>
+      <a href="#/brand" data-nav="brand"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18M8 12h.01M12 8h.01M16 12h.01M12 16h.01"/></svg>Brand kit</a>
+      <a href="#/broll" data-nav="broll"><svg viewBox="0 0 24 24"><path d="m3 8 4-4h10l4 4v8l-4 4H7l-4-4z"/><path d="M12 8v8M8 12h8"/></svg>B-roll</a>
+      <a href="#/jobs" data-nav="jobs"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Jobs</a>
+    </nav>
+    <div class="foot">
+      <span class="pill" id="pill-ai"><i></i>AI mode</span>
+      <span class="pill" id="pill-ffmpeg"><i></i>ffmpeg</span>
+      <button class="btn ghost sm" id="theme-toggle" type="button">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <div class="snapbanner" id="snapbanner" hidden></div>
+    <header class="topbar">
+      <h1 id="page-title">Dashboard</h1>
+      <button class="btn sm jobbtn" id="jobs-open" type="button" data-live>Jobs <span class="n" id="jobs-badge" hidden>0</span></button>
+    </header>
+    <div id="view" tabindex="-1" aria-live="polite"></div>
+  </main>
+  <nav class="tabbar" aria-label="Main (mobile)">
+    <a href="#/dashboard" data-nav="dashboard"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="14" width="8" height="7" rx="1.5"/></svg>Home</a>
+    <a href="#/library" data-nav="library"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M8 5v14"/></svg>Library</a>
+    <a href="#/search" data-nav="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search</a>
+    <a href="#/plans" data-nav="plans"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 20V9"/></svg>Plans</a>
+    <a href="#/report" data-nav="report"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>More</a>
+  </nav>
+  <div id="drawer" hidden></div>
+  <div id="modal" hidden></div>
+  <div id="toast" hidden></div>
+</div>
+<script>
+// ---------- data layer: live API or embedded snapshot ----------
+const SNAP = (() => {
+  const el = document.getElementById("fce-snapshot");
+  if (!el) return null;
+  try { return JSON.parse(el.textContent); } catch { return null; }
+})();
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const fmtS = (n) => (n == null ? "–" : `${Number(n).toFixed(n >= 10 ? 0 : 1)}s`);
+const fmtMin = (sec) => { const s = Math.round(sec || 0); return s < 90 ? `${s}s` : `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, "0")}s`; };
+const tc = (sec, fps = 30) => { const f = Math.round(sec * fps); const F = Math.round(fps); const p = (n) => String(n).padStart(2, "0"); return `${p(Math.floor(f / F / 3600))}:${p(Math.floor(f / F / 60) % 60)}:${p(Math.floor(f / F) % 60)}:${p(f % F)}`; };
+const label = (t) => String(t ?? "").replace(/_/g, " ");
+const title = (t) => label(t).replace(/(^|\s)\S/g, (c) => c.toUpperCase());
+
+const api = {
+  async get(path) {
+    if (SNAP) return snapGet(path);
+    const r = await fetch(path);
+    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.statusText);
+    return r.json();
+  },
+  async send(method, path, body) {
+    if (SNAP) throw new Error("This is a shared snapshot. Run `fce ui` locally to use actions.");
+    const r = await fetch(path, { method, headers: { "content-type": "application/json" }, body: JSON.stringify(body ?? {}) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || r.statusText);
+    return j;
+  },
+};
+
+// ---------- snapshot search: a port of src/search.js offline parsing + ranking ----------
+const TX = SNAP?.taxonomy;
+function buildMatcher(table) { const e = []; for (const [tag, phrases] of Object.entries(table)) for (const p of phrases) e.push({ phrase: p.toLowerCase(), tag }); return e.sort((a, b) => b.phrase.length - a.phrase.length); }
+const MATCHERS = TX ? {
+  shot_type: buildMatcher(TX.SYNONYMS.shot_type), camera_motion: buildMatcher(TX.SYNONYMS.camera_motion), stage: buildMatcher(TX.SYNONYMS.stage), action: buildMatcher(TX.SYNONYMS.action),
+  ingredient: buildMatcher({ ...Object.fromEntries(TX.INGREDIENTS.map((i) => [i, [i.replace(/_/g, " ")]])), ...TX.INGREDIENT_SYNONYMS }),
+} : null;
+const normalize = (t) => String(t ?? "").toLowerCase().replace(/\.[a-z0-9]{2,4}$/i, "").replace(/[_\-./\\]+/g, " ").replace(/[^\p{L}\p{N}\s']/gu, " ").replace(/\s+/g, " ").trim();
+function matchAll(m, text) { const found = []; let rem = ` ${text} `; for (const { phrase, tag } of m) { const n = ` ${phrase} `; if (rem.includes(n)) { if (!found.includes(tag)) found.push(tag); rem = rem.split(n).join(" "); } } return found; }
+const STOP = new Set("show me all find get give the a an of with for and or in on at to from that this those these shots shot clips clip footage video videos recipe recipes any some every please i want need looking".split(" "));
+function parseQueryLocal(q) {
+  const t = normalize(q);
+  const f = { ingredients: [], actions: [], shot_types: [], stages: [], camera_motion: [], dish: null, hero_only: false, hook_only: false, min_quality: null, has_face: null, terms: [], min_duration: null, max_duration: null };
+  if (!MATCHERS) { f.terms = t.split(" ").filter((w) => w.length > 2 && !STOP.has(w)); return f; }
+  f.ingredients = matchAll(MATCHERS.ingredient, t); f.actions = matchAll(MATCHERS.action, t); f.shot_types = matchAll(MATCHERS.shot_type, t); f.stages = matchAll(MATCHERS.stage, t); f.camera_motion = matchAll(MATCHERS.camera_motion, t);
+  f.hero_only = /\b(hero|beauty|money shot|reveal|final dish)\b/.test(t); f.hook_only = /\b(hook|opener|opening)\b/.test(t);
+  if (/\b(face|talking|to camera|reaction)\b/.test(t)) f.has_face = true; if (/\bno (face|people|person)\b|\bhands only\b/.test(t)) f.has_face = false;
+  if (/\b(best|top|high quality|quality)\b/.test(t)) f.min_quality = 4;
+  const dm = t.match(/\b(under|less than|shorter than|max)\s+(\d+(?:\.\d+)?)\s*s/); if (dm) f.max_duration = Number(dm[2]);
+  const dm2 = t.match(/\b(over|longer than|at least|min)\s+(\d+(?:\.\d+)?)\s*s/); if (dm2) f.min_duration = Number(dm2[2]);
+  const known = new Set([...f.ingredients, ...f.actions, ...f.shot_types, ...f.stages, ...f.camera_motion].flatMap((x) => x.split("_")));
+  f.terms = t.split(" ").filter((w) => w.length > 2 && !STOP.has(w) && !known.has(w) && !/^\d+s?$/.test(w));
+  return f;
+}
+function overlap(list, wanted) { if (!wanted?.length) return null; const have = new Set((list ?? []).map((x) => String(x).toLowerCase())); return wanted.filter((w) => have.has(String(w).toLowerCase())).length; }
+function scoreLocal(shot, f, textHit) {
+  let facets = 0, matched = 0, score = 0;
+  const facet = (hits, w) => { facets++; if (hits) { matched++; score += w * hits; } };
+  if (f.ingredients?.length) { const dishHit = f.ingredients.some((i) => (shot.dish ?? shot.clip_recipe ?? "").toLowerCase().includes(String(i).toLowerCase().replace(/_/g, " ")) || (shot.clip_recipe ?? "").includes(String(i).toLowerCase())); facet((overlap(shot.ingredients, f.ingredients) || 0) + (dishHit ? 0.5 : 0), 10); }
+  if (f.actions?.length) facet(overlap(shot.actions, f.actions), 10);
+  if (f.shot_types?.length) facet(f.shot_types.includes(shot.shot_type) ? 1 : 0, 6);
+  if (f.stages?.length) facet(f.stages.includes(shot.stage) ? 1 : 0, 6);
+  if (f.camera_motion?.length) facet(f.camera_motion.includes(shot.camera_motion) ? 1 : 0, 4);
+  if (f.hero_only) facet(shot.hero_worthy ? 1 : 0, 6);
+  if (f.hook_only) facet(shot.hook_worthy ? 1 : 0, 6);
+  if (f.terms?.length) facet(textHit ? 1 : 0, 4);
+  if (f.has_face === true && !shot.has_face) return null; if (f.has_face === false && shot.has_face) return null;
+  if (f.min_quality && (shot.quality ?? 0) < f.min_quality) return null;
+  if (f.min_duration && shot.duration < f.min_duration) return null; if (f.max_duration && shot.duration > f.max_duration) return null;
+  if (facets > 0 && matched === 0) return null;
+  score += (shot.quality ?? 3) * 1.5; if (shot.hero_worthy) score += 1; if (shot.hook_worthy) score += 1; if (!(shot.used > 0)) score += 2; if (textHit) score += 2; if (shot.dead) score -= 8;
+  return { score: Math.round(score * 100) / 100, matched, facets };
+}
+function searchLocal(q, { limit = 60, unused = false, strict = false, recipe, dead = false } = {}) {
+  const f = q ? parseQueryLocal(q) : parseQueryLocal("");
+  const out = [];
+  for (const s of SNAP.shots) {
+    if (recipe && s.clip_recipe !== recipe) continue; if (!dead && s.dead) continue; if (unused && s.used > 0) continue;
+    const hay = normalize(`${s.description} ${(s.keywords || []).join(" ")} ${(s.ingredients || []).join(" ")} ${(s.actions || []).join(" ")} ${s.clip_filename} ${s.clip_recipe}`);
+    const textHit = f.terms?.length ? f.terms.some((t) => hay.includes(t.replace(/(ing|ed|s)$/, ""))) : false;
+    const r = scoreLocal(s, f, textHit); if (!r) continue; if (strict && r.matched < r.facets) continue;
+    out.push({ ...s, ...r });
+  }
+  out.sort((a, b) => b.matched - a.matched || b.score - a.score || a.id - b.id);
+  return { query: q, filter: f, mode: "snapshot", results: out.slice(0, limit) };
+}
+function snapGet(path) {
+  const u = new URL(path, location.origin); const p = u.pathname; const q = u.searchParams;
+  let m;
+  if (p === "/api/status") return SNAP.status;
+  if (p === "/api/clips") return SNAP.clips.filter((c) => (!q.get("recipe") || c.recipe === q.get("recipe")) && (!q.get("source") || c.source_type === q.get("source")));
+  if ((m = p.match(/^\/api\/clips\/(\d+)$/))) { const d = SNAP.clipDetails[m[1]]; if (!d) throw new Error("clip not found"); return d; }
+  if (p === "/api/shots") return searchLocal((q.get("q") ?? "").trim(), { limit: Number(q.get("limit") ?? 60), unused: q.get("unused") === "1", strict: q.get("strict") === "1", recipe: q.get("recipe") || undefined, dead: q.get("dead") === "1" });
+  if (p === "/api/recipes") return SNAP.status.recipes;
+  if (p === "/api/templates") return SNAP.templates;
+  if (p === "/api/plans") return SNAP.plans;
+  if ((m = p.match(/^\/api\/plans\/(.+)$/))) { const d = SNAP.planDetails[decodeURIComponent(m[1])]; if (!d) throw new Error("plan not found"); return d; }
+  if (p === "/api/report") return SNAP.report;
+  if (p === "/api/unused") return SNAP.unused;
+  if (p === "/api/brand") return SNAP.brand;
+  if (p === "/api/broll") return SNAP.broll;
+  if (p === "/api/jobs") return [];
+  throw new Error(`not in snapshot: ${p}`);
+}
+
+// ---------- router ----------
+const routes = {};
+function route() {
+  const hash = location.hash.startsWith("#/") ? location.hash.slice(2) : "";
+  const [pathPart, qs = ""] = hash.split("?");
+  const parts = pathPart.split("/").filter(Boolean);
+  return { screen: parts[0] || "library", parts, params: new URLSearchParams(qs) };
+}
+function go(hash) { location.hash = hash; }
+async function render() {
+  const r = route();
+  const fn = routes[r.screen] || routes.library;
+  document.querySelectorAll("[data-nav]").forEach((a) => a.classList.toggle("is-active", a.dataset.nav === r.screen));
+  const view = document.getElementById("view");
+  view.setAttribute("aria-busy", "true");
+  try { await fn(view, r); } catch (err) { view.innerHTML = `<div class="empty error"><strong>Could not load this screen.</strong><p>${esc(err.message)}</p></div>`; }
+  view.removeAttribute("aria-busy");
+  view.focus({ preventScroll: true });
+}
+window.addEventListener("hashchange", render);
+
+// ---------- toast + jobs ----------
+function toast(msg, kind = "info") {
+  const el = document.getElementById("toast"); el.textContent = msg; el.dataset.kind = kind; el.hidden = false;
+  clearTimeout(toast._t); toast._t = setTimeout(() => { el.hidden = true; }, kind === "error" ? 6000 : 3200);
+}
+const jobs = { list: [], timer: null, listeners: new Set() };
+async function refreshJobs() {
+  if (SNAP) return;
+  try { jobs.list = await api.get("/api/jobs"); } catch { return; }
+  for (const fn of jobs.listeners) fn(jobs.list);
+  const active = jobs.list.some((j) => j.status === "queued" || j.status === "running");
+  const badge = document.getElementById("jobs-badge");
+  if (badge) { badge.hidden = !active; badge.textContent = String(jobs.list.filter((j) => j.status === "queued" || j.status === "running").length); }
+  clearTimeout(jobs.timer);
+  if (active) jobs.timer = setTimeout(refreshJobs, 1200);
+}
+async function startJob(params, doneMessage) {
+  const job = await api.send("POST", "/api/jobs", params);
+  toast(`Started: ${params.type}`);
+  refreshJobs();
+  return new Promise((resolve) => {
+    const check = (list) => { const j = list.find((x) => x.id === job.id); if (!j || j.status === "queued" || j.status === "running") return; jobs.listeners.delete(check); if (j.status === "done") { toast(doneMessage ?? `Done: ${j.type}`, "ok"); resolve(j); } else { toast(`Failed: ${j.error}`, "error"); resolve(j); } };
+    jobs.listeners.add(check);
+  });
+}
+
+// ---------- shared UI pieces ----------
+const STAGE_COLORS = { ingredients: "#2FB8A3", prep: "#4C8EDA", cooking: "#F28C28", plating: "#A98BE8", hero: "#E5B62A", serving: "#5FC29E", eating: "#E8739A", talking_head: "#7A9AB8", lifestyle: "#9DB36B", meal_prep: "#38B6D6", packaging: "#B78A5B", workout: "#D95F9A", transition: "#8A8A96" };
+const SLOT_COLORS = { hook: "#E5B62A", ingredients: "#2FB8A3", cook: "#F28C28", plating: "#A98BE8", hero: "#E5B62A", cta: "#8B7CF6", protein: "#4C8EDA", macros: "#E5B62A", reaction: "#E8739A", portion: "#38B6D6", spotlight: "#2FB8A3" };
+const STAGES = ["ingredients", "prep", "cooking", "plating", "hero", "serving", "eating", "talking_head", "lifestyle", "meal_prep", "packaging", "workout", "transition"];
+const SHOT_TYPES = ["extreme_close_up", "close_up", "medium", "wide", "overhead", "pov", "detail"];
+const CAMERA = ["static", "pan", "tilt", "push_in", "pull_out", "handheld", "slider", "orbit", "whip"];
+const COVERAGE = ["ingredients", "prep", "cooking", "plating", "hero", "eating"];
+const QC_LABELS = { duration: ["Duration", "Trim the longest segments or pick a shorter template."], frame: ["Frame size", "Re-render; the conform targets the platform frame."], fps: ["Frame rate", "Re-render."], filesize: ["File size", "Lower the CRF/preset in fce.config.json render settings."], loudness: ["Loudness", "Re-render: audio is normalised to the platform target."], true_peak: ["True peak", "Re-render with music lower or without music."], captions: ["Caption coverage", "Give every segment a caption."], safe_zone: ["Safe zone", "Raise captions.marginBottomPct in the brand kit."], caption_length: ["Caption length", "Shorten the caption or raise maxCharsPerLine."], unique_shots: ["Unique shots", "Swap one of the repeated segments."], pacing: ["Pacing", "Nudge in/out so shots sit inside the pacing range."], hook: ["Hook", "Swap the first segment for a hook-worthy or hero shot."], ai_broll_share: ["AI B-roll share", "Replace AI inserts with real footage."], ai_hero: ["AI on hero", "Never use AI footage for the hero or CTA."], gaps: ["Gaps", "Film the missing stage or request AI B-roll for inserts."], file: ["Render file", "Render the plan first."] };
+const stageStyle = (stage) => `style="--stage:${STAGE_COLORS[stage] ?? "#8A8A96"}"`;
+const stageChip = (stage) => stage ? `<span class="chip stage" ${stageStyle(stage)}>${esc(label(stage))}</span>` : `<span class="chip">untagged</span>`;
+const qDots = (q) => `<span class="q" title="quality ${q ?? "?"}/5">${[1, 2, 3, 4, 5].map((i) => `<i class="${(q ?? 0) >= i ? "on" : ""}"></i>`).join("")}</span>`;
+const flags = (s) => [s.hero_worthy ? `<span class="badge gold">Hero</span>` : "", s.hook_worthy ? `<span class="badge gold">Hook</span>` : "", s.dead ? `<span class="badge fail">Dead</span>` : "", s.clip_ai_generated || s.ai_generated ? `<span class="badge ai">AI</span>` : "", s.used ? `<span class="badge neutral">used ×${s.used}</span>` : ""].join("");
+function shotTile(s, { rank, href, sub } = {}) {
+  const frames = (s.frames ?? []).filter(Boolean);
+  const img = frames[1] ?? frames[0] ?? "";
+  const link = href ?? `#/library/${s.clip_id}?shot=${s.id}`;
+  return `<a class="shot ${s.dead ? "dead" : ""}" href="${esc(link)}" data-shot="${s.id}">
+    <div class="pic" data-frames='${esc(JSON.stringify(frames))}'>${img ? `<img src="${esc(img)}" alt="${esc(s.description ?? "")}" loading="lazy" decoding="async">` : `<div class="ph" style="position:absolute;inset:0;--stage:${STAGE_COLORS[s.stage] ?? "#555"}">${esc((s.clip_filename ?? "").split("_")[3] ?? s.stage ?? "no keyframe")}</div>`}
+      ${rank != null ? `<span class="rank">#${rank}${s.facets ? ` · ${s.matched}/${s.facets}` : ""}</span>` : ""}<span class="dur">${fmtS(s.duration)}</span>
+      ${frames.length > 1 ? `<span class="dots">${frames.map((_, i) => `<i class="${i === Math.min(1, frames.length - 1) ? "on" : ""}"></i>`).join("")}</span>` : ""}</div>
+    <div class="meta"><div class="row" style="gap:6px">${stageChip(s.stage)}<span class="small muted">${esc(label(s.shot_type ?? ""))}${s.camera_motion ? " · " + esc(label(s.camera_motion)) : ""}</span></div>
+      <div class="t" title="${esc(s.clip_filename)}">${esc(sub ?? s.caption_suggestion ?? s.description ?? s.clip_filename)}</div>
+      <div class="s">${esc(s.clip_recipe ?? "")} · ${esc((s.actions ?? []).map(label).join(", ") || "no action tagged")}</div>
+      <div class="row between" style="gap:6px">${qDots(s.quality)}<span class="flags">${flags(s)}</span></div></div></a>`;
+}
+function bindScrub(root) {
+  root.querySelectorAll(".pic[data-frames]").forEach((pic) => {
+    const frames = JSON.parse(pic.dataset.frames || "[]");
+    if (frames.length < 2) return;
+    const img = pic.querySelector("img"); const dots = pic.querySelectorAll(".dots i");
+    const show = (i) => { if (img.src !== frames[i]) img.src = frames[i]; dots.forEach((d, k) => d.classList.toggle("on", k === i)); };
+    pic.addEventListener("mousemove", (e) => { const r = pic.getBoundingClientRect(); show(Math.min(frames.length - 1, Math.max(0, Math.floor(((e.clientX - r.left) / r.width) * frames.length)))); });
+    pic.addEventListener("mouseleave", () => show(Math.min(1, frames.length - 1)));
+  });
+}
+function openModal(html) { const m = document.getElementById("modal"); m.innerHTML = `<div class="modal-bg" data-close><div class="modal" role="dialog" aria-modal="true">${html}</div></div>`; m.hidden = false; m.querySelector(".modal").focus?.(); }
+function closeModal() { const m = document.getElementById("modal"); m.hidden = true; m.innerHTML = ""; }
+document.getElementById("modal").addEventListener("click", (e) => { if (e.target.dataset.close != null || e.target.closest("[data-close-modal]")) closeModal(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeModal(); document.getElementById("drawer").hidden = true; } if (e.key === "/" && !/input|textarea|select/i.test(document.activeElement?.tagName ?? "")) { e.preventDefault(); go("#/search"); setTimeout(() => document.getElementById("q")?.focus(), 50); } });
+async function copyText(text, what = "Copied") { try { await navigator.clipboard.writeText(text); toast(what, "ok"); } catch { toast("Copy failed: select the text and copy it manually.", "error"); } }
+const meter = (total, target, ideal) => { const pct = Math.min(100, (total / Math.max(target, 0.1)) * 100); const short = total < target * 0.95; return `<div class="meter ${short ? "short" : ""}" title="${fmtS(total)} of ${fmtS(target)} target${ideal ? `; ideal ${ideal[0]}–${ideal[1]}s` : ""}"><b style="width:${pct}%"></b></div>`; };
+const qcBadge = (qc) => !qc ? `<span class="badge neutral">not rendered</span>` : qc.passed ? `<span class="badge pass">PASS${qc.warn ? ` · ${qc.warn} warn` : ""}</span>` : `<span class="badge fail">FAIL · ${qc.fail}</span>`;
+const platformBadge = (p, w, h) => `<span class="badge neutral">${esc(title(p))} · ${w}×${h}</span>`;
+function setTitle(t) { document.getElementById("page-title").textContent = t; document.title = `${t} · Food Content Engine`; }
+const cache = { status: null, brand: null, templates: null, report: null };
+async function status(force) { if (!cache.status || force) cache.status = await api.get("/api/status"); return cache.status; }
+async function brandKit(force) { if (!cache.brand || force) cache.brand = (await api.get("/api/brand")).kit; return cache.brand; }
+async function templates() { if (!cache.templates) cache.templates = await api.get("/api/templates"); return cache.templates; }
+const platformOf = (kit, id) => kit?.platforms?.[id] ?? { width: 1080, height: 1920, fps: 30, safeZone: { top: 0, bottom: 0, left: 0, right: 0 } };
+
+// ---------- plan / variants form ----------
+async function openPlanForm({ mode = "variants", recipe = "", template = "" } = {}) {
+  const [st, kit, tpls] = await Promise.all([status(), brandKit(), templates()]);
+  const sets = Object.keys(kit.variantSets ?? { default: [] });
+  const recipeOpts = st.recipes.map((r) => `<option value="${esc(r.recipe)}" ${r.recipe === recipe ? "selected" : ""}>${esc(r.recipe)} (${r.clips} clips)</option>`).join("");
+  const dish = recipe ? title(recipe.split("-").filter((t) => !/^(mealprep|meal|prep|v\d+)$/.test(t)).join(" ")) : "";
+  openModal(`<form id="planform" class="stack" style="gap:14px">
+    <div class="row between"><h2 style="margin:0">${mode === "variants" ? "Make variants" : "New plan"}</h2><button type="button" class="btn ghost sm" data-close-modal>Close</button></div>
+    <div class="tabs"><button type="button" class="${mode === "variants" ? "on" : ""}" data-mode="variants">Variants (one recipe → many formats)</button><button type="button" class="${mode === "plan" ? "on" : ""}" data-mode="plan">Single plan</button></div>
+    <div class="grid cols-2">
+      <div class="field"><label for="f-recipe">Recipe</label><select id="f-recipe" name="recipe"><option value="">Whole library (cross-recipe formats)</option>${recipeOpts}</select></div>
+      <div class="field" data-only="plan"><label for="f-template">Template</label><select id="f-template" name="template">${tpls.map((t) => `<option value="${esc(t.id)}" ${t.id === template ? "selected" : ""}>${esc(t.name)} · ${t.targetSeconds}s</option>`).join("")}</select></div>
+      <div class="field" data-only="variants"><label for="f-set">Variant set</label><select id="f-set" name="set">${sets.map((s) => `<option value="${esc(s)}">${esc(s)} (${(kit.variantSets[s] ?? []).length} templates: ${esc((kit.variantSets[s] ?? []).join(", "))})</option>`).join("")}</select></div>
+    </div>
+    <fieldset class="card" style="border-color:var(--line)"><legend class="eyebrow">Recipe facts (used by hooks, macro cards and post copy)</legend>
+      <div class="grid cols-3">
+        <div class="field"><label for="f-dish">Dish name</label><input id="f-dish" name="dish" type="text" value="${esc(dish)}" placeholder="Grilled Chicken Bowl"></div>
+        <div class="field"><label for="f-protein">Protein per serving (g)</label><input id="f-protein" name="protein_grams" type="number" min="0" placeholder="42"></div>
+        <div class="field"><label for="f-cal">Calories</label><input id="f-cal" name="calories" type="number" min="0" placeholder="520"></div>
+        <div class="field"><label for="f-min">Minutes</label><input id="f-min" name="minutes" type="number" min="0" placeholder="20"></div>
+        <div class="field"><label for="f-por">Portions</label><input id="f-por" name="portions" type="number" min="1" placeholder="4"></div>
+        <div class="field"><label for="f-seed">Seed (change for an alternative cut)</label><input id="f-seed" name="seed" type="number" min="1" value="1"></div>
+      </div></fieldset>
+    <div class="row" style="gap:16px">
+      <label class="row" style="gap:6px"><input type="checkbox" name="render" id="f-render" checked> Render drafts and run QC</label>
+      <label class="row" style="gap:6px"><input type="checkbox" name="offline" id="f-offline" ${st.aiMode === "claude" ? "" : "checked disabled"}> Offline captions (skip Claude)</label>
+      <span class="hint">${st.aiMode === "claude" ? `Captions written by ${esc(st.model)}` : "No API key: captions come from the brand formulas and the shots' own suggestions"}</span>
+    </div>
+    <div class="row between"><span class="hint" id="f-hint">Hook preview: <b id="f-hook"></b></span><button class="btn primary" type="submit">${mode === "variants" ? "Make variants" : "Create plan"}</button></div>
+  </form>`);
+  const hookPreview = () => { const fd = new FormData(document.getElementById("planform")); const vars = { dish: fd.get("dish") || (fd.get("recipe") ? title(String(fd.get("recipe")).replace(/-/g, " ")) : "this recipe"), protein: "protein", protein_grams: fd.get("protein_grams"), calories: fd.get("calories"), minutes: fd.get("minutes"), portions: fd.get("portions") || 4 }; const ok = (kit.voice?.hookFormulas ?? []).filter((f) => [...f.matchAll(/\{\{(\w+)\}\}/g)].every((m) => vars[m[1]])); const el = document.getElementById("f-hook"); el.textContent = ok.length ? ok[0].replace(/\{\{(\w+)\}\}/g, (_, k) => vars[k]) : `${vars.dish} in ${vars.minutes || 20} min`; };
+  document.getElementById("planform").addEventListener("input", hookPreview); hookPreview();
+  const form = document.getElementById("planform");
+  let current = mode;
+  const applyMode = () => { form.querySelectorAll("[data-only]").forEach((el) => (el.hidden = el.dataset.only !== current)); form.querySelectorAll(".tabs button").forEach((b) => b.classList.toggle("on", b.dataset.mode === current)); const n = (kit.variantSets?.[form.querySelector("#f-set").value] ?? []).length; form.querySelector("button[type=submit]").textContent = current === "variants" ? `Make ${n} variants` : "Create plan"; };
+  form.querySelector("#f-set").addEventListener("change", applyMode);
+  form.querySelectorAll(".tabs button").forEach((b) => b.addEventListener("click", () => { current = b.dataset.mode; applyMode(); }));
+  applyMode();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const info = {};
+    for (const k of ["dish", "protein_grams", "calories", "minutes", "portions"]) if (fd.get(k)) info[k] = String(fd.get(k));
+    const params = { recipe: fd.get("recipe") || null, seed: Number(fd.get("seed") || 1), info, render: fd.get("render") === "on", offline: fd.get("offline") === "on" };
+    closeModal();
+    if (current === "variants") {
+      const job = await startJob({ type: "variants", set: fd.get("set"), ...params }, "Variants ready");
+      cache.status = null; cache.report = null;
+      if (job.status === "done") go("#/plans"); else if (route().screen !== "jobs") render();
+    } else {
+      const job = await startJob({ type: "plan", template: fd.get("template"), ...params }, "Plan ready");
+      cache.status = null; cache.report = null;
+      if (job.status === "done") go(`#/plans/${encodeURIComponent(job.result.planId)}`);
+    }
+  });
+}
+
+// ---------- dashboard ----------
+routes.dashboard = async (view) => {
+  setTitle("Dashboard");
+  view.innerHTML = `<div class="stack"><div class="tiles"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div><div class="skeleton" style="min-height:200px"></div></div>`;
+  const [st, report, plans] = await Promise.all([status(true), api.get("/api/report"), api.get("/api/plans")]);
+  cache.report = report;
+  const s = st.stats; const used = s.used?.n ?? 0; const unusedBy = new Map(report.unused.map((u) => [u.recipe, u]));
+  const pending = (s.byStatus ?? []).find((r) => r.status === "ingested")?.n ?? 0;
+  const recent = plans.slice(0, 6);
+  view.innerHTML = `<div class="stack" style="gap:16px">
+    ${st.stats.clips.n === 0 ? `<div class="empty"><strong>No footage indexed yet.</strong>Put clips in <code>library/01_raw/&lt;YYYY-MM-DD&gt;_&lt;recipe-slug&gt;/</code>, then run Ingest and Analyze from the Library screen.</div>` : ""}
+    <div class="tiles">
+      <a class="tile" href="#/library"><b>${s.clips.n}</b><span>Clips</span><small>${fmtMin(s.clips.seconds)} of footage${pending ? ` · ${pending} awaiting analysis` : ""}</small></a>
+      <a class="tile" href="#/library?view=shots"><b>${s.shots.n}</b><span>Shots</span><small>${s.shots.dead ?? 0} dead (excluded)</small></a>
+      <a class="tile" href="#/search?q=hero%20shots"><b>${s.shots.hero ?? 0} <span style="display:inline;font-size:14px;color:var(--muted);text-transform:none;letter-spacing:0">/ ${s.shots.hook ?? 0}</span></b><span>Hero / hook shots</span><small>openers and finals</small></a>
+      <a class="tile" href="#/report"><b>${s.shots.n ? Math.round((used / s.shots.n) * 100) : 0}%</b><span>Shots used in plans</span><small>${used} of ${s.shots.n}</small></a>
+      <a class="tile" href="#/plans"><b>${s.plans.n}</b><span>Plans</span><small>${plans.filter((p) => p.qc?.passed).length} passed QC</small></a>
+    </div>
+    <div class="stack">
+      <div class="card flush"><div class="row between" style="padding:12px 14px 0"><h3 style="margin:0">Coverage by recipe</h3><span class="hint">A recipe is ready for every template when all six stages exist</span></div>
+        <div class="table-wrap"><table><thead><tr><th>Recipe</th><th class="num">Clips</th><th class="num">Footage</th>${COVERAGE.map((c) => `<th>${esc(title(c))}</th>`).join("")}<th class="num">Unused</th><th>Status</th><th></th></tr></thead><tbody>
+        ${report.recipes.map((r) => `<tr><td><a href="#/library?recipe=${encodeURIComponent(r.recipe)}"><b>${esc(r.recipe)}</b></a></td><td class="num">${r.clips}</td><td class="num">${fmtMin(r.seconds)}</td>
+          ${COVERAGE.map((c) => `<td><a class="cov" href="#/library?view=shots&recipe=${encodeURIComponent(r.recipe)}&stage=${c}" title="${r.stages[c] ?? 0} ${c} shots" ${stageStyle(c)}><i class="${r.stages[c] ? "" : "no"}"></i><span class="num small">${r.stages[c] ?? 0}</span></a></td>`).join("")}
+          <td class="num">${unusedBy.get(r.recipe) ? fmtMin(unusedBy.get(r.recipe).seconds) : "–"}</td><td>${r.missing.length ? `<span class="badge warn">Missing ${esc(r.missing.map(label).join(", "))}</span>` : `<span class="badge pass">Ready</span>`}</td>
+          <td class="row" style="gap:6px;flex-wrap:nowrap"><button class="btn sm primary" data-live data-variants="${esc(r.recipe)}">Make variants</button></td></tr>`).join("") || `<tr><td colspan="11" class="muted">No analysed clips yet.</td></tr>`}
+        </tbody></table></div></div>
+      <div class="grid cols-2">
+        <div class="card"><div class="row between"><h3>What to film next</h3><button class="btn sm ghost" id="copy-film">Copy list</button></div>
+          ${report.recipes.filter((r) => r.missing.length).map((r) => `<div class="row" style="margin-bottom:6px"><b class="small">${esc(r.recipe)}</b>${r.missing.map((m) => `<span class="chip stage" ${stageStyle(m)}>${esc(label(m))}</span>`).join("")}</div>`).join("") || `<p class="muted small" style="margin:0">Every recipe has all six stages. ${s.shots.dead ? `${s.shots.dead} dead shots could be deleted.` : ""}</p>`}</div>
+        <div class="card"><h3>Unused footage</h3>${report.unused.length ? `<div class="table-wrap"><table><thead><tr><th>Recipe</th><th class="num">Shots</th><th class="num">Footage</th><th></th></tr></thead><tbody>${report.unused.map((u) => `<tr><td>${esc(u.recipe)}</td><td class="num">${u.shots}</td><td class="num">${fmtMin(u.seconds)}</td><td><a class="btn sm ghost" href="#/search?q=${encodeURIComponent(u.recipe.replace(/-/g, " "))}&unused=1&recipe=${encodeURIComponent(u.recipe)}">Search unused</a></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted small" style="margin:0">Everything usable has been placed in at least one plan. New footage shows up here.</p>`}</div>
+      </div>
+    </div>
+    <div class="card"><div class="row between"><h3 style="margin:0">Recent plans</h3><div class="row"><a class="btn sm ghost" href="#/plans">All plans</a><button class="btn sm primary" data-live data-variants="">Make variants</button></div></div>
+      <div class="tile-grid" style="margin-top:12px">${recent.map(planCard).join("") || `<div class="empty" style="grid-column:1/-1"><strong>No plans yet.</strong>Make six variants of a recipe in one go.</div>`}</div></div>
+  </div>`;
+  view.querySelectorAll("[data-variants]").forEach((b) => b.addEventListener("click", () => openPlanForm({ mode: "variants", recipe: b.dataset.variants })));
+  view.querySelector("#copy-film")?.addEventListener("click", () => copyText(report.recipes.filter((r) => r.missing.length).map((r) => `${r.recipe}: ${r.missing.join(", ")}`).join("\n") || "Nothing to film: full coverage.", "Filming list copied"));
+};
+function planCard(p) {
+  return `<a class="shot" href="#/plans/${encodeURIComponent(p.id)}"><div class="pic" style="aspect-ratio:${p.width && p.height ? `${p.width}/${p.height}` : "9/16"};max-height:220px">${p.poster ? `<img src="${esc(p.poster)}" alt="" loading="lazy">` : ""}<span class="dur">${fmtS(p.totalSeconds)}</span></div>
+    <div class="meta"><div class="t">${esc(p.templateName ?? p.template)}</div><div class="s">${esc(p.recipe ?? "library")} · ${esc(title(p.platform))}</div>${meter(p.totalSeconds, p.targetSeconds)}<div class="row between" style="gap:6px">${qcBadge(p.qc)}${p.gaps ? `<span class="badge warn">${p.gaps} gap${p.gaps > 1 ? "s" : ""}</span>` : ""}</div></div></a>`;
+}
+
+// ---------- library ----------
+routes.library = async (view, r) => {
+  if (r.parts[1]) return clipPage(view, Number(r.parts[1]), r.params);
+  setTitle("Library");
+  const recipe = r.params.get("recipe") || ""; const mode = r.params.get("view") || "clips";
+  view.innerHTML = `<div class="skeleton" style="min-height:300px"></div>`;
+  const [st, report] = await Promise.all([status(), cache.report ?? api.get("/api/report")]);
+  cache.report = report;
+  const covOf = (slug) => { const rr = report.recipes.find((x) => x.recipe === slug); return COVERAGE.map((c) => `<i class="${rr?.stages?.[c] ? "" : "no"}" ${stageStyle(c)} title="${c}"></i>`).join(""); };
+  const rail = `<div class="card flush" style="align-self:start"><div style="padding:12px 14px 6px" class="eyebrow">Recipes</div>
+    <a class="btn ghost" style="display:flex;justify-content:space-between;border-radius:0;width:100%" href="#/library?view=${mode}">All <span class="muted small">${st.stats.clips.n} clips</span></a>
+    ${st.recipes.map((x) => `<a class="btn ghost ${x.recipe === recipe ? "on" : ""}" style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;border-radius:0;width:100%;${x.recipe === recipe ? "background:var(--accent-soft)" : ""}" href="#/library?view=${mode}&recipe=${encodeURIComponent(x.recipe)}"><span>${esc(x.recipe)}</span><span class="row" style="gap:8px"><span class="cov">${covOf(x.recipe)}</span><span class="muted small">${x.clips} clips · ${fmtMin(x.seconds)}</span></span></a>`).join("")}</div>`;
+  const toolbar = `<div class="row between"><div class="row"><div class="tabs" style="margin:0;border:0"><button class="${mode === "clips" ? "on" : ""}" data-view="clips">Clips</button><button class="${mode === "shots" ? "on" : ""}" data-view="shots">Shots</button></div></div>
+    <div class="row" data-live><button class="btn sm" id="btn-ingest">Ingest new files</button><button class="btn sm primary" id="btn-analyze">Analyze pending</button></div></div>`;
+  view.innerHTML = `<div class="grid" style="grid-template-columns:230px minmax(0,1fr)" id="lib-grid"><div>${rail}</div><div class="stack" id="lib-main">${toolbar}<div class="skeleton"></div></div></div>`;
+  if (matchMedia("(max-width:960px)").matches) view.querySelector("#lib-grid").style.gridTemplateColumns = "1fr";
+  view.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => { const p = new URLSearchParams(r.params); p.set("view", b.dataset.view); go(`#/library?${p}`); }));
+  view.querySelector("#btn-ingest")?.addEventListener("click", async () => { await startJob({ type: "ingest" }, "Ingest finished"); cache.status = null; render(); });
+  view.querySelector("#btn-analyze")?.addEventListener("click", async () => { await startJob({ type: "analyze" }, "Analysis finished"); cache.status = null; cache.report = null; render(); });
+  const main = view.querySelector("#lib-main");
+  if (mode === "clips") {
+    const clips = await api.get(`/api/clips${recipe ? `?recipe=${encodeURIComponent(recipe)}` : ""}`);
+    main.lastElementChild.outerHTML = `<div class="card flush"><div class="table-wrap"><table><thead><tr><th></th><th>File</th><th>Session</th><th class="num">Length</th><th>Frame</th><th class="num">Shots</th><th class="num">Dead</th><th class="num">Hero / hook</th><th>Status</th><th></th></tr></thead><tbody>
+      ${clips.map((c) => `<tr class="click" data-href="#/library/${c.id}"><td>${c.poster ? `<img class="thumb" src="${esc(c.poster)}" alt="" loading="lazy">` : `<div class="thumb"></div>`}</td>
+        <td><div class="mono" style="max-width:360px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(c.rel_path)}">${esc(c.filename)}</div><div class="row" style="gap:4px;margin-top:4px">${c.stages.map(stageChip).join("")}${c.ai_generated ? `<span class="badge ai">AI</span>` : ""}</div></td>
+        <td class="small">${esc(c.session ?? c.recipe ?? "")}</td><td class="num">${fmtS(c.duration)}</td><td class="small mono">${c.width}×${c.height} ${Math.round(c.fps)}fps${c.has_audio ? "" : " · mute"}</td><td class="num">${c.shots}</td><td class="num">${c.dead || "–"}</td><td class="num">${c.hero} / ${c.hook}</td>
+        <td>${c.status === "analyzed" ? `<span class="badge pass">analyzed · ${esc(c.analysis_mode ?? "")}</span>` : c.status === "error" ? `<span class="badge fail">error</span>` : `<span class="badge warn">not analyzed</span>`}</td><td><a class="btn sm ghost" href="#/library/${c.id}">Open</a></td></tr>`).join("") || `<tr><td colspan="10"><div class="empty"><strong>No clips here.</strong>Ingest the library to register footage.</div></td></tr>`}</tbody></table></div></div>`;
+    main.querySelectorAll("tr.click").forEach((tr) => tr.addEventListener("click", (e) => { if (!e.target.closest("a,button")) go(tr.dataset.href); }));
+  } else {
+    const stage = r.params.get("stage") || ""; const qmin = Number(r.params.get("q") || 0); const only = r.params.get("only") || ""; const showDead = r.params.get("dead") === "1";
+    const res = await api.get(`/api/shots?limit=1000&dead=1${recipe ? `&recipe=${encodeURIComponent(recipe)}` : ""}`);
+    let shots = res.results.filter((s) => (!stage || s.stage === stage) && (s.quality ?? 3) >= qmin && (showDead || !s.dead) && (only !== "hero" || s.hero_worthy) && (only !== "hook" || s.hook_worthy) && (only !== "unused" || !s.used));
+    const setP = (k, v) => { const p = new URLSearchParams(r.params); v ? p.set(k, v) : p.delete(k); return `#/library?${p}`; };
+    main.lastElementChild.outerHTML = `<div class="filters"><select id="f-stage" aria-label="Stage"><option value="">All stages</option>${STAGES.map((s) => `<option value="${s}" ${s === stage ? "selected" : ""}>${esc(label(s))}</option>`).join("")}</select>
+      <select id="f-q" aria-label="Minimum quality"><option value="0">Any quality</option>${[3, 4, 5].map((q) => `<option value="${q}" ${q === qmin ? "selected" : ""}>Quality ≥ ${q}</option>`).join("")}</select>
+      <a class="chip click ${only === "hero" ? "on" : ""}" href="${setP("only", only === "hero" ? "" : "hero")}">Hero</a><a class="chip click ${only === "hook" ? "on" : ""}" href="${setP("only", only === "hook" ? "" : "hook")}">Hook</a><a class="chip click ${only === "unused" ? "on" : ""}" href="${setP("only", only === "unused" ? "" : "unused")}">Unused</a><a class="chip click ${showDead ? "on" : ""}" href="${setP("dead", showDead ? "" : "1")}">Show dead</a>
+      <span class="muted small">${shots.length} shots</span></div><div class="tile-grid">${shots.map((s) => shotTile(s)).join("") || `<div class="empty" style="grid-column:1/-1"><strong>No shots match.</strong>Clear a filter or analyze more footage.</div>`}</div>`;
+    main.querySelector("#f-stage").addEventListener("change", (e) => go(setP("stage", e.target.value)));
+    main.querySelector("#f-q").addEventListener("change", (e) => go(setP("q", e.target.value)));
+    bindScrub(main);
+  }
+};
+async function clipPage(view, id, params) {
+  const d = await api.get(`/api/clips/${id}`);
+  const c = d.clip;
+  setTitle(c.filename);
+  const opt = (list, v) => list.map((x) => `<option value="${x}" ${x === v ? "selected" : ""}>${esc(label(x))}</option>`).join("");
+  view.innerHTML = `<div class="stack" style="gap:14px">
+    <div class="row between"><a class="btn ghost sm" href="#/library${c.recipe ? `?recipe=${encodeURIComponent(c.recipe)}` : ""}">← Library</a><div class="row" data-live><button class="btn sm" id="reanalyze">Re-analyze this clip</button></div></div>
+    <div class="card"><h2 class="mono" style="font-size:15px;word-break:break-all">${esc(c.filename)}</h2>
+      <dl class="kv"><dt>Path</dt><dd class="mono">${esc(c.rel_path)} <button class="btn ghost sm" data-copy="${esc(c.path ?? c.rel_path)}">copy</button></dd><dt>Recipe · session</dt><dd>${esc(c.recipe ?? "–")} · ${esc(c.session ?? "–")}</dd><dt>Media</dt><dd>${fmtS(c.duration)} · ${c.width}×${c.height} · ${Number(c.fps).toFixed(2)} fps · ${esc(c.codec ?? "")}${c.has_audio ? " · audio" : " · no audio"}</dd><dt>Analysis</dt><dd>${esc(c.status)}${c.analysis_mode ? ` (${esc(c.analysis_mode)})` : ""}${c.dish ? ` · dish: ${esc(c.dish)}` : ""}${c.protein ? ` · protein: ${esc(c.protein)}` : ""}${c.error ? ` · <span style="color:var(--fail)">${esc(c.error)}</span>` : ""}</dd>${d.transcript ? `<dt>Transcript</dt><dd class="small">${esc(d.transcript.text.slice(0, 600))}</dd>` : ""}</dl></div>
+    ${d.shots.map((s) => `<div class="card" id="shot-${s.id}" data-shot-card="${s.id}"><div class="grid" style="grid-template-columns:minmax(0,3fr) minmax(0,2fr)">
+      <div><div class="frames3">${(s.frames ?? []).map((f) => `<img src="${esc(f)}" alt="" loading="lazy">`).join("")}</div>
+        <div class="row" style="margin-top:8px"><span class="mono">${s.start.toFixed(2)}s → ${s.end.toFixed(2)}s · ${fmtS(s.duration)}</span><span class="mono muted">${tc(s.start, c.fps)} – ${tc(s.end, c.fps)}</span><button class="btn ghost sm" data-copy="${esc(`${c.filename}\t${s.start}\t${s.end}`)}">copy in/out</button>
+          ${s.motion != null ? `<span class="pill ${s.dead ? "bad" : "ok"}"><i></i>motion ${s.motion}${s.dead ? " · dead, excluded from planning" : ""}</span>` : ""}${s.used ? `<span class="badge neutral">used in ${s.used} plan${s.used > 1 ? "s" : ""}</span>` : ""}</div>
+        <p class="small" style="margin:8px 0 0">${esc(s.description ?? "")}</p>
+        <div class="row" style="margin-top:8px"><a class="btn sm ghost" href="#/search?q=${encodeURIComponent([s.stage, ...(s.ingredients ?? []).slice(0, 2), ...(s.actions ?? []).slice(0, 1), s.shot_type].filter(Boolean).map(label).join(" "))}">Find similar</a></div></div>
+      <form class="stack" data-tags="${s.id}" style="gap:8px">
+        <div class="grid cols-3"><div class="field"><label>Stage</label><select name="stage">${opt(STAGES, s.stage)}</select></div><div class="field"><label>Shot type</label><select name="shot_type"><option value="">–</option>${opt(SHOT_TYPES, s.shot_type)}</select></div><div class="field"><label>Camera</label><select name="camera_motion"><option value="">–</option>${opt(CAMERA, s.camera_motion)}</select></div></div>
+        <div class="row" style="gap:14px"><span class="row" style="gap:6px"><span class="small muted">Quality</span><span class="stars" data-q="${s.quality ?? 3}">${[1, 2, 3, 4, 5].map((i) => `<button type="button" class="${(s.quality ?? 3) >= i ? "on" : ""}" data-star="${i}" aria-label="quality ${i}">★</button>`).join("")}</span></span>
+          <label class="row" style="gap:5px"><input type="checkbox" name="hero_worthy" ${s.hero_worthy ? "checked" : ""}> Hero-worthy</label><label class="row" style="gap:5px"><input type="checkbox" name="hook_worthy" ${s.hook_worthy ? "checked" : ""}> Hook-worthy</label><label class="row" style="gap:5px"><input type="checkbox" name="dead" ${s.dead ? "checked" : ""}> Dead</label></div>
+        <div class="grid cols-2"><div class="field"><label>Ingredients (comma separated)</label><input type="text" name="ingredients" value="${esc((s.ingredients ?? []).join(", "))}"></div><div class="field"><label>Actions</label><input type="text" name="actions" value="${esc((s.actions ?? []).join(", "))}"></div></div>
+        <div class="field"><label>Description</label><textarea name="description" rows="2">${esc(s.description ?? "")}</textarea></div>
+        <div class="field"><label>Caption suggestion</label><input type="text" name="caption_suggestion" value="${esc(s.caption_suggestion ?? "")}"></div>
+        <div class="row between" data-live><span class="hint">Edits go straight into the search index.</span><button class="btn sm primary" type="submit">Save tags</button></div>
+      </form></div></div>`).join("") || `<div class="empty"><strong>Not analyzed yet.</strong>Run Analyze to split this clip into shots.</div>`}</div>`;
+  view.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => copyText(b.dataset.copy)));
+  view.querySelectorAll(".stars").forEach((st) => st.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { st.dataset.q = b.dataset.star; st.querySelectorAll("button").forEach((x) => x.classList.toggle("on", Number(x.dataset.star) <= Number(b.dataset.star))); })));
+  view.querySelectorAll("form[data-tags]").forEach((f) => f.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const fd = new FormData(f);
+    const split = (v) => String(v ?? "").split(",").map((x) => x.trim().toLowerCase().replace(/\s+/g, "_")).filter(Boolean);
+    const patch = { stage: fd.get("stage") || null, shot_type: fd.get("shot_type") || null, camera_motion: fd.get("camera_motion") || null, quality: Number(f.querySelector(".stars").dataset.q), hero_worthy: fd.get("hero_worthy") === "on", hook_worthy: fd.get("hook_worthy") === "on", dead: fd.get("dead") === "on", ingredients: split(fd.get("ingredients")), actions: split(fd.get("actions")), description: fd.get("description"), caption_suggestion: fd.get("caption_suggestion") };
+    try { await api.send("PATCH", `/api/shots/${f.dataset.tags}`, patch); toast("Tags saved", "ok"); cache.report = null; } catch (err) { toast(err.message, "error"); }
+  }));
+  view.querySelector("#reanalyze")?.addEventListener("click", async () => { await startJob({ type: "analyze", clipId: id }, "Clip re-analyzed"); cache.status = null; cache.report = null; render(); });
+  const focus = params.get("shot"); if (focus) document.getElementById(`shot-${focus}`)?.scrollIntoView({ block: "start" });
+}
+
+// ---------- search ----------
+const EXAMPLES = ["chicken recipes with grilling shots", "close-up shots of pouring sauce", "best hero shots of salmon under 4s", "hands only overhead meal prep containers", "steam rising", "first bite reaction"];
+routes.search = async (view, r) => {
+  setTitle("Search");
+  const q = r.params.get("q") ?? ""; const strict = r.params.get("strict") === "1"; const unused = r.params.get("unused") === "1"; const recipe = r.params.get("recipe") ?? ""; let grid = true; try { grid = (localStorage.getItem("fce.view") ?? "grid") === "grid"; } catch {}
+  const st = await status();
+  let recents = []; try { recents = JSON.parse(localStorage.getItem("fce.recent") ?? "[]"); } catch {}
+  view.innerHTML = `<form id="sform" class="stack" style="gap:10px">
+    <div class="searchbar"><input type="search" id="q" name="q" value="${esc(q)}" placeholder="Ask the archive: ${esc(EXAMPLES[recents.length % EXAMPLES.length])}" autocomplete="off"><button class="btn primary" type="submit">Search</button></div>
+    <div class="filters"><label class="chip"><input type="checkbox" name="strict" ${strict ? "checked" : ""}> Strict (every facet)</label><label class="chip"><input type="checkbox" name="unused" ${unused ? "checked" : ""}> Unused only</label>
+      <select name="recipe" aria-label="Recipe"><option value="">Any recipe</option>${st.recipes.map((x) => `<option value="${esc(x.recipe)}" ${x.recipe === recipe ? "selected" : ""}>${esc(x.recipe)}</option>`).join("")}</select>
+      <span class="hint">${st.aiMode === "claude" ? `Queries are understood by ${esc(st.model)}` : "Offline: queries are matched with the taxonomy's synonyms (set ANTHROPIC_API_KEY for textures and moods)"}</span>
+      <span style="flex:1"></span><button type="button" class="btn sm ghost" id="viewtoggle">${grid ? "Table view" : "Grid view"}</button></div></form><div id="results" style="margin-top:14px"></div>`;
+  const form = view.querySelector("#sform");
+  form.addEventListener("submit", (e) => { e.preventDefault(); const fd = new FormData(form); const p = new URLSearchParams(); if (fd.get("q")) p.set("q", fd.get("q")); if (fd.get("strict")) p.set("strict", "1"); if (fd.get("unused")) p.set("unused", "1"); if (fd.get("recipe")) p.set("recipe", fd.get("recipe")); go(`#/search?${p}`); });
+  form.querySelectorAll("input[type=checkbox],select").forEach((el) => el.addEventListener("change", () => form.requestSubmit()));
+  view.querySelector("#viewtoggle").addEventListener("click", () => { try { localStorage.setItem("fce.view", grid ? "table" : "grid"); } catch {} grid = !grid; render(); });
+  const out = view.querySelector("#results");
+  if (!q) { out.innerHTML = `<div class="empty"><strong>Ask the archive in plain words.</strong><div class="row" style="justify-content:center;margin-top:10px">${EXAMPLES.map((x) => `<a class="chip click" href="#/search?q=${encodeURIComponent(x)}">${esc(x)}</a>`).join("")}</div>${recents.length ? `<p class="small" style="margin:12px 0 4px">Recent</p><div class="row" style="justify-content:center">${recents.map((x) => `<a class="chip click" href="#/search?q=${encodeURIComponent(x)}">${esc(x)}</a>`).join("")}</div>` : ""}</div>`; return; }
+  out.innerHTML = `<div class="skeleton" style="min-height:200px"></div>`;
+  const res = await api.get(`/api/shots?q=${encodeURIComponent(q)}&limit=60${strict ? "&strict=1" : ""}${unused ? "&unused=1" : ""}${recipe ? `&recipe=${encodeURIComponent(recipe)}` : ""}`);
+  try { localStorage.setItem("fce.recent", JSON.stringify([q, ...recents.filter((x) => x !== q)].slice(0, 8))); } catch {}
+  const f = res.filter; const chips = [];
+  const push = (kind, vals) => (vals ?? []).forEach((v) => chips.push(`<span class="chip on" data-chip="${esc(String(v).replace(/_/g, " "))}">${esc(kind)}: ${esc(label(v))}<button type="button" aria-label="remove">×</button></span>`));
+  push("ingredient", f.ingredients); push("action", f.actions); push("shot", f.shot_types); push("stage", f.stages); push("camera", f.camera_motion);
+  if (f.dish) chips.push(`<span class="chip on">dish: ${esc(f.dish)}</span>`); if (f.hero_only) chips.push(`<span class="chip on">hero only</span>`); if (f.hook_only) chips.push(`<span class="chip on">hook only</span>`); if (f.min_quality) chips.push(`<span class="chip on">quality ≥ ${f.min_quality}</span>`); if (f.has_face != null) chips.push(`<span class="chip on">${f.has_face ? "with face" : "no face"}</span>`); if (f.max_duration) chips.push(`<span class="chip on">under ${f.max_duration}s</span>`); if (f.min_duration) chips.push(`<span class="chip on">over ${f.min_duration}s</span>`); (f.terms ?? []).forEach((t) => chips.push(`<span class="chip">text: ${esc(t)}</span>`));
+  out.innerHTML = `<div class="row between" style="margin-bottom:10px"><div class="row" style="gap:6px"><span class="small muted">Understood as</span>${chips.join("") || `<span class="chip">nothing specific — text match only</span>`}<span class="hint">(${esc(res.mode)})</span></div><div class="row"><span class="muted small">${res.results.length} shots · ranked by facets matched, quality, unused</span><button class="btn sm ghost" id="copy-inout">Copy in/out list</button></div></div>
+    ${res.results.length ? grid ? `<div class="tile-grid">${res.results.map((s, i) => shotTile(s, { rank: i + 1 })).join("")}</div>` : `<div class="card flush"><div class="table-wrap"><table><thead><tr><th>#</th><th></th><th>File</th><th>In → out</th><th class="num">Dur</th><th>Stage</th><th>Type</th><th class="num">Score</th><th>Matched</th><th>Flags</th></tr></thead><tbody>${res.results.map((s, i) => `<tr class="click" data-href="#/library/${s.clip_id}?shot=${s.id}"><td class="num">${i + 1}</td><td><img class="thumb" src="${esc(s.frames?.[1] ?? s.frames?.[0] ?? "")}" alt="" loading="lazy"></td><td class="mono" style="max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(s.clip_filename)}</td><td class="mono">${s.start.toFixed(2)} → ${s.end.toFixed(2)}</td><td class="num">${fmtS(s.duration)}</td><td>${stageChip(s.stage)}</td><td class="small">${esc(label(s.shot_type ?? ""))}</td><td class="num">${s.score}</td><td class="num">${s.matched}/${s.facets}</td><td>${flags(s)}</td></tr>`).join("")}</tbody></table></div></div>`
+      : `<div class="empty"><strong>Nothing matched${strict ? " every facet" : ""}.</strong>${strict || unused ? "Turn off Strict or Unused, or " : ""}remove a facet and try again.</div>`}`;
+  out.querySelectorAll("[data-chip] button").forEach((b) => b.addEventListener("click", () => { const word = b.parentElement.dataset.chip; const nq = q.replace(new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i"), "").replace(/\s+/g, " ").trim(); const p = new URLSearchParams(r.params); nq ? p.set("q", nq) : p.delete("q"); go(`#/search?${p}`); }));
+  out.querySelector("#copy-inout")?.addEventListener("click", () => copyText(res.results.map((s) => `${s.clip_filename}\t${s.start}\t${s.end}\t${s.duration}\t${s.description ?? ""}`).join("\n"), "In/out list copied (file, in, out, duration)"));
+  out.querySelectorAll("tr.click").forEach((tr) => tr.addEventListener("click", () => go(tr.dataset.href)));
+  bindScrub(out);
+};
+
+// ---------- plans ----------
+routes.plans = async (view, r) => {
+  if (r.parts[1]) return planPage(view, decodeURIComponent(r.parts[1]), r.params);
+  setTitle("Plans");
+  view.innerHTML = `<div class="skeleton" style="min-height:200px"></div>`;
+  const plans = await api.get("/api/plans");
+  view.innerHTML = `<div class="stack"><div class="row between"><span class="muted small">${plans.length} plans · newest first</span><div class="row" data-live><button class="btn sm" id="new-plan">New plan</button><button class="btn sm primary" id="new-variants">Make variants</button></div></div>
+    ${plans.length ? `<div class="card flush"><div class="table-wrap"><table><thead><tr><th></th><th>Plan</th><th>Recipe</th><th>Platform</th><th>Length</th><th class="num">Segments</th><th class="num">Gaps</th><th>Render</th><th>QC</th><th>Created</th><th></th></tr></thead><tbody>
+      ${plans.map((p) => `<tr class="click" data-href="#/plans/${encodeURIComponent(p.id)}"><td>${p.poster ? `<img class="thumb" src="${esc(p.poster)}" alt="" loading="lazy">` : `<div class="thumb"></div>`}</td><td><b>${esc(p.templateName ?? p.template)}</b><div class="mono muted small">${esc(p.id)}</div></td><td>${esc(p.recipe ?? "library")}</td><td>${platformBadge(p.platform, p.width, p.height)}</td><td style="min-width:120px"><span class="num small">${fmtS(p.totalSeconds)} / ${p.targetSeconds}s</span>${meter(p.totalSeconds, p.targetSeconds)}</td><td class="num">${p.segments}</td><td class="num">${p.gaps ? `<span class="badge warn">${p.gaps}</span>` : "–"}</td><td>${p.files.mp4 ? `<a class="btn sm ghost" href="${esc(p.files.mp4)}?download" download>MP4</a>` : `<span class="muted small">not rendered</span>`}</td><td>${qcBadge(p.qc)}</td><td class="small muted">${esc((p.created_at ?? "").slice(0, 16).replace("T", " "))}</td><td><a class="btn sm ghost" href="#/plans/${encodeURIComponent(p.id)}">Open</a></td></tr>`).join("")}</tbody></table></div></div>`
+      : `<div class="empty"><strong>No plans yet.</strong>Make six variants of a recipe in one go.</div>`}</div>`;
+  view.querySelector("#new-plan")?.addEventListener("click", () => openPlanForm({ mode: "plan" }));
+  view.querySelector("#new-variants")?.addEventListener("click", () => openPlanForm({ mode: "variants" }));
+  view.querySelectorAll("tr.click").forEach((tr) => tr.addEventListener("click", (e) => { if (!e.target.closest("a,button")) go(tr.dataset.href); }));
+};
+async function planPage(view, id, params) {
+  view.innerHTML = `<div class="skeleton" style="min-height:300px"></div>`;
+  const [d, kit] = await Promise.all([api.get(`/api/plans/${encodeURIComponent(id)}`), brandKit()]);
+  const plan = d.plan; const platform = d.platform ?? platformOf(kit, plan.platform); const files = d.files ?? {};
+  setTitle(plan.name);
+  let dirty = false; let staleRender = false;
+  const maxChars = kit.captions?.maxCharsPerLine ?? 22; const maxLines = kit.captions?.maxLines ?? 2;
+  const slotColor = (slot) => SLOT_COLORS[slot] ?? "#8A8A96";
+  const total = () => plan.segments.reduce((a, s) => a + s.duration, 0);
+  const draw = () => {
+    const tot = total(); const gapsSec = (plan.gaps ?? []).reduce((a, g) => a + g.neededSeconds, 0); const span = tot + gapsSec || 1;
+    view.innerHTML = `<div class="stack" style="gap:14px">
+      <div class="row between"><a class="btn ghost sm" href="#/plans">← Plans</a><div class="row" data-live>
+        <button class="btn sm ${files.mp4 ? "" : "primary"}" id="a-render">${files.mp4 ? "Re-render" : "Render draft"}</button>${files.mp4 ? `<button class="btn sm" id="a-qc">Run QC</button>` : ""}<button class="btn sm" id="a-export">Re-export files</button><button class="btn sm" id="a-alt">Alternative cut (seed ${Number(plan.seed) + 1})</button>${plan.gaps?.length ? `<a class="btn sm" href="#/broll?plan=${encodeURIComponent(plan.id)}">Request B-roll for ${plan.gaps.length} gap${plan.gaps.length > 1 ? "s" : ""}</a>` : ""}</div></div>
+      <div class="card"><div class="row between"><div><h2 style="margin:0 0 4px">${esc(plan.name)}</h2><div class="row" style="gap:8px">${platformBadge(plan.platform, plan.width, plan.height)}<span class="small muted">${platform.fps ?? 30} fps · max ${platform.maxSeconds ?? "–"}s${platform.idealSeconds ? ` · ideal ${platform.idealSeconds[0]}–${platform.idealSeconds[1]}s` : ""}</span><span class="small muted">seed ${esc(String(plan.seed))} · ${esc(plan.scope ?? "")} scope · captions ${esc(plan.copy?.mode ?? "offline")}</span></div></div>
+        <div style="min-width:220px"><div class="row between"><span class="num small"><b>${fmtS(tot)}</b> of ${plan.targetSeconds}s target</span>${d.qc ? qcBadge({ passed: d.qc.passed, warn: d.qc.checks.filter((c) => c.status === "warn").length, fail: d.qc.checks.filter((c) => c.status === "fail").length }) : `<span class="badge neutral">not rendered</span>`}</div>${meter(tot, plan.targetSeconds, platform.idealSeconds)}</div></div>
+        ${staleRender ? `<div class="hint" style="margin-top:8px;color:var(--warn)">The draft was rendered before your last edit. Re-render to see the changes.</div>` : ""}
+        <div class="row" style="margin-top:12px;gap:6px"><span class="eyebrow">Downloads</span>${[["edl", "EDL (Premiere / Resolve)"], ["csv", "Shot list CSV"], ["srt", "Captions SRT"], ["ass", "Captions ASS (styled)"], ["mp4", "Draft MP4"], ["copy", "Post copy"], ["plan", "plan.json"], ["script", "render.sh"]].map(([k, l]) => files[k] ? `<a class="btn sm ghost" href="${esc(files[k])}?download" download>${l}</a>` : `<span class="btn sm ghost" style="opacity:.45" title="not generated${SNAP ? " (downloads are not part of the snapshot)" : ""}">${l}</span>`).join("")}<button class="btn sm ghost" data-copy="${esc(`${cache.status?.outputDir ?? "output"}/${plan.id}`)}">Copy folder path</button></div></div>
+      <div class="grid side-8-4">
+        <div class="stack">
+          <div class="card"><h3>Timeline</h3><div class="timeline">${plan.segments.map((s, i) => `<div class="seg" data-seg="${i}" style="flex:${s.duration};--slot:${slotColor(s.slot)};background-image:url('${esc(s.frames?.[1] ?? s.frames?.[0] ?? "")}')" title="${esc(`${s.slot} · ${s.filename} · ${s.caption ?? ""}`)}"><span>${esc(s.slot)}</span></div>`).join("")}${(plan.gaps ?? []).map((g) => `<div class="seg gap" style="flex:${g.neededSeconds}" title="${esc(`${g.slot}: ${g.neededSeconds}s missing — ${g.reason}`)}"><span>${esc(g.slot)} −${g.neededSeconds}s</span></div>`).join("")}</div><div class="ruler"><span>0s</span><span>${(span / 2).toFixed(1)}s</span><span>${span.toFixed(1)}s</span></div></div>
+          <div class="card flush"><div class="row between" style="padding:12px 14px 0"><h3 style="margin:0">Segments</h3><span class="hint">Captions: max ${maxChars} chars per line, ${maxLines} lines</span></div>
+            <div class="table-wrap"><table><thead><tr><th>#</th><th>Shot</th><th>Source</th><th>Window</th><th>Caption</th><th></th></tr></thead><tbody>
+            ${plan.segments.map((s, i) => `<tr id="seg-${i}"><td class="num">${i + 1}</td><td><div class="pic" data-frames='${esc(JSON.stringify(s.frames ?? []))}' style="width:72px;aspect-ratio:4/3;border-radius:6px;overflow:hidden;background:#0a0a0a;position:relative"><img src="${esc(s.frames?.[1] ?? s.frames?.[0] ?? "")}" alt="" style="width:100%;height:100%;object-fit:cover"></div><span class="chip" style="border-color:${slotColor(s.slot)};margin-top:4px">${esc(s.slot)}</span></td>
+              <td><div class="mono small" style="max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(s.filename)}">${esc(s.filename)}</div><div class="row" style="gap:4px;margin-top:3px">${stageChip(s.stage)}<span class="small muted">${esc(label(s.shot_type ?? ""))}</span></div><div class="row" style="gap:4px;margin-top:3px">${s.hero_worthy ? `<span class="badge gold">Hero</span>` : ""}${s.hook_worthy ? `<span class="badge gold">Hook</span>` : ""}${s.ai_generated ? `<span class="badge ai">AI</span>` : ""}${s.quality ? qDots(s.quality) : ""}</div></td>
+              <td><div class="row" style="gap:4px;flex-wrap:nowrap" data-live><input type="number" step="0.1" min="0" value="${s.in}" data-in="${i}" style="width:58px;padding:5px 6px" aria-label="in"><span>→</span><input type="number" step="0.1" min="0" value="${s.out}" data-out="${i}" style="width:58px;padding:5px 6px" aria-label="out"></div><div class="mono small muted" style="margin-top:3px"><b data-dur="${i}">${fmtS(s.duration)}</b> · ${tc(s.in, plan.fps)}</div></td>
+              <td><textarea class="cap-edit" rows="2" data-cap="${i}" ${SNAP ? "readonly" : ""}>${esc(s.caption ?? "")}</textarea><div class="counter" data-count="${i}"></div></td>
+              <td><div class="stack" style="gap:4px" data-live><button class="btn sm ghost" data-swap="${i}">Swap</button><button class="btn sm ghost danger" data-remove="${i}">Remove</button></div></td></tr>`).join("")}</tbody></table></div></div>
+          ${plan.gaps?.length ? `<div class="card"><h3>Gaps</h3>${plan.gaps.map((g) => `<div class="row" style="margin-bottom:6px"><span class="chip" style="border-color:${slotColor(g.slot)}">${esc(g.slot)}</span><span class="num">${g.neededSeconds}s missing</span><span class="small muted">${esc(g.reason)} · prefers ${esc((g.prefer?.stages ?? []).map(label).join(" / ") || "any stage")}</span><a class="btn sm ghost" href="#/search?q=${encodeURIComponent((g.prefer?.stages ?? []).map(label).join(" "))}${plan.recipe ? `&recipe=${encodeURIComponent(plan.recipe)}` : ""}">Find footage</a></div>`).join("")}</div>` : ""}
+        </div>
+        <div class="stack">
+          <div class="card"><div class="row between"><h3 style="margin:0">Preview</h3><label class="row small" style="gap:5px"><input type="checkbox" id="zones"> Safe zones</label></div>
+            <div class="preview" style="max-width:300px;margin-top:10px;aspect-ratio:${plan.width}/${plan.height}">${files.mp4 ? `<video controls playsinline preload="metadata" src="${esc(files.mp4)}" poster="${esc(plan.segments[0]?.frames?.[1] ?? "")}"></video>` : `<img src="${esc(plan.segments[0]?.frames?.[1] ?? "")}" alt="">`}
+              <div id="zone-layer" hidden>${["top", "bottom", "left", "right"].map((k) => { const v = platform.safeZone?.[k] ?? 0; const pct = (k === "top" || k === "bottom") ? (v / plan.height) * 100 : (v / plan.width) * 100; return `<div class="zone ${k[0]}" style="${k === "top" ? `top:0;height:${pct}%` : k === "bottom" ? `bottom:0;height:${pct}%` : k === "left" ? `left:0;width:${pct}%` : `right:0;width:${pct}%`}"><small>${k} ${v}px</small></div>`; }).join("")}</div></div>
+            ${!files.mp4 ? `<p class="hint" style="margin:8px 0 0">Not rendered yet. The first frame of the hook is shown.</p>` : `<p class="hint" style="margin:8px 0 0">Draft render: hard cuts, brand captions burned in, -14 LUFS.</p>`}</div>
+          ${plan.copy ? `<div class="card"><div class="row between"><h3 style="margin:0">Post copy</h3><button class="btn sm ghost" id="copy-all">Copy all</button></div><dl class="kv" style="margin-top:8px"><dt>Hook</dt><dd>${esc(plan.copy.hook ?? "")}</dd><dt>CTA</dt><dd>${esc(plan.copy.cta ?? "")}</dd><dt>Title</dt><dd>${esc(plan.copy.title ?? "")}</dd><dt>Description</dt><dd style="white-space:pre-wrap">${esc(plan.copy.description ?? "")}</dd><dt>Hashtags</dt><dd>${esc((plan.copy.hashtags ?? []).join(" "))}</dd></dl></div>` : ""}
+          <div class="card" id="qc-card"><div class="row between"><h3 style="margin:0">Quality check</h3>${d.qc ? `<span class="small muted">${d.qc.meta?.duration?.toFixed(1)}s · ${d.qc.meta?.width}×${d.qc.meta?.height} · ${d.qc.meta?.sizeMB} MB</span>` : ""}</div>
+            ${d.qc ? (() => { const row = (c) => `<div class="qc-row"><span class="badge ${c.status}">${c.status.toUpperCase()}</span><div class="small"><b>${esc(QC_LABELS[c.id]?.[0] ?? c.id)}</b> <span class="muted">${esc(c.detail)}</span>${c.status !== "pass" ? `<div class="hint" style="margin-top:2px">${esc(c.id === "unique_shots" ? "One take used twice with different windows — usually fine." : QC_LABELS[c.id]?.[1] ?? "")}</div><div style="margin-top:4px">${qcFix(c.id)}</div>` : ""}</div></div>`; const fails = d.qc.checks.filter((c) => c.status === "fail"); const warns = d.qc.checks.filter((c) => c.status === "warn"); const passes = d.qc.checks.filter((c) => c.status === "pass"); return `<div style="margin-top:8px">${fails.map(row).join("")}${warns.length ? (d.qc.passed ? `<details ${fails.length ? "open" : ""}><summary class="small" style="padding:8px 0;cursor:pointer">${warns.length} warning${warns.length > 1 ? "s" : ""} — worth a look, not blocking</summary>${warns.map(row).join("")}</details>` : warns.map(row).join("")) : ""}<details><summary class="small muted" style="padding:8px 0;cursor:pointer">${passes.length} checks passed</summary>${passes.map(row).join("")}</details></div>`; })() : `<p class="hint" style="margin:8px 0 0">Render the draft to run the ${Object.keys(QC_LABELS).length - 1} automated checks.</p>`}
+            <details style="margin-top:10px"><summary class="small">Manual checklist before upload</summary><div class="stack" style="gap:4px;margin-top:6px">${["Hook reads in the first second with sound off", "Every caption is true to what is on screen; numbers match the recipe card", "Hero shot graded; skin tones natural", "No caption or logo under the platform UI", "Music licensed; SFX not clipping", "CTA matches the post copy; hashtags updated", "AI B-roll inserts blend (light direction, grade, grain)", "Cover chosen from a hero frame"].map((t, i) => `<label class="row small" style="gap:6px"><input type="checkbox" data-manual="${i}"> ${esc(t)}</label>`).join("")}</div></details></div>
+        </div></div>
+      <div id="dirtybar" class="card row between" style="position:sticky;bottom:12px;box-shadow:var(--shadow)" hidden><span>Unsaved edits — saving re-writes plan.json, the EDL, CSV and captions.</span><div class="row"><button class="btn sm" id="discard">Discard</button><button class="btn sm primary" id="save">Save &amp; re-export</button></div></div></div>`;
+    bindScrub(view);
+    view.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => copyText(b.dataset.copy, "Path copied")));
+    const wrap = (text) => { const words = text.split(/\s+/).filter(Boolean); const lines = []; let cur = ""; for (const w of words) { if ((cur + " " + w).trim().length > maxChars && cur) { lines.push(cur); cur = w; } else cur = (cur + " " + w).trim(); } if (cur) lines.push(cur); if (lines.length > maxLines) { const head = lines.slice(0, maxLines - 1); head.push(lines.slice(maxLines - 1).join(" ")); return head; } return lines; };
+    const counters = () => view.querySelectorAll("[data-cap]").forEach((t) => { const lines = wrap(t.value); const longest = Math.max(0, ...lines.map((l) => l.length)); const words = t.value.trim().split(/\s+/).filter(Boolean).length; const lint = []; if (longest > maxChars) lint.push("long line"); if (lines.length > maxLines) lint.push("too many lines"); if (words > 5) lint.push(`${words} words (brand: ≤5)`); if (/\p{Extended_Pictographic}/u.test(t.value)) lint.push("emoji"); if (t.value.length > 6 && t.value === t.value.toUpperCase() && /[A-Z]/.test(t.value)) lint.push("all caps"); const c = view.querySelector(`[data-count="${t.dataset.cap}"]`); c.textContent = `wraps to ${lines.length} line${lines.length === 1 ? "" : "s"}, longest ${longest}/${maxChars}${lint.length ? " · " + lint.join(", ") : ""}`; c.classList.toggle("over", lint.length > 0); });
+    counters();
+    const markDirty = () => { dirty = true; view.querySelector("#dirtybar").hidden = false; };
+    view.querySelectorAll("[data-cap]").forEach((t) => t.addEventListener("input", () => { plan.segments[t.dataset.cap].caption = t.value; counters(); markDirty(); }));
+    const nudge = (i) => { const s = plan.segments[i]; const inp = view.querySelector(`[data-in="${i}"]`); const out = view.querySelector(`[data-out="${i}"]`); let a = Number(inp.value), b = Number(out.value); if (b - a < 0.3) b = a + 0.3; s.in = Math.round(a * 1000) / 1000; s.out = Math.round(b * 1000) / 1000; s.duration = Math.round((s.out - s.in) * 1000) / 1000; out.value = s.out; view.querySelector(`[data-dur="${i}"]`).textContent = fmtS(s.duration); markDirty(); };
+    view.querySelectorAll("[data-in],[data-out]").forEach((el) => el.addEventListener("change", () => nudge(Number(el.dataset.in ?? el.dataset.out))));
+    view.querySelectorAll("[data-remove]").forEach((b) => b.addEventListener("click", () => { plan.segments.splice(Number(b.dataset.remove), 1); plan.segments.forEach((s, i) => (s.index = i)); dirty = true; draw(); view.querySelector("#dirtybar").hidden = false; }));
+    view.querySelectorAll("[data-swap]").forEach((b) => b.addEventListener("click", () => swapDialog(Number(b.dataset.swap))));
+    view.querySelector("#zones").addEventListener("change", (e) => (view.querySelector("#zone-layer").hidden = !e.target.checked));
+    view.querySelectorAll(".timeline .seg[data-seg]").forEach((el) => el.addEventListener("click", () => document.getElementById(`seg-${el.dataset.seg}`)?.scrollIntoView({ block: "center" })));
+    view.querySelector("#copy-all")?.addEventListener("click", () => copyText([plan.copy.title, "", plan.copy.description, "", (plan.copy.hashtags ?? []).join(" ")].join("\n"), "Post copy copied"));
+    view.querySelector("#discard")?.addEventListener("click", () => render());
+    view.querySelector("#save")?.addEventListener("click", async () => { try { const res = await api.send("PUT", `/api/plans/${encodeURIComponent(plan.id)}`, { plan }); Object.assign(d, res); dirty = false; staleRender = Boolean(files.mp4); toast("Saved and re-exported", "ok"); draw(); } catch (err) { toast(err.message, "error"); } });
+    view.querySelector("#a-render")?.addEventListener("click", async () => { if (dirty) return toast("Save your edits first.", "error"); const j = await startJob({ type: "render", planId: plan.id }, "Rendered and checked"); if (j.status === "done") { staleRender = false; render(); } });
+    view.querySelector("#a-qc")?.addEventListener("click", async () => { await startJob({ type: "qc", planId: plan.id }, "QC finished"); render(); });
+    view.querySelector("#a-export")?.addEventListener("click", async () => { try { await api.send("PUT", `/api/plans/${encodeURIComponent(plan.id)}`, { plan }); toast("Files re-exported", "ok"); render(); } catch (err) { toast(err.message, "error"); } });
+    view.querySelector("#a-alt")?.addEventListener("click", async () => { const j = await startJob({ type: "plan", template: plan.template, recipe: plan.recipe, seed: Number(plan.seed) + 1, info: {}, render: Boolean(files.mp4), offline: (plan.copy?.mode ?? "offline") !== "claude", scope: plan.scope }, "Alternative cut ready"); if (j.status === "done") go(`#/plans/${encodeURIComponent(j.result.planId)}`); });
+    const key = `fce.manual.${plan.id}`; let manual = []; try { manual = JSON.parse(localStorage.getItem(key) ?? "[]"); } catch {}
+    view.querySelectorAll("[data-manual]").forEach((cb) => { cb.checked = manual.includes(Number(cb.dataset.manual)); cb.addEventListener("change", () => { const set = new Set(manual); cb.checked ? set.add(Number(cb.dataset.manual)) : set.delete(Number(cb.dataset.manual)); manual = [...set]; try { localStorage.setItem(key, JSON.stringify(manual)); } catch {} }); });
+    if (params.get("tab") === "qc") document.getElementById("qc-card")?.scrollIntoView();
+  };
+  function qcFix(id) {
+    if (id === "safe_zone" || id === "caption_length") return `<a class="btn sm ghost" href="#/brand#captions">Fix in brand kit</a>`;
+    if (id === "gaps") return `<a class="btn sm ghost" href="#/broll?plan=${encodeURIComponent(plan.id)}">Request B-roll</a>`;
+    if (["hook", "pacing", "unique_shots", "duration"].includes(id)) return `<button class="btn sm ghost" data-jump="0">Edit segments</button>`;
+    return "";
+  }
+  async function swapDialog(i) {
+    const seg = plan.segments[i];
+    const q = [seg.stage, seg.shot_type].filter(Boolean).map(label).join(" ") || "cooking";
+    openModal(`<div class="row between"><h2 style="margin:0">Swap segment ${i + 1} (${esc(seg.slot)})</h2><button class="btn ghost sm" data-close-modal>Close</button></div><form id="swapq" class="searchbar" style="margin:10px 0"><input type="search" id="swap-q" value="${esc(q)}"><button class="btn" type="submit">Search</button></form><div id="swap-results" class="tile-grid"></div>`);
+    const run = async () => {
+      const qq = document.getElementById("swap-q").value;
+      const res = await api.get(`/api/shots?q=${encodeURIComponent(qq)}&limit=40${plan.scope === "recipe" && plan.recipe ? `&recipe=${encodeURIComponent(plan.recipe)}` : ""}`);
+      const inPlan = new Set(plan.segments.map((s) => s.shot_id));
+      const list = res.results.filter((s) => !inPlan.has(s.id));
+      const box = document.getElementById("swap-results");
+      box.innerHTML = list.map((s, k) => shotTile(s, { rank: k + 1, href: "javascript:void 0" })).join("") || `<div class="empty" style="grid-column:1/-1"><strong>No other shots match.</strong>Try a broader query.</div>`;
+      box.querySelectorAll(".shot").forEach((el) => el.addEventListener("click", (e) => { e.preventDefault(); const s = list.find((x) => x.id === Number(el.dataset.shot)); const d0 = seg.duration; const free = Math.max(0, s.duration - d0); const start = s.start + free * 0.4; const dur = Math.min(d0, s.duration); Object.assign(seg, { shot_id: s.id, clip_id: s.clip_id, path: s.clip_path ?? seg.path, filename: s.clip_filename, recipe: s.clip_recipe, in: Math.round(start * 1000) / 1000, out: Math.round((start + dur) * 1000) / 1000, duration: Math.round(dur * 1000) / 1000, stage: s.stage, shot_type: s.shot_type, camera_motion: s.camera_motion, actions: s.actions, ingredients: s.ingredients, description: s.description, caption_suggestion: s.caption_suggestion, hero_worthy: s.hero_worthy, hook_worthy: s.hook_worthy, has_audio: seg.has_audio, ai_generated: s.clip_ai_generated, quality: s.quality, frames: s.frames }); closeModal(); dirty = true; draw(); view.querySelector("#dirtybar").hidden = false; toast(`Segment ${i + 1} now uses ${s.clip_filename}`, "ok"); }));
+      bindScrub(box);
+    };
+    document.getElementById("swapq").addEventListener("submit", (e) => { e.preventDefault(); run(); });
+    run();
+  }
+  draw();
+  view.addEventListener("click", (e) => { const j = e.target.closest("[data-jump]"); if (j) document.getElementById("seg-0")?.scrollIntoView({ block: "center" }); });
+}
+
+// ---------- report ----------
+routes.report = async (view) => {
+  setTitle("Library report");
+  view.innerHTML = `<div class="skeleton" style="min-height:300px"></div>`;
+  const [report, dead] = await Promise.all([api.get("/api/report"), api.get("/api/shots?limit=1000&dead=1")]);
+  cache.report = report; const s = report.stats; const deadShots = dead.results.filter((x) => x.dead);
+  const target = { ingredients: 1, prep: 2, cooking: 5, plating: 2, hero: 2, eating: 1 };
+  const bars = (rows) => { const max = Math.max(1, ...rows.map((r) => r[1])); return `<div class="bar-list">${rows.map(([k, n]) => `<div><span class="small">${esc(label(k))}</span><b style="width:${(n / max) * 100}%"></b><span class="num small muted">${n}</span></div>`).join("")}</div>`; };
+  view.innerHTML = `<div class="stack" style="gap:16px">
+    <div class="row between"><span class="hint">The same numbers as <code>fce report</code>, live from the index.</span><div class="row"><button class="btn sm ghost" id="dl-md">Download markdown</button></div></div>
+    <div class="tiles"><div class="tile"><b>${s.clips.n}</b><span>Clips</span><small>${fmtMin(s.clips.seconds)}</small></div><div class="tile"><b>${s.shots.n}</b><span>Shots</span></div><div class="tile"><b>${s.shots.dead ?? 0}</b><span>Dead shots</span></div><div class="tile"><b>${s.shots.hero ?? 0}</b><span>Hero</span></div><div class="tile"><b>${s.shots.hook ?? 0}</b><span>Hook</span></div><div class="tile"><b>${report.usedShots}</b><span>Used in plans</span><small>${s.shots.n ? Math.round((report.usedShots / s.shots.n) * 100) : 0}%</small></div><div class="tile"><b>${s.plans.n}</b><span>Plans</span></div></div>
+    <div class="card flush"><div style="padding:12px 14px 0"><h3 style="margin:0">Coverage by recipe</h3><span class="hint">Cell shows the shot count; the minimum from the capture guide is in brackets. Red ring = missing.</span></div><div class="table-wrap"><table><thead><tr><th>Recipe</th><th class="num">Clips</th><th class="num">Footage</th><th class="num">Shots</th><th class="num">Dead</th>${COVERAGE.map((c) => `<th>${esc(title(c))} <span class="faint">(${target[c]})</span></th>`).join("")}<th>Missing</th></tr></thead><tbody>
+      ${report.recipes.map((r) => `<tr><td><b>${esc(r.recipe)}</b></td><td class="num">${r.clips}</td><td class="num">${fmtMin(r.seconds)}</td><td class="num">${r.shots}</td><td class="num">${r.dead || "–"}</td>${COVERAGE.map((c) => `<td><span class="cov" ${stageStyle(c)}><i class="${r.stages[c] ? "" : "no"}"></i></span> <span class="num ${(r.stages[c] ?? 0) < target[c] ? "muted" : ""}">${r.stages[c] ?? 0}</span></td>`).join("")}<td>${r.missing.length ? r.missing.map((m) => `<span class="chip stage" ${stageStyle(m)}>${esc(label(m))}</span>`).join(" ") : `<span class="badge pass">complete</span>`}</td></tr>`).join("")}</tbody></table></div></div>
+    <div class="grid cols-2">
+      <div class="card"><div class="row between"><h3 style="margin:0">What to film next</h3><button class="btn sm ghost" id="copy-sheet">Copy as session sheet</button></div>
+        ${report.recipes.filter((r) => r.missing.length).map((r) => `<p class="small" style="margin:8px 0 0"><b>${esc(r.recipe)}</b>: ${esc(r.missing.map(label).join(", "))}</p>`).join("") || `<p class="small muted" style="margin:8px 0 0">Nothing: every recipe has full stage coverage. Film module shots (pours, steam, sprinkles, transitions) instead.</p>`}
+        ${deadShots.length ? `<h3 style="margin-top:14px">Dead footage (${deadShots.length})</h3><p class="hint">No on-screen motion; excluded from planning. Delete from the library to save space.</p><div class="table-wrap"><table><tbody>${deadShots.map((x) => `<tr><td><img class="thumb" src="${esc(x.frames?.[1] ?? x.frames?.[0] ?? "")}" alt=""></td><td class="mono small">${esc(x.clip_filename)}</td><td class="num small">${x.start}s–${x.end}s</td><td class="num small muted">motion ${x.motion}</td></tr>`).join("")}</tbody></table></div>` : ""}</div>
+      <div class="card"><h3>Unused footage (repurposing backlog)</h3>${report.unused.length ? `<div class="table-wrap"><table><thead><tr><th>Recipe</th><th class="num">Shots</th><th class="num">Footage</th><th class="num">Hero</th><th class="num">Hook</th><th></th></tr></thead><tbody>${report.unused.map((u) => `<tr><td>${esc(u.recipe)}</td><td class="num">${u.shots}</td><td class="num">${fmtMin(u.seconds)}</td><td class="num">${u.hero}</td><td class="num">${u.hook}</td><td class="row" style="gap:4px"><a class="btn sm ghost" href="#/search?q=${encodeURIComponent(u.recipe.replace(/-/g, " "))}&unused=1&recipe=${encodeURIComponent(u.recipe)}">Search</a><button class="btn sm ghost" data-live data-variants="${esc(u.recipe)}">Plan</button></td></tr>`).join("")}</tbody></table></div>` : `<p class="small muted">Everything usable has been placed in at least one plan.</p>`}
+        <h3 style="margin-top:14px">Most common actions</h3>${bars(report.topActions)}<h3 style="margin-top:14px">Most common ingredients</h3>${bars(report.topIngredients)}<h3 style="margin-top:14px">Shot types</h3>${bars((s.byShotType ?? []).map((r) => [r.shot_type ?? "untagged", r.n]))}</div>
+    </div></div>`;
+  view.querySelector("#dl-md").addEventListener("click", () => { if (SNAP) return copyText(report.markdown, "Report markdown copied"); const a = document.createElement("a"); a.href = "data:text/markdown;charset=utf-8," + encodeURIComponent(report.markdown); a.download = "library-report.md"; a.click(); });
+  view.querySelector("#copy-sheet").addEventListener("click", () => copyText(["| # | Stage | Subject | Shot | Takes | Notes |", "|---|---|---|---|---|---|", ...report.recipes.flatMap((r) => r.missing.map((m, i) => `| ${i + 1} | ${m} | ${r.recipe} | closeup | t01 | |`))].join("\n"), "Session sheet copied"));
+  view.querySelectorAll("[data-variants]").forEach((b) => b.addEventListener("click", () => openPlanForm({ mode: "variants", recipe: b.dataset.variants })));
+};
+
+// ---------- brand kit ----------
+routes.brand = async (view) => {
+  setTitle("Brand kit");
+  const data = await api.get("/api/brand");
+  let kit = JSON.parse(JSON.stringify(data.kit)); const original = JSON.stringify(kit);
+  let platformId = Object.keys(kit.platforms ?? {})[0] ?? "instagram_reel";
+  const field = (path, val, type = "text") => `<div class="field"><label>${esc(path.split(".").pop())}</label>${typeof val === "boolean" ? `<label class="row small" style="gap:6px"><input type="checkbox" data-path="${path}" ${val ? "checked" : ""}> ${val ? "on" : "off"}</label>` : type === "color" ? `<div class="row" style="gap:6px"><input type="color" data-path="${path}" value="${esc(val)}"><input type="text" data-path="${path}" value="${esc(val)}" class="mono" style="width:110px"></div>` : typeof val === "number" ? `<input type="number" step="any" data-path="${path}" value="${val}">` : Array.isArray(val) ? `<textarea data-path="${path}" data-list rows="${Math.min(6, val.length + 1)}">${esc(val.join("\n"))}</textarea>` : String(val ?? "").length > 60 ? `<textarea data-path="${path}" rows="2">${esc(val)}</textarea>` : `<input type="text" data-path="${path}" value="${esc(val ?? "")}">`}</div>`;
+  const section = (key, title2, hint) => { const obj = kit[key]; if (!obj || typeof obj !== "object") return ""; const fields = Object.entries(obj).flatMap(([k, v]) => v && typeof v === "object" && !Array.isArray(v) ? Object.entries(v).map(([k2, v2]) => field(`${key}.${k}.${k2}`, v2, key === "colors" ? "color" : "text")) : [field(`${key}.${k}`, v, key === "colors" ? "color" : "text")]); return `<div class="card" id="${key}"><h3>${esc(title2)}</h3>${hint ? `<p class="hint" style="margin:0 0 8px">${hint}</p>` : ""}<div class="grid ${key === "colors" ? "cols-4" : "cols-2"}">${fields.join("")}</div></div>`; };
+  const draw = () => {
+    view.innerHTML = `<div class="grid side-8-4"><div class="stack" id="kitform">
+      <div class="row between"><span class="hint">Every render, caption file, QC check and AI prompt reads from this file: <code>${esc(data.path.split("/").slice(-2).join("/"))}</code></span><div class="row" data-live><button class="btn sm ghost" id="k-json">Edit as JSON</button><button class="btn sm" id="k-revert">Revert</button><button class="btn sm primary" id="k-save">Save</button></div></div>
+      ${section("brand", "Brand")}${section("voice", "Voice", "Lists: one entry per line. Hook formulas may use {{dish}} {{protein}} {{protein_grams}} {{calories}} {{minutes}} {{portions}}; a formula is skipped when a fact is missing.")}${section("colors", "Colours")}${section("fonts", "Fonts", "Font files live in brand/fonts/; a missing file falls back to a system font in renders.")}${section("captions", "Captions")}${section("pacing", "Pacing")}${section("transitions", "Transitions")}${section("colorGrade", "Colour grade")}${section("visualStyle", "Visual style (feeds every AI B-roll prompt)")}${section("thumbnails", "Thumbnails")}${section("aiBroll", "AI B-roll rules")}
+      <div class="card" id="platforms"><h3>Platforms</h3><div class="table-wrap"><table><thead><tr><th>Platform</th><th>Frame</th><th class="num">fps</th><th class="num">Max s</th><th>Ideal s</th><th class="num">Max MB</th><th>Safe zone T/B/L/R (px)</th><th class="num">LUFS</th></tr></thead><tbody>${Object.entries(kit.platforms ?? {}).map(([id, p]) => `<tr><td><b>${esc(p.label ?? id)}</b><div class="mono small muted">${esc(id)}</div></td><td class="mono">${p.width}×${p.height}</td><td class="num">${p.fps}</td><td class="num"><input type="number" data-path="platforms.${id}.maxSeconds" value="${p.maxSeconds}" style="width:70px"></td><td class="mono small">${(p.idealSeconds ?? []).join("–")}</td><td class="num">${p.maxFileMB}</td><td class="row" style="gap:3px;flex-wrap:nowrap">${["top", "bottom", "left", "right"].map((k) => `<input type="number" data-path="platforms.${id}.safeZone.${k}" value="${p.safeZone?.[k] ?? 0}" style="width:62px" aria-label="${k}">`).join("")}</td><td class="num">${p.loudnessLUFS} ± ${p.loudnessTolerance}</td></tr>`).join("")}</tbody></table></div></div>
+      <div class="card"><h3>Variant sets</h3><div class="grid cols-2">${Object.entries(kit.variantSets ?? {}).map(([k, v]) => field(`variantSets.${k}`, v)).join("")}</div></div>
+    </div>
+    <div class="stack" style="position:sticky;top:64px;align-self:start"><div class="card"><div class="row between"><h3 style="margin:0">Caption preview</h3><select id="pv-platform" aria-label="Platform">${Object.keys(kit.platforms ?? {}).map((id) => `<option value="${id}" ${id === platformId ? "selected" : ""}>${esc(kit.platforms[id].label ?? id)}</option>`).join("")}</select></div><div class="canvas-wrap" style="margin-top:10px"><canvas id="pv" width="270" height="480"></canvas></div><p class="hint" id="pv-warn" style="margin:8px 0 0"></p><div class="row" style="margin-top:8px;gap:6px">${["captionText", "captionHighlight", "captionOutline", "primary", "accent"].map((k) => `<span class="row small" style="gap:4px"><span class="swatch" style="background:${esc(kit.colors?.[k] ?? "#000")}"></span>${k}</span>`).join("")}</div></div></div></div>`;
+    view.querySelectorAll("[data-path]").forEach((el) => el.addEventListener("input", () => { set(kit, el.dataset.path, el.type === "checkbox" ? el.checked : el.dataset.list != null ? el.value.split("\n").map((x) => x.trim()).filter(Boolean) : el.type === "number" ? Number(el.value) : el.value); if (el.type === "color" || el.type === "text") view.querySelectorAll(`[data-path="${el.dataset.path}"]`).forEach((o) => { if (o !== el && o.type !== "checkbox") o.value = el.value; }); preview(); }));
+    view.querySelector("#pv-platform").addEventListener("change", (e) => { platformId = e.target.value; preview(); });
+    view.querySelector("#k-revert")?.addEventListener("click", () => { kit = JSON.parse(original); draw(); });
+    view.querySelector("#k-save")?.addEventListener("click", async () => { try { const res = await api.send("PUT", "/api/brand", { kit }); cache.brand = null; toast(`Saved (backup: ${res.backup.split("/").pop()}). Applies to future exports and renders.`, "ok"); } catch (err) { toast(err.message, "error"); } });
+    view.querySelector("#k-json")?.addEventListener("click", () => { openModal(`<div class="row between"><h2 style="margin:0">brand-kit.json</h2><button class="btn ghost sm" data-close-modal>Close</button></div><textarea id="kit-json" rows="24" class="mono" style="margin-top:10px">${esc(JSON.stringify(kit, null, 2))}</textarea><div class="row between" style="margin-top:10px"><span class="hint" id="json-err"></span><button class="btn primary" id="json-apply">Apply to form</button></div>`); document.getElementById("json-apply").addEventListener("click", () => { try { kit = JSON.parse(document.getElementById("kit-json").value); closeModal(); draw(); } catch (err) { document.getElementById("json-err").textContent = `Invalid JSON: ${err.message}`; } }); });
+    preview();
+  };
+  function set(obj, path, val) { const keys = path.split("."); let o = obj; for (const k of keys.slice(0, -1)) o = o[k] ?? (o[k] = {}); o[keys[keys.length - 1]] = val; }
+  function preview() {
+    const cv = view.querySelector("#pv"); if (!cv) return; const ctx = cv.getContext("2d"); const p = kit.platforms?.[platformId] ?? { width: 1080, height: 1920, safeZone: {} }; const W = p.width, H = p.height; cv.width = 270; cv.height = Math.round((270 * H) / W); const sc = cv.width / W;
+    ctx.fillStyle = "#101010"; ctx.fillRect(0, 0, cv.width, cv.height); ctx.fillStyle = "#1e1e1e"; ctx.fillRect(0, cv.height * 0.3, cv.width, cv.height * 0.4);
+    const sz = p.safeZone ?? {}; ctx.fillStyle = "rgba(255,80,80,.22)"; ctx.fillRect(0, 0, cv.width, (sz.top ?? 0) * sc); ctx.fillRect(0, cv.height - (sz.bottom ?? 0) * sc, cv.width, (sz.bottom ?? 0) * sc); ctx.fillRect(0, 0, (sz.left ?? 0) * sc, cv.height); ctx.fillRect(cv.width - (sz.right ?? 0) * sc, 0, (sz.right ?? 0) * sc, cv.height);
+    const c = kit.captions ?? {}; const fs = ((H * (c.fontSizePct ?? 5)) / 100) * sc; const margin = Math.max((H * (c.marginBottomPct ?? 20)) / 100, sz.bottom ?? 0) * sc; const fam = kit.fonts?.caption?.family ?? "sans-serif";
+    ctx.font = `${(kit.fonts?.caption?.weight ?? 400) >= 600 ? "bold " : ""}${fs}px "${fam}", "IBM Plex Sans", sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "bottom"; ctx.lineJoin = "round"; ctx.lineWidth = (c.outlinePx ?? 3) * sc * 2;
+    let text = "42g protein bowl in 20 min"; if (c.uppercase) text = text.toUpperCase(); const words = text.split(" "); const lines = []; let cur = ""; for (const w of words) { if ((cur + " " + w).trim().length > (c.maxCharsPerLine ?? 22) && cur) { lines.push(cur); cur = w; } else cur = (cur + " " + w).trim(); } if (cur) lines.push(cur);
+    lines.reverse().forEach((line, i) => { const y = cv.height - margin - i * fs * 1.15; ctx.strokeStyle = kit.colors?.captionOutline ?? "#000"; ctx.strokeText(line, cv.width / 2, y); const parts = line.split(/(\d+(?:[.,]\d+)?\s?(?:g|kg|ml|min|kcal|cal|%|x)?\b)/i).filter(Boolean); const widths = parts.map((t) => ctx.measureText(t).width); let x = cv.width / 2 - widths.reduce((a, b) => a + b, 0) / 2; ctx.textAlign = "left"; parts.forEach((t, k) => { ctx.fillStyle = c.highlightKeywords && /\d/.test(t) ? kit.colors?.captionHighlight ?? "#FFD23F" : kit.colors?.captionText ?? "#fff"; ctx.fillText(t, x, y); x += widths[k]; }); ctx.textAlign = "center"; });
+    const warn = view.querySelector("#pv-warn"); const marginPx = (H * (c.marginBottomPct ?? 20)) / 100; warn.textContent = marginPx < (sz.bottom ?? 0) ? `marginBottomPct puts captions ${Math.round((sz.bottom ?? 0) - marginPx)}px inside ${p.label ?? platformId}'s bottom UI zone; the renderer clamps to the safe zone and QC would warn.` : `Caption margin ${Math.round(marginPx)}px clears the ${p.label ?? platformId} bottom zone (${sz.bottom ?? 0}px).`; warn.style.color = marginPx < (sz.bottom ?? 0) ? "var(--warn)" : "var(--muted)";
+  }
+  draw();
+};
+
+// ---------- b-roll ----------
+routes.broll = async (view, r) => {
+  setTitle("AI B-roll");
+  const [sheets, plans, st] = await Promise.all([api.get("/api/broll"), api.get("/api/plans"), status()]);
+  const withGaps = plans.filter((p) => p.gaps > 0); const sel = r.params.get("plan") ?? ""; const open = r.params.get("sheet") ?? sheets[0]?.file ?? "";
+  const sheet = sheets.find((s) => s.file === open);
+  view.innerHTML = `<div class="grid side-8-4" style="grid-template-columns:minmax(0,1fr) minmax(0,2fr)"><div class="stack">
+    <form class="card stack" id="bform" data-live><h3>Write a prompt sheet</h3><p class="hint" style="margin:0">Prompts match the brand's visual style and name a real reference frame from the library. ${st.aiMode === "claude" ? "Art-directed by Claude." : "Offline: built from the brand kit's visual style."}</p>
+      <div class="field"><label for="b-plan">Gaps from a plan</label><select id="b-plan" name="planId"><option value="">None</option>${withGaps.map((p) => `<option value="${esc(p.id)}" ${p.id === sel ? "selected" : ""}>${esc(p.templateName)} · ${esc(p.recipe ?? "library")} (${p.gaps} gap${p.gaps > 1 ? "s" : ""})</option>`).join("")}</select></div>
+      <div class="field"><label for="b-needs">Extra needs, one per line</label><textarea id="b-needs" name="needs" rows="4" placeholder="extreme close-up of teriyaki glaze bubbling&#10;steam rising off jasmine rice"></textarea></div>
+      <div class="row between"><span class="hint">Rule: AI inserts ≤ ${Math.round((cache.brand?.aiBroll?.maxShareOfRuntime ?? 0.2) * 100)}% of runtime, never the hero.</span><button class="btn primary" type="submit">Write prompt sheet</button></div></form>
+    <div class="card"><h3>Sheets</h3>${sheets.length ? sheets.map((s) => `<a class="btn ghost" style="display:flex;justify-content:space-between;width:100%" href="#/broll?sheet=${encodeURIComponent(s.file)}"><span>${esc(s.file.replace(/^broll-requests-|\.json$/g, ""))}</span><span class="muted small">${s.requests.length} request${s.requests.length > 1 ? "s" : ""}</span></a>`).join("") : `<p class="small muted">No sheets yet.</p>`}</div></div>
+    <div class="stack">${sheet ? `<div class="card"><div class="row between"><h3 style="margin:0">${esc(sheet.file.replace(/\.json$/, ""))}</h3><button class="btn sm ghost" id="copy-sheet">Copy all as markdown</button></div>
+        ${sheet.reference ? `<div class="row" style="margin-top:10px"><img class="thumb" style="width:120px" src="${esc(sheet.reference.frameUrl ?? "")}" alt=""><div><div class="small"><b>Style reference</b> — upload this frame as the image/style reference in the generator.</div><div class="mono small muted">${esc(sheet.reference.file)}</div></div></div>` : ""}
+        <ol class="stack" style="padding-left:18px;margin:12px 0 0;gap:12px">${sheet.requests.map((q) => `<li><b>${esc(q.need)}</b> <span class="muted small">· ${q.seconds}s · ${esc(q.camera)}</span>
+          <div class="stack" style="gap:6px;margin-top:6px">${[["Image prompt", q.image_prompt], ["Motion prompt (image → video)", q.motion_prompt], ["Negative prompt", q.negative_prompt]].map(([l, t]) => `<div><div class="eyebrow">${l}</div><div class="copyblock">${esc(t)}<button class="btn sm" data-copy="${esc(t)}">Copy</button></div></div>`).join("")}<p class="hint" style="margin:0">Continuity: ${esc(q.notes)}</p></div></li>`).join("")}</ol>
+        <p class="hint" style="margin-top:12px">Workflow: still image (4 candidates) → pick one → image-to-video 3–5 s → grade with the brand LUT → save to <code>04_assets/ai-broll/</code> → Ingest &amp; Analyze. QC caps AI inserts and blocks them on the hero.</p></div>` : `<div class="empty"><strong>No prompt sheet selected.</strong>Pick a plan with gaps or type a need, then write a sheet.</div>`}</div></div>`;
+  view.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => copyText(b.dataset.copy)));
+  view.querySelector("#copy-sheet")?.addEventListener("click", () => copyText(sheet.requests.map((q, i) => `## ${i + 1}. ${q.need}\n\n**Image prompt**\n${q.image_prompt}\n\n**Motion prompt**\n${q.motion_prompt}\n\n**Negative**\n${q.negative_prompt}\n\nContinuity: ${q.notes}\n`).join("\n"), "Sheet copied"));
+  view.querySelector("#bform")?.addEventListener("submit", async (e) => { e.preventDefault(); const fd = new FormData(e.target); const j = await startJob({ type: "broll", planId: fd.get("planId") || null, needs: String(fd.get("needs") ?? "").split("\n").map((x) => x.trim()).filter(Boolean), offline: st.aiMode !== "claude" }, "Prompt sheet written"); if (j.status === "done") go(`#/broll?sheet=${encodeURIComponent(j.result.file)}`); });
+};
+
+// ---------- jobs ----------
+function jobHtml(j) {
+  const badge = j.status === "done" ? "pass" : j.status === "failed" ? "fail" : j.status === "running" ? "warn" : "neutral";
+  const result = j.result?.planId ? `<a class="btn sm ghost" href="#/plans/${encodeURIComponent(j.result.planId)}">Open plan</a>` : j.result?.plans ? j.result.plans.map((p) => `<a class="btn sm ghost" href="#/plans/${encodeURIComponent(p.planId)}">${esc(p.planId.split("__")[1] ?? p.planId)}</a>`).join("") : j.result?.file ? `<a class="btn sm ghost" href="#/broll?sheet=${encodeURIComponent(j.result.file)}">Open sheet</a>` : "";
+  const target = j.params?.recipe ?? j.params?.planId ?? j.params?.clipId ?? "";
+  const pos = j.status === "queued" ? jobs.list.filter((x) => x.status === "queued" && x.id > j.id).length + 1 : 0;
+  return `<div class="job"><div class="row between"><span><b>${esc(j.type)}</b> <span class="muted small">${esc(String(target))}</span></span><span class="badge ${badge}">${esc(j.status)}${pos ? ` · ${pos}${pos === 1 ? "st" : pos === 2 ? "nd" : pos === 3 ? "rd" : "th"} in line` : ""}</span></div>${j.log?.length ? `<pre>${esc(j.log.slice(-6).join("\n"))}</pre>` : ""}${j.error ? `<div class="small" style="color:var(--fail)">${esc(j.error)}</div>` : ""}<div class="row between"><span class="faint small">${esc((j.started_at ?? j.created_at ?? "").slice(11, 19))}${j.finished_at ? ` → ${esc(j.finished_at.slice(11, 19))}` : ""}</span><span class="row">${result}</span></div></div>`;
+}
+routes.jobs = async (view) => {
+  setTitle("Jobs");
+  const list = SNAP ? [] : await api.get("/api/jobs");
+  view.innerHTML = `<div class="stack">${SNAP ? `<div class="empty"><strong>Jobs run in the live app.</strong>This snapshot is read-only.</div>` : list.length ? list.map(jobHtml).join("") : `<div class="empty"><strong>Nothing has run yet.</strong>Analyze, plan, render and QC jobs appear here with their logs.</div>`}</div>`;
+  if (!SNAP) jobs.listeners.add(function upd(l) { if (route().screen !== "jobs") return jobs.listeners.delete(upd); view.innerHTML = `<div class="stack">${l.map(jobHtml).join("")}</div>`; });
+};
+function drawer() {
+  const d = document.getElementById("drawer");
+  const paint = (list) => { d.innerHTML = `<div class="drawer"><div class="row between"><h3 style="margin:0">Jobs</h3><button class="btn ghost sm" id="drawer-close">Close</button></div>${list.length ? list.slice(0, 12).map(jobHtml).join("") : `<p class="muted small">Nothing running.</p>`}<a class="btn sm ghost" href="#/jobs">All jobs</a></div>`; d.querySelector("#drawer-close").addEventListener("click", () => { d.hidden = true; jobs.listeners.delete(paint); }); };
+  d.hidden = false; paint(jobs.list); jobs.listeners.add(paint); refreshJobs();
+}
+
+// ---------- boot ----------
+async function boot() {
+  try { const t = localStorage.getItem("fce.theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+  document.getElementById("theme-toggle").addEventListener("click", () => { const cur = document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark" : "light"); const next = cur === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = next; try { localStorage.setItem("fce.theme", next); } catch {} });
+  document.getElementById("jobs-open").addEventListener("click", drawer);
+  if (SNAP) { const b = document.getElementById("snapbanner"); b.hidden = false; b.textContent = `Read-only snapshot generated ${new Date(SNAP.generated).toLocaleString()} — browsing and search work; actions need the local app (fce ui).`; document.querySelectorAll("[data-live]").forEach((el) => (el.hidden = true)); new MutationObserver(() => document.querySelectorAll("[data-live]").forEach((el) => (el.hidden = true))).observe(document.getElementById("view"), { childList: true, subtree: true }); }
+  try { const st = await status(); document.getElementById("proj-name").textContent = st.brandName || "Food Content Engine"; document.getElementById("proj-path").textContent = st.library; const ai = document.getElementById("pill-ai"); ai.className = `pill ${st.aiMode === "claude" ? "ok" : "warn"}`; ai.innerHTML = `<i></i>${st.aiMode === "claude" ? esc(st.model) : "offline tagging"}`; const ff = document.getElementById("pill-ffmpeg"); ff.className = `pill ${st.ffmpeg ? "ok" : "bad"}`; ff.innerHTML = `<i></i>${st.ffmpeg ? "ffmpeg ready" : "ffmpeg missing"}`; } catch (err) { toast(`Cannot reach the engine: ${err.message}`, "error"); }
+  if (!location.hash) location.hash = "#/dashboard";
+  render();
+  refreshJobs();
+}
+boot();
+</script>

@@ -1,0 +1,16 @@
+{
+  "id": "meal-prep-batch-40s",
+  "name": "Meal-prep version (40s YouTube Short)",
+  "platform": "youtube_short",
+  "targetSeconds": 40,
+  "pacing": { "minShot": 1.0, "maxShot": 3.5 },
+  "description": "Re-frames a recipe as a weekly batch: cook, portion into containers, container hero, storage tip.",
+  "slots": [
+    { "id": "hook", "seconds": 2.5, "count": 1, "prefer": { "stages": ["meal_prep", "hero"], "hookWorthy": true }, "sameRecipe": true, "caption": "{{mealprep_hook}}" },
+    { "id": "ingredients", "seconds": 4, "count": 2, "prefer": { "stages": ["ingredients", "prep"] }, "diversify": "ingredients", "sameRecipe": true, "caption": "{{ingredients}}" },
+    { "id": "cook", "seconds": 16, "count": 6, "prefer": { "stages": ["cooking"], "minMotion": 0.6 }, "diversify": "actions", "caption": "{{step}}" },
+    { "id": "portion", "seconds": 9, "count": 3, "prefer": { "stages": ["meal_prep", "plating"], "actions": ["packing", "assembling", "scooping", "layering"] }, "sameRecipe": true, "caption": "{{portion_line}}" },
+    { "id": "hero", "seconds": 5, "count": 1, "prefer": { "heroWorthy": true, "stages": ["meal_prep", "hero"] }, "sameRecipe": true, "caption": "{{storage_tip}}" },
+    { "id": "cta", "seconds": 3.5, "count": 1, "prefer": { "stages": ["hero", "eating", "serving"] }, "sameRecipe": true, "caption": "{{cta}}" }
+  ]
+}

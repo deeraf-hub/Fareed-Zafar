@@ -1,0 +1,16 @@
+{
+  "id": "fitness-macro-focus-30s",
+  "name": "Fitness angle - macros first (30s Reel)",
+  "platform": "instagram_reel",
+  "targetSeconds": 30,
+  "pacing": { "minShot": 0.8, "maxShot": 3.0 },
+  "description": "Same footage, different story: protein source close-ups, the cook, then a macro breakdown over the hero shot.",
+  "slots": [
+    { "id": "hook", "seconds": 2.5, "count": 1, "prefer": { "heroWorthy": true, "stages": ["hero", "eating"], "minQuality": 4 }, "sameRecipe": true, "caption": "{{macro_hook}}" },
+    { "id": "protein", "seconds": 5, "count": 2, "prefer": { "stages": ["ingredients", "prep", "cooking"], "shotTypes": ["close_up", "extreme_close_up", "overhead"], "proteinOnly": true }, "sameRecipe": true, "caption": "{{protein_line}}" },
+    { "id": "cook", "seconds": 12, "count": 5, "prefer": { "stages": ["cooking"], "minMotion": 0.6 }, "diversify": "actions", "caption": "{{step}}" },
+    { "id": "plating", "seconds": 3.5, "count": 1, "prefer": { "stages": ["plating"] }, "sameRecipe": true, "caption": "{{step}}" },
+    { "id": "macros", "seconds": 4.5, "count": 1, "prefer": { "heroWorthy": true, "stages": ["hero"], "cameraMotion": ["static", "push_in", "orbit"] }, "sameRecipe": true, "caption": "{{macros}}" },
+    { "id": "cta", "seconds": 2.5, "count": 1, "prefer": { "stages": ["eating", "hero", "serving"] }, "sameRecipe": true, "caption": "{{cta}}" }
+  ]
+}
