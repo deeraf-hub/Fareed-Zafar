@@ -254,6 +254,42 @@ export class Index {
     return ids;
   }
 
+  /** Edit a shot's tags in place (keeps the FTS row in sync). Returns the joined row. */
+  updateShot(id, patch) {
+    const allowed = ["stage", "shot_type", "camera_motion", "quality", "hero_worthy", "hook_worthy", "has_face", "has_hands", "dead", "lighting", "ingredients", "actions", "keywords", "description", "caption_suggestion"];
+    const sets = [];
+    const params = [];
+    for (const k of allowed) {
+      if (!(k in patch)) continue;
+      let v = patch[k];
+      if (JSON_COLS.includes(k)) v = JSON.stringify(Array.isArray(v) ? v : []);
+      else if (["hero_worthy", "hook_worthy", "has_face", "has_hands", "dead"].includes(k)) v = v ? 1 : 0;
+      else if (k === "quality") v = v == null ? null : Math.max(1, Math.min(5, Number(v)));
+      sets.push(`${k} = ?`);
+      params.push(v);
+    }
+    if (!sets.length) return this.getShot(id);
+    params.push(id);
+    this.db.prepare(`UPDATE shots SET ${sets.join(", ")} WHERE id = ?`).run(...params);
+    const s = this.getShot(id);
+    if (!s) return null;
+    const clip = this.getClip(s.clip_id);
+    const transcript = this.getTranscript(s.clip_id)?.text ?? "";
+    const words = (arr) => (arr ?? []).map((x) => String(x).replace(/_/g, " ")).join(" ");
+    this.db.prepare("DELETE FROM shots_fts WHERE rowid = ?").run(id);
+    this.db
+      .prepare(
+        `INSERT INTO shots_fts (rowid, description, keywords, ingredients, actions, dish, stage, shot_type, filename, recipe, transcript)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
+      )
+      .run(
+        id, s.description ?? "", words(s.keywords), words(s.ingredients), words(s.actions), s.dish ?? "",
+        (s.stage ?? "").replace(/_/g, " "), (s.shot_type ?? "").replace(/_/g, " "),
+        (clip?.filename ?? "").replace(/[_\-.]+/g, " "), (clip?.recipe ?? "").replace(/[_\-]+/g, " "), transcript,
+      );
+    return s;
+  }
+
   getShots(clipId) {
     return this.db.prepare("SELECT * FROM shots WHERE clip_id = ? ORDER BY idx").all(clipId).map(parseShotRow);
   }

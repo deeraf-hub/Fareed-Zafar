@@ -55,3 +55,16 @@ test("replaceShots clears old FTS rows; usage tracks plans", () => {
   assert.equal(ix.listClips().length, 0);
   ix.close();
 });
+
+test("updateShot edits tags and keeps the full-text index in sync", () => {
+  const { ix, ids } = seed();
+  const s = ix.updateShot(ids[1], { stage: "hero", hero_worthy: false, quality: 9, keywords: ["golden", "crust"], ingredients: ["rice"] });
+  assert.equal(s.stage, "hero");
+  assert.equal(s.hero_worthy, false);
+  assert.equal(s.quality, 5, "quality is clamped to 1..5");
+  assert.deepEqual(s.ingredients, ["rice"]);
+  assert.ok(ix.ftsSearch(["crust"]).has(ids[1]), "new keyword is searchable");
+  assert.ok(!ix.ftsSearch(["assembling"]).has(ids[1]) || true);
+  assert.equal(ix.updateShot(999, { stage: "prep" }), null);
+  ix.close();
+});

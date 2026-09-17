@@ -16,6 +16,8 @@ import { renderPlan } from "./exporters/render.js";
 import { runQc, formatQc } from "./qc.js";
 import { libraryReport } from "./report.js";
 import { needsFromPlan, pickReference, offlinePrompts, claudePrompts, writePromptSheet } from "./broll.js";
+import { startUi, createUiServer } from "./ui/server.js";
+import { writeSnapshot } from "./ui/snapshot.js";
 
 export function parseArgs(argv) {
   const args = { _: [], flags: {} };
@@ -58,6 +60,10 @@ Make
   render <plan-id> [--music <file>] [--no-exec]
   qc <plan-id>
   broll [--plan <plan-id>] [--need "<text>" ...] [--offline]
+
+Browse
+  ui [--port 4310] [--host 127.0.0.1] [--snapshot <file.html>]
+                                     local web app over the index (library, search, plans, QC, report, brand kit, B-roll)
 
 Options common to most commands: --project <dir>
 `;
@@ -235,6 +241,22 @@ export async function main(argv = process.argv.slice(2)) {
         const out = writePromptSheet(path.join(config.outputDir, "broll"), { requests, reference, brand, needs });
         log(`${requests.length} B-roll request(s) → ${out.md}`);
         printUsage();
+        return 0;
+      }
+      case "ui": {
+        if (flags.snapshot) {
+          const server = createUiServer({ config, brand, ix });
+          const r = await writeSnapshot({ config, brand, ix, api: server.api, outFile: path.resolve(String(flags.snapshot)), thumbWidth: flags.thumbWidth ? Number(flags.thumbWidth) : 320, log });
+          log(`snapshot written: ${r.outFile} (${(r.bytes / 1048576).toFixed(1)} MB, ${r.thumbnails} thumbnails inlined)`);
+          return 0;
+        }
+        const { url, server } = await startUi({ config, brand, ix, port: flags.port ? Number(flags.port) : 4310, host: flags.host ? String(flags.host) : "127.0.0.1" });
+        log(`fce ui running at ${url}  (project ${config.root})`);
+        log("press Ctrl+C to stop");
+        await new Promise((resolve) => {
+          process.on("SIGINT", () => server.close(resolve));
+          process.on("SIGTERM", () => server.close(resolve));
+        });
         return 0;
       }
       default:
