@@ -1,0 +1,16 @@
+{
+  "id": "tiktok-fast-45s",
+  "name": "TikTok - fast recipe with reaction (45s)",
+  "platform": "tiktok",
+  "targetSeconds": 45,
+  "pacing": { "minShot": 0.7, "maxShot": 2.5 },
+  "description": "Faster cuts, more steps shown, a first-bite reaction before the CTA.",
+  "slots": [
+    { "id": "hook", "seconds": 2, "count": 1, "prefer": { "hookWorthy": true, "stages": ["hero", "cooking", "eating"], "minQuality": 4 }, "sameRecipe": true, "caption": "{{hook}}" },
+    { "id": "ingredients", "seconds": 5, "count": 3, "prefer": { "stages": ["ingredients", "prep"] }, "diversify": "ingredients", "sameRecipe": true, "caption": "{{ingredients}}" },
+    { "id": "cook", "seconds": 24, "count": 10, "prefer": { "stages": ["cooking", "prep"], "minMotion": 0.6 }, "diversify": "actions", "caption": "{{step}}" },
+    { "id": "plating", "seconds": 5, "count": 2, "prefer": { "stages": ["plating"] }, "sameRecipe": true, "caption": "{{step}}" },
+    { "id": "reaction", "seconds": 4, "count": 1, "prefer": { "stages": ["eating", "hero"] }, "sameRecipe": true, "caption": "{{reaction}}" },
+    { "id": "cta", "seconds": 5, "count": 1, "prefer": { "heroWorthy": true, "stages": ["hero", "serving"] }, "sameRecipe": true, "caption": "{{cta}}" }
+  ]
+}

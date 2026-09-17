@@ -1,0 +1,21 @@
+{
+  "name": "food-content-engine",
+  "version": "0.1.0",
+  "description": "AI-assisted footage indexing, search, repurposing and semi-automated editing pipeline for a high-volume food and fitness recipe brand.",
+  "type": "module",
+  "bin": {
+    "fce": "bin/fce.js"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "test": "node --test --no-warnings=ExperimentalWarning",
+    "fce": "node --no-warnings=ExperimentalWarning bin/fce.js",
+    "demo": "node --no-warnings=ExperimentalWarning scripts/demo.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.126.0"
+  },
+  "license": "MIT"
+}

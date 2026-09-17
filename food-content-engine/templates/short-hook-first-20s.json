@@ -1,0 +1,14 @@
+{
+  "id": "short-hook-first-20s",
+  "name": "YouTube Short - hook first, 20s",
+  "platform": "youtube_short",
+  "targetSeconds": 20,
+  "pacing": { "minShot": 0.8, "maxShot": 3.0 },
+  "description": "Ultra-tight version: reveal, five cooking beats, plate, hero. No ingredient section.",
+  "slots": [
+    { "id": "hook", "seconds": 2, "count": 1, "prefer": { "hookWorthy": true, "heroWorthy": true, "stages": ["hero", "plating"], "minQuality": 4 }, "sameRecipe": true, "caption": "{{hook}}" },
+    { "id": "cook", "seconds": 12, "count": 5, "prefer": { "stages": ["cooking"], "minMotion": 0.6 }, "diversify": "actions", "caption": "{{step}}" },
+    { "id": "plating", "seconds": 3, "count": 1, "prefer": { "stages": ["plating"] }, "sameRecipe": true, "caption": "{{step}}" },
+    { "id": "hero", "seconds": 3, "count": 1, "prefer": { "heroWorthy": true, "stages": ["hero", "eating"] }, "sameRecipe": true, "caption": "{{cta}}" }
+  ]
+}

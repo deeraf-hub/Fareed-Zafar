@@ -1,0 +1,98 @@
+{
+  "$comment": "Single source of truth for brand consistency. Every render, caption file, QC check and AI prompt reads from here. Edit this file, not the code.",
+  "brand": {
+    "name": "Your Brand",
+    "niche": "high-protein recipes and fitness meal prep",
+    "audience": "25-40, trains 3-5x a week, cooks at home, short on time",
+    "promise": "Big flavour, real macros, under 30 minutes"
+  },
+  "voice": {
+    "tone": "confident, warm, no fluff; a knowledgeable friend, not a nutrition lecture",
+    "captionRules": [
+      "short imperative lines",
+      "max 5 words per pop caption",
+      "numbers as digits (40g, 12 min)",
+      "no emojis in burned-in captions",
+      "sentence case, never all caps for full sentences"
+    ],
+    "hookFormulas": [
+      "{{protein_grams}}g protein {{dish}} in {{minutes}} min",
+      "Stop overcooking your {{protein}}",
+      "Meal prep {{portions}} {{dish}} for the week",
+      "The {{dish}} I eat every training day",
+      "{{calories}} kcal and it tastes like this"
+    ],
+    "ctas": ["Save this for meal prep day", "Follow for a new recipe every day", "Full macros in the caption", "Comment RECIPE and I'll send it"]
+  },
+  "colors": {
+    "primary": "#FF6B35",
+    "secondary": "#1B1B1B",
+    "accent": "#FFD23F",
+    "background": "#0E0E0E",
+    "captionText": "#FFFFFF",
+    "captionHighlight": "#FFD23F",
+    "captionOutline": "#000000"
+  },
+  "fonts": {
+    "caption": { "family": "Montserrat", "weight": 800, "file": "fonts/Montserrat-ExtraBold.ttf", "fallback": "DejaVu Sans" },
+    "title": { "family": "Bebas Neue", "weight": 400, "file": "fonts/BebasNeue-Regular.ttf", "fallback": "DejaVu Sans" }
+  },
+  "captions": {
+    "style": "word-pop",
+    "position": "lower-middle",
+    "fontSizePct": 5.2,
+    "outlinePx": 3,
+    "shadowPx": 0,
+    "maxCharsPerLine": 22,
+    "maxLines": 2,
+    "marginBottomPct": 24,
+    "uppercase": false,
+    "highlightKeywords": true
+  },
+  "pacing": {
+    "default": { "minShot": 0.8, "maxShot": 3.0, "targetCutsPer10s": 4 },
+    "youtube": { "minShot": 1.5, "maxShot": 6.0, "targetCutsPer10s": 2 },
+    "hookMaxSeconds": 2.5
+  },
+  "transitions": {
+    "default": "hard_cut",
+    "allowed": ["hard_cut", "whip", "match_cut", "speed_ramp"],
+    "onBeat": true,
+    "notes": "Hard cuts on the beat by default. Whip only between prep and cook, and between cook and plating. No dissolves, no zoom-blur presets."
+  },
+  "colorGrade": {
+    "lut": "luts/brand-warm.cube",
+    "notes": "Warm, high contrast, saturated oranges and reds, lifted blacks, greens kept natural. Skin stays natural, never orange."
+  },
+  "visualStyle": {
+    "lighting": "soft natural window light, warm key from camera left, no on-camera flash",
+    "surfaces": "dark slate, walnut chopping board, matte black bowls, brushed steel pan",
+    "lens": "35mm for overheads and mediums, 85mm macro for close-ups, shallow depth of field",
+    "palette": "warm neutrals with pops of green herbs and red chilli",
+    "props": "linen napkin, brass cutlery, cast-iron pan, glass meal-prep containers",
+    "avoid": "harsh flash, plastic props, glossy stock-photo look, floating ingredients, perfect symmetry, watermarks"
+  },
+  "thumbnails": {
+    "layout": "hero dish on the right two-thirds, 3-4 word title on the left, macro badge top-left",
+    "titleFont": "title",
+    "maxWords": 4,
+    "badge": "{{protein_grams}}g PROTEIN"
+  },
+  "aiBroll": {
+    "maxShareOfRuntime": 0.2,
+    "allowedFor": ["ingredient close-ups", "textures", "steam and sizzle inserts", "lifestyle cutaways", "transitions"],
+    "neverFor": ["the hero dish", "any step that teaches a technique", "the creator's face or hands"],
+    "notes": "AI inserts must be indistinguishable in grade and lighting; if it needs a disclaimer, it does not ship."
+  },
+  "platforms": {
+    "instagram_reel": { "label": "Instagram Reel", "width": 1080, "height": 1920, "fps": 30, "maxSeconds": 90, "idealSeconds": [15, 45], "maxFileMB": 250, "safeZone": { "top": 220, "bottom": 330, "left": 60, "right": 120 }, "loudnessLUFS": -14, "loudnessTolerance": 2, "truePeakMax": -1 },
+    "tiktok": { "label": "TikTok", "width": 1080, "height": 1920, "fps": 30, "maxSeconds": 180, "idealSeconds": [15, 60], "maxFileMB": 287, "safeZone": { "top": 150, "bottom": 400, "left": 60, "right": 130 }, "loudnessLUFS": -14, "loudnessTolerance": 2, "truePeakMax": -1 },
+    "youtube_short": { "label": "YouTube Short", "width": 1080, "height": 1920, "fps": 30, "maxSeconds": 180, "idealSeconds": [15, 60], "maxFileMB": 256, "safeZone": { "top": 200, "bottom": 360, "left": 60, "right": 120 }, "loudnessLUFS": -14, "loudnessTolerance": 2, "truePeakMax": -1 },
+    "youtube": { "label": "YouTube", "width": 1920, "height": 1080, "fps": 30, "maxSeconds": 900, "idealSeconds": [180, 600], "maxFileMB": 4000, "safeZone": { "top": 60, "bottom": 140, "left": 60, "right": 60 }, "loudnessLUFS": -14, "loudnessTolerance": 2, "truePeakMax": -1 },
+    "square": { "label": "Square (feed)", "width": 1080, "height": 1080, "fps": 30, "maxSeconds": 60, "idealSeconds": [15, 45], "maxFileMB": 250, "safeZone": { "top": 60, "bottom": 120, "left": 60, "right": 60 }, "loudnessLUFS": -14, "loudnessTolerance": 2, "truePeakMax": -1 }
+  },
+  "variantSets": {
+    "default": ["reel-recipe-30s", "tiktok-fast-45s", "short-hook-first-20s", "fitness-macro-focus-30s", "ingredient-spotlight-20s", "meal-prep-batch-40s"],
+    "quick": ["reel-recipe-30s", "short-hook-first-20s"]
+  }
+}

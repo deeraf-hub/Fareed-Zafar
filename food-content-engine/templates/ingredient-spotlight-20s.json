@@ -1,0 +1,15 @@
+{
+  "id": "ingredient-spotlight-20s",
+  "name": "Ingredient spotlight (20s TikTok)",
+  "platform": "tiktok",
+  "targetSeconds": 20,
+  "pacing": { "minShot": 0.8, "maxShot": 2.5 },
+  "description": "Cross-recipe format: every close-up of one ingredient across the library, one cooking action, one hero. Built for library-wide search.",
+  "scope": "library",
+  "slots": [
+    { "id": "hook", "seconds": 2, "count": 1, "prefer": { "hookWorthy": true, "stages": ["hero", "cooking", "ingredients"] }, "caption": "{{ingredient_hook}}" },
+    { "id": "spotlight", "seconds": 10, "count": 5, "prefer": { "stages": ["ingredients", "prep", "cooking"], "shotTypes": ["close_up", "extreme_close_up", "overhead", "detail"] }, "diversify": "clip", "caption": "{{ingredient_fact}}" },
+    { "id": "cook", "seconds": 4, "count": 2, "prefer": { "stages": ["cooking"], "minMotion": 0.6 }, "caption": "{{step}}" },
+    { "id": "hero", "seconds": 4, "count": 1, "prefer": { "heroWorthy": true, "stages": ["hero", "plating"] }, "caption": "{{cta}}" }
+  ]
+}

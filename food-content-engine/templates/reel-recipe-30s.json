@@ -1,0 +1,15 @@
+{
+  "id": "reel-recipe-30s",
+  "name": "Instagram Reel - full recipe in 30s",
+  "platform": "instagram_reel",
+  "targetSeconds": 30,
+  "pacing": { "minShot": 0.8, "maxShot": 3.0 },
+  "description": "The workhorse. Hook on the finished dish, ingredients, the cook in 5-7 fast cuts, plating, hero + CTA.",
+  "slots": [
+    { "id": "hook", "seconds": 2.5, "count": 1, "prefer": { "hookWorthy": true, "heroWorthy": true, "stages": ["hero", "plating", "eating"], "shotTypes": ["close_up", "extreme_close_up"], "minQuality": 4 }, "sameRecipe": true, "caption": "{{hook}}" },
+    { "id": "ingredients", "seconds": 4, "count": 2, "prefer": { "stages": ["ingredients", "prep"], "shotTypes": ["overhead", "close_up"] }, "diversify": "ingredients", "sameRecipe": true, "caption": "{{ingredients}}" },
+    { "id": "cook", "seconds": 15, "count": 6, "prefer": { "stages": ["cooking", "prep"], "minMotion": 0.6 }, "diversify": "actions", "caption": "{{step}}" },
+    { "id": "plating", "seconds": 4, "count": 2, "prefer": { "stages": ["plating"], "shotTypes": ["overhead", "close_up"] }, "sameRecipe": true, "caption": "{{step}}" },
+    { "id": "cta", "seconds": 4.5, "count": 1, "prefer": { "heroWorthy": true, "stages": ["hero", "serving", "eating"] }, "sameRecipe": true, "caption": "{{cta}}" }
+  ]
+}
