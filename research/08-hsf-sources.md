@@ -171,3 +171,86 @@ Every URL behind `06-healthcare-saas-fintech.md`, grouped the way the list is gr
 **Tier 2's weakest four rows are exactly that.** Lumanity, Nucleus Holdings, Bioscript Group and Aptitude Health appear in 2026 agency roundups and nothing more. They are on the list because the category is right, not because anything specific was found. Graded Weak for that reason.
 
 **Compliance, unchanged from `05-email-campaign.md`.** Germany and Austria are opt-in jurisdictions, so fino data services and Enzo should be approached on LinkedIn rather than by email. Turn off open and click tracking for UK and EU recipients. Never fake a `Re:` in a subject line.
+
+---
+
+# Additional sources: named executives
+
+Added 18 September 2026, for `09-executive-target-list.md` and `10-executive-outreach.md`. Every executive name in those two documents traces to one of these. Names are as published in the source; nobody's profile was opened, so confirm the person is still in the seat before writing.
+
+## Founders and CEOs of recently funded companies
+
+- **Nitesh Shroff**, Arintra co-founder and CEO, $25m Series B: https://www.fiercehealthcare.com/finance/arintra-banks-25m-series-b-funding-round-ai-driven-revenue-assurance-platform
+- Arintra, company press release with total funding and investor list: https://www.arintra.com/resources/press-release/arintra-banks-25m-series-b-funding-round-for-ai-driven-revenue-assurance-platform
+- Arintra, PR Newswire release: http://www.prnewswire.com/news-releases/arintra-raises-25m-to-pioneer-revenue-assurance-for-americas-health-systems-302860106.html
+- **Lukas Saari** (CEO), **Oliver Astrand** (CTO), **Oscar Boldt-Christmas** (CCO), Tandem Health $100m Series B: https://tech.eu/2026/09/14/swedish-healthtech-tandem-health-scores-100m-series-b-led-by-eus-eur5bn-tech-startup-fund
+- Tandem Health, EUR 86.5m figure and investor list: https://www.eu-startups.com/2026/09/stockholms-tandem-health-raises-e86-5-million-to-build-an-ai-native-operating-system-for-european-healthcare
+- Tandem Health, product scope beyond transcription: https://thenextweb.com/news/tandem-health-100m-series-b-scaleup-europe-fund
+- **Dr. Sohum Patel** (CEO) and **Mattijs De Paepe** (CTO), Penelope Health EUR 87m, plus the 200 million patients and 15,000 codes figures: https://www.eu-startups.com/2026/09/with-200-million-patients-covered-penelope-health-secures-e87-million-in-funding
+- Penelope Health, Thoreau partnership: https://www.01net.it/penelope-health-announces-partnership-with-thoreau-to-accelerate-its-platform-for-real-time-policy-intelligence/
+- **Eran Barak**, MIND co-founder and CEO, $72m Series B, plus the Hexadite and Microsoft history: https://www.bankinfosecurity.com/mind-raises-72m-to-rebuild-dlp-around-ai-agents-a-32860
+- MIND, company release: https://www.prnewswire.com/news-releases/mind-raises-72m-series-b-funding-to-bring-complete-dlp-to-the-ai-era-302881118.html
+- MIND, Seattle base and 17 September date: https://siliconangle.com/2026/09/17/mind-raises-72m-to-stop-sensitive-data-leaking-into-ai-tools/
+- **Gabriel Weiss** (CEO) and **Jonathan York**, Luzern Risk $45m Series B led by Insight Partners: https://fintech.global/2026/09/18/luzern-risk-raises-45m-series-b-led-by-insight-partners/
+- Luzern Risk, 17 September date and captive platform detail: https://www.theinsurer.com/ti/news/captive-platform-luzern-risk-raises-45-million-in-insight-partners-led-series-b-2026-09-17/
+- **Dr. Dustin Freckleton**, Happy Health founder and CEO, $75m Series A: https://finance.yahoo.com/video/happy-health-ceo-dr-dustin-142314339.html
+- Happy Health, ARCH Venture Partners and OpenLoop, sleep apnea focus: https://www.fiercehealthcare.com/finance/happy-health-secures-75m-ai-driven-home-based-care-platform
+- Happy Health, co-founder list: https://dealroom.co/news/145590-happy-health-lands-75m-series-a-to-move-care-into-the-home-starting-with/
+- **Alice Liu** (founder and CEO) and **Band Zhao** (chairman), dtcpay Series A extended to $25m with SBI Group: https://www.theblock.co/news/business/2026-09-18-dtcpay-series-a-sbi-group-415483
+- dtcpay, Vertex Ventures first tranche and enterprise portal detail: https://fintech.global/2026/09/18/dtcpay-grows-series-a-to-25m-with-sbi-group-backing/
+- dtcpay, stablecoin and fiat swap engine detail: https://www.crowdfundinsider.com/2026/09/311059-singapore-based-stablecoin-payments-firm-dtcpay-reports-series-a-funding/
+- **Juan Pablo Ortega**, Yuno co-founder and CEO, plus **Edwin Poot** as CTO, $45m Series B: https://fintech.global/2026/08/12/yuno-raises-45m-series-b-to-scale-payments-os/
+- Yuno, company newsroom release: https://y.uno/en/newsroom/yuno-series-b
+- Yuno, full investor list and AI-native positioning: https://www.globenewswire.com/news-release/2026/08/12/3343819/0/en/yuno-raises-45-million-series-b-to-scale-the-ai-native-operating-system-of-global-payments-and-financial-services.html
+- **Nicolas Kopp** (co-founder and CEO) and **Stelios Modes** (co-founder and CTO), Rillet $100m Series C, plus the "operating layer for what happens next" quote: https://www.crowdfundinsider.com/2026/08/300472-ai-erp-platform-rillet-reports-100m-series-c-funding-round/
+- Rillet, the "give CFOs back their weekends" quote: https://fortune.com/2026/08/18/rillet-unicorn-1-billion-valuation-series-c-nicolas-kopp-accounting-ai/
+- Rillet, 48-hour raise and ICONIQ lead: https://techcrunch.com/2026/08/21/how-ai-accounting-startup-rillet-raised-100m-and-became-a-unicorn-in-48-hours/
+- **Ritik Malhotra**, Savvy Wealth founder and CEO, $100m Series C led by Halo Fund: https://www.finsmes.com/2026/09/savvy-wealth-raises-100m-in-series-c-funding.html
+- Savvy Wealth, 9 September date and Halo Fund detail: https://www.axios.com/pro/fintech-deals/2026/09/09/savvy-wealth-100m-series-c-halo-fund
+- Savvy Wealth, $600m valuation: https://finance.yahoo.com/technology/ai/articles/savvy-wealth-raises-100m-valuation-120000608.html
+- **Amiram Shachar**, Upwind co-founder and CEO, plus the Spot.io sale to NetApp: https://techcrunch.com/2026/01/29/upwind-raises-250m-at-1-5b-valuation-to-continue-building-runtime-cloud-security
+- Upwind, 900% revenue growth and named customers: https://siliconangle.com/2026/01/26/cloud-security-startup-upwind-raises-250m-funding-round/
+- Upwind, Bessemer lead and $1.5bn valuation: https://www.businesswire.com/news/home/20260126965572/en/Cloud-Security-Unicorn-Upwind-Secures-$250-Million-Series-B
+- **Geoffrey von Maltzahn**, Lila Sciences CEO: https://www.bioxconomy.com/investment/lila-lands-235m-to-accelerate-ai-driven-research
+- Lila Sciences, Series A total reaching $350m with Nvidia backing: https://www.fiercebiotech.com/biotech/lila-sciences-adds-115m-series-bringing-total-haul-350m-and-securing-backing-nvidia
+- Lila Sciences, own announcement: https://www.lila.ai/news/announcing-the-close-of-our-series-a
+- **Hosam Arab**, Tabby co-founder and CEO, $233m at $6.5bn: https://fintech.global/2026/09/14/tabby-raises-233m-at-6-5bn-valuation/
+- Tabby, Blue Pool Capital lead and the move beyond BNPL: https://www.crowdfundinsider.com/2026/09/310324-saudi-fintech-firm-tabby-reports-233m-funding-round-at-6-5b-valuation-as-it-moves-beyond-bnpl/
+- **Chift** EUR 10.5m Series A and tenfold revenue growth: https://www.eu-startups.com/2026/09/brussels-based-chift-raises-e10-5-million-series-a-to-become-europes-financial-connectivity-layer
+- **Qupital** and **Fortaegis**, named in 14 September 2026 funding news: https://techstartups.com/2026/09/14/startup-funding-news-today-september-14-2026-chift-qupital-tandem-health-fortaegis-more/
+- European weekly context, EUR 3.9bn across 70+ deals with healthtech at EUR 115.1m: https://tech.eu/2026/09/14/european-tech-weekly-recap-over-eur39b-invested-across-70-deals
+
+## Executives quoted in rebrand announcements
+
+- **Arsen Liametov**, Skyro co-founder and co-CEO, with the "next chapter" quote, the 7 million users, $200m credit portfolio and H1 2026 break-even figures: https://www.manilatimes.net/2026/09/15/tmt-newswire/media-outreach-newswire/skyro-unveils-refreshed-visual-identity-as-it-builds-a-global-financial-ecosystem/2425104
+- Skyro, shift beyond consumer lending: https://newsbytes.ph/2026/09/16/skyro-rebrands-as-it-expands-beyond-consumer-lending/
+- **Rachel Broghammer** (Marketing Director, quoted in the rebrand) and **James Fitter** (CEO), Oneview Healthcare: https://www.oneviewhealthcare.com/news/healthcare-brand-identity-rebrand/
+- Oneview Healthcare leadership team: https://www.oneviewhealthcare.com/leadership-team/
+- Oneview, Ovie digital care assistant launch, February 2026: https://www.businesswire.com/news/home/20260223585045/en/Oneview-Advances-Intelligent-Care-Delivery-with-Ovie-A-Unified-Digital-Care-Assistant-Built-for-Modern-Hospital-Operations
+- **Summer Nilson** (Creative Director of Marketing) and **Srinivas (Sri) Velamoor** (President and CEO), NextGen Healthcare rebrand, 13 April 2026: https://www.businesswire.com/news/home/20260413282730/en/NextGen-Healthcare-Launches-Bold-Platform-Future-with-New-Brand-Identity
+- NextGen Healthcare, company newsroom version: https://www.nextgen.com/company/newsroom/press-release/nextgen-healthcare-launches-bold-platform-future-with-new-brand-identity
+- **Eden Ovadia** (co-founder and CEO) and **Victoria Toli** (co-founder and president), FINNY, plus the Little Plains agency credit and the Ovadia quote on the refresh: https://www.martechcube.com/finny-refreshes-brand-identity-echoes-mission-to-modernize-advisor-growth/
+- FINNY, Hunter AI agent launch, April 2026: https://www.morningstar.com/news/business-wire/20260414451772/finny-debuts-hunter-new-ai-agent-that-thinks-guides-and-acts-as-chief-growth-officer-for-advisors
+- FINNY, $17m Series A and investor list: https://www.forbes.com/sites/martinacastellanos/2025/12/18/finny-raises-17-million-as-it-seeks-to-upend-advisor-prospecting-with-artificial-intelligence/
+
+## Private equity, buyouts and revenue executives
+
+- **Andy Brownsell** (CEO), **Peter Thompson** (Chair, formerly CEO of BGL Group) and founder **Julian Hucks** stepping back, Starpeak management buyout backed by August Equity: https://www.theinsurer.com/ti/news/uk-mga-starpeak-receives-august-equity-backing-for-mbo-2026-07-09/
+- Starpeak, own announcement: https://www.starpeakuk.com/news/starpeak-secures-investment-from-august-equity/
+- Starpeak, August Equity's announcement: https://www.augustequity.com/news-insights/august-backs-specialist-digital-insurance-platform-to-accelerate-growth/
+- **Mike Volanoski**, Chief Revenue Officer at Q2 Holdings: https://www.businesswire.com/news/home/20210607005101/en/Q2-Appoints-New-Chief-Revenue-Officer
+- **Joel Pearson**, Chief Revenue Officer at Financial Information Technologies, appointed July 2026: https://fintech.com/our-team
+
+## Deliberately excluded, with the source that excluded them
+
+- **Linda Yaccarino** as eMed CEO, $200m Series A at a $2bn valuation, with Tom Brady as founding Chief Wellness Officer: https://www.fiercehealthcare.com/health-tech/employer-telehealth-company-emed-raises-200m-2b-valuation
+- eMed, Yaccarino's background and the GLP-1 adherence claim: https://pitchbook.com/news/articles/linda-yaccarinos-glp-1-telehealth-unicorn-raises-200m-on-adherence-claim-that-bucks-industry-norm
+- Mistral EUR 3bn Series D, Upwind, Cylake, Savvy Wealth, Celligence and Payward all in one week: https://fintech.global/2026/09/11/more-than-4-5bn-raised-across-18-fintech-deals/
+
+## Note on the two executive documents
+
+Two further limitations specific to `09-executive-target-list.md` and `10-executive-outreach.md`:
+
+**One source, one name.** Each executive name rests on a single publication. None was cross-checked against a company leadership page or a filing, with the exception of Oneview Healthcare, where the rebrand release and the leadership page agree.
+
+**Q2 Holdings is the weakest row in either document.** Mike Volanoski's appointment as CRO surfaced through a Business Wire release with a 2021 URL path. The appointment is real but the date is not established, so treat the "new CRO" framing in message 219 as unverified and check his tenure before sending. Every other executive row rests on a 2026-dated source.

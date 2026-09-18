@@ -2,6 +2,7 @@
 
 **Round one:** 18 August 2026, 100 prospects across 7 segments, plus your supplied 105-company list.
 **Round two:** 18 September 2026, 82 prospects in healthcare, SaaS and fintech. Rows 101 to 182.
+**Round three:** 18 September 2026, re-aimed at named executives instead of job postings. 38 companies and 3 events, rows 183 to 223.
 
 **For:** LinkedIn-first outreach, email second.
 
@@ -29,6 +30,17 @@
 | **[07-hsf-outreach-messages.md](07-hsf-outreach-messages.md)** | 26 message sets for the strongest rows. Split in two: 12 applications to live postings, and 14 cold LinkedIn notes each under 300 characters. Includes the three-week sending order. |
 | **[prospects-hsf.csv](prospects-hsf.csv)** | The same 82 rows, CRM-ready, with tier, sector, trigger, what to sell, contact route and evidence grade. |
 | **[08-hsf-sources.md](08-hsf-sources.md)** | All 125 source URLs for round two, grouped the same way the list is, plus the research limitations stated plainly. |
+
+### Round three, added 18 September 2026
+
+**Start here if you are pitching, not applying.** Round two sorted prospects by live job postings, which routes you into a hiring pipeline as a candidate. This round targets companies with a business event that created a problem an executive personally owns, and names that executive.
+
+| File | What it's for |
+|---|---|
+| **[09-executive-target-list.md](09-executive-target-list.md)** | 38 companies and 3 events, rows 183 to 223, in six sections by trending signal. Includes a table for deciding which seat to pitch based on company stage, a named do-not-bother list, and 20 named executives. |
+| **[10-executive-outreach.md](10-executive-outreach.md)** | 19 messages addressed to named founders, CEOs, CMOs and CROs. Connection notes under 300 characters plus a day-+4 follow-up that introduces a new idea rather than repeating the first. Includes a four-week working order. |
+| **[executive-targets.csv](executive-targets.csv)** | The same 41 rows, CRM-ready, with section, trigger, who to pitch, what they personally own, what to sell, and an odds grade. |
+| `08-hsf-sources.md` | Extended with every source behind the executive names, plus two limitations specific to round three. |
 
 ---
 
@@ -80,6 +92,35 @@ That spread is not about skill. It is about who is buying. The agency roster pay
 
 ---
 
+## Round three: what changed, and why it matters more than the list
+
+Round two used live freelance job postings as its evidence. That was the wrong instrument. A posting puts you in a queue of applicants being compared on rate and availability, which is the opposite of what you want when the plan is to pitch executives.
+
+So round three keeps the company research and throws away the routing. Three rules follow from that:
+
+1. **Never mention a job posting.** Even where one exists and you know about it. It is private intelligence that the company buys outside design. Saying it out loud turns a supplier into an applicant.
+2. **The agency rows are excluded.** Med comms agencies and design studios are a white-label roster play, not an executive pitch. They are still real revenue and still in `06-healthcare-saas-fintech.md`, Tier 2. Do not mix the motions.
+3. **Which seat you pitch is decided by company stage.** Seed and Series A means the founder, because there is no marketing department and the founder still writes the decks. Series B to C means the CMO. Series C and later means the CRO or Head of IR, because brand is already staffed and the gap moved to sales and investor collateral. Mid-rebrand means whoever is quoted in the announcement, because their name is publicly attached to the rollout.
+
+The shortest version: **the smaller the company, the higher up you go.**
+
+| Section | The signal | Rows | Why |
+|---|---|---:|---|
+| **A** | Raised recently, founder still owns the story | 21 | Best odds anywhere. Cash, a board that now wants quarterly decks, a sales motion starting from zero, and no brand hire yet. They answer their own messages. |
+| **B** | Rebrand or repositioning in flight | 7 | The least pitched signal in this business. The launch is the press release; the eighteen months of stale collateral is the work, and nobody budgets for it. |
+| **C** | Product launch or new market | 7 | Brand exists, but a new product or country arrives with collateral nobody scoped. |
+| **D** | Private equity backed or post buyout | 1 | New owners arrive with a mandate to look like a bigger company, and it lands on the CEO in year one. |
+| **E** | Named revenue executive | 2 | A CRO does not care about brand. They care that every rep built their own deck and deals die at the same slide. |
+| **F** | Sector events, sponsor side | 3 | Do not pitch HLTH. Pitch the 950 companies buying booths at it. |
+
+Odds: **15 Good, 23 Fair, 3 Long.** 20 of the 38 company rows carry a named executive.
+
+### What the executive messages deliberately leave out
+
+No rate, no availability, no portfolio link, and no description of your services. An executive has decided nothing, so sending them rate and availability is like handing a CFO your CV when they asked about their margin. What replaces all of it is one observation about their business, specific enough that it could not have been sent to anyone else, and a question they can answer in four seconds.
+
+---
+
 ## Honest caveats — read before you send
 
 - **Job postings expire.** Segment A triggers were live as of 10–18 Aug 2026. Re-check the posting is still up (or recently filled) before you reference it. If it's filled, the angle flips to *"you've got someone in-house now — I'm useful for overflow and peak pursuit weeks."*
@@ -94,3 +135,11 @@ That spread is not about skill. It is about who is buying. The agency roster pay
 - **No email address appears in round two at all,** and none was constructed from a pattern. Same rule as round one, same reason.
 - **Asia Pacific and Latin America are thin,** two Singapore rows, one Philippines, one Colombia, one India. That reflects one day of English-language search, not the size of those markets.
 - **Healthcare payers and provider systems are barely covered.** One academic medical center, found through a recruiter. Payers buy a large amount of member-facing and broker-facing design and were not researched.
+
+### Round three, additional caveats
+
+- **Every executive name came from a press release, a funding announcement or a company newsroom.** No LinkedIn profile was opened, because the egress proxy blocks it. Names are as published, and executives move, so confirm the person is still in the seat before writing.
+- **One source per name.** None was cross-checked against a leadership page or a filing, except Oneview Healthcare where the rebrand release and the leadership page agree.
+- **Row 219, Q2 Holdings, is the weakest in either executive document.** Mike Volanoski's CRO appointment surfaced through a release with a 2021 URL path, so the "new CRO" framing in message 219 is unverified. Check his tenure first. Every other executive row rests on a 2026-dated source.
+- **18 of the 38 company rows still need a name.** Funding press releases name CEOs reliably, so that is roughly five minutes per company, and a named message beats an unnamed one by a margin that dwarfs everything else in these documents.
+- **Asia Pacific, Latin America and the Gulf appear once each.** Competition for specialist deck work is far lower in those markets than in the US, which makes this the most valuable gap to close.
