@@ -79,6 +79,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build backend image
-        run: docker build ./globex-customer-intelligence/backend
+        run: docker build ./backend
       - name: Build frontend image
-        run: docker build ./globex-customer-intelligence/frontend
+        run: docker build ./frontend
