@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Data, models, experiment tracking (durable stores live outside git)
+backend/data/raw/*
+!backend/data/raw/.gitkeep
+backend/data/processed/
+backend/models/
+backend/mlruns/
+backend/mlartifacts/
+backend/reports/*.csv
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+
+# Notebook checkpoints
+.ipynb_checkpoints/
