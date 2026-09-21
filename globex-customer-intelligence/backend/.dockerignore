@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.env
+data/raw/*
+models/
+mlruns/
+mlartifacts/
+notebooks/.ipynb_checkpoints/
+reports/*.csv

@@ -1,0 +1,85 @@
+# Local execution: database, API and web UI, with durable volumes for data, models and MLflow.
+#
+#   cp .env.example .env
+#   docker compose up -d --build
+#   docker compose run --rm api gci download            # or copy the workbook to ./backend/data/raw
+#   docker compose run --rm api gci run-all /data/raw/online_retail_II.xlsx
+#   open http://localhost:8080
+#
+# Expensive jobs (import, training, scoring) run as one-off `docker compose run` commands, never
+# from web requests.
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-gci}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-gci}
+      POSTGRES_DB: ${POSTGRES_DB:-gci}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-gci} -d ${POSTGRES_DB:-gci}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    ports:
+      - "127.0.0.1:5432:5432"
+
+  migrate:
+    build: ./backend
+    command: ["alembic", "upgrade", "head"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-gci}:${POSTGRES_PASSWORD:-gci}@db:5432/${POSTGRES_DB:-gci}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-gci}:${POSTGRES_PASSWORD:-gci}@db:5432/${POSTGRES_DB:-gci}
+      MODEL_STORE_DIR: /data/models
+      MLFLOW_TRACKING_URI: /data/mlruns
+      MLFLOW_EXPERIMENT_NAME: ${MLFLOW_EXPERIMENT_NAME:-globex-customer-intelligence}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080,http://localhost:5173}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - model-store:/data/models
+      - mlflow-store:/data/mlruns
+      - ./backend/data/raw:/data/raw
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  web:
+    build: ./frontend
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:8080:80"
+
+  # Optional MLflow UI over the same file store the pipeline writes to:
+  #   docker compose --profile mlflow up mlflow   -> http://localhost:5000
+  mlflow:
+    profiles: ["mlflow"]
+    build: ./backend
+    command: ["mlflow", "ui", "--backend-store-uri", "/data/mlruns", "--host", "0.0.0.0", "--port", "5000"]
+    volumes:
+      - mlflow-store:/data/mlruns
+    ports:
+      - "127.0.0.1:5000:5000"
+
+volumes:
+  pgdata:
+  model-store:
+  mlflow-store:

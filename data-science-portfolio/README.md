@@ -4,6 +4,8 @@ Eight lightweight, real-data projects that together cover **every skill in the t
 
 Build them in order. Each one reuses the setup of the one before, and every project ends as something deployable, not a notebook.
 
+**Already built:** P1 and P2 are realised together as the [Globex Customer Intelligence](../globex-customer-intelligence/README.md) application (SQL warehouse, RFM segmentation, 30-day repeat-purchase and spending models, FastAPI + React, Docker, tests, notebooks).
+
 ---
 
 ## Contents
