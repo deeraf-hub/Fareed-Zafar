@@ -134,6 +134,17 @@ The destination stays WhatsApp either way — these are just different ways to r
 
 ---
 
+## Browser automation in Claude Code (Playwright MCP)
+
+This repo registers the [Playwright MCP](https://github.com/microsoft/playwright-mcp) server, so every Claude Code session on it — including Claude Code on the web — gets browser tools (open pages, click, fill forms, take screenshots).
+
+- Added with `claude mcp add --scope project playwright -- node scripts/playwright-mcp.js`, which writes `.mcp.json`; `.claude/settings.json` pre-approves it.
+- `scripts/playwright-mcp.js` runs `npx @playwright/mcp@latest`. In the web sandbox it switches to the pre-installed headless Chromium and trusts the sandbox's HTTPS proxy certificate.
+- MCP servers load when a session starts — open a new session to pick it up.
+- On the web, the browser reaches only `localhost` and the sites your environment's network access allows. To browse any site, set network access to **Full** (or **Custom** with the domains you need) in the environment settings.
+
+---
+
 ## Project layout
 
 ```
@@ -146,5 +157,7 @@ src/
   config.js           Environment configuration
 scripts/
   check-whatsapp.js   Credential check: sends a test WhatsApp message (npm run test:whatsapp)
+  playwright-mcp.js   Starts the Playwright MCP server (browser tools) for Claude Code
 test/                 Unit tests (npm test)
+.mcp.json             Claude Code MCP servers for this repo (Playwright)
 ```
