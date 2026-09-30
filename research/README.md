@@ -3,6 +3,7 @@
 **Round one:** 18 August 2026, 100 prospects across 7 segments, plus your supplied 105-company list.
 **Round two:** 18 September 2026, 82 prospects in healthcare, SaaS and fintech. Rows 101 to 182.
 **Round three:** 18 September 2026, re-aimed at named executives instead of job postings. 38 companies and 3 events, rows 183 to 223.
+**Round four:** 30 September 2026, a LinkedIn list of 51 named executives, mostly healthcare, each with a verified profile URL and the date of their latest post. Rows 224 to 274.
 
 **For:** LinkedIn-first outreach, email second.
 
@@ -41,6 +42,16 @@
 | **[10-executive-outreach.md](10-executive-outreach.md)** | 19 messages addressed to named founders, CEOs, CMOs and CROs. Connection notes under 300 characters plus a day-+4 follow-up that introduces a new idea rather than repeating the first. Includes a four-week working order. |
 | **[executive-targets.csv](executive-targets.csv)** | The same 41 rows, CRM-ready, with section, trigger, who to pitch, what they personally own, what to sell, and an odds grade. |
 | `08-hsf-sources.md` | Extended with every source behind the executive names, plus two limitations specific to round three. |
+
+### Round four, added 30 September 2026
+
+**Start here if you are working LinkedIn.** Every person has a LinkedIn URL taken from search results, not guessed, and the date of their most recent post, decoded from the post's ID. That date tells you whether a DM will be read.
+
+| File | What it's for |
+|---|---|
+| **[11-linkedin-executive-list.md](11-linkedin-executive-list.md)** | 51 executives, rows 224 to 274. 38 healthcare CEOs in three sections by how recently they raised, 5 CEOs from SaaS, AI and fintech who raised in September, and 8 senior leaders who are the better door at the bigger companies. Includes a namesake table so you message the right profile. |
+| **[linkedin-executives.csv](linkedin-executives.csv)** | The same 51 rows, CRM-ready, with trigger date, last-post date, LinkedIn URL and how to reach each one. |
+| **[12-linkedin-sources.md](12-linkedin-sources.md)** | The post behind every last-post date, how the date is decoded, the funding sources, and the limits of the method. |
 
 ---
 
