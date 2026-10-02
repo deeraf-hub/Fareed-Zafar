@@ -1,0 +1,37 @@
+{
+  "about": "Replies inside an open P1 water-leak case. vendor → accepted | declined | on_site | mitigated | completed | delayed. neighbor (the unit above, asked to check for water) → no_leak | leak_found | possible_leak. resident (asked 'is water still coming in? 1 = stopped, 2 = still coming in') → stopped | still_leaking | thanks | forward (a person should see it) | log (nothing to act on).",
+  "cases": [
+    { "id": "v01", "kind": "vendor", "digits": "1", "expected": "accepted" },
+    { "id": "v02", "kind": "vendor", "digits": "2", "expected": "declined" },
+    { "id": "v03", "kind": "vendor", "text": "Yes we can take it, ETA 40 min", "expected": "accepted" },
+    { "id": "v04", "kind": "vendor", "text": "on my way, 25 minutes", "expected": "accepted" },
+    { "id": "v05", "kind": "vendor", "text": "Sorry can't tonight, all techs are out", "expected": "declined" },
+    { "id": "v06", "kind": "vendor", "text": "On site now", "expected": "on_site" },
+    { "id": "v07", "kind": "vendor", "text": "Arrived, heading up to the unit", "expected": "on_site" },
+    { "id": "v08", "kind": "vendor", "text": "Water is shut off and the leak is stopped. Burst supply line under the 3B vanity. Replaced the line. Drywall in 2B needs to be cut out and replaced, estimate $1,150.", "expected": "mitigated" },
+    { "id": "v09", "kind": "vendor", "text": "All done, replaced the wax ring on the toilet, no further work needed", "expected": "completed" },
+    { "id": "v10", "kind": "vendor", "text": "Running about 30 min behind, still coming", "expected": "delayed" },
+    { "id": "v11", "kind": "vendor", "text": "we're not able to get there until tomorrow morning, is that ok?", "expected": "declined", "why": "for a P1, 'tomorrow' is a decline — the ladder must move on" },
+    { "id": "v12", "kind": "vendor", "text": "Capped the line, leak is stopped for now. Will need to come back to replace the valve.", "expected": "mitigated" },
+
+    { "id": "n01", "kind": "neighbor", "text": "No leak here, everything is dry", "expected": "no_leak" },
+    { "id": "n02", "kind": "neighbor", "text": "Checked under the sinks and around the toilet, nothing", "expected": "no_leak" },
+    { "id": "n03", "kind": "neighbor", "text": "Yes there's water on the bathroom floor!", "expected": "leak_found" },
+    { "id": "n04", "kind": "neighbor", "text": "Found a puddle under the water heater", "expected": "leak_found" },
+    { "id": "n05", "kind": "neighbor", "text": "Hmm, the floor by my bathroom vanity feels a little damp? Not sure if that's new.", "expected": "possible_leak" },
+    { "id": "n06", "kind": "neighbor", "text": "I think the cabinet under the sink might be wet but I'm not home until tomorrow", "expected": "possible_leak" },
+    { "id": "n07", "kind": "neighbor", "text": "all good up here", "expected": "no_leak" },
+    { "id": "n08", "kind": "neighbor", "text": "there's a little water around the base of the toilet, maybe from my shower earlier?", "expected": "possible_leak" },
+
+    { "id": "r01", "kind": "resident", "text": "1", "expected": "stopped" },
+    { "id": "r02", "kind": "resident", "text": "2", "expected": "still_leaking" },
+    { "id": "r03", "kind": "resident", "text": "It stopped, thank you!", "expected": "stopped" },
+    { "id": "r04", "kind": "resident", "text": "still coming in, it's getting worse", "expected": "still_leaking" },
+    { "id": "r05", "kind": "resident", "text": "thanks!", "expected": "thanks" },
+    { "id": "r06", "kind": "resident", "text": "not sure, the carpet still feels wet", "expected": "forward", "why": "hedged — a person decides whether it's still leaking" },
+    { "id": "r07", "kind": "resident", "text": "Can someone call me? I need to talk to a person", "expected": "forward" },
+    { "id": "r08", "kind": "resident", "text": "Will I need to move out while they fix the ceiling?", "expected": "forward" },
+    { "id": "r09", "kind": "resident", "text": "ok", "expected": "thanks" },
+    { "id": "r10", "kind": "resident", "text": "Also the bathroom fan isn't working, unrelated", "expected": "forward", "why": "a new issue a person should see" }
+  ]
+}

@@ -1,0 +1,194 @@
+{
+  "name": "Mortar · On-call rota (sheet) → /directory/sync",
+  "nodes": [
+    {
+      "id": "d5e4982e-e538-43b6-a6de-cceab87b4fcc",
+      "name": "About this workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -340
+      ],
+      "parameters": {
+        "content": "## On-call rota → Mortar\nOps keeps the escalation ladder in a spreadsheet (columns: `rota` = after_hours | business_hours, `level` = 1, 2, 3…, `staff_id` = Mortar party id). Publish that tab as CSV (File → Share → Publish to web) and set `ONCALL_SHEET_CSV_URL`.\n\nEvery 15 minutes the ladder is rebuilt and synced. A rota with a missing level fails loudly instead of silently paging nobody.\n\nEvery request to Mortar is signed: the Code node builds the exact JSON string, the Crypto node signs that string (HMAC-SHA256, MORTAR_WEBHOOK_SECRET), and the HTTP node sends the same string as the raw body with `X-Mortar-Signature: sha256=<hex>`. Mortar rejects anything else with 401 and dedupes redeliveries by id.\n\nNeeds n8n env vars: `MORTAR_URL`, `MORTAR_WEBHOOK_SECRET` (and `N8N_BLOCK_ENV_ACCESS_IN_NODE=false`).",
+        "width": 420,
+        "height": 340,
+        "color": 7
+      }
+    },
+    {
+      "id": "3d7a29c1-1e7b-49bc-a287-c8794308b2e3",
+      "name": "Every 15 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "1ec352a2-f46e-42fe-a462-9eaffa070978",
+      "name": "Rota sheet (CSV)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.ONCALL_SHEET_CSV_URL }}",
+        "options": {
+          "timeout": 10000,
+          "response": {
+            "response": {
+              "responseFormat": "text",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "312428c8-ee14-420c-a95a-eef19baa8084",
+      "name": "Build on-call ladder",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// CSV rows (rota, level, staff_id) → { oncall: { afterHours: [ids…], businessHours: [ids…] } }.\nconst csv = String($input.first().json.data ?? '').trim();\nconst [header, ...lines] = csv.split(/\\r?\\n/).map((l) => l.split(',').map((c) => c.trim().replace(/^\"|\"$/g, '')));\nconst col = (name) => header.indexOf(name);\nconst ladders = { after_hours: [], business_hours: [] };\nfor (const cells of lines) {\n  const rota = cells[col('rota')];\n  const level = Number(cells[col('level')]);\n  const staffId = cells[col('staff_id')];\n  if (!ladders[rota] || !staffId || !Number.isInteger(level)) continue;\n  ladders[rota][level - 1] = staffId;\n}\nfor (const [rota, ids] of Object.entries(ladders)) {\n  // [...ids] turns holes (a missing level) into undefined — .some() alone would skip them\n  if (!ids.length || [...ids].some((id) => !id)) throw new Error(`On-call rota \"${rota}\" is empty or has a gap — refusing to sync`);\n}\nconst payload = { oncall: { afterHours: ladders.after_hours, businessHours: ladders.business_hours } };\nreturn [{ json: { payload: JSON.stringify(payload) } }];"
+      }
+    },
+    {
+      "id": "a5643962-9c2e-4fd3-a68e-b6c117ca1dee",
+      "name": "Sign (HMAC-SHA256)",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        720,
+        0
+      ],
+      "parameters": {
+        "action": "hmac",
+        "type": "SHA256",
+        "value": "={{ $json.payload }}",
+        "dataPropertyName": "signature",
+        "secret": "={{ $env.MORTAR_WEBHOOK_SECRET }}",
+        "encoding": "hex"
+      }
+    },
+    {
+      "id": "cffc6fa8-f928-4e2d-af23-e4df7c82d559",
+      "name": "POST /directory/sync",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.MORTAR_URL }}/directory/sync",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Mortar-Signature",
+              "value": "=sha256={{ $json.signature }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.payload }}",
+        "options": {
+          "timeout": 10000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every 15 minutes": {
+      "main": [
+        [
+          {
+            "node": "Rota sheet (CSV)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rota sheet (CSV)": {
+      "main": [
+        [
+          {
+            "node": "Build on-call ladder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build on-call ladder": {
+      "main": [
+        [
+          {
+            "node": "Sign (HMAC-SHA256)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sign (HMAC-SHA256)": {
+      "main": [
+        [
+          {
+            "node": "POST /directory/sync",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Chicago",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "none"
+  },
+  "pinData": {},
+  "meta": {
+    "description": "Ops edits the on-call ladder in a spreadsheet; Mortar's escalation ladder follows within 15 minutes."
+  },
+  "tags": [
+    {
+      "name": "mortar"
+    }
+  ]
+}

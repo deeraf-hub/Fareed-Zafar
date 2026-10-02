@@ -1,0 +1,15 @@
+{
+  "source": "Demo stand-in for a contact-enrichment provider (skip-trace / people-data API). Fictional.",
+  "costPerLookupUsd": 0.15,
+  "contacts": {
+    "rec-1001": { "email": "priya.raman@example.com", "phone": "+12065550147", "title": "Senior Software Engineer", "confidence": 0.93 },
+    "rec-1002": { "email": "linda.becker@example.com", "phone": "+17205550188", "title": "Retired teacher", "confidence": 0.88 },
+    "rec-1003": { "email": "mei.chen@example.com", "phone": "+14085550132", "title": "Product Manager", "confidence": 0.9 },
+    "rec-1004": { "email": "sofia.alvarez@example.com", "phone": "+12105550174", "title": "Nurse practitioner", "confidence": 0.81 },
+    "rec-1005": { "email": "hassan.farouk@example.com", "phone": "+12145550119", "title": "Small-business owner", "confidence": 0.77 },
+    "rec-1006": { "email": "beth.kowalski@example.com", "phone": null, "title": null, "confidence": 0.62 },
+    "rec-1007": { "email": "olivia.turner@example.com", "phone": "+15125550170", "title": "Graphic designer", "confidence": 0.85 },
+    "rec-1008": { "email": null, "phone": "+17135550165", "title": null, "confidence": 0.55 },
+    "rec-1012": { "email": "natalie.brooks@example.com", "phone": "+16025550181", "title": "Travel nurse", "confidence": 0.86 }
+  }
+}

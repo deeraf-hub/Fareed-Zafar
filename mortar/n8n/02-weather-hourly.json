@@ -1,0 +1,201 @@
+{
+  "name": "Mortar · Hourly weather → /directory/sync",
+  "nodes": [
+    {
+      "id": "7fe444bf-90bf-472c-a72d-0db7e2f6b64a",
+      "name": "About this workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -320
+      ],
+      "parameters": {
+        "content": "## Hourly weather → Mortar\nThe emergency SOP makes no heat P1 at or below 40°F and no AC P1 at or above 95°F. Mortar applies that by rule; this workflow keeps the outside temperature fresh (Mortar ignores readings older than 3 hours, so a broken feed can never set severity).\n\nSource: National Weather Service, station KAUS (Austin-Bergstrom). No API key; NWS asks for a descriptive User-Agent.\n\nEvery request to Mortar is signed: the Code node builds the exact JSON string, the Crypto node signs that string (HMAC-SHA256, MORTAR_WEBHOOK_SECRET), and the HTTP node sends the same string as the raw body with `X-Mortar-Signature: sha256=<hex>`. Mortar rejects anything else with 401 and dedupes redeliveries by id.\n\nNeeds n8n env vars: `MORTAR_URL`, `MORTAR_WEBHOOK_SECRET` (and `N8N_BLOCK_ENV_ACCESS_IN_NODE=false`).",
+        "width": 420,
+        "height": 320,
+        "color": 7
+      }
+    },
+    {
+      "id": "794cd64a-8101-4c04-adf9-bd603c087bf1",
+      "name": "Every hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5bab90c5-b0d5-467f-a9f1-dc556e480e20",
+      "name": "NWS latest observation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.weather.gov/stations/KAUS/observations/latest",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "mortar-ops (ops@northwind.example)"
+            },
+            {
+              "name": "Accept",
+              "value": "application/geo+json"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      }
+    },
+    {
+      "id": "96964b0c-b5e1-45d0-a7d5-07a14bceaec5",
+      "name": "Build weather update",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// NWS reports °C and may return null while a sensor is down — then send nothing.\nconst out = [];\nfor (const { json } of $input.all()) {\n  const celsius = json.properties?.temperature?.value;\n  if (typeof celsius !== 'number') continue;\n  const station = String(json.properties.station ?? '').split('/').pop();\n  const payload = { weather: { tempF: Math.round((celsius * 9) / 5 + 32), observedAt: json.properties.timestamp, source: `NWS ${station}`.trim() } };\n  out.push({ json: { payload: JSON.stringify(payload) } });\n}\nreturn out;"
+      }
+    },
+    {
+      "id": "83ad18d8-aa00-4334-ad94-379ae2608610",
+      "name": "Sign (HMAC-SHA256)",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        720,
+        0
+      ],
+      "parameters": {
+        "action": "hmac",
+        "type": "SHA256",
+        "value": "={{ $json.payload }}",
+        "dataPropertyName": "signature",
+        "secret": "={{ $env.MORTAR_WEBHOOK_SECRET }}",
+        "encoding": "hex"
+      }
+    },
+    {
+      "id": "cbdf965f-fcf3-472d-a7df-6140f0d6f9d8",
+      "name": "POST /directory/sync",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.MORTAR_URL }}/directory/sync",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Mortar-Signature",
+              "value": "=sha256={{ $json.signature }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.payload }}",
+        "options": {
+          "timeout": 10000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every hour": {
+      "main": [
+        [
+          {
+            "node": "NWS latest observation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NWS latest observation": {
+      "main": [
+        [
+          {
+            "node": "Build weather update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build weather update": {
+      "main": [
+        [
+          {
+            "node": "Sign (HMAC-SHA256)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sign (HMAC-SHA256)": {
+      "main": [
+        [
+          {
+            "node": "POST /directory/sync",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Chicago",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "none"
+  },
+  "pinData": {},
+  "meta": {
+    "description": "Latest NWS observation for Austin, so 'no heat' at ≤ 40°F and 'no AC' at ≥ 95°F are P1 by rule."
+  },
+  "tags": [
+    {
+      "name": "mortar"
+    }
+  ]
+}

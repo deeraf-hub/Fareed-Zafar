@@ -1,0 +1,124 @@
+{
+  "name": "Mortar · Nightly lead-scorer learning cycle",
+  "nodes": [
+    {
+      "id": "6292100b-c5d0-44f3-aef9-8949de7ad1f0",
+      "name": "About this workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -260
+      ],
+      "parameters": {
+        "content": "## Nightly learning cycle\nAt 2:15 AM: Mortar refits the lead scorer on historical + live outcomes and promotes the candidate only when its held-out log-loss beats the current model's. The summary node is the place to add a Slack or email step.\n\nNeeds `MORTAR_URL` and `MORTAR_CONSOLE_TOKEN` (Mortar's CONSOLE_TOKEN).",
+        "width": 420,
+        "height": 240,
+        "color": 7
+      }
+    },
+    {
+      "id": "2104a8a5-ffa3-4fb5-abbe-410db0ec739c",
+      "name": "Nightly 2:15 AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "15 2 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b96ad583-1620-4943-a582-453eec1d84f9",
+      "name": "POST /api/leadgen/learn",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 30000,
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.MORTAR_URL }}/api/leadgen/learn",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.MORTAR_CONSOLE_TOKEN }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      }
+    },
+    {
+      "id": "baec05ba-95d3-4cbe-a811-347a52e18e89",
+      "name": "Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const r = $input.first().json;\nconst loss = r.holdoutLogLoss ?? {};\nreturn [{ json: { text: `Lead scorer: ${r.promoted ? `promoted v${r.version}` : 'kept the current model'} · held-out log-loss ${loss.current} → ${loss.candidate} · ${r.liveSamples} live outcomes` } }];"
+      }
+    }
+  ],
+  "connections": {
+    "Nightly 2:15 AM": {
+      "main": [
+        [
+          {
+            "node": "POST /api/leadgen/learn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST /api/leadgen/learn": {
+      "main": [
+        [
+          {
+            "node": "Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Chicago",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "none"
+  },
+  "pinData": {},
+  "meta": {
+    "description": "Refits the owner-lead scorer on yesterday's outcomes; promotes the new model only if it beats the current one on held-out data."
+  },
+  "tags": [
+    {
+      "name": "mortar"
+    }
+  ]
+}

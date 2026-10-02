@@ -1,0 +1,217 @@
+{
+  "name": "Mortar · Rentvine work-order changes → /events",
+  "nodes": [
+    {
+      "id": "082bfcb4-41bf-44f2-ade3-02063cae0da6",
+      "name": "About this workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -340
+      ],
+      "parameters": {
+        "content": "## Rentvine work-order changes → Mortar\nEvery 2 minutes: read the most recently changed work orders, compare each status with the last one seen (kept in workflow static data), and send only real changes. People keep working in Rentvine; Mortar follows (\"people win\").\n\nThe first run only records a baseline. Static data persists for active (production) executions only.\nConfirm the list endpoint's query parameters in your Rentvine API reference.\n\nEvery request to Mortar is signed: the Code node builds the exact JSON string, the Crypto node signs that string (HMAC-SHA256, MORTAR_WEBHOOK_SECRET), and the HTTP node sends the same string as the raw body with `X-Mortar-Signature: sha256=<hex>`. Mortar rejects anything else with 401 and dedupes redeliveries by id.\n\nNeeds n8n env vars: `MORTAR_URL`, `MORTAR_WEBHOOK_SECRET` (and `N8N_BLOCK_ENV_ACCESS_IN_NODE=false`). Also `RENTVINE_BASE_URL`, `RENTVINE_STATUS_IDS` (same JSON as Mortar's) and a Basic-auth credential (API key : secret).",
+        "width": 420,
+        "height": 340,
+        "color": 7
+      }
+    },
+    {
+      "id": "3cfac622-fc9b-45c9-aa2f-ec89a56fffaa",
+      "name": "Every 2 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "53f0204c-85e0-4352-a84e-a2c19db14033",
+      "name": "Recent work orders",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "REPLACE_ME",
+          "name": "Rentvine API"
+        }
+      },
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.RENTVINE_BASE_URL }}/maintenance/work-orders",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "1"
+            },
+            {
+              "name": "pageSize",
+              "value": "100"
+            },
+            {
+              "name": "orderBy",
+              "value": "dateTimeModified"
+            },
+            {
+              "name": "orderDirection",
+              "value": "desc"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "e62cab2e-f34b-4a84-ad3c-05c7e0bd2268",
+      "name": "Status changes only",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// Diff against the last status seen per work order; emit an event only on change.\nconst seen = $getWorkflowStaticData('global');\nseen.status ??= {};\nconst names = Object.fromEntries(Object.entries(JSON.parse($env.RENTVINE_STATUS_IDS ?? '{}')).map(([name, id]) => [String(id), name]));\nconst out = [];\nfor (const { json } of $input.all()) {\n  const rows = Array.isArray(json) ? json : json.data ?? json.workOrders ?? [];\n  for (const row of rows) {\n    const wo = row.workOrder ?? row;\n    const id = String(wo.workOrderID ?? wo.id);\n    const statusId = String(wo.primaryWorkOrderStatusID ?? wo.workOrderStatusID ?? '');\n    const before = seen.status[id];\n    seen.status[id] = statusId;\n    if (before === undefined || before === statusId) continue; // first sight = baseline; same = no change\n    const payload = { id: `${id}-${statusId}-${wo.dateTimeModified ?? ''}`, event: 'workorder.updated', source: 'rentvine', workOrderId: id, status: names[statusId] ?? statusId, occurredAt: wo.dateTimeModified ?? new Date().toISOString() };\n    out.push({ json: { payload: JSON.stringify(payload) } });\n  }\n}\nreturn out;"
+      }
+    },
+    {
+      "id": "61ab30e9-7398-4f45-a79b-b2412f56c5de",
+      "name": "Sign (HMAC-SHA256)",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        720,
+        0
+      ],
+      "parameters": {
+        "action": "hmac",
+        "type": "SHA256",
+        "value": "={{ $json.payload }}",
+        "dataPropertyName": "signature",
+        "secret": "={{ $env.MORTAR_WEBHOOK_SECRET }}",
+        "encoding": "hex"
+      }
+    },
+    {
+      "id": "545bec4c-57d2-4dec-a5e6-320a149e6535",
+      "name": "POST /events",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.MORTAR_URL }}/events",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Mortar-Signature",
+              "value": "=sha256={{ $json.signature }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.payload }}",
+        "options": {
+          "timeout": 10000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every 2 minutes": {
+      "main": [
+        [
+          {
+            "node": "Recent work orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recent work orders": {
+      "main": [
+        [
+          {
+            "node": "Status changes only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Status changes only": {
+      "main": [
+        [
+          {
+            "node": "Sign (HMAC-SHA256)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sign (HMAC-SHA256)": {
+      "main": [
+        [
+          {
+            "node": "POST /events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Chicago",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "none"
+  },
+  "pinData": {},
+  "meta": {
+    "description": "Polls recent work orders and emits workorder.updated only when a status actually changed."
+  },
+  "tags": [
+    {
+      "name": "mortar"
+    }
+  ]
+}
