@@ -4,6 +4,7 @@
 **Round two:** 18 September 2026, 82 prospects in healthcare, SaaS and fintech. Rows 101 to 182.
 **Round three:** 18 September 2026, re-aimed at named executives instead of job postings. 38 companies and 3 events, rows 183 to 223.
 **Round four:** 30 September 2026, a LinkedIn list of 51 named executives, mostly healthcare, each with a verified profile URL and the date of their latest post. Rows 224 to 274.
+**Round five:** 2 October 2026, 72 founders of small companies, mostly healthcare and medtech, ranked into three tiers by reply odds. Rows 275 to 346.
 
 **For:** LinkedIn-first outreach, email second.
 
@@ -52,6 +53,15 @@
 | **[11-linkedin-executive-list.md](11-linkedin-executive-list.md)** | 51 executives, rows 224 to 274. 38 healthcare CEOs in three sections by how recently they raised, 5 CEOs from SaaS, AI and fintech who raised in September, and 8 senior leaders who are the better door at the bigger companies. Includes a namesake table so you message the right profile. |
 | **[linkedin-executives.csv](linkedin-executives.csv)** | The same 51 rows, CRM-ready, with trigger date, last-post date, LinkedIn URL and how to reach each one. |
 | **[12-linkedin-sources.md](12-linkedin-sources.md)** | The post behind every last-post date, how the date is decoded, the funding sources, and the limits of the method. |
+
+### Round five, added 2 October 2026
+
+**Start here for small companies.** Founders of pre-seed to small Series A companies with a dated reason to need a deck now, each checked by one agent and challenged by a second.
+
+| File | What it's for |
+|---|---|
+| **[13-linkedin-founder-list.md](13-linkedin-founder-list.md)** | 72 founders, rows 275 to 346, in three tiers: 19 who are verified and posting, 23 verified but quieter, 30 newly found that need a profile check. Includes a calendar of the Demo Days and showcases they are preparing for, and the 12 dropped candidates. |
+| **[linkedin-founders.csv](linkedin-founders.csv)** | The same 72 rows, CRM-ready, with tier, trigger date, last post, the fact to mention, the caveat, LinkedIn URL, source link and the deck each one most likely needs. |
 
 ---
 
