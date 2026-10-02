@@ -1,0 +1,24 @@
+{
+  "name": "mortar",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mortar \u2014 a 24/7 agentic operating layer for residential real estate. Event \u2192 State \u2192 Deterministic Logic \u2192 Retrieval \u2192 Model (only if needed) \u2192 Action \u2192 Validation \u2192 State Update \u2192 Next Action.",
+  "type": "module",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env src/server.js",
+    "demo": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env src/server.js --demo",
+    "demo:cli": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env scripts/demo.js",
+    "test": "node --disable-warning=ExperimentalWarning --test --test-reporter=spec \"test/**/*.test.js\"",
+    "eval": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env evals/run.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
+    "express": "^5.2.1",
+    "zod": "^4.6.5"
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "name": "Mortar · ShowMojo leads & showings → /events",
+  "nodes": [
+    {
+      "id": "0d09aedd-64f8-4da1-aadf-f76a4a718240",
+      "name": "About this workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -320
+      ],
+      "parameters": {
+        "content": "## ShowMojo → Mortar\nPoint ShowMojo's notification webhook at this workflow's production URL. The Code node maps ShowMojo's fields to Mortar's three leasing events: listing.inquiry, showing.scheduled, showing.completed.\n\nField names differ between ShowMojo accounts — open one execution, compare with the mapping on the left of each line, adjust once.\n\nEvery request to Mortar is signed: the Code node builds the exact JSON string, the Crypto node signs that string (HMAC-SHA256, MORTAR_WEBHOOK_SECRET), and the HTTP node sends the same string as the raw body with `X-Mortar-Signature: sha256=<hex>`. Mortar rejects anything else with 401 and dedupes redeliveries by id.\n\nNeeds n8n env vars: `MORTAR_URL`, `MORTAR_WEBHOOK_SECRET` (and `N8N_BLOCK_ENV_ACCESS_IN_NODE=false`).",
+        "width": 420,
+        "height": 320,
+        "color": 7
+      }
+    },
+    {
+      "id": "dfc34ca7-39d7-4e63-a3a2-fab22f358b7c",
+      "name": "ShowMojo webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "ada11f00-8fad-4101-a9a5-e0c21eacb494",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "showmojo",
+        "responseMode": "onReceived",
+        "options": {}
+      }
+    },
+    {
+      "id": "8355aa7e-03cd-4bce-a690-5ec1dd4eb2a1",
+      "name": "Map to leasing event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const EVENT = { new_lead: 'listing.inquiry', lead: 'listing.inquiry', showing_scheduled: 'showing.scheduled', showing_completed: 'showing.completed' };\nreturn $input.all().flatMap(({ json }) => {\n  const b = json.body ?? json; // the Webhook node puts the POST body under .body\n  const event = EVENT[b.event_type ?? b.type];\n  if (!event) return []; // other notifications are not Mortar's business\n  const payload = {\n    id: `${b.event_type ?? b.type}-${b.id ?? b.showing_id ?? b.lead_id}`,\n    event,\n    source: 'showmojo',\n    listingId: String(b.listing_id ?? b.listing?.id ?? ''),\n    prospect: { name: b.name ?? b.prospect?.name, phone: b.phone ?? b.prospect?.phone, email: b.email ?? b.prospect?.email },\n    message: b.message ?? b.comments ?? '',\n    showingId: b.showing_id ?? null,\n    startsAt: b.showing_time ?? b.starts_at ?? null,\n    occurredAt: b.created_at ?? new Date().toISOString(),\n  };\n  return [{ json: { payload: JSON.stringify(payload) } }];\n});"
+      }
+    },
+    {
+      "id": "9b43f86e-c05b-49c9-a5e9-f6fb663a61cc",
+      "name": "Sign (HMAC-SHA256)",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "action": "hmac",
+        "type": "SHA256",
+        "value": "={{ $json.payload }}",
+        "dataPropertyName": "signature",
+        "secret": "={{ $env.MORTAR_WEBHOOK_SECRET }}",
+        "encoding": "hex"
+      }
+    },
+    {
+      "id": "4f1e8336-c4f7-47b6-a93b-43be48f5351c",
+      "name": "POST /events",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.MORTAR_URL }}/events",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Mortar-Signature",
+              "value": "=sha256={{ $json.signature }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.payload }}",
+        "options": {
+          "timeout": 10000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "ShowMojo webhook": {
+      "main": [
+        [
+          {
+            "node": "Map to leasing event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map to leasing event": {
+      "main": [
+        [
+          {
+            "node": "Sign (HMAC-SHA256)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sign (HMAC-SHA256)": {
+      "main": [
+        [
+          {
+            "node": "POST /events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Chicago",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "none"
+  },
+  "pinData": {},
+  "meta": {
+    "description": "Relays ShowMojo notifications as normalized leasing events."
+  },
+  "tags": [
+    {
+      "name": "mortar"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "source": "Demo data — fictional owners assembled to look like county deed records joined with rental-listing signals. Not real people.",
+  "records": [
+    { "id": "rec-1001", "name": "Priya Raman", "mailing": { "city": "Seattle", "state": "WA" }, "doors": 3, "purchaseDate": "2019-05-14", "currentManager": null, "evictionFilings24m": 0, "codeViolations12m": 0,
+      "properties": [ { "address": "1907 Brushy Creek Rd", "city": "Round Rock", "zip": "78664", "type": "single_family", "listedForRent": true, "daysOnMarket": 47, "priceCuts": 2, "listedBy": "owner", "rent": 1995 } ] },
+    { "id": "rec-1002", "name": "Linda Becker", "mailing": { "city": "Denver", "state": "CO" }, "doors": 6, "purchaseDate": "2016-09-02", "currentManager": null, "evictionFilings24m": 1, "codeViolations12m": 0,
+      "properties": [ { "address": "801 Oak Hollow Dr", "city": "Pflugerville", "zip": "78660", "type": "single_family", "listedForRent": true, "daysOnMarket": 38, "priceCuts": 1, "listedBy": "owner", "rent": 2150 },
+                      { "address": "22 Lantana Ln", "city": "Austin", "zip": "78745", "type": "duplex", "listedForRent": true, "daysOnMarket": 9, "priceCuts": 0, "listedBy": "owner", "rent": 1650 } ] },
+    { "id": "rec-1003", "name": "Mei Chen", "mailing": { "city": "San Jose", "state": "CA" }, "doors": 2, "purchaseDate": "2021-03-30", "currentManager": null, "evictionFilings24m": 0, "codeViolations12m": 0,
+      "properties": [ { "address": "315 Sunfield Pkwy", "city": "Buda", "zip": "78610", "type": "single_family", "listedForRent": true, "daysOnMarket": 64, "priceCuts": 3, "listedBy": "owner", "rent": 1850 } ] },
+    { "id": "rec-1004", "name": "Sofia Alvarez", "mailing": { "city": "San Antonio", "state": "TX" }, "doors": 4, "purchaseDate": "2018-11-20", "currentManager": null, "evictionFilings24m": 0, "codeViolations12m": 0,
+      "properties": [ { "address": "1208 Mesa Verde Dr", "city": "Cedar Park", "zip": "78613", "type": "single_family", "listedForRent": true, "daysOnMarket": 33, "priceCuts": 0, "listedBy": "owner", "rent": 2300 } ] },
+    { "id": "rec-1005", "name": "Hassan Farouk", "mailing": { "city": "Dallas", "state": "TX" }, "doors": 3, "purchaseDate": "2017-06-08", "currentManager": "Lonestar PM Group", "evictionFilings24m": 0, "codeViolations12m": 0,
+      "properties": [ { "address": "9 Copper Ridge", "city": "Georgetown", "zip": "78628", "type": "single_family", "listedForRent": true, "daysOnMarket": 41, "priceCuts": 0, "listedBy": "manager", "rent": 2050 } ] },
+    { "id": "rec-1006", "name": "Beth Kowalski", "mailing": { "city": "Chicago", "state": "IL" }, "doors": 1, "purchaseDate": "2015-02-11", "currentManager": null, "evictionFilings24m": 0, "codeViolations12m": 1,
+      "properties": [ { "address": "4410 Avenue F", "city": "Austin", "zip": "78751", "type": "single_family", "listedForRent": false, "daysOnMarket": 0, "priceCuts": 0, "listedBy": null, "rent": null } ] },
+    { "id": "rec-1007", "name": "Olivia Turner", "mailing": { "city": "Austin", "state": "TX" }, "doors": 1, "purchaseDate": "2020-08-17", "currentManager": null, "evictionFilings24m": 0, "codeViolations12m": 0,
+      "properties": [ { "address": "77 Kestrel Way", "city": "Leander", "zip": "78641", "type": "single_family", "listedForRent": true, "daysOnMarket": 6, "priceCuts": 0, "listedBy": "owner", "rent": 1900 } ] },
+    { "id": "rec-1008", "name": "Grant Whitaker", "mailing": { "city": "Houston", "state": "TX" }, "doors": 2, "purchaseDate": "2014-04-03", "currentManager": null, "evictionFilings24m": 1, "codeViolations12m": 0,
+      "properties": [ { "address": "1500 Hutto Pkwy", "city": "Hutto", "zip": "78634", "type": "townhome", "listedForRent": false, "daysOnMarket": 0, "priceCuts": 0, "listedBy": null, "rent": null } ] },
+    { "id": "rec-1009", "name": "Rahul Mehta", "mailing": { "city": "Austin", "state": "TX" }, "doors": 2, "purchaseDate": "2026-03-12", "currentManager": null, "evictionFilings24m": 0, "codeViolations12m": 0,
+      "properties": [ { "address": "6 Blue Heron Ct", "city": "Kyle", "zip": "78640", "type": "single_family", "listedForRent": false, "daysOnMarket": 0, "priceCuts": 0, "listedBy": null, "rent": null } ] },
+    { "id": "rec-1010", "name": "Derek Hollis", "mailing": { "city": "Austin", "state": "TX" }, "doors": 26, "purchaseDate": "2012-01-09", "currentManager": null, "evictionFilings24m": 2, "codeViolations12m": 1,
+      "properties": [ { "address": "2100 Riverside Dr", "city": "Austin", "zip": "78741", "type": "multifamily", "listedForRent": true, "daysOnMarket": 22, "priceCuts": 1, "listedBy": "owner", "rent": 1400 } ] },
+    { "id": "rec-1011", "name": "Jason Park", "mailing": { "city": "Waco", "state": "TX" }, "doors": 1, "purchaseDate": "2019-07-22", "currentManager": null, "evictionFilings24m": 0, "codeViolations12m": 0,
+      "properties": [ { "address": "410 Elm St", "city": "Waco", "zip": "76701", "type": "single_family", "listedForRent": true, "daysOnMarket": 52, "priceCuts": 1, "listedBy": "owner", "rent": 1300 } ] },
+    { "id": "rec-1012", "name": "Natalie Brooks", "mailing": { "city": "Phoenix", "state": "AZ" }, "doors": 1, "purchaseDate": "2022-10-05", "currentManager": null, "evictionFilings24m": 0, "codeViolations12m": 0,
+      "properties": [ { "address": "3301 Wildflower Ln", "city": "Manor", "zip": "78653", "type": "single_family", "listedForRent": true, "daysOnMarket": 18, "priceCuts": 1, "listedBy": "owner", "rent": 1750 } ] }
+  ]
+}

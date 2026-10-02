@@ -1,0 +1,52 @@
+# docker compose up                    Mortar + a local model (Ollama)
+# docker compose --profile n8n up      … plus n8n with the workflows in ./n8n mounted for import
+#
+# MORTAR_DEMO=1 in .env runs the demo (simulated clock and systems) inside the container.
+services:
+  mortar:
+    build: .
+    env_file: .env
+    environment:
+      DB_PATH: /app/var/mortar.db
+      LOCAL_MODEL_PROVIDER: ${LOCAL_MODEL_PROVIDER:-ollama}
+      OLLAMA_URL: http://ollama:11434
+    ports: ["4000:4000"]
+    volumes: ["mortar-data:/app/var"]
+    depends_on:
+      ollama: { condition: service_started }
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    volumes: ["ollama-models:/root/.ollama"]
+    restart: unless-stopped
+
+  # One-shot: pulls the local model on first start (cached in the volume afterwards).
+  # Any small instruct model with reliable JSON output works — pick it with OLLAMA_MODEL.
+  ollama-pull:
+    image: ollama/ollama:latest
+    depends_on: [ollama]
+    environment: { OLLAMA_HOST: "http://ollama:11434" }
+    entrypoint: ["sh", "-c", "ollama pull ${OLLAMA_MODEL:-qwen3:4b}"]
+    restart: "no"
+
+  n8n:
+    image: n8nio/n8n:latest
+    profiles: ["n8n"]
+    environment:
+      MORTAR_URL: http://mortar:4000
+      MORTAR_WEBHOOK_SECRET: ${MORTAR_WEBHOOK_SECRET:?set MORTAR_WEBHOOK_SECRET in .env}
+      MORTAR_CONSOLE_TOKEN: ${CONSOLE_TOKEN:-}
+      RENTVINE_BASE_URL: ${RENTVINE_BASE_URL:-}
+      RENTVINE_STATUS_IDS: ${RENTVINE_STATUS_IDS:-}
+      ONCALL_SHEET_CSV_URL: ${ONCALL_SHEET_CSV_URL:-}
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"   # the workflows read MORTAR_* from the environment
+      GENERIC_TIMEZONE: America/Chicago
+    ports: ["5678:5678"]
+    volumes: ["n8n-data:/home/node/.n8n", "./n8n:/workflows:ro"]
+    restart: unless-stopped
+
+volumes:
+  mortar-data: {}
+  ollama-models: {}
+  n8n-data: {}

@@ -1,0 +1,159 @@
+{
+  "name": "Mortar · Inbound maintenance email → /events",
+  "nodes": [
+    {
+      "id": "ae688002-483d-4c0d-ac69-e73bc4bbabf7",
+      "name": "About this workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -300
+      ],
+      "parameters": {
+        "content": "## Inbound maintenance email → Mortar\nReads the maintenance mailbox over IMAP and relays each email to Mortar as one event. Mortar does the rest: auto-replies are recognised from the headers, the sender is matched to the directory, severity is decided by rules.\n\nEvery request to Mortar is signed: the Code node builds the exact JSON string, the Crypto node signs that string (HMAC-SHA256, MORTAR_WEBHOOK_SECRET), and the HTTP node sends the same string as the raw body with `X-Mortar-Signature: sha256=<hex>`. Mortar rejects anything else with 401 and dedupes redeliveries by id.\n\nNeeds n8n env vars: `MORTAR_URL`, `MORTAR_WEBHOOK_SECRET` (and `N8N_BLOCK_ENV_ACCESS_IN_NODE=false`). Set the IMAP credential on the trigger.",
+        "width": 420,
+        "height": 300,
+        "color": 7
+      }
+    },
+    {
+      "id": "2d68f0a9-dde6-47bb-ae11-71c1f7d07625",
+      "name": "Maintenance mailbox (IMAP)",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "mailbox": "INBOX",
+        "postProcessAction": "read",
+        "format": "simple",
+        "options": {}
+      },
+      "credentials": {
+        "imap": {
+          "id": "REPLACE_ME",
+          "name": "Maintenance mailbox"
+        }
+      }
+    },
+    {
+      "id": "c30b9be4-c8a6-4759-a783-086049167671",
+      "name": "Build email event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// IMAP message → Mortar's inbound-email envelope (see fromInboundEmail in src/core/events.js).\n// Only reshapes fields: Mortar dedupes on messageId and spots auto-replies from the headers.\nconst address = (v) => (typeof v === 'string' ? v : v?.value?.[0]?.address ?? v?.text ?? '');\nreturn $input.all().map(({ json: m }) => {\n  const headers = m.metadata ?? m.headers ?? {};\n  const payload = {\n    event: 'email.received',\n    messageId: m.messageId ?? headers['message-id'] ?? `${m.date}|${address(m.from)}|${m.subject ?? ''}`,\n    from: address(m.from),\n    to: address(m.to),\n    subject: m.subject ?? '',\n    text: m.textPlain ?? m.text ?? '',\n    headers,\n    date: m.date,\n  };\n  return { json: { payload: JSON.stringify(payload) } };\n});"
+      }
+    },
+    {
+      "id": "89fe7a02-55bd-4c85-ad4b-b5da27571e35",
+      "name": "Sign (HMAC-SHA256)",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "action": "hmac",
+        "type": "SHA256",
+        "value": "={{ $json.payload }}",
+        "dataPropertyName": "signature",
+        "secret": "={{ $env.MORTAR_WEBHOOK_SECRET }}",
+        "encoding": "hex"
+      }
+    },
+    {
+      "id": "d401e242-865c-473d-a545-715d6afb2714",
+      "name": "POST /events",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.MORTAR_URL }}/events",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Mortar-Signature",
+              "value": "=sha256={{ $json.signature }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.payload }}",
+        "options": {
+          "timeout": 10000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Maintenance mailbox (IMAP)": {
+      "main": [
+        [
+          {
+            "node": "Build email event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build email event": {
+      "main": [
+        [
+          {
+            "node": "Sign (HMAC-SHA256)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sign (HMAC-SHA256)": {
+      "main": [
+        [
+          {
+            "node": "POST /events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Chicago",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "none"
+  },
+  "pinData": {},
+  "meta": {
+    "description": "Every email to the maintenance mailbox becomes a signed message.received event."
+  },
+  "tags": [
+    {
+      "name": "mortar"
+    }
+  ]
+}

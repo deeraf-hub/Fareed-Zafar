@@ -1,0 +1,25 @@
+{
+  "about": "Holdout: written after the rules were tuned on triage.json and never used to tune them. Reported, not gated — it estimates how the rules generalize to messages nobody has seen. When it reveals gaps: fix them, merge these cases into triage.json, and draw a new holdout from real traffic.",
+  "cases": [
+    { "id": "x01", "expected": "P1", "text": "my kitchen is filling up with water from the dishwasher, it won't stop" },
+    { "id": "x02", "expected": "P1", "text": "There's a strong smell of natural gas near the water heater closet" },
+    { "id": "x03", "expected": "P1", "text": "help the bathroom ceiling just fell in and there's water everywhere" },
+    { "id": "x04", "expected": "P1", "text": "an outlet in the living room started smoking" },
+    { "id": "x05", "expected": "P1", "text": "my elderly mom is here and the AC died, it's 97 inside" },
+    { "id": "x06", "expected": "P1", "text": "sewage smell and brown water coming up through the shower drain" },
+    { "id": "x07", "expected": "P1", "text": "water dripping through the light in the kitchen ceiling" },
+    { "id": "x08", "expected": "P1", "text": "Someone smashed our sliding door glass and I think they came inside" },
+    { "id": "x09", "expected": "P2", "text": "heater won't kick on at all", "weatherF": 52 },
+    { "id": "x10", "expected": "P2", "text": "the only toilet in the apartment won't flush" },
+    { "id": "x11", "expected": "P2", "text": "There's a wet spot on the ceiling that's slowly getting bigger" },
+    { "id": "x12", "expected": "P2", "text": "lost my key fob and I'm stuck outside the building" },
+    { "id": "x13", "expected": "P2", "text": "the fridge is making a clicking sound and it's warm inside" },
+    { "id": "x14", "expected": "P3", "text": "One of the burners on the stove won't light" },
+    { "id": "x15", "expected": "P3", "text": "the bedroom window screen is torn" },
+    { "id": "x16", "expected": "P3", "text": "the bathroom exhaust fan is really noisy" },
+    { "id": "x17", "expected": "P3", "text": "There's a small crack in the bathroom tile" },
+    { "id": "x18", "expected": "P3", "text": "the dryer takes two cycles to dry clothes" },
+    { "id": "x19", "expected": "non_maintenance", "text": "Where should I leave my rent check?" },
+    { "id": "x20", "expected": "non_maintenance", "text": "Can you tell me the wifi password for the clubhouse?" }
+  ]
+}

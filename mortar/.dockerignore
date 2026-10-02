@@ -1,0 +1,10 @@
+node_modules
+var
+*.db
+*.db-*
+.env
+evals/results
+test
+docs
+n8n
+.git

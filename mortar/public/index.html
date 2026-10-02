@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mortar Ops Console</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Crect width='12' height='12' rx='2' fill='%23b4532a'/%3E%3Crect x='14' width='12' height='12' rx='2' fill='%23b4532a' opacity='.75'/%3E%3Crect y='14' width='12' height='12' rx='2' fill='%23b4532a' opacity='.55'/%3E%3Crect x='14' y='14' width='12' height='12' rx='2' fill='%23b4532a'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="logo">
+        <div class="logo-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <div><b>MORTAR</b><small>agentic operating layer · Northwind Residential (demo)</small></div>
+      </div>
+      <div class="pill-row" id="providers"></div>
+      <div class="clock" id="clock"></div>
+    </header>
+
+    <section class="kpis" id="kpis"></section>
+
+    <main class="layout">
+      <aside class="col">
+        <section class="card story" id="story"></section>
+        <section class="card">
+          <header><h2>Cases</h2><span class="count" id="case-count"></span></header>
+          <div id="cases"></div>
+        </section>
+      </aside>
+
+      <section class="col">
+        <section class="card">
+          <nav class="tabs" id="tabs"></nav>
+          <div id="view"></div>
+        </section>
+      </section>
+
+      <aside class="col right">
+        <section class="card">
+          <header><h2>Needs a person</h2><span class="count" id="approval-count"></span></header>
+          <div id="approvals"></div>
+        </section>
+        <section class="card">
+          <header><h2>Phones &amp; inboxes</h2><span class="count">simulated</span></header>
+          <div id="phones"></div>
+        </section>
+        <section class="card">
+          <header><h2>Connected systems</h2><span class="count" id="modes"></span></header>
+          <div id="systems"></div>
+        </section>
+      </aside>
+    </main>
+
+    <div class="toast" id="toast"></div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,456 @@
+{
+  "about": "Resident messages to the maintenance line, labeled against data/knowledge/emergency-sop.md — the development set (rules are tuned against it). 'expected' is P1 | P2 | P3 | non_maintenance. 'weatherF' (optional) is the outside temperature the weather feed reports at that moment. Cases h01–h25 were a holdout until their first run (see docs/engineering-notes.md).",
+  "cases": [
+    {
+      "id": "t01",
+      "expected": "P1",
+      "text": "There is water coming through the ceiling. I tried calling and nobody answered."
+    },
+    {
+      "id": "t02",
+      "expected": "P1",
+      "text": "I smell gas in the kitchen, really strong"
+    },
+    {
+      "id": "t03",
+      "expected": "P1",
+      "text": "my CO detector is going off and won't stop"
+    },
+    {
+      "id": "t04",
+      "expected": "P1",
+      "text": "Sparks came out of the outlet when I plugged in the toaster"
+    },
+    {
+      "id": "t05",
+      "expected": "P1",
+      "text": "Toilet is backing up into the tub, it's sewage"
+    },
+    {
+      "id": "t06",
+      "expected": "P1",
+      "text": "Pipe burst under the sink, water everywhere!!"
+    },
+    {
+      "id": "t07",
+      "expected": "P1",
+      "text": "someone broke into my apartment, the door was kicked in"
+    },
+    {
+      "id": "t08",
+      "expected": "P1",
+      "text": "water is pouring out of the light fixture in the bathroom"
+    },
+    {
+      "id": "t09",
+      "expected": "P1",
+      "text": "the ceiling in the hallway is sagging and dripping"
+    },
+    {
+      "id": "t10",
+      "expected": "P1",
+      "text": "Theres smoke coming from the dryer vent and a burning smell"
+    },
+    {
+      "id": "t11",
+      "expected": "P1",
+      "text": "outlet in the bedroom is hot and smells like burning plastic",
+      "why": "electrical burning smell (SOP: fire, smoke or electrical sparks)"
+    },
+    {
+      "id": "t12",
+      "expected": "P1",
+      "text": "My son slipped on the wet stairs and is bleeding, the stairwell light is out too"
+    },
+    {
+      "id": "t13",
+      "expected": "P1",
+      "text": "water dripping from the ceiling onto my bed"
+    },
+    {
+      "id": "t14",
+      "expected": "P1",
+      "text": "The basement is flooded, about 2 inches of water"
+    },
+    {
+      "id": "t15",
+      "expected": "P1",
+      "text": "Rotten egg smell near the stove"
+    },
+    {
+      "id": "t16",
+      "expected": "P1",
+      "text": "HELP water gushing from under the kitchen sink wont stop"
+    },
+    {
+      "id": "t17",
+      "expected": "P1",
+      "text": "smells like gas in the hallway outside my door"
+    },
+    {
+      "id": "t18",
+      "expected": "P1",
+      "text": "i think theres a gas leak"
+    },
+    {
+      "id": "t19",
+      "expected": "P1",
+      "text": "ceiling collapsed in the bathroom",
+      "why": "past tense of a P1 pattern"
+    },
+    {
+      "id": "t20",
+      "expected": "P1",
+      "text": "Water heater is leaking all over the garage floor",
+      "why": "active water damage that isn't coming through a ceiling"
+    },
+    {
+      "id": "t21",
+      "expected": "P1",
+      "text": "electrical panel is buzzing loudly and smells hot"
+    },
+    {
+      "id": "t22",
+      "expected": "P1",
+      "text": "No heat since last night and it's 30 degrees outside",
+      "why": "SOP: no heat is P1 at or below 40°F"
+    },
+    {
+      "id": "t23",
+      "expected": "P1",
+      "text": "The heater stopped working",
+      "weatherF": 34,
+      "why": "SOP: no heat is P1 at or below 40°F (temperature from the weather feed, not the message)"
+    },
+    {
+      "id": "t24",
+      "expected": "P1",
+      "text": "AC isn't working and my grandmother lives with us, she has a heart condition",
+      "why": "SOP: no AC is P1 when a resident is medically vulnerable"
+    },
+    {
+      "id": "t25",
+      "expected": "P1",
+      "text": "AC is broken and it's 101 outside",
+      "why": "SOP: no AC is P1 at or above 95°F"
+    },
+    {
+      "id": "t26",
+      "expected": "P2",
+      "text": "No heat since last night",
+      "weatherF": 58,
+      "why": "SOP: no heat above 40°F is P2"
+    },
+    {
+      "id": "t27",
+      "expected": "P2",
+      "text": "AC stopped working, can someone come look?",
+      "weatherF": 84
+    },
+    {
+      "id": "t28",
+      "expected": "P2",
+      "text": "Fridge isn't cooling, all my food is going bad"
+    },
+    {
+      "id": "t29",
+      "expected": "P2",
+      "text": "I'm locked out, lost my keys"
+    },
+    {
+      "id": "t30",
+      "expected": "P2",
+      "text": "There's black mold growing on the bathroom ceiling"
+    },
+    {
+      "id": "t31",
+      "expected": "P2",
+      "text": "Smoke detector keeps chirping",
+      "why": "looks like fire; it's a battery"
+    },
+    {
+      "id": "t32",
+      "expected": "P2",
+      "text": "brown water stain on the ceiling and it's getting bigger"
+    },
+    {
+      "id": "t33",
+      "expected": "P2",
+      "text": "No hot water for 2 days"
+    },
+    {
+      "id": "t34",
+      "expected": "P2",
+      "text": "Toilet is overflowing when I flush"
+    },
+    {
+      "id": "t35",
+      "expected": "P2",
+      "text": "the CO detector chirps every minute, I think it needs a new battery",
+      "why": "looks like a CO alarm; it's a battery"
+    },
+    {
+      "id": "t36",
+      "expected": "P2",
+      "text": "the AC is broken and also there's a small drip under the sink",
+      "weatherF": 80,
+      "why": "mixed message: the most urgent issue wins"
+    },
+    {
+      "id": "t37",
+      "expected": "P2",
+      "text": "There's mold in my daughter's room and she has asthma. This is the third time I've reported it. If it's not fixed I'm calling a lawyer and withholding rent.",
+      "why": "P2 by severity; also routed as sensitive"
+    },
+    {
+      "id": "t38",
+      "expected": "P3",
+      "text": "Kitchen faucet is dripping"
+    },
+    {
+      "id": "t39",
+      "expected": "P3",
+      "text": "The dishwasher isn't draining"
+    },
+    {
+      "id": "t40",
+      "expected": "P3",
+      "text": "Can someone fix the blinds in the living room?"
+    },
+    {
+      "id": "t41",
+      "expected": "P3",
+      "text": "seeing a few ants in the kitchen"
+    },
+    {
+      "id": "t42",
+      "expected": "P3",
+      "text": "bathroom door handle is loose"
+    },
+    {
+      "id": "t43",
+      "expected": "P3",
+      "text": "garbage disposal is jammed"
+    },
+    {
+      "id": "t44",
+      "expected": "P3",
+      "text": "The light bulb in the hallway is out, I can't reach it"
+    },
+    {
+      "id": "t45",
+      "expected": "P3",
+      "text": "Toilet keeps running after flushing"
+    },
+    {
+      "id": "t46",
+      "expected": "P3",
+      "text": "small leak under the bathroom sink, just a slow drip into the cabinet"
+    },
+    {
+      "id": "t47",
+      "expected": "P3",
+      "text": "The fireplace flue is stuck open and cold air comes in",
+      "why": "contains 'fire'"
+    },
+    {
+      "id": "t48",
+      "expected": "P3",
+      "text": "I burned toast and the smoke alarm went off, it's fine now but the alarm is really loud",
+      "why": "contains 'smoke'"
+    },
+    {
+      "id": "t49",
+      "expected": "P3",
+      "text": "heater makes a loud banging noise but it works"
+    },
+    {
+      "id": "t50",
+      "expected": "P3",
+      "text": "The garage door opener stopped working"
+    },
+    {
+      "id": "t51",
+      "expected": "non_maintenance",
+      "text": "When is rent due this month?"
+    },
+    {
+      "id": "t52",
+      "expected": "non_maintenance",
+      "text": "Package was left at the wrong door"
+    },
+    {
+      "id": "t53",
+      "expected": "non_maintenance",
+      "text": "My lease is up in March, can I renew?"
+    },
+    {
+      "id": "t54",
+      "expected": "non_maintenance",
+      "text": "The fire hydrant out on the street is leaking water",
+      "why": "contains 'fire' and 'leaking water'; a city issue, not the home"
+    },
+    {
+      "id": "t55",
+      "expected": "non_maintenance",
+      "text": "Upstairs neighbor has been really loud every night"
+    },
+    {
+      "id": "t56",
+      "expected": "P1",
+      "text": "Hi, hope you're well. A few things: the blinds in the bedroom are broken, the dishwasher is making a weird noise, and the garbage disposal is jammed again. Also my neighbor's dog barks a lot but that's not your problem. Oh and I almost forgot, when I came home tonight there was water coming through the ceiling in the bathroom and it's getting worse. Sorry for the long message, I know you're busy, and thanks for always being so quick to help!",
+      "why": "long, mixed message; the emergency is buried at the end"
+    },
+    {
+      "id": "h01",
+      "expected": "P1",
+      "text": "theres water leaking from the ceiling fan in the living room",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h02",
+      "expected": "P1",
+      "text": "My carbon monoxide alarm is going off!!",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h03",
+      "expected": "P1",
+      "text": "the toilet overflowed and now sewage is all over the bathroom floor",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h04",
+      "expected": "P1",
+      "text": "I can smell smoke but I can't tell where it's coming from",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h05",
+      "expected": "P1",
+      "text": "water is spraying from the pipe under the kitchen sink",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h06",
+      "expected": "P1",
+      "text": "the light switch in the hallway sparked and now the lights won't turn on",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h07",
+      "expected": "P1",
+      "text": "My front door was broken into while I was at work",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h08",
+      "expected": "P1",
+      "text": "the bathroom ceiling is bulging and dripping water",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h09",
+      "expected": "P1",
+      "text": "Water is coming in under the front door from the storm",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h10",
+      "expected": "P1",
+      "text": "I fell because the stair railing broke and I hurt my back",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h11",
+      "expected": "P2",
+      "text": "There's no hot water in the shower",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h12",
+      "expected": "P2",
+      "text": "the heat isn't working",
+      "weatherF": 55,
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h13",
+      "expected": "P2",
+      "text": "We have no power in half the apartment",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h14",
+      "expected": "P2",
+      "text": "freezer stopped working and everything melted",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h15",
+      "expected": "P2",
+      "text": "Our toilet is clogged and it's the only bathroom",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h16",
+      "expected": "P2",
+      "text": "There's a musty smell and black spots on the wall behind the bed",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h17",
+      "expected": "P2",
+      "text": "my apartment key broke in the lock and I can't get in",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h18",
+      "expected": "P3",
+      "text": "The kitchen sink is draining slowly",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h19",
+      "expected": "P3",
+      "text": "a cabinet door in the kitchen fell off its hinge",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h20",
+      "expected": "P3",
+      "text": "the washer makes a loud squealing noise",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h21",
+      "expected": "P3",
+      "text": "there are a couple of mice droppings under the sink",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h22",
+      "expected": "P3",
+      "text": "the closet door is off its track",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h23",
+      "expected": "non_maintenance",
+      "text": "Can I pay rent with a credit card?",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h24",
+      "expected": "non_maintenance",
+      "text": "Who do I talk to about adding a roommate to my lease?",
+      "why": "from the first holdout run"
+    },
+    {
+      "id": "h25",
+      "expected": "non_maintenance",
+      "text": "is the pool open this weekend?",
+      "why": "from the first holdout run"
+    }
+  ]
+}
