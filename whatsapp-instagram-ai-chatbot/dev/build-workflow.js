@@ -481,7 +481,7 @@ To hand a chat back to the bot: set \`status = bot\` in the Leads sheet (auto-re
       messaging_product: 'whatsapp',
       metadata: { display_phone_number: '15550000000', phone_number_id: 'PASTE_WHATSAPP_PHONE_NUMBER_ID' },
       contacts: [{ profile: { name: 'Ayesha Khan' }, wa_id: '923001234567' }],
-      messages: [{ from: '923001234567', id: 'wamid.TEST0001', timestamp: String(Math.floor(Date.now() / 1000)), type: 'text', text: { body: 'Hi! How much is teeth cleaning and when are you open?' } }],
+      messages: [{ from: '923001234567', id: 'wamid.TEST0001', timestamp: '1760000000', type: 'text', text: { body: 'Hi! How much is teeth cleaning and when are you open?' } }],
       field: 'messages',
     } }],
   };
