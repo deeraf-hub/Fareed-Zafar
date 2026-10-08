@@ -16,16 +16,36 @@
       "typeVersion": 1,
       "position": [
         0,
-        0
+        -60
       ],
       "webhookId": "bd2e63f5-047f-42f7-a9b1-caea6842c606"
     },
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "instagram-inbound",
+        "path": "manychat-inbound",
+        "authentication": "headerAuth",
         "responseMode": "onReceived",
         "options": {}
+      },
+      "id": "b97b5c20-8265-4531-a71b-93f33f843bd0",
+      "name": "ManyChat Inbound (POST)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        80
+      ],
+      "webhookId": "6c4cea48-35c2-4514-a7ae-e45cc10bc5e4"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "instagram-inbound",
+        "responseMode": "onReceived",
+        "options": {
+          "rawBody": true
+        }
       },
       "id": "46eb3110-c68b-48f2-ad28-3bebe05c7c7e",
       "name": "Instagram Inbound (POST)",
@@ -33,9 +53,71 @@
       "typeVersion": 2,
       "position": [
         0,
-        200
+        220
       ],
       "webhookId": "1cda5955-e8fc-4870-a5c8-0092c4f7d610"
+    },
+    {
+      "parameters": {
+        "action": "hmac",
+        "type": "SHA256",
+        "binaryData": true,
+        "binaryPropertyName": "data",
+        "dataPropertyName": "expected_signature",
+        "encoding": "hex"
+      },
+      "id": "2d9f3646-4911-4177-a8b8-38894de7dc87",
+      "name": "Verify Instagram Signature",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 2,
+      "position": [
+        260,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e78210d3-ae9f-4f3b-a631-a6cc30747b09",
+              "leftValue": "={{ $json.headers['x-hub-signature-256'] || '' }}",
+              "rightValue": "={{ 'sha256=' + $json.expected_signature }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "efa8c895-ebf6-4dfe-a27a-d11927f49321",
+      "name": "Signature Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        520,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "2368caba-9b88-4e66-ab6f-0982d8747a69",
+      "name": "Reject Forged Request",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        780,
+        300
+      ]
     },
     {
       "parameters": {
@@ -50,7 +132,7 @@
       "typeVersion": 2,
       "position": [
         0,
-        500
+        520
       ],
       "webhookId": "868f231f-e0de-4615-a055-ede68e99c64e"
     },
@@ -93,7 +175,7 @@
       "typeVersion": 2.2,
       "position": [
         260,
-        500
+        520
       ]
     },
     {
@@ -110,7 +192,7 @@
       "typeVersion": 1.1,
       "position": [
         520,
-        420
+        440
       ]
     },
     {
@@ -127,7 +209,7 @@
       "typeVersion": 1.1,
       "position": [
         520,
-        580
+        600
       ]
     },
     {
@@ -139,7 +221,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        260,
+        780,
         100
       ]
     },
@@ -244,6 +326,18 @@
               "type": "string"
             },
             {
+              "id": "a3dfc83b-c474-477e-a567-b147d50b6e3e",
+              "name": "reply_mode",
+              "value": "assistant",
+              "type": "string"
+            },
+            {
+              "id": "37ba30e6-2dc3-4269-a63a-09f194e8d05e",
+              "name": "require_consent",
+              "value": false,
+              "type": "boolean"
+            },
+            {
               "id": "93c09e86-9c9b-4925-acba-1e3f24574abe",
               "name": "handoff_confidence_threshold",
               "value": 0.6,
@@ -277,7 +371,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        520,
+        1040,
         100
       ]
     },
@@ -303,7 +397,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        780,
+        1300,
         100
       ],
       "alwaysOutputData": true,
@@ -343,7 +437,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1040,
+        1560,
         100
       ],
       "alwaysOutputData": true,
@@ -383,7 +477,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1300,
+        1820,
         100
       ],
       "alwaysOutputData": true,
@@ -394,14 +488,14 @@
     },
     {
       "parameters": {
-        "jsCode": "// ============================================================================\n// 2 · ASSEMBLE CONTEXT\n// ----------------------------------------------------------------------------\n// Gathers everything the AI step needs into ONE item:\n//   message   → the normalized customer message\n//   config    → the per-client settings from \"Client Config\"\n//   kb_text   → the approved knowledge base, formatted for the prompt\n//   history   → the last N turns of this conversation (Claude message format)\n//   lead      → the customer's existing row in the Leads sheet (or null)\n//   triage    → \"bot\" | \"human\" | \"ignore\"\n//       bot    = the assistant answers\n//       human  = a person took over this chat (status = human in Leads) → stay silent, alert owner\n//       ignore = Meta re-delivered a message we already processed (same message_id)\n// ============================================================================\n\nconst message = $('Normalize Message').first().json;\nconst config = $('Client Config').first().json;\nconst zone = config.timezone || 'UTC';\n\n// Google Sheets nodes return one empty item when nothing matches → drop those.\nconst rows = (items) => items.map((i) => i.json).filter((r) => r && Object.keys(r).length > 0);\n\nconst kbRows = rows($('Load Knowledge Base').all());\nconst leadRows = rows($('Lookup Lead').all()).filter((r) => String(r.contact_key) === message.contact_key);\nconst logRows = rows($('Load Conversation History').all()).filter((r) => String(r.contact_key) === message.contact_key);\n\n// --- Knowledge base → readable text, grouped by category ---------------------\nconst ORDER = ['services', 'hours', 'location', 'booking', 'policies', 'faq'];\nconst groups = {};\nfor (const r of kbRows) {\n  const cat = String(r.category || 'faq').trim().toLowerCase();\n  if (!r.title && !r.content) continue;\n  (groups[cat] = groups[cat] || []).push(`- ${String(r.title || '').trim()}: ${String(r.content || '').trim()}`);\n}\nconst cats = [...ORDER.filter((c) => groups[c]), ...Object.keys(groups).filter((c) => !ORDER.includes(c))];\nconst kb_text = cats.map((c) => `## ${c.toUpperCase()}\\n${groups[c].join('\\n')}`).join('\\n\\n') || '(The knowledge base is empty.)';\n\n// --- Timestamps: accept ISO strings, \"yyyy-LL-dd HH:mm\" or Sheets date serials\nfunction parseWhen(value) {\n  if (value === undefined || value === null || value === '') return null;\n  if (typeof value === 'number') return DateTime.fromMillis(Math.round((value - 25569) * 86400000), { zone });\n  const s = String(value);\n  let dt = DateTime.fromISO(s, { zone });\n  if (!dt.isValid) dt = DateTime.fromFormat(s, 'yyyy-LL-dd HH:mm:ss', { zone });\n  if (!dt.isValid) dt = DateTime.fromFormat(s, 'yyyy-LL-dd HH:mm', { zone });\n  return dt.isValid ? dt : null;\n}\n\n// --- Conversation history → Claude messages (oldest first, last N turns) -----\nlogRows.sort((a, b) => {\n  const ta = parseWhen(a.timestamp), tb = parseWhen(b.timestamp);\n  return (ta ? ta.toMillis() : 0) - (tb ? tb.toMillis() : 0);\n});\nconst maxTurns = Number(config.max_history_turns) || 10;\nconst history = [];\nfor (const r of logRows.slice(-maxTurns)) {\n  if (r.customer_message) history.push({ role: 'user', content: String(r.customer_message) });\n  if (r.bot_reply) history.push({ role: 'assistant', content: String(r.bot_reply) });\n}\n\n// --- Triage -------------------------------------------------------------------\nconst lead = leadRows[0] || null;\nconst is_duplicate = logRows.some((r) => r.message_id && String(r.message_id) === message.message_id);\n\nlet human_mode = false;\nif (lead && String(lead.status || '').trim().toLowerCase() === 'human') {\n  const since = parseWhen(lead.handoff_at);\n  const hours = since ? (Date.now() - since.toMillis()) / 3600000 : 0;\n  human_mode = hours < (Number(config.human_mode_timeout_hours) || 12);   // auto-resume the bot after the timeout\n}\n\nconst triage = is_duplicate ? 'ignore' : human_mode ? 'human' : 'bot';\n\nreturn [{ json: { message, config, lead, kb_text, kb_row_count: kbRows.length, history, triage, is_duplicate, human_mode } }];\n"
+        "jsCode": "// ============================================================================\n// 2 · ASSEMBLE CONTEXT\n// ----------------------------------------------------------------------------\n// Gathers everything the AI step needs into ONE item:\n//   message   → the normalized customer message\n//   config    → the per-client settings from \"Client Config\"\n//   kb_text   → the approved knowledge base, formatted for the prompt (rows carry ids)\n//   kb_rows   → the same rows as objects { id, category, title, content }\n//   history   → the last N turns of this conversation (Claude message format)\n//   lead      → the customer's existing row in the Leads sheet (or null)\n//   triage    → \"bot\" | \"human\" | \"ignore\"\n//       bot    = the assistant answers\n//       human  = a person took over this chat (status = human in Leads) → stay silent, alert owner\n//       ignore = Meta re-delivered a message we already processed (same message_id)\n// ============================================================================\n\nconst message = $('Normalize Message').first().json;\nconst config = $('Client Config').first().json;\nconst zone = config.timezone || 'UTC';\n\n// Google Sheets nodes return one empty item when nothing matches → drop those.\nconst rows = (items) => items.map((i) => i.json).filter((r) => r && Object.keys(r).length > 0);\n\nconst kbRows = rows($('Load Knowledge Base').all());\nconst leadRows = rows($('Lookup Lead').all()).filter((r) => String(r.contact_key) === message.contact_key);\nconst logRows = rows($('Load Conversation History').all()).filter((r) => String(r.contact_key) === message.contact_key);\n\n// --- Knowledge base → readable text, grouped by category ---------------------\n// Every row gets a short id such as [S1] (services), [H2] (hours), [F3] (faq).\n// The model must cite the ids it used (kb_refs); in strict mode the workflow\n// sends those rows verbatim instead of the model's wording.\nconst ORDER = ['services', 'hours', 'location', 'booking', 'policies', 'faq'];\nconst groups = {};\nconst kb_rows = [];\nconst counters = {};\nfor (const r of kbRows) {\n  const cat = String(r.category || 'faq').trim().toLowerCase();\n  if (!r.title && !r.content) continue;\n  counters[cat] = (counters[cat] || 0) + 1;\n  const row = { id: `${cat.charAt(0).toUpperCase()}${counters[cat]}`, category: cat, title: String(r.title || '').trim(), content: String(r.content || '').trim() };\n  kb_rows.push(row);\n  (groups[cat] = groups[cat] || []).push(`- [${row.id}] ${row.title}: ${row.content}`);\n}\nconst cats = [...ORDER.filter((c) => groups[c]), ...Object.keys(groups).filter((c) => !ORDER.includes(c))];\nconst kb_text = cats.map((c) => `## ${c.toUpperCase()}\\n${groups[c].join('\\n')}`).join('\\n\\n') || '(The knowledge base is empty.)';\n\n// --- Timestamps: accept ISO strings, \"yyyy-LL-dd HH:mm\" or Sheets date serials\nfunction parseWhen(value) {\n  if (value === undefined || value === null || value === '') return null;\n  if (typeof value === 'number') return DateTime.fromMillis(Math.round((value - 25569) * 86400000), { zone });\n  const s = String(value);\n  let dt = DateTime.fromISO(s, { zone });\n  if (!dt.isValid) dt = DateTime.fromFormat(s, 'yyyy-LL-dd HH:mm:ss', { zone });\n  if (!dt.isValid) dt = DateTime.fromFormat(s, 'yyyy-LL-dd HH:mm', { zone });\n  return dt.isValid ? dt : null;\n}\n\n// --- Conversation history → Claude messages (oldest first, last N turns) -----\nlogRows.sort((a, b) => {\n  const ta = parseWhen(a.timestamp), tb = parseWhen(b.timestamp);\n  return (ta ? ta.toMillis() : 0) - (tb ? tb.toMillis() : 0);\n});\nconst maxTurns = Number(config.max_history_turns) || 10;\nconst history = [];\nfor (const r of logRows.slice(-maxTurns)) {\n  if (r.customer_message) history.push({ role: 'user', content: String(r.customer_message) });\n  if (r.bot_reply) history.push({ role: 'assistant', content: String(r.bot_reply) });\n}\n\n// --- Triage -------------------------------------------------------------------\nconst lead = leadRows[0] || null;\nconst is_duplicate = logRows.some((r) => r.message_id && String(r.message_id) === message.message_id);\n\nlet human_mode = false;\nif (lead && String(lead.status || '').trim().toLowerCase() === 'human') {\n  const since = parseWhen(lead.handoff_at);\n  const hours = since ? (Date.now() - since.toMillis()) / 3600000 : 0;\n  human_mode = hours < (Number(config.human_mode_timeout_hours) || 12);   // auto-resume the bot after the timeout\n}\n\nconst triage = is_duplicate ? 'ignore' : human_mode ? 'human' : 'bot';\n\nreturn [{ json: { message, config, lead, kb_text, kb_rows, kb_row_count: kb_rows.length, history, triage, is_duplicate, human_mode } }];\n"
       },
       "id": "4be84460-8031-41de-a2ff-d81e5e9191f1",
       "name": "Assemble Context",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1560,
+        2080,
         100
       ]
     },
@@ -490,7 +584,7 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        1820,
+        2340,
         100
       ]
     },
@@ -501,7 +595,7 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        2080,
+        2600,
         500
       ]
     },
@@ -570,6 +664,12 @@
               "type": "string"
             },
             {
+              "id": "b6666fa5-11ce-42d7-ac46-ad1d6cef0c47",
+              "name": "kb_refs",
+              "value": "",
+              "type": "string"
+            },
+            {
               "id": "dc6af101-4043-4e11-a25b-a9146d583e9a",
               "name": "message_id",
               "value": "={{ $json.message.message_id }}",
@@ -591,7 +691,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2080,
+        2600,
         300
       ]
     },
@@ -623,7 +723,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2340,
+        2860,
         300
       ],
       "executeOnce": true,
@@ -649,7 +749,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        2600,
+        3120,
         300
       ],
       "executeOnce": true,
@@ -659,14 +759,14 @@
     },
     {
       "parameters": {
-        "jsCode": "// ============================================================================\n// 3 · BUILD CLAUDE REQUEST\n// ----------------------------------------------------------------------------\n// Builds the body for the Anthropic Messages API call. The design choices that\n// keep the bot \"limited to approved information\" live here:\n//   • the knowledge base is injected into the system prompt and the rules say\n//     \"answer ONLY from it, otherwise hand off\";\n//   • the reply is returned as STRICT JSON (output_config.format) so the\n//     workflow — not the model — decides what is sent, booked or escalated;\n//   • the model never confirms bookings; it only collects details.\n// ============================================================================\n\nconst ctx = $input.first().json;\nconst { message, config, kb_text, history, lead } = ctx;\nconst zone = config.timezone || 'UTC';\nconst now = DateTime.now().setZone(zone);\n\nconst stableRules = `You are the virtual assistant of ${config.client_name} (${config.business_type}). You chat with customers on WhatsApp and Instagram.\n\nSTRICT RULES\n1. Answer ONLY from the APPROVED KNOWLEDGE BASE below. If the answer is not there, do NOT guess, estimate or invent anything. Say you will check with the team and set needs_human = true.\n2. Quote prices, durations, hours, addresses and policies exactly as written. Never offer discounts, promises, diagnoses or medical/legal advice.\n3. Never confirm an appointment yourself. Your job is only to collect: (a) the service, (b) the date, (c) the time, (d) the customer's name. Once all four are known, repeat them back in one short message and ask the customer to confirm. Set booking.ready_to_book = true ONLY after the customer has confirmed. The booking system then checks the calendar and sends the confirmation.\n4. Appointments are possible only during the booking hours listed below. If the customer asks for a time outside them, politely offer the booking hours instead.\n5. Hand off to a human (needs_human = true, with a short polite reply) when the customer asks for a person, is upset or complaining, asks for medical/legal advice, asks about something not in the knowledge base, or when you are unsure.\n6. Reply in the customer's language. Keep replies short: at most 3 short sentences or a short list. Plain text only — no markdown, no headings, no bold.\n7. Capture lead details (name, phone, email, service interest) whenever the customer shares them.\n8. If the customer message is a placeholder such as \"[The customer sent a image message ...]\", politely ask them to type their question.\n9. confidence = how fully your reply is supported by the knowledge base (1.0 = fully supported, below 0.6 = unsure).\n\nBOOKING HOURS: ${config.opening_time}–${config.closing_time} (${zone}), closed on: ${config.closed_days || 'none'}. Appointment length: ${config.slot_minutes} minutes.\n\nAPPROVED KNOWLEDGE BASE\n${kb_text}`;\n\nconst profile = lead\n  ? `name: ${lead.name || 'unknown'}; service interest: ${lead.service_interest || 'unknown'}; previous booking: ${lead.booking_datetime || 'none'}`\n  : 'new customer, no previous chats';\n\nconst liveContext = `TODAY: ${now.toFormat('cccc, d LLLL yyyy')} · current time ${now.toFormat('HH:mm')} (${zone}). Resolve relative dates such as \"tomorrow\" or \"next Monday\" into absolute dates.\nCHANNEL: ${message.channel}. CUSTOMER PROFILE: ${profile}.`;\n\n// JSON schema the model MUST follow (structured outputs) ---------------------\nconst nullableString = { anyOf: [{ type: 'string' }, { type: 'null' }] };\nconst schema = {\n  type: 'object',\n  additionalProperties: false,\n  required: ['intent', 'reply', 'confidence', 'needs_human', 'handoff_reason', 'lead', 'booking'],\n  properties: {\n    intent: {\n      type: 'string',\n      enum: ['faq', 'booking', 'lead', 'handoff', 'smalltalk'],\n      description: 'faq = question answerable from the knowledge base · booking = wants an appointment · lead = sharing contact details / interest · handoff = needs a human · smalltalk = greeting or thanks',\n    },\n    reply: { type: 'string', description: \"The exact message to send to the customer. Plain text, short, friendly, in the customer's language.\" },\n    confidence: { type: 'number', description: '0 to 1. How fully the reply is supported by the approved knowledge base.' },\n    needs_human: { type: 'boolean', description: 'true when a human must take over this conversation.' },\n    handoff_reason: { ...nullableString, description: 'Short reason when needs_human is true, otherwise null.' },\n    lead: {\n      type: 'object',\n      additionalProperties: false,\n      required: ['name', 'phone', 'email', 'service_interest'],\n      properties: {\n        name: nullableString,\n        phone: nullableString,\n        email: nullableString,\n        service_interest: nullableString,\n      },\n    },\n    booking: {\n      type: 'object',\n      additionalProperties: false,\n      required: ['requested', 'service', 'date', 'time', 'ready_to_book'],\n      properties: {\n        requested: { type: 'boolean', description: 'true if the customer wants an appointment.' },\n        service: nullableString,\n        date: { ...nullableString, description: 'Absolute date as YYYY-MM-DD, resolved from TODAY.' },\n        time: { ...nullableString, description: 'Start time as HH:MM in 24-hour format.' },\n        ready_to_book: { type: 'boolean', description: 'true ONLY when service, date, time and name are all known AND the customer confirmed them in their latest message.' },\n      },\n    },\n  },\n};\n\nconst claude_request = {\n  model: config.claude_model || 'claude-opus-5-5',\n  max_tokens: 2048,\n  system: [\n    { type: 'text', text: stableRules, cache_control: { type: 'ephemeral' } },   // stable → cached between messages\n    { type: 'text', text: liveContext },                                          // changes every call → after the cache breakpoint\n  ],\n  messages: [...history, { role: 'user', content: message.text }],\n  output_config: {\n    effort: config.claude_effort || 'low',\n    format: { type: 'json_schema', schema },\n  },\n};\n\nreturn [{ json: { ...ctx, claude_request } }];\n"
+        "jsCode": "// ============================================================================\n// 3 · BUILD CLAUDE REQUEST\n// ----------------------------------------------------------------------------\n// Builds the body for the Anthropic Messages API call. The design choices that\n// keep the bot \"limited to approved information\" live here:\n//   • the knowledge base is injected into the system prompt and the rules say\n//     \"answer ONLY from it, otherwise hand off\";\n//   • the reply is returned as STRICT JSON (output_config.format) so the\n//     workflow — not the model — decides what is sent, booked or escalated;\n//   • the model never confirms bookings; it only collects details.\n// ============================================================================\n\nconst ctx = $input.first().json;\nconst { message, config, kb_text, history, lead } = ctx;\nconst zone = config.timezone || 'UTC';\nconst now = DateTime.now().setZone(zone);\nconst requireConsent = String(config.require_consent) === 'true';\nconst strictMode = String(config.reply_mode || 'assistant').toLowerCase() === 'strict';\n\nconst stableRules = `You are the virtual assistant of ${config.client_name} (${config.business_type}). You chat with customers on WhatsApp and Instagram.\n\nSTRICT RULES\n1. Answer ONLY from the APPROVED KNOWLEDGE BASE below. If the answer is not there, do NOT guess, estimate or invent anything. Say you will check with the team and set needs_human = true.\n2. Quote prices, durations, hours, addresses and policies exactly as written. Never offer discounts, promises, diagnoses or medical/legal advice.\n3. Never confirm an appointment yourself. Your job is only to collect: (a) the service, (b) the date, (c) the time, (d) the customer's name. Once all four are known, repeat them back in one short message and ask the customer to confirm. Set booking.ready_to_book = true ONLY after the customer has confirmed. The booking system then checks the calendar and sends the confirmation.\n4. Appointments are possible only during the booking hours listed below. If the customer asks for a time outside them, politely offer the booking hours instead.\n5. Hand off to a human (needs_human = true, with a short polite reply) when the customer asks for a person, is upset or complaining, asks for medical/legal advice, asks about something not in the knowledge base, or when you are unsure.\n6. Reply in the customer's language. Keep replies short: at most 3 short sentences or a short list. Plain text only — no markdown, no headings, no bold.\n7. Capture lead details (name, phone, email, service interest) whenever the customer shares them.\n8. If the customer message is a placeholder such as \"[The customer sent a image message ...]\", politely ask them to type their question.\n9. confidence = how fully your reply is supported by the knowledge base (1.0 = fully supported, below 0.6 = unsure).\n10. Every knowledge base row has an id in square brackets, e.g. [S1]. In kb_refs list the ids of EVERY row you used for the reply (empty list for greetings or booking steps).${strictMode ? ' For FAQ answers the system will send the referenced rows word for word, so choose the ids carefully and keep the reply short.' : ''}${requireConsent ? `\n11. Before collecting booking or contact details, ask once: \"May we save your name and contact details in our records to arrange your appointment? Please reply yes or no.\" Record the answer in lead.consent. If the customer says no, keep helping but do not store or ask again.` : ''}\n\nBOOKING HOURS: ${config.opening_time}–${config.closing_time} (${zone}), closed on: ${config.closed_days || 'none'}. Appointment length: ${config.slot_minutes} minutes.\n\nAPPROVED KNOWLEDGE BASE\n${kb_text}`;\n\nconst profile = lead\n  ? `name: ${lead.name || 'unknown'}; service interest: ${lead.service_interest || 'unknown'}; previous booking: ${lead.booking_datetime || 'none'}`\n  : 'new customer, no previous chats';\n\nconst liveContext = `TODAY: ${now.toFormat('cccc, d LLLL yyyy')} · current time ${now.toFormat('HH:mm')} (${zone}). Resolve relative dates such as \"tomorrow\" or \"next Monday\" into absolute dates.\nCHANNEL: ${message.channel}. CUSTOMER PROFILE: ${profile}.`;\n\n// JSON schema the model MUST follow (structured outputs) ---------------------\nconst nullableString = { anyOf: [{ type: 'string' }, { type: 'null' }] };\nconst schema = {\n  type: 'object',\n  additionalProperties: false,\n  required: ['intent', 'reply', 'confidence', 'needs_human', 'handoff_reason', 'kb_refs', 'lead', 'booking'],\n  properties: {\n    intent: {\n      type: 'string',\n      enum: ['faq', 'booking', 'lead', 'handoff', 'smalltalk'],\n      description: 'faq = question answerable from the knowledge base · booking = wants an appointment · lead = sharing contact details / interest · handoff = needs a human · smalltalk = greeting or thanks',\n    },\n    reply: { type: 'string', description: \"The exact message to send to the customer. Plain text, short, friendly, in the customer's language.\" },\n    confidence: { type: 'number', description: '0 to 1. How fully the reply is supported by the approved knowledge base.' },\n    needs_human: { type: 'boolean', description: 'true when a human must take over this conversation.' },\n    handoff_reason: { ...nullableString, description: 'Short reason when needs_human is true, otherwise null.' },\n    kb_refs: { type: 'array', items: { type: 'string' }, description: 'Ids of the knowledge base rows used for this reply, e.g. [\"S1\", \"H2\"]. Empty if none were needed.' },\n    lead: {\n      type: 'object',\n      additionalProperties: false,\n      required: ['name', 'phone', 'email', 'service_interest', 'consent'],\n      properties: {\n        name: nullableString,\n        phone: nullableString,\n        email: nullableString,\n        service_interest: nullableString,\n        consent: { type: 'string', enum: ['yes', 'no', 'unknown'], description: 'Whether the customer agreed to have their details stored. \"unknown\" until they answer.' },\n      },\n    },\n    booking: {\n      type: 'object',\n      additionalProperties: false,\n      required: ['requested', 'service', 'date', 'time', 'ready_to_book'],\n      properties: {\n        requested: { type: 'boolean', description: 'true if the customer wants an appointment.' },\n        service: nullableString,\n        date: { ...nullableString, description: 'Absolute date as YYYY-MM-DD, resolved from TODAY.' },\n        time: { ...nullableString, description: 'Start time as HH:MM in 24-hour format.' },\n        ready_to_book: { type: 'boolean', description: 'true ONLY when service, date, time and name are all known AND the customer confirmed them in their latest message.' },\n      },\n    },\n  },\n};\n\nconst claude_request = {\n  model: config.claude_model || 'claude-opus-5-5',\n  max_tokens: 2048,\n  system: [\n    { type: 'text', text: stableRules, cache_control: { type: 'ephemeral' } },   // stable → cached between messages\n    { type: 'text', text: liveContext },                                          // changes every call → after the cache breakpoint\n  ],\n  messages: [...history, { role: 'user', content: message.text }],\n  output_config: {\n    effort: config.claude_effort || 'low',\n    format: { type: 'json_schema', schema },\n  },\n};\n\nreturn [{ json: { ...ctx, claude_request } }];\n"
       },
       "id": "b76b86ed-1bd1-4420-a0b9-e4a1d1b7def7",
       "name": "Build Claude Request",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2080,
+        2600,
         100
       ]
     },
@@ -699,7 +799,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2340,
+        2860,
         100
       ],
       "retryOnFail": true,
@@ -709,14 +809,14 @@
     },
     {
       "parameters": {
-        "jsCode": "// ============================================================================\n// 4 · PARSE CLAUDE RESPONSE + GUARDRAILS\n// ----------------------------------------------------------------------------\n// Reads the model's JSON and then applies DETERMINISTIC checks that the model\n// cannot talk its way around. Any failed check → \"handoff\" (safe default).\n//   • unreadable / refused / errored API response\n//   • empty reply\n//   • the model itself asked for a human\n//   • confidence below the threshold set in Client Config\n//   • PRICE GUARD: every money amount in the reply must exist in the knowledge base\n//   • the customer explicitly asked for a person\n// Output adds: ai, guard[], needs_human, decision (\"answer\" | \"book\" | \"handoff\"), lead_merged\n// ============================================================================\n\nconst ctx = $('Build Claude Request').first().json;\nconst res = $input.first().json || {};\nconst config = ctx.config;\n\n// --- 1. Read the structured JSON -------------------------------------------\nlet ai = null;\nlet problem = null;\nif (res.error) problem = 'ai_api_error';\nelse if (res.stop_reason === 'refusal') problem = 'ai_refusal';\nelse if (res.stop_reason === 'max_tokens') problem = 'ai_output_truncated';\nelse {\n  try {\n    const text = (res.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('').trim();\n    ai = JSON.parse(text);\n  } catch (e) {\n    problem = 'ai_output_unreadable';\n  }\n}\nif (!ai || typeof ai !== 'object') { ai = {}; problem = problem || 'ai_output_unreadable'; }\n\n// --- 2. Normalize fields with safe defaults ----------------------------------\nconst INTENTS = ['faq', 'booking', 'lead', 'handoff', 'smalltalk'];\nai.intent = INTENTS.includes(ai.intent) ? ai.intent : 'faq';\nai.reply = String(ai.reply || '').trim();\nai.confidence = Math.max(0, Math.min(1, Number(ai.confidence) || 0));\nai.needs_human = Boolean(ai.needs_human);\nai.handoff_reason = ai.handoff_reason ? String(ai.handoff_reason) : null;\nai.lead = Object.assign({ name: null, phone: null, email: null, service_interest: null }, ai.lead || {});\nai.booking = Object.assign({ requested: false, service: null, date: null, time: null, ready_to_book: false }, ai.booking || {});\n\n// --- 3. Guardrails (outside the model) ---------------------------------------\nconst guard = [];\nif (problem) guard.push(problem);\nif (!ai.reply) guard.push('empty_reply');\nif (ai.needs_human) guard.push(ai.handoff_reason ? `model: ${ai.handoff_reason}` : 'model_requested_handoff');\n\nconst threshold = Number(config.handoff_confidence_threshold) || 0.6;\nif (!problem && ai.confidence < threshold) guard.push(`low_confidence (${ai.confidence} < ${threshold})`);\n\n// Price guard: any currency amount in the reply must appear in the approved knowledge base.\nconst MONEY = /(?:PKR|Rs\\.?|₨|\\$|USD|€|EUR|£|GBP|AED|SAR|INR|₹)\\s?\\d[\\d,]*(?:\\.\\d+)?|\\d[\\d,]*(?:\\.\\d+)?\\s?(?:PKR|Rs\\.?|USD|EUR|GBP|AED|SAR|INR|dollars|rupees|euros|pounds)\\b/gi;\nconst kbNumbers = new Set((String(ctx.kb_text).match(/\\d[\\d,]*(?:\\.\\d+)?/g) || []).map((n) => n.replace(/,/g, '')));\nfor (const amount of ai.reply.match(MONEY) || []) {\n  const n = (amount.match(/\\d[\\d,]*(?:\\.\\d+)?/) || [''])[0].replace(/,/g, '');\n  if (n && !kbNumbers.has(n)) { guard.push(`price_not_in_knowledge_base: ${amount.trim()}`); break; }\n}\n\n// Explicit request for a person (checked on the customer's own words).\nif (/\\b(human|real person|speak to (?:someone|a person|the doctor|the owner)|talk to (?:someone|a person|the doctor|the owner)|manager|complaint|complain)\\b/i.test(ctx.message.text)) {\n  guard.push('customer_asked_for_human');\n}\n\nconst needs_human = guard.length > 0;\nconst b = ai.booking;\nconst booking_ready = !needs_human && b.ready_to_book && b.service && b.date && b.time;\nconst decision = needs_human ? 'handoff' : booking_ready ? 'book' : 'answer';\n\n// --- 4. Merge lead details: this turn > existing sheet row > channel profile --\nconst old = ctx.lead || {};\nconst lead_merged = {\n  name: ai.lead.name || old.name || ctx.message.contact_name || '',\n  phone: ai.lead.phone || old.phone || (ctx.message.channel === 'whatsapp' ? ctx.message.contact_id : ''),\n  email: ai.lead.email || old.email || '',\n  service_interest: ai.lead.service_interest || b.service || old.service_interest || '',\n};\n\nconst usage = res.usage || {};\nconst tokens_used = (Number(usage.input_tokens) || 0) + (Number(usage.cache_read_input_tokens) || 0) + (Number(usage.cache_creation_input_tokens) || 0) + (Number(usage.output_tokens) || 0);\n\nreturn [{ json: { ...ctx, ai, guard, needs_human, decision, lead_merged, tokens_used } }];\n"
+        "jsCode": "// ============================================================================\n// 4 · PARSE CLAUDE RESPONSE + GUARDRAILS\n// ----------------------------------------------------------------------------\n// Reads the model's JSON and then applies DETERMINISTIC checks that the model\n// cannot talk its way around. Any failed check → \"handoff\" (safe default).\n//   • unreadable / refused / errored API response\n//   • empty reply\n//   • the model itself asked for a human\n//   • confidence below the threshold set in Client Config\n//   • PRICE GUARD: every money amount in the reply must exist in the knowledge base\n//   • the customer explicitly asked for a person\n// Also: validates kb_refs, applies strict mode (verbatim sheet rows for FAQs)\n// and the optional consent rule.\n// Output adds: ai, guard[], needs_human, decision (\"answer\" | \"book\" | \"handoff\"),\n//              lead_merged, consent_given, save_personal_details, tokens_used\n// ============================================================================\n\nconst ctx = $('Build Claude Request').first().json;\nconst res = $input.first().json || {};\nconst config = ctx.config;\n\n// --- 1. Read the structured JSON -------------------------------------------\nlet ai = null;\nlet problem = null;\nif (res.error) problem = 'ai_api_error';\nelse if (res.stop_reason === 'refusal') problem = 'ai_refusal';\nelse if (res.stop_reason === 'max_tokens') problem = 'ai_output_truncated';\nelse {\n  try {\n    const text = (res.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('').trim();\n    ai = JSON.parse(text);\n  } catch (e) {\n    problem = 'ai_output_unreadable';\n  }\n}\nif (!ai || typeof ai !== 'object') { ai = {}; problem = problem || 'ai_output_unreadable'; }\n\n// --- 2. Normalize fields with safe defaults ----------------------------------\nconst INTENTS = ['faq', 'booking', 'lead', 'handoff', 'smalltalk'];\nai.intent = INTENTS.includes(ai.intent) ? ai.intent : 'faq';\nai.reply = String(ai.reply || '').trim();\nai.confidence = Math.max(0, Math.min(1, Number(ai.confidence) || 0));\nai.needs_human = Boolean(ai.needs_human);\nai.handoff_reason = ai.handoff_reason ? String(ai.handoff_reason) : null;\nai.lead = Object.assign({ name: null, phone: null, email: null, service_interest: null, consent: 'unknown' }, ai.lead || {});\nai.lead.consent = ['yes', 'no'].includes(ai.lead.consent) ? ai.lead.consent : 'unknown';\nai.booking = Object.assign({ requested: false, service: null, date: null, time: null, ready_to_book: false }, ai.booking || {});\n\n// Knowledge-base references: keep only ids that really exist in the sheet.\nconst kbById = {};\nfor (const row of ctx.kb_rows || []) kbById[row.id] = row;\nai.kb_refs = (Array.isArray(ai.kb_refs) ? ai.kb_refs : []).map((id) => String(id).replace(/[\\[\\]\\s]/g, '').toUpperCase()).filter((id) => kbById[id]);\n\n// Strict mode: FAQ answers are the sheet rows word for word, never the model's wording.\nconst strictMode = String(config.reply_mode || 'assistant').toLowerCase() === 'strict';\nif (strictMode && ai.intent === 'faq' && !problem) {\n  if (ai.kb_refs.length) ai.reply = ai.kb_refs.map((id) => `${kbById[id].title}: ${kbById[id].content}`).join('\\n');\n  else { ai.needs_human = true; ai.handoff_reason = ai.handoff_reason || 'strict mode: answer not backed by a knowledge base row'; }\n}\n\n// --- 3. Guardrails (outside the model) ---------------------------------------\nconst guard = [];\nif (problem) guard.push(problem);\nif (!ai.reply) guard.push('empty_reply');\nif (ai.needs_human) guard.push(ai.handoff_reason ? `model: ${ai.handoff_reason}` : 'model_requested_handoff');\n\nconst threshold = Number(config.handoff_confidence_threshold) || 0.6;\nif (!problem && ai.confidence < threshold) guard.push(`low_confidence (${ai.confidence} < ${threshold})`);\n\n// Price guard: any currency amount in the reply must appear in the approved knowledge base.\nconst MONEY = /(?:PKR|Rs\\.?|₨|\\$|USD|€|EUR|£|GBP|AED|SAR|INR|₹)\\s?\\d[\\d,]*(?:\\.\\d+)?|\\d[\\d,]*(?:\\.\\d+)?\\s?(?:PKR|Rs\\.?|USD|EUR|GBP|AED|SAR|INR|dollars|rupees|euros|pounds)\\b/gi;\nconst kbNumbers = new Set((String(ctx.kb_text).match(/\\d[\\d,]*(?:\\.\\d+)?/g) || []).map((n) => n.replace(/,/g, '')));\nfor (const amount of ai.reply.match(MONEY) || []) {\n  const n = (amount.match(/\\d[\\d,]*(?:\\.\\d+)?/) || [''])[0].replace(/,/g, '');\n  if (n && !kbNumbers.has(n)) { guard.push(`price_not_in_knowledge_base: ${amount.trim()}`); break; }\n}\n\n// Explicit request for a person (checked on the customer's own words).\nif (/\\b(human|real person|speak to (?:someone|a person|the doctor|the owner)|talk to (?:someone|a person|the doctor|the owner)|manager|complaint|complain)\\b/i.test(ctx.message.text)) {\n  guard.push('customer_asked_for_human');\n}\n\nconst needs_human = guard.length > 0;\nconst b = ai.booking;\nconst booking_ready = !needs_human && b.ready_to_book && b.service && b.date && b.time;\nconst decision = needs_human ? 'handoff' : booking_ready ? 'book' : 'answer';\n\n// --- 4. Merge lead details: this turn > existing sheet row > channel profile --\nconst old = ctx.lead || {};\nconst lead_merged = {\n  name: ai.lead.name || old.name || ctx.message.contact_name || '',\n  phone: ai.lead.phone || old.phone || (ctx.message.channel === 'whatsapp' ? ctx.message.contact_id : ''),\n  email: ai.lead.email || old.email || '',\n  service_interest: ai.lead.service_interest || b.service || old.service_interest || '',\n};\n\n// --- 5. Consent (only when require_consent is true in Client Config) --------\n// Personal details (name, phone, email) are written to the Leads sheet only\n// with consent. The row itself always exists: it carries the bot/human status.\nconst requireConsent = String(config.require_consent) === 'true';\nconst consent_given = ai.lead.consent === 'yes' || Boolean(old.consent_at);\nconst save_personal_details = !requireConsent || consent_given;\n\nconst usage = res.usage || {};\nconst tokens_used = (Number(usage.input_tokens) || 0) + (Number(usage.cache_read_input_tokens) || 0) + (Number(usage.cache_creation_input_tokens) || 0) + (Number(usage.output_tokens) || 0);\n\nreturn [{ json: { ...ctx, ai, guard, needs_human, decision, lead_merged, consent_given, save_personal_details, tokens_used } }];\n"
       },
       "id": "4f3cced1-edac-4616-a3f8-2622ba19aff8",
       "name": "Parse Claude Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2600,
+        3120,
         100
       ]
     },
@@ -805,7 +905,7 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        2860,
+        3380,
         100
       ]
     },
@@ -859,7 +959,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3120,
+        3640,
         -100
       ]
     },
@@ -872,7 +972,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3120,
+        3640,
         100
       ]
     },
@@ -906,7 +1006,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        3380,
+        3900,
         100
       ]
     },
@@ -930,7 +1030,7 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        3640,
+        4160,
         40
       ],
       "retryOnFail": true,
@@ -967,7 +1067,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        3900,
+        4420,
         40
       ]
     },
@@ -993,8 +1093,107 @@
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
       "position": [
-        4160,
+        4680,
         -20
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "resource": "event",
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('Client Config').first().json.google_calendar_id }}",
+          "mode": "id"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $('Validate Booking Slot').first().json.slot.start_iso }}",
+        "timeMax": "={{ $('Validate Booking Slot').first().json.slot.end_iso }}",
+        "options": {}
+      },
+      "id": "73ac127a-44ca-471e-a6b5-501215ecb5cc",
+      "name": "List Events In Slot",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        4940,
+        -20
+      ],
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================================\n// 7 · RESOLVE BOOKING RACE\n// ----------------------------------------------------------------------------\n// Google Calendar's free/busy check and the event insert are two separate API\n// calls. If two customers confirm the same slot within those few seconds, both\n// events get created. This node runs AFTER our insert and lists every event in\n// the slot: the event that was created FIRST keeps the slot. If ours is not the\n// first, the workflow deletes our event and tells the customer the slot is gone.\n// Output: { keep: true | false, our_event_id, competing_event_id }\n// ============================================================================\n\nconst ours = $('Create Calendar Event').first().json;\nconst events = $input.all().map((i) => i.json).filter((e) => e && e.id);\n\nconst overlaps = (e) => {\n  const s = (e.start && (e.start.dateTime || e.start.date)) || '';\n  const t = (e.end && (e.end.dateTime || e.end.date)) || '';\n  const os = ours.start && (ours.start.dateTime || ours.start.date);\n  const oe = ours.end && (ours.end.dateTime || ours.end.date);\n  if (!s || !t || !os || !oe) return true;              // be conservative: treat unknown as overlapping\n  return new Date(s) < new Date(oe) && new Date(t) > new Date(os);\n};\n\nconst competitors = events.filter((e) => e.id !== ours.id && e.status !== 'cancelled' && overlaps(e));\nconst earlier = competitors.filter((e) => e.created && ours.created && new Date(e.created) < new Date(ours.created));\n\nconst keep = earlier.length === 0;\nreturn [{ json: { keep, our_event_id: ours.id, competing_event_id: keep ? null : earlier[0].id, competitors: competitors.length } }];\n"
+      },
+      "id": "1444a267-f841-4af6-a224-ee5b187ecc38",
+      "name": "Resolve Booking Race",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5200,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "428a0981-bd4c-41e3-aa14-46299b858587",
+              "leftValue": "={{ $json.keep }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "29b27c31-af93-4737-aacb-b9934da8a205",
+      "name": "We Keep The Slot?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5460,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "event",
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('Client Config').first().json.google_calendar_id }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $json.our_event_id }}",
+        "options": {}
+      },
+      "id": "5ad2c5e7-9fa9-484d-af9c-147ae5283a1a",
+      "name": "Delete Our Event",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        5720,
+        60
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -1035,9 +1234,9 @@
               "type": "string"
             },
             {
-              "id": "c4ef56c5-3d89-479e-aa37-4da3fa1512d4",
+              "id": "fe655f53-c433-42d9-a223-31036e3b0ff3",
               "name": "calendar_event_link",
-              "value": "={{ $json.htmlLink || '' }}",
+              "value": "={{ $('Create Calendar Event').first().json.htmlLink || '' }}",
               "type": "string"
             }
           ]
@@ -1050,8 +1249,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        4420,
-        -20
+        5720,
+        -80
       ]
     },
     {
@@ -1104,7 +1303,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        4160,
+        5980,
         120
       ]
     },
@@ -1158,7 +1357,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3640,
+        4160,
         220
       ]
     },
@@ -1212,7 +1411,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3120,
+        3640,
         360
       ]
     },
@@ -1225,7 +1424,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4680,
+        6240,
         100
       ]
     },
@@ -1290,7 +1489,7 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        4940,
+        6500,
         100
       ]
     },
@@ -1309,7 +1508,7 @@
       "type": "n8n-nodes-base.whatsApp",
       "typeVersion": 1.1,
       "position": [
-        5200,
+        6760,
         20
       ],
       "retryOnFail": true,
@@ -1335,7 +1534,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        5200,
+        6760,
         180
       ],
       "retryOnFail": true,
@@ -1365,27 +1564,33 @@
               "type": "string"
             },
             {
-              "id": "90fe537a-60fa-44be-af78-d2efaee67ce7",
+              "id": "d4e39e38-60b7-4065-a71a-674d82952227",
               "name": "name",
-              "value": "={{ $('Parse Claude Response').first().json.lead_merged.name }}",
+              "value": "={{ $('Parse Claude Response').first().json.save_personal_details ? $('Parse Claude Response').first().json.lead_merged.name : (($('Assemble Context').first().json.lead || {}).name || '') }}",
               "type": "string"
             },
             {
-              "id": "db4cc135-a474-42d2-a37e-4afd53931ed0",
+              "id": "8d9de5ea-6335-4b5b-aaca-21aa6b35fd03",
               "name": "phone",
-              "value": "={{ $('Parse Claude Response').first().json.lead_merged.phone }}",
+              "value": "={{ $('Parse Claude Response').first().json.save_personal_details ? $('Parse Claude Response').first().json.lead_merged.phone : (($('Assemble Context').first().json.lead || {}).phone || '') }}",
               "type": "string"
             },
             {
-              "id": "e4b9d5d7-e33f-4313-a505-fa82aefe52ce",
+              "id": "e2162c7b-666d-4d88-a932-177111ef72ac",
               "name": "email",
-              "value": "={{ $('Parse Claude Response').first().json.lead_merged.email }}",
+              "value": "={{ $('Parse Claude Response').first().json.save_personal_details ? $('Parse Claude Response').first().json.lead_merged.email : (($('Assemble Context').first().json.lead || {}).email || '') }}",
               "type": "string"
             },
             {
               "id": "16113654-4fab-410a-a3a1-14142f68515c",
               "name": "service_interest",
               "value": "={{ $('Parse Claude Response').first().json.lead_merged.service_interest }}",
+              "type": "string"
+            },
+            {
+              "id": "c2c7ed7b-1208-41e5-a14c-b23299b6697b",
+              "name": "consent_at",
+              "value": "={{ ($('Assemble Context').first().json.lead || {}).consent_at || ($('Parse Claude Response').first().json.consent_given ? $now.setZone($('Client Config').first().json.timezone).toISO() : '') }}",
               "type": "string"
             },
             {
@@ -1452,7 +1657,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        5460,
+        7020,
         100
       ]
     },
@@ -1486,7 +1691,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        5720,
+        7280,
         100
       ],
       "executeOnce": true,
@@ -1559,6 +1764,12 @@
               "type": "string"
             },
             {
+              "id": "3472bff2-1975-4b50-a58c-3c0a21e73adc",
+              "name": "kb_refs",
+              "value": "={{ $('Parse Claude Response').first().json.ai.kb_refs.join(' ') }}",
+              "type": "string"
+            },
+            {
               "id": "5fb3f859-0629-474d-a81d-5058a2b66bea",
               "name": "message_id",
               "value": "={{ $('Normalize Message').first().json.message_id }}",
@@ -1580,7 +1791,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        5980,
+        7540,
         100
       ]
     },
@@ -1612,7 +1823,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        6240,
+        7800,
         100
       ],
       "executeOnce": true,
@@ -1650,7 +1861,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        6500,
+        8060,
         100
       ]
     },
@@ -1672,7 +1883,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
       "position": [
-        6760,
+        8320,
         100
       ],
       "executeOnce": true,
@@ -1682,9 +1893,9 @@
     },
     {
       "parameters": {
-        "content": "## 1 · Inbound channels\n**WhatsApp** → the WhatsApp Trigger node (needs the Meta app's Client ID + Secret; it registers the webhook for you).\n\n**Instagram** → two Webhook nodes on the same path `instagram-inbound`:\n- GET = Meta's one-time verification handshake (edit the verify token in *Verify Token OK?*)\n- POST = incoming DMs (replies 200 immediately, as Meta requires)\n\n**Normalize Message** converts every payload (WhatsApp, Instagram, ManyChat) into one shape: `channel, contact_id, contact_key, contact_name, text, message_id`. Status receipts, echoes and non-text events produce no item → the run ends quietly.",
-        "height": 440,
-        "width": 520,
+        "content": "## 1 · Inbound channels\n**WhatsApp** → the WhatsApp Trigger node (Meta app Client ID + Secret; it registers the webhook and checks Meta's signature for you).\n\n**Instagram (Meta API)** → two Webhook nodes on the same path `instagram-inbound`:\n- GET = Meta's one-time verification handshake (edit the verify token in *Verify Token OK?*)\n- POST = incoming DMs, answered with 200 at once. **Verify Instagram Signature** (Crypto node, credential = Meta App Secret) recomputes `X-Hub-Signature-256` over the raw body; forged requests are dropped.\n\n**Instagram (ManyChat)** → `manychat-inbound` webhook protected by a Header Auth credential (ManyChat sends the same header). Use one of the two Instagram options, not both.\n\n**Normalize Message** converts every payload (WhatsApp, Instagram, ManyChat) into one shape: `channel, contact_id, contact_key, contact_name, text, message_id`. Status receipts, echoes and empty events produce no item → the run ends quietly.",
+        "height": 460,
+        "width": 1040,
         "color": 5
       },
       "id": "20514bf6-8f41-4d55-a33a-6eabdf7cd2d8",
@@ -1693,13 +1904,13 @@
       "typeVersion": 1,
       "position": [
         -40,
-        -620
+        -640
       ]
     },
     {
       "parameters": {
-        "content": "## 2 · Context (one place to configure a client)\n**Client Config** holds everything client-specific: name, timezone, hours, Sheet / Calendar / WhatsApp / Instagram IDs, model, thresholds and the hand-off message. Duplicate the workflow per client and edit only this node.\n\nThree Google Sheets reads (all \"execute once\", \"always output data\"):\n- **Knowledge** tab → the approved price list, services, hours, FAQs\n- **Leads** tab → is this customer already known? is a human handling them?\n- **Conversations** tab → the last turns, for memory\n\n**Assemble Context** formats the knowledge base, rebuilds the chat history and decides the **Triage**:\n- `bot` → the assistant answers\n- `human` → a person took over (status = human in Leads) → log + alert owner, send nothing\n- `ignore` → Meta re-delivered a message we already logged",
-        "height": 440,
+        "content": "## 2 · Context (one place to configure a client)\n**Client Config** holds everything client-specific: name, timezone, hours, Sheet / Calendar / WhatsApp / Instagram IDs, model, `reply_mode` (assistant | strict), `require_consent`, thresholds and the hand-off message. Duplicate the workflow per client and edit only this node.\n\nThree Google Sheets reads (all \"execute once\", \"always output data\"):\n- **Knowledge** tab → the approved price list, services, hours, FAQs (each row gets an id like [S1])\n- **Leads** tab → is this customer already known? is a human handling them?\n- **Conversations** tab → the last turns, for memory\n\n**Assemble Context** formats the knowledge base, rebuilds the chat history and decides the **Triage**:\n- `bot` → the assistant answers\n- `human` → a person took over (status = human in Leads) → log + alert owner, send nothing\n- `ignore` → Meta re-delivered a message we already logged",
+        "height": 460,
         "width": 1560,
         "color": 4
       },
@@ -1708,14 +1919,14 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        480,
-        -620
+        1000,
+        -640
       ]
     },
     {
       "parameters": {
-        "content": "## 3 · AI brain + guardrails\n**Build Claude Request** writes the system prompt: strict rules + the knowledge base (cached) + today's date, hours and customer profile. The model must answer as strict JSON (`output_config.format`), never free text.\n\n**Ask Claude** = one HTTP call to the Anthropic Messages API (credential: *Anthropic account*). On API errors it continues so the customer still gets a safe hand-off reply.\n\n**Parse Claude Response** applies checks the model cannot bypass: unreadable/refused output, empty reply, model asked for a human, confidence below threshold, **price guard** (every amount in the reply must exist in the knowledge base), customer asked for a person. Any failure → `handoff`.\n\n**Route Decision**: `answer` · `book` · `handoff`.",
-        "height": 440,
+        "content": "## 3 · AI brain + guardrails\n**Build Claude Request** writes the system prompt: strict rules + the knowledge base (cached) + today's date, hours and customer profile. The model must answer as strict JSON (`output_config.format`) and cite the knowledge base ids it used (`kb_refs`).\n\n**Ask Claude** = one HTTP call to the Anthropic Messages API (credential: *Anthropic account*). On API errors it continues so the customer still gets a safe hand-off reply.\n\n**Parse Claude Response** applies checks the model cannot bypass: unreadable/refused output, empty reply, model asked for a human, confidence below threshold, **price guard** (every amount in the reply must exist in the knowledge base), customer asked for a person. In **strict mode** FAQ replies are replaced by the cited sheet rows word for word. Any failure → `handoff`.\n\n**Route Decision**: `answer` · `book` · `handoff`.",
+        "height": 460,
         "width": 1040,
         "color": 6
       },
@@ -1724,15 +1935,15 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2040,
-        -620
+        2560,
+        -640
       ]
     },
     {
       "parameters": {
-        "content": "## 4 · Actions\n- **answer** → send the model's reply as-is.\n- **book** → the model only *proposed* a slot. **Validate Booking Slot** checks it is in the future, on an open day and inside booking hours → **Check Calendar Availability** (Google Calendar free/busy) → **Create Calendar Event** → confirmation text written by the workflow, not the model. Busy or invalid slots get a deterministic \"please pick another time\" reply.\n- **handoff** → fixed, safe hand-off message; the Leads row is switched to `status = human` and the owner is emailed (section 6).\n\nEvery branch ends in a Set node that produces the same fields: `reply_text, decision, status, booking_confirmed, booking_datetime, calendar_event_link`.",
-        "height": 440,
-        "width": 1560,
+        "content": "## 4 · Actions\n- **answer** → send the model's reply as-is.\n- **book** → the model only *proposed* a slot. **Validate Booking Slot** checks future / open day / booking hours → **Check Calendar Availability** (free/busy) → **Create Calendar Event** → **List Events In Slot** + **Resolve Booking Race**: if another event was created a moment earlier in the same slot, **Delete Our Event** and tell the customer the slot is gone. Only a race-free event gets the confirmation, written by the workflow, not the model.\n- **handoff** → fixed, safe hand-off message; the Leads row is switched to `status = human` and the owner is emailed (section 6).\n\nEvery branch ends in a Set node with the same fields: `reply_text, decision, status, booking_confirmed, booking_datetime, calendar_event_link`.",
+        "height": 460,
+        "width": 2600,
         "color": 3
       },
       "id": "f0ff0dc4-782f-468a-af15-ec92847e4c8c",
@@ -1740,14 +1951,14 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        3080,
-        -620
+        3600,
+        -640
       ]
     },
     {
       "parameters": {
         "content": "## 5 · Send the reply\n**Finalize Reply** is the single merge point: strips markdown, applies channel formatting (Instagram has no bold), caps length, falls back to the hand-off message if the text is empty.\n\n**Route by Channel** → WhatsApp Business Cloud node or Instagram Send API (HTTP, header credential `Authorization: Bearer <page token>`).",
-        "height": 440,
+        "height": 460,
         "width": 780,
         "color": 7
       },
@@ -1756,14 +1967,14 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        4640,
-        -620
+        6200,
+        -640
       ]
     },
     {
       "parameters": {
-        "content": "## 6 · Lead capture · memory · owner alerts\n- **Upsert Lead** → one row per customer in *Leads* (matched on `contact_key`): name, phone, email, service interest, status (bot/human), booking, last message.\n- **Append Conversation Log** → one row per turn in *Conversations* (customer message, bot reply, intent, confidence, guardrail notes, tokens). This is also the bot's memory.\n- **Owner Alert Needed?** → Gmail to the owner on every hand-off and every confirmed booking, with what to do next.\n\nTo hand a chat back to the bot: set `status = bot` in the Leads sheet (auto-resumes after `human_mode_timeout_hours`).",
-        "height": 440,
+        "content": "## 6 · Lead capture · memory · owner alerts\n- **Upsert Lead** → one row per customer in *Leads* (matched on `contact_key`): name, phone, email, service interest, consent, status (bot/human), booking, last message. With `require_consent = true` the personal fields are written only after the customer says yes.\n- **Append Conversation Log** → one row per turn in *Conversations* (customer message, bot reply, intent, confidence, guardrail notes, kb_refs, tokens). This is also the bot's memory.\n- **Owner Alert Needed?** → Gmail to the owner on every hand-off and every confirmed booking, with what to do next.\n\nTo hand a chat back to the bot: set `status = bot` in the Leads sheet (auto-resumes after `human_mode_timeout_hours`). Workflow settings → *Error workflow* = \"AI Chatbot – Error Alert\" so failed runs email the owner too.",
+        "height": 460,
         "width": 1560,
         "color": 4
       },
@@ -1772,8 +1983,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        5420,
-        -620
+        6980,
+        -640
       ]
     }
   ],
@@ -1789,11 +2000,51 @@
         ]
       ]
     },
-    "Instagram Inbound (POST)": {
+    "ManyChat Inbound (POST)": {
       "main": [
         [
           {
             "node": "Normalize Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Instagram Inbound (POST)": {
+      "main": [
+        [
+          {
+            "node": "Verify Instagram Signature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Instagram Signature": {
+      "main": [
+        [
+          {
+            "node": "Signature Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Signature Valid?": {
+      "main": [
+        [
+          {
+            "node": "Normalize Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reject Forged Request",
             "type": "main",
             "index": 0
           }
@@ -2062,7 +2313,58 @@
       "main": [
         [
           {
+            "node": "List Events In Slot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Events In Slot": {
+      "main": [
+        [
+          {
+            "node": "Resolve Booking Race",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resolve Booking Race": {
+      "main": [
+        [
+          {
+            "node": "We Keep The Slot?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "We Keep The Slot?": {
+      "main": [
+        [
+          {
             "node": "Booking Confirmed Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Delete Our Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Our Event": {
+      "main": [
+        [
+          {
+            "node": "Slot Taken Reply",
             "type": "main",
             "index": 0
           }
@@ -2252,7 +2554,7 @@
             {
               "from": "923001234567",
               "id": "wamid.TEST0001",
-              "timestamp": "1791489016",
+              "timestamp": "1791493076",
               "type": "text",
               "text": {
                 "body": "Hi! How much is teeth cleaning and when are you open?"
@@ -2260,41 +2562,6 @@
             }
           ],
           "field": "messages"
-        }
-      }
-    ],
-    "Instagram Inbound (POST)": [
-      {
-        "json": {
-          "headers": {
-            "content-type": "application/json"
-          },
-          "params": {},
-          "query": {},
-          "body": {
-            "object": "instagram",
-            "entry": [
-              {
-                "id": "17841400000000000",
-                "time": 1791489016797,
-                "messaging": [
-                  {
-                    "sender": {
-                      "id": "1234567890123456"
-                    },
-                    "recipient": {
-                      "id": "17841400000000000"
-                    },
-                    "timestamp": 1791489016797,
-                    "message": {
-                      "mid": "m_TEST0001",
-                      "text": "Do you do teeth whitening? What does it cost?"
-                    }
-                  }
-                ]
-              }
-            ]
-          }
         }
       }
     ]

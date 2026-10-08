@@ -26,7 +26,7 @@ const config = {
   client_name: 'Bright Smile Dental Clinic', business_type: 'dental clinic', timezone: 'Asia/Karachi',
   opening_time: '10:00', closing_time: '19:00', closed_days: 'Sunday', slot_minutes: 30,
   max_history_turns: 10, handoff_confidence_threshold: 0.6, human_mode_timeout_hours: 12,
-  claude_model: 'claude-opus-5-5', claude_effort: 'low',
+  claude_model: 'claude-opus-5-5', claude_effort: 'low', reply_mode: 'assistant', require_consent: false,
   handoff_message: 'Thanks! I have passed this to our team, they will reply shortly.',
 };
 const waTriggerItem = {
@@ -101,8 +101,9 @@ test('new customer → triage bot, KB grouped, empty history', () => {
   assert.strictEqual(j.triage, 'bot');
   assert.strictEqual(j.lead, null);
   assert.deepStrictEqual(j.history, []);
-  assert.match(j.kb_text, /^## SERVICES\n- Teeth Cleaning: PKR 3,500 · 30 minutes\n- Teeth Whitening/);
-  assert.match(j.kb_text, /## HOURS[\s\S]*## FAQ/);
+  assert.match(j.kb_text, /^## SERVICES\n- \[S1\] Teeth Cleaning: PKR 3,500 · 30 minutes\n- \[S2\] Teeth Whitening/);
+  assert.match(j.kb_text, /## HOURS\n- \[H1\][\s\S]*## FAQ\n- \[F1\]/);
+  assert.deepStrictEqual(j.kb_rows.map((r) => r.id), ['S1', 'S2', 'H1', 'F1']);
 });
 test('history → ordered user/assistant turns, capped at max_history_turns', () => {
   const logs = [];
@@ -153,14 +154,21 @@ test('messages = history + current customer message, first role is user', () => 
   assert.deepStrictEqual(m.map((x) => x.role), ['user', 'assistant', 'user']);
   assert.strictEqual(m[2].content, 'How much is teeth cleaning?');
 });
+test('schema includes kb_refs and lead.consent; prompt explains the ids', () => {
+  const sch = built.claude_request.output_config.format.schema;
+  assert.strictEqual(sch.properties.kb_refs.type, 'array');
+  assert.deepStrictEqual(sch.properties.lead.properties.consent.enum, ['yes', 'no', 'unknown']);
+  assert.match(built.claude_request.system[0].text, /kb_refs/);
+  assert.ok(!/May we save your name/.test(built.claude_request.system[0].text), 'consent rule must be absent when require_consent is false');
+});
 test('schema: every object has additionalProperties:false and required lists', () => {
   const walk = (s) => { if (s.type === 'object') { assert.strictEqual(s.additionalProperties, false); assert.deepStrictEqual(Object.keys(s.properties).sort(), [...s.required].sort()); Object.values(s.properties).forEach(walk); } };
   walk(built.claude_request.output_config.format.schema);
 });
 
 console.log('\n04 · Parse Claude Response + guardrails');
-const aiJson = (over = {}) => JSON.stringify({ intent: 'faq', reply: 'Teeth cleaning is PKR 3,500 and takes 30 minutes.', confidence: 0.95, needs_human: false, handoff_reason: null,
-  lead: { name: null, phone: null, email: null, service_interest: 'Teeth Cleaning' }, booking: { requested: false, service: null, date: null, time: null, ready_to_book: false }, ...over });
+const aiJson = (over = {}) => JSON.stringify({ intent: 'faq', reply: 'Teeth cleaning is PKR 3,500 and takes 30 minutes.', confidence: 0.95, needs_human: false, handoff_reason: null, kb_refs: ['S1'],
+  lead: { name: null, phone: null, email: null, service_interest: 'Teeth Cleaning', consent: 'unknown' }, booking: { requested: false, service: null, date: null, time: null, ready_to_book: false }, ...over });
 const apiRes = (text, extra = {}) => ({ id: 'msg_1', type: 'message', role: 'assistant', model: 'claude-opus-5-5', stop_reason: 'end_turn', content: [{ type: 'thinking', thinking: '' }, { type: 'text', text }], usage: { input_tokens: 900, output_tokens: 80, cache_read_input_tokens: 400 }, ...extra });
 const parse = (res) => run('04-parse-claude-response.js', wrap([res]), { 'Build Claude Request': wrap([built]) })[0].json;
 test('good answer with a KB price → decision answer, lead merged from profile', () => {
@@ -169,6 +177,39 @@ test('good answer with a KB price → decision answer, lead merged from profile'
   assert.deepStrictEqual(j.guard, []);
   assert.deepStrictEqual(j.lead_merged, { name: 'Ayesha Khan', phone: '923001234567', email: '', service_interest: 'Teeth Cleaning' });
   assert.strictEqual(j.tokens_used, 1380);
+  assert.deepStrictEqual(j.ai.kb_refs, ['S1']);
+  assert.strictEqual(j.save_personal_details, true, 'consent not required → details saved');
+});
+test('kb_refs are cleaned and unknown ids dropped', () => {
+  const j = parse(apiRes(aiJson({ kb_refs: ['[s1]', 'H1', 'Z9', ''] })));
+  assert.deepStrictEqual(j.ai.kb_refs, ['S1', 'H1']);
+});
+test('STRICT MODE: FAQ reply is replaced by the cited sheet rows word for word', () => {
+  const strictBuilt = { ...built, config: { ...config, reply_mode: 'strict' } };
+  const j = run('04-parse-claude-response.js', wrap([apiRes(aiJson({ reply: 'Cleaning is around PKR 3,500, roughly half an hour.', kb_refs: ['S1', 'H1'] }))]), { 'Build Claude Request': wrap([strictBuilt]) })[0].json;
+  assert.strictEqual(j.decision, 'answer');
+  assert.strictEqual(j.ai.reply, 'Teeth Cleaning: PKR 3,500 · 30 minutes\nMonday to Saturday: 10:00 AM – 7:00 PM');
+});
+test('STRICT MODE: FAQ reply without a valid reference → handoff; booking replies untouched', () => {
+  const strictBuilt = { ...built, config: { ...config, reply_mode: 'strict' } };
+  const j = run('04-parse-claude-response.js', wrap([apiRes(aiJson({ kb_refs: [] }))]), { 'Build Claude Request': wrap([strictBuilt]) })[0].json;
+  assert.strictEqual(j.decision, 'handoff');
+  assert.match(j.guard[0], /strict mode/);
+  const k = run('04-parse-claude-response.js', wrap([apiRes(aiJson({ intent: 'booking', reply: 'Which day suits you?', kb_refs: [] }))]), { 'Build Claude Request': wrap([strictBuilt]) })[0].json;
+  assert.strictEqual(k.decision, 'answer');
+  assert.strictEqual(k.ai.reply, 'Which day suits you?');
+});
+test('CONSENT: required and not given → personal details withheld; given → saved; prompt asks once', () => {
+  const consentBuilt = { ...built, config: { ...config, require_consent: true } };
+  const no = run('04-parse-claude-response.js', wrap([apiRes(aiJson())]), { 'Build Claude Request': wrap([consentBuilt]) })[0].json;
+  assert.strictEqual(no.save_personal_details, false);
+  assert.strictEqual(no.consent_given, false);
+  const yes = run('04-parse-claude-response.js', wrap([apiRes(aiJson({ lead: { name: 'Ayesha', phone: null, email: null, service_interest: null, consent: 'yes' } }))]), { 'Build Claude Request': wrap([consentBuilt]) })[0].json;
+  assert.strictEqual(yes.save_personal_details, true);
+  const already = run('04-parse-claude-response.js', wrap([apiRes(aiJson())]), { 'Build Claude Request': wrap([{ ...consentBuilt, lead: { consent_at: '2026-10-01T10:00:00+05:00' } }]) })[0].json;
+  assert.strictEqual(already.save_personal_details, true, 'consent recorded earlier on the lead row counts');
+  const req = run('03-build-claude-request.js', wrap([{ ...ctx, config: { ...config, require_consent: true } }]))[0].json;
+  assert.match(req.claude_request.system[0].text, /May we save your name and contact details/);
 });
 test('PRICE GUARD: invented price → handoff', () => {
   const j = parse(apiRes(aiJson({ reply: 'Teeth cleaning costs PKR 2,000.' })));
@@ -228,6 +269,25 @@ test('21:00 → outside_hours; 18:45 (would end after closing) → outside_hours
 test('yesterday → in_the_past; garbage → invalid_datetime', () => {
   assert.strictEqual(slot(DateTime.now().minus({ days: 1 }).toFormat('yyyy-LL-dd'), '12:00').error, 'in_the_past');
   assert.strictEqual(slot('next tuesday', 'afternoon').error, 'invalid_datetime');
+});
+
+console.log('\n07 · Resolve Booking Race');
+const ev = (id, created, start = '2026-10-14T15:00:00+05:00', end = '2026-10-14T15:30:00+05:00', status = 'confirmed') => ({ id, created, status, start: { dateTime: start }, end: { dateTime: end } });
+const race = (ours, events) => run('07-resolve-booking-race.js', wrap(events.length ? events : [{}]), { 'Create Calendar Event': wrap([ours]) })[0].json;
+test('only our event in the slot → keep', () => {
+  const j = race(ev('ours', '2026-10-10T10:00:05Z'), [ev('ours', '2026-10-10T10:00:05Z')]);
+  assert.deepStrictEqual([j.keep, j.our_event_id, j.competing_event_id, j.competitors], [true, 'ours', null, 0]);
+});
+test('another event created a moment EARLIER → we lose the slot (delete ours)', () => {
+  const j = race(ev('ours', '2026-10-10T10:00:05Z'), [ev('theirs', '2026-10-10T10:00:03Z'), ev('ours', '2026-10-10T10:00:05Z')]);
+  assert.deepStrictEqual([j.keep, j.competing_event_id], [false, 'theirs']);
+});
+test('another event created LATER → we keep (they will delete theirs); cancelled and non-overlapping events ignored', () => {
+  const j = race(ev('ours', '2026-10-10T10:00:05Z'), [ev('later', '2026-10-10T10:00:09Z'), ev('ours', '2026-10-10T10:00:05Z'), ev('old', '2026-10-01T10:00:00Z', '2026-10-14T15:00:00+05:00', '2026-10-14T15:30:00+05:00', 'cancelled'), ev('next', '2026-10-01T10:00:00Z', '2026-10-14T15:30:00+05:00', '2026-10-14T16:00:00+05:00')]);
+  assert.deepStrictEqual([j.keep, j.competitors], [true, 1]);
+});
+test('empty listing (alwaysOutputData placeholder) → keep', () => {
+  assert.strictEqual(race(ev('ours', '2026-10-10T10:00:05Z'), []).keep, true);
 });
 
 console.log('\n06 · Finalize Reply');

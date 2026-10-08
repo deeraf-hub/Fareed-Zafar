@@ -14,6 +14,8 @@ const ctx = $input.first().json;
 const { message, config, kb_text, history, lead } = ctx;
 const zone = config.timezone || 'UTC';
 const now = DateTime.now().setZone(zone);
+const requireConsent = String(config.require_consent) === 'true';
+const strictMode = String(config.reply_mode || 'assistant').toLowerCase() === 'strict';
 
 const stableRules = `You are the virtual assistant of ${config.client_name} (${config.business_type}). You chat with customers on WhatsApp and Instagram.
 
@@ -27,6 +29,8 @@ STRICT RULES
 7. Capture lead details (name, phone, email, service interest) whenever the customer shares them.
 8. If the customer message is a placeholder such as "[The customer sent a image message ...]", politely ask them to type their question.
 9. confidence = how fully your reply is supported by the knowledge base (1.0 = fully supported, below 0.6 = unsure).
+10. Every knowledge base row has an id in square brackets, e.g. [S1]. In kb_refs list the ids of EVERY row you used for the reply (empty list for greetings or booking steps).${strictMode ? ' For FAQ answers the system will send the referenced rows word for word, so choose the ids carefully and keep the reply short.' : ''}${requireConsent ? `
+11. Before collecting booking or contact details, ask once: "May we save your name and contact details in our records to arrange your appointment? Please reply yes or no." Record the answer in lead.consent. If the customer says no, keep helping but do not store or ask again.` : ''}
 
 BOOKING HOURS: ${config.opening_time}–${config.closing_time} (${zone}), closed on: ${config.closed_days || 'none'}. Appointment length: ${config.slot_minutes} minutes.
 
@@ -45,7 +49,7 @@ const nullableString = { anyOf: [{ type: 'string' }, { type: 'null' }] };
 const schema = {
   type: 'object',
   additionalProperties: false,
-  required: ['intent', 'reply', 'confidence', 'needs_human', 'handoff_reason', 'lead', 'booking'],
+  required: ['intent', 'reply', 'confidence', 'needs_human', 'handoff_reason', 'kb_refs', 'lead', 'booking'],
   properties: {
     intent: {
       type: 'string',
@@ -56,15 +60,17 @@ const schema = {
     confidence: { type: 'number', description: '0 to 1. How fully the reply is supported by the approved knowledge base.' },
     needs_human: { type: 'boolean', description: 'true when a human must take over this conversation.' },
     handoff_reason: { ...nullableString, description: 'Short reason when needs_human is true, otherwise null.' },
+    kb_refs: { type: 'array', items: { type: 'string' }, description: 'Ids of the knowledge base rows used for this reply, e.g. ["S1", "H2"]. Empty if none were needed.' },
     lead: {
       type: 'object',
       additionalProperties: false,
-      required: ['name', 'phone', 'email', 'service_interest'],
+      required: ['name', 'phone', 'email', 'service_interest', 'consent'],
       properties: {
         name: nullableString,
         phone: nullableString,
         email: nullableString,
         service_interest: nullableString,
+        consent: { type: 'string', enum: ['yes', 'no', 'unknown'], description: 'Whether the customer agreed to have their details stored. "unknown" until they answer.' },
       },
     },
     booking: {

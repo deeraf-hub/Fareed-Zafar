@@ -4,7 +4,8 @@
 // Gathers everything the AI step needs into ONE item:
 //   message   → the normalized customer message
 //   config    → the per-client settings from "Client Config"
-//   kb_text   → the approved knowledge base, formatted for the prompt
+//   kb_text   → the approved knowledge base, formatted for the prompt (rows carry ids)
+//   kb_rows   → the same rows as objects { id, category, title, content }
 //   history   → the last N turns of this conversation (Claude message format)
 //   lead      → the customer's existing row in the Leads sheet (or null)
 //   triage    → "bot" | "human" | "ignore"
@@ -25,12 +26,20 @@ const leadRows = rows($('Lookup Lead').all()).filter((r) => String(r.contact_key
 const logRows = rows($('Load Conversation History').all()).filter((r) => String(r.contact_key) === message.contact_key);
 
 // --- Knowledge base → readable text, grouped by category ---------------------
+// Every row gets a short id such as [S1] (services), [H2] (hours), [F3] (faq).
+// The model must cite the ids it used (kb_refs); in strict mode the workflow
+// sends those rows verbatim instead of the model's wording.
 const ORDER = ['services', 'hours', 'location', 'booking', 'policies', 'faq'];
 const groups = {};
+const kb_rows = [];
+const counters = {};
 for (const r of kbRows) {
   const cat = String(r.category || 'faq').trim().toLowerCase();
   if (!r.title && !r.content) continue;
-  (groups[cat] = groups[cat] || []).push(`- ${String(r.title || '').trim()}: ${String(r.content || '').trim()}`);
+  counters[cat] = (counters[cat] || 0) + 1;
+  const row = { id: `${cat.charAt(0).toUpperCase()}${counters[cat]}`, category: cat, title: String(r.title || '').trim(), content: String(r.content || '').trim() };
+  kb_rows.push(row);
+  (groups[cat] = groups[cat] || []).push(`- [${row.id}] ${row.title}: ${row.content}`);
 }
 const cats = [...ORDER.filter((c) => groups[c]), ...Object.keys(groups).filter((c) => !ORDER.includes(c))];
 const kb_text = cats.map((c) => `## ${c.toUpperCase()}\n${groups[c].join('\n')}`).join('\n\n') || '(The knowledge base is empty.)';
@@ -71,4 +80,4 @@ if (lead && String(lead.status || '').trim().toLowerCase() === 'human') {
 
 const triage = is_duplicate ? 'ignore' : human_mode ? 'human' : 'bot';
 
-return [{ json: { message, config, lead, kb_text, kb_row_count: kbRows.length, history, triage, is_duplicate, human_mode } }];
+return [{ json: { message, config, lead, kb_text, kb_rows, kb_row_count: kb_rows.length, history, triage, is_duplicate, human_mode } }];

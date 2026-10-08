@@ -1,6 +1,6 @@
 # Pre-launch test checklist
 
-Run these from a real WhatsApp number and a real Instagram account after the workflow is activated (for a dry run without a phone, use the pinned sample data on the two trigger nodes: click **Test workflow**).
+Run these from a real WhatsApp number and a real Instagram account after the workflow is activated. For a dry run without a phone: the **WhatsApp Trigger** carries a pinned sample message, so **Test workflow** runs the whole pipeline; for Instagram use `tests/send-instagram-test.sh`, which posts a correctly signed DM.
 
 For every case, check the three places where the result is visible: the **reply** on the phone, the new row in **Conversations** (`decision`, `guardrails` columns), and the row in **Leads**.
 
@@ -56,6 +56,11 @@ For every case, check the three places where the result is visible: the **reply*
 | E2 | Send two messages within a second: `hi` then `price of whitening?` | One combined answer (both lines understood). |
 | E3 | In n8n → Executions, re-run a finished execution with the same input (or let Meta retry). | Execution ends at *Triage → ignore*; no duplicate reply, no duplicate row. |
 | E4 | Check the Instagram verify URL in a browser: `https://<n8n>/webhook/instagram-inbound?hub.mode=subscribe&hub.verify_token=<token>&hub.challenge=123` | Page shows `123`. With a wrong token: `403 Verification failed`. |
+| E6 | Run `META_APP_SECRET=<secret> tests/send-instagram-test.sh https://<n8n>/webhook/instagram-inbound "price of whitening?"` | A normal Instagram answer is attempted (the fake sender id will fail at *Send Instagram Reply*, which is expected). Run it again with a wrong secret: the execution stops at *Reject Forged Request* and nothing is logged. |
+| E7 | Two phones confirm the **same slot** within a few seconds of each other. | Exactly one calendar event survives. The second customer gets "Sorry, … is already booked" even if their event was created for a moment (*Resolve Booking Race* deleted it). |
+| E8 | Set `reply_mode = strict` in Client Config, ask A2 again. | The reply is the sheet row word for word: `Teeth Cleaning (Scaling & Polishing): PKR 3,500 · 30 minutes`. Ask something not in the sheet → hand-off. Set it back to `assistant`. |
+| E9 | Set `require_consent = true`, start a booking from a new number, answer `no` to the consent question. | The Leads row exists (status only) but `name`, `phone`, `email` stay empty; the bot keeps helping. Answer `yes` from another number → details saved and `consent_at` filled. |
+| E10 | Import `n8n/error-alert-workflow.json`, set it as the chatbot's Error workflow, then break something on purpose (rename the *Knowledge* tab) and send `Hi`. | The owner receives the "Chatbot run failed" e-mail with the execution link. Rename the tab back and use *Retry* on the execution. |
 | E5 | Open the *Conversations* tab. | Every row has `tokens_used`; use it to estimate monthly cost (tokens × model price). |
 
 ## Sign-off
@@ -64,5 +69,5 @@ For every case, check the three places where the result is visible: the **reply*
 - [ ] All B cases hand off (and the owner got the e-mails)
 - [ ] C1–C3 behave as described
 - [ ] D3 created exactly one calendar event, D4–D7 created none
-- [ ] E1–E5 pass
+- [ ] E1–E10 pass
 - [ ] Pinned test data removed from both trigger nodes, workflow active, owner has the sheet link and the hand-off instructions

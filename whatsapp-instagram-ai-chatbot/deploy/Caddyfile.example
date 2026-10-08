@@ -1,0 +1,5 @@
+# Minimal TLS reverse proxy for n8n (Caddy obtains the certificate automatically).
+# Run next to the compose file with:  docker run -d --network host -v $PWD/Caddyfile:/etc/caddy/Caddyfile caddy:2
+n8n.yourdomain.com {
+    reverse_proxy 127.0.0.1:5678
+}

@@ -20,6 +20,8 @@ The n8n workflow in this folder is the reference implementation. If a client or 
 | Validate Booking Slot | **Tools → Set variables** with `parseDate()`, `formatDate()`, `addMinutes()` + a filter on weekday/hours | |
 | Check Calendar Availability | **Google Calendar → Get Free/Busy Information** | Busy array empty → free. |
 | Create Calendar Event | **Google Calendar → Create an Event** | |
+| List Events In Slot + Resolve Booking Race + Delete Our Event | **Google Calendar → Search Events** (slot range) → **Filter** (an overlapping event with an earlier `created`) → **Google Calendar → Delete an Event** | Closes the free/busy-then-insert race. |
+| Verify Instagram Signature | **Webhooks → Custom webhook** with *Get request headers* + **Tools → Set variable** `sha256(body; secret)` using `sha256()`/`hmac` functions, then a **Filter** on the `x-hub-signature-256` header | Make exposes the raw body only when JSON pass-through is enabled. |
 | Finalize Reply + Route by Channel | **Router** on `channel` | |
 | Send WhatsApp Reply | **WhatsApp Business Cloud → Send a Message** (text) | |
 | Send Instagram Reply | **HTTP → Make a request** `POST https://graph.facebook.com/v23.0/{page-id}/messages` with `Authorization: Bearer <page token>` | Or **Instagram for Business → Send a Message** where available. |

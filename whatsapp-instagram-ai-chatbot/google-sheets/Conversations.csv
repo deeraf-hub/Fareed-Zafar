@@ -1,1 +1,1 @@
-timestamp,contact_key,channel,customer_name,customer_message,bot_reply,intent,confidence,decision,guardrails,message_id,tokens_used
+timestamp,contact_key,channel,customer_name,customer_message,bot_reply,intent,confidence,decision,guardrails,kb_refs,message_id,tokens_used
