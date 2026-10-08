@@ -25,10 +25,11 @@
   };
 
   // ------------------------------------------------------------ helpers available to scenes
+  const PACE = 1.45;   // reading-time multiplier for caption pauses (typing speed is unaffected)
   function check(token) { if (token.cancelled) throw new Cancelled(); }
   async function wait(token, ms) {
     check(token);
-    const end = Date.now() + ms;
+    const end = Date.now() + (ms >= 800 ? ms * PACE : ms);
     while (Date.now() < end) {
       while (player.paused) { await new Promise((r) => player.resumeWaiters.push(r)); check(token); }
       await new Promise((r) => setTimeout(r, Math.min(60, end - Date.now())));
@@ -107,7 +108,7 @@
 
   // ------------------------------------------------------------ scenes
   const scenes = [
-    { title: 'Introduction', est: 16, async run(t) {
+    { title: 'Introduction', est: 22, async run(t) {
       phone({ ...AYESHA, label: 'Customer messages arrive here' });
       caption('A small clinic gets the same questions all day on WhatsApp and Instagram: <b>prices, opening hours, "can I come tomorrow at 3?"</b>. Staff answer late between patients, and leads slip away.');
       show('intro', `<div class="intro-cards"><div class="intro-card"><b>💬 WhatsApp</b>WhatsApp Cloud API, native n8n trigger</div><div class="intro-card"><b>📸 Instagram</b>Meta Messaging API or ManyChat</div><div class="intro-card"><b>📄 Google Sheets</b>Knowledge base · leads · conversation log</div><div class="intro-card"><b>📅 Google Calendar</b>Free/busy check and booking</div><div class="intro-card"><b>🙋 Human hand-off</b>Pause the bot, email the owner</div></div>`);
@@ -118,7 +119,7 @@
       await wait(t, 3500);
     } },
 
-    { title: 'Approved FAQ', est: 30, async run(t) {
+    { title: 'Approved FAQ', est: 20, async run(t) {
       await api('reset', {});
       phone(AYESHA);
       caption('<b>Scene 2 · Approved FAQ.</b> Ayesha, a fictional customer, asks about prices on WhatsApp.');
@@ -135,7 +136,7 @@
       await wait(t, 7000);
     } },
 
-    { title: 'Appointment booking', est: 62, async run(t) {
+    { title: 'Appointment booking', est: 47, async run(t) {
       await api('reset', {});
       phone(SARA);
       caption('<b>Scene 3 · Booking.</b> Sara messages on Instagram. The assistant collects four things in order: name, service, day and time, then asks for an explicit confirmation.', 'Instagram messages enter through the Meta webhook path; its signature check is simulated here.');
@@ -170,7 +171,7 @@
       await wait(t, 6500);
     } },
 
-    { title: 'Human hand-off', est: 34, async run(t) {
+    { title: 'Human hand-off', est: 28, async run(t) {
       await api('reset', {});
       phone(AYESHA);
       caption('<b>Scene 4 · Human hand-off.</b> Ayesha asks about something the clinic never approved for the bot.');
@@ -193,7 +194,7 @@
       await wait(t, 6000);
     } },
 
-    { title: 'Wrong-answer safeguard', est: 28, async run(t) {
+    { title: 'Wrong-answer safeguard', est: 25, async run(t) {
       await api('reset', {});
       phone(HAMZA);
       caption('<b>Scene 5 · Wrong-answer safeguard.</b> A test hook forces the simulated model to misquote a price. What matters is what the real <b>Parse Claude Response</b> node does next.', 'Test hook: the local responder is instructed to answer with a wrong number. A real model can make the same mistake.');
@@ -213,7 +214,7 @@
       await wait(t, 5500);
     } },
 
-    { title: 'Technical overview', est: 26, async run(t) {
+    { title: 'Technical overview', est: 32, async run(t) {
       await loadStatic();
       phone({ ...AYESHA, label: 'Workflow view' });
       caption('<b>Scene 6 · Under the hood.</b> One n8n workflow file, six sections. Nodes highlighted below ran during this walkthrough.');
@@ -237,7 +238,7 @@
       await wait(t, 5000);
     } },
 
-    { title: 'Honest closing', est: 18, async run(t) {
+    { title: 'Honest closing', est: 19, async run(t) {
       phone({ ...AYESHA, label: 'Thanks for watching' });
       caption('<b>Scene 7 · Where this stands.</b>');
       show('closing', `<div class="sections"><div class="section"><h4>✅ Implemented</h4><ul class="checklist"><li>Importable n8n workflow (49 nodes) + error-alert workflow</li><li>WhatsApp Cloud API, Instagram (Meta API or ManyChat)</li><li>Sheet-driven FAQ answers with cited rows, optional strict mode</li><li>Lead capture, conversation memory, owner emails</li><li>Calendar booking with slot validation and race check</li><li>Human hand-off with pause and auto-resume</li><li>Guardrails: confidence, price guard, hard triggers, API-error fallback</li></ul></div><div class="section"><h4>🧪 Tested here</h4><ul class="checklist"><li>42 unit tests on the Code nodes</li><li>Smoke tests running the whole workflow graph with simulated providers</li><li>This walkthrough: the same real logic, live, on this machine</li><li>Node parameters checked against the published n8n package</li></ul></div><div class="section"><h4>⏳ Still requires</h4><ul class="checklist"><li>Live credentials: Meta (WhatsApp, Instagram), Google (Sheets, Calendar, Gmail), Anthropic</li><li>An import into a running n8n instance and acceptance testing with real phones</li><li>A real model: replies here come from a local rule-based stand-in, not Claude</li><li>Client-approved knowledge base content and a public HTTPS endpoint</li></ul></div></div><p class="muted" style="margin:10px 0 0">Not claimed: live message delivery, real model responses, Google connectivity, actual email delivery, production readiness, client work or hiring outcomes. Fictional customers and prices throughout.</p>`);

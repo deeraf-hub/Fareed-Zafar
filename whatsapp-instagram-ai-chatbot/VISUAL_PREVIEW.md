@@ -13,7 +13,7 @@ npm run preview      # http://localhost:8091
 | URL | What it is |
 |---|---|
 | `http://localhost:8091/` | **Chat preview.** Type messages as a customer (WhatsApp or Instagram), see which workflow nodes ran, the guardrail verdict, the simulated Leads / Conversations sheets, calendar events, owner emails and the exact request the Ask Claude node would send. |
-| `http://localhost:8091/walkthrough` | **Recruiter walkthrough.** Seven animated scenes, about 3½ minutes, with Start / Pause / Resume / Restart / Prev / Next, a progress bar and captions. Runs in its own isolated session. |
+| `http://localhost:8091/walkthrough` | **Recruiter walkthrough.** Seven animated scenes, about 3 minutes (measured 3:13 uninterrupted), with Start / Pause / Resume / Restart / Prev / Next, a progress bar and captions. Runs in its own isolated session. |
 
 Keyboard on the walkthrough: `Space` play/pause, `←` `→` previous/next scene, `R` restart. Animations follow your system's reduced-motion setting (typing becomes instant; captions keep their reading time). No audio.
 
@@ -54,7 +54,7 @@ npm run check   # both
 
 The smoke tests cover: FAQ with cited row, the complete booking sequence, a taken slot, duplicate delivery, hand-off + human pause + resume, the price guard, a non-text message, session reset isolation, and the workflow map.
 
-## Recording a recruiter-facing video (3–4 minutes)
+## Recording a recruiter-facing video (about 3½ minutes with narration)
 
 1. Start the server, open `http://localhost:8091/walkthrough` in a clean browser window at about 1280×800, and hide bookmarks and other tabs.
 2. Record the browser window (Loom, OBS, or the OS screen recorder). Keep the **"Local demo — external services simulated."** label visible in every shot. No audio is produced by the page; narrate over it if you like.
