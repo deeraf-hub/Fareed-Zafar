@@ -15,6 +15,8 @@
 | `n8n/ai-chatbot-whatsapp-instagram.json` | The chatbot (49 nodes, 6 explanatory notes). |
 | `n8n/error-alert-workflow.json` | Optional but recommended: e-mails the owner when a run fails. Set it as the chatbot's *Error workflow*. |
 
+**See it without any credentials:** `cd dev && npm install && npm run preview`, then open `http://localhost:8091/walkthrough` (animated 3-minute tour) or `http://localhost:8091/` (chat with the bot). Real workflow logic, simulated providers; see `VISUAL_PREVIEW.md`.
+
 **What you edit per client:** only the **Client Config** node (plus the verify token in *Verify Token OK?* and the credentials).
 
 **Status:** built and unit-tested offline (42 tests, `dev/`), node parameters checked against the published n8n package. Not yet run in a live n8n instance with real Meta/Google/Anthropic accounts: README step 7 is that first live test.

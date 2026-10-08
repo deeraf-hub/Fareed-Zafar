@@ -114,7 +114,8 @@ whatsapp-instagram-ai-chatbot/
 ├── docs/
 │   ├── make-com-equivalent.md         ← same design as a Make.com scenario
 │   └── application-note.md            ← answers for the job application
-└── dev/                               ← regenerate the JSON from reviewable sources / run the 42 unit tests
+├── VISUAL_PREVIEW.md                  ← local chat preview + recruiter walkthrough (what is real vs simulated, recording guide)
+└── dev/                               ← regenerate the JSON, run the tests, serve the local preview (npm run preview)
 ```
 
 ---
@@ -245,7 +246,11 @@ The same design as a Make scenario (module-by-module mapping) is in `docs/make-c
 
 ---
 
-## 10. For developers: regenerating the workflow and running the tests
+## 10. Local preview and recruiter walkthrough
+
+`cd dev && npm run preview` serves a **chat preview** at `http://localhost:8091/` and an animated **recruiter walkthrough** at `http://localhost:8091/walkthrough`. Both run the real workflow logic (Code nodes and node expressions from the JSON) with simulated providers, so nothing is sent anywhere and no credentials are needed. Details, the real-vs-simulated table and a video recording guide: `VISUAL_PREVIEW.md`.
+
+## 11. For developers: regenerating the workflow and running the tests
 
 The seven Code nodes are kept as plain files in `dev/code/` so they can be reviewed, diffed and unit-tested outside n8n.
 
@@ -253,6 +258,7 @@ The seven Code nodes are kept as plain files in `dev/code/` so they can be revie
 cd whatsapp-instagram-ai-chatbot/dev
 npm install          # luxon only (the same date library n8n exposes to Code nodes)
 npm test             # 42 tests: payload normalization, triage, prompt/schema shape, guardrails, strict mode, consent, slot validation, booking race, formatting
+npm run smoke        # 10 smoke tests that drive the whole workflow graph through the local preview API
 npm run build        # rewrites both JSON files in ../n8n/ from dev/code + build-workflow.js
 ```
 
