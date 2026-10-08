@@ -1,0 +1,13 @@
+{
+  "name": "ai-chatbot-workflow-dev",
+  "private": true,
+  "type": "commonjs",
+  "description": "Regenerates the n8n workflow JSON from ./code and unit-tests every Code node with a mock n8n runtime.",
+  "scripts": {
+    "build": "node build-workflow.js ../n8n/ai-chatbot-whatsapp-instagram.json",
+    "test": "node run-tests.js"
+  },
+  "devDependencies": {
+    "luxon": "^3.5.0"
+  }
+}

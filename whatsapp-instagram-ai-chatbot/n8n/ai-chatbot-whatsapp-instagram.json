@@ -1,0 +1,2313 @@
+{
+  "name": "AI Chatbot – WhatsApp + Instagram (FAQ · Leads · Booking · Hand-off)",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {
+          "messageStatusUpdates": []
+        }
+      },
+      "id": "e321a06f-00e5-44c9-a2bf-fb3435814b1d",
+      "name": "WhatsApp Trigger",
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "bd2e63f5-047f-42f7-a9b1-caea6842c606"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "instagram-inbound",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "46eb3110-c68b-48f2-ad28-3bebe05c7c7e",
+      "name": "Instagram Inbound (POST)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        200
+      ],
+      "webhookId": "1cda5955-e8fc-4870-a5c8-0092c4f7d610"
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "instagram-inbound",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "35a93be7-4ac9-47f8-aaac-da11b9ab8ba8",
+      "name": "Instagram Verify (GET)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        500
+      ],
+      "webhookId": "868f231f-e0de-4615-a055-ede68e99c64e"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "890c6e60-bc0b-4730-ad8f-fe8c001cb9ff",
+              "leftValue": "={{ $json.query['hub.mode'] }}",
+              "rightValue": "subscribe",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "3d739f27-e6b6-43f4-ace1-a8e161fcf6a6",
+              "leftValue": "={{ $json.query['hub.verify_token'] }}",
+              "rightValue": "CHANGE_ME_instagram_verify_token",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "0d30eeb4-2456-42a6-ab0c-b62e963ecb7f",
+      "name": "Verify Token OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        260,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $('Instagram Verify (GET)').first().json.query['hub.challenge'] }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "801967c3-c043-4d76-a296-8eba16bece31",
+      "name": "Respond: hub.challenge",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "Verification failed",
+        "options": {
+          "responseCode": 403
+        }
+      },
+      "id": "02c897c7-edcb-4ebe-a8ba-3fa1e8c1b77e",
+      "name": "Respond: 403 Forbidden",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================================\n// 1 · NORMALIZE MESSAGE\n// ----------------------------------------------------------------------------\n// Turns ANY inbound payload into ONE canonical shape, so every node after this\n// one is channel-agnostic. Accepted inputs:\n//   • WhatsApp Trigger node output          (flattened Meta \"value\" object)\n//   • Raw Meta webhook body                  (WhatsApp or Instagram \"entry\" array)\n//   • Generic Webhook node output            ({ headers, query, body })\n//   • ManyChat \"External Request\"            ({ channel, contact_id, text, ... })\n//\n// Output item (exactly one, or none):\n//   channel       \"whatsapp\" | \"instagram\"\n//   contact_id    phone number (WhatsApp) or Instagram-scoped user id (IGSID)\n//   contact_key   \"<channel>:<contact_id>\"  → the key used in the Google Sheets\n//   contact_name  profile name when the channel sends one, else \"\"\n//   text          the customer's message (quick successive messages are joined)\n//   message_id    platform message id (used to ignore duplicate deliveries)\n//   message_type  \"text\" | \"image\" | \"audio\" | \"video\" | \"document\" | ...\n//   received_at   ISO timestamp\n//\n// Delivery/read receipts, echoes of our own replies and empty payloads produce\n// NO item, which simply ends the execution (nothing to answer).\n// ============================================================================\n\nconst bySender = {};\n\nfunction add(m) {\n  if (!m.contact_id || !m.text) return;\n  const key = `${m.channel}:${m.contact_id}`;\n  if (!bySender[key]) {\n    bySender[key] = {\n      channel: m.channel,\n      contact_id: String(m.contact_id),\n      contact_key: key,\n      contact_name: m.contact_name || '',\n      text: m.text,\n      message_id: String(m.message_id || `${key}:${m.ts}`),\n      message_type: m.message_type || 'text',\n      received_at: new Date(m.ts || Date.now()).toISOString(),\n    };\n  } else {\n    // The customer sent several messages in one burst → treat as one turn.\n    bySender[key].text += '\\n' + m.text;\n  }\n}\n\nfunction placeholder(type) {\n  return `[The customer sent a ${type} message that the assistant cannot read]`;\n}\n\n// WhatsApp Cloud API: one \"value\" object = { metadata, contacts[], messages[] | statuses[] }\nfunction handleWhatsAppValue(v) {\n  const names = {};\n  for (const c of v.contacts || []) names[c.wa_id] = (c.profile && c.profile.name) || '';\n  for (const m of v.messages || []) {          // \"statuses\" payloads have no messages → ignored\n    let text = '';\n    if (m.type === 'text') text = (m.text && m.text.body) || '';\n    else if (m.type === 'button') text = (m.button && m.button.text) || '';\n    else if (m.type === 'interactive') {\n      const i = m.interactive || {};\n      text = (i.button_reply && i.button_reply.title) || (i.list_reply && i.list_reply.title) || '';\n    } else text = placeholder(m.type || 'unsupported');\n    add({\n      channel: 'whatsapp',\n      contact_id: m.from,\n      contact_name: names[m.from] || '',\n      text: String(text).trim(),\n      message_id: m.id,\n      message_type: m.type || 'text',\n      ts: m.timestamp ? Number(m.timestamp) * 1000 : Date.now(),\n    });\n  }\n}\n\n// Instagram Messaging API: one \"messaging\" event = { sender, recipient, timestamp, message }\nfunction handleInstagramEvent(ev) {\n  const msg = ev.message;\n  if (!msg || msg.is_echo || msg.is_deleted) return;   // is_echo = our own outgoing message → never answer it\n  let text = msg.text || '';\n  let type = 'text';\n  if (!text && msg.quick_reply && msg.quick_reply.payload) text = String(msg.quick_reply.payload);\n  if (!text && Array.isArray(msg.attachments) && msg.attachments.length) {\n    type = msg.attachments[0].type || 'attachment';\n    text = placeholder(type);\n  }\n  add({\n    channel: 'instagram',\n    contact_id: ev.sender && ev.sender.id,\n    contact_name: '',\n    text: String(text).trim(),\n    message_id: msg.mid,\n    message_type: type,\n    ts: ev.timestamp || Date.now(),\n  });\n}\n\nfor (const item of $input.all()) {\n  let p = item.json || {};\n  if (p.body && typeof p.body === 'object' && !p.messages && !p.entry) p = p.body;   // generic Webhook node → unwrap\n\n  if (Array.isArray(p.messages) || Array.isArray(p.statuses) || p.messaging_product === 'whatsapp') {\n    handleWhatsAppValue(p);                                   // WhatsApp Trigger node output\n  } else if (Array.isArray(p.entry)) {                        // raw Meta webhook body\n    for (const entry of p.entry) {\n      for (const change of entry.changes || []) if (change.value) handleWhatsAppValue(change.value);\n      for (const ev of entry.messaging || []) handleInstagramEvent(ev);\n    }\n  } else if (p.contact_id && p.text) {                        // ManyChat External Request (simple JSON)\n    add({\n      channel: p.channel === 'whatsapp' ? 'whatsapp' : 'instagram',\n      contact_id: p.contact_id,\n      contact_name: p.contact_name || '',\n      text: String(p.text).trim(),\n      message_id: p.message_id,\n      message_type: 'text',\n      ts: Date.now(),\n    });\n  }\n}\n\n// Meta sends one notification per sender, so the workflow handles ONE\n// conversation per execution. (In the rare case a batch contains several\n// senders only the first is processed — see README → Known limits.)\nreturn Object.values(bySender).slice(0, 1).map((json) => ({ json }));\n"
+      },
+      "id": "76939419-ae2c-48df-a359-d8d31a68017a",
+      "name": "Normalize Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9be048f9-617c-40c2-aa9e-a7f1c0a4d863",
+              "name": "client_name",
+              "value": "Bright Smile Dental Clinic",
+              "type": "string"
+            },
+            {
+              "id": "fd142606-11d5-4217-ae0f-2a551cc17c0d",
+              "name": "business_type",
+              "value": "dental clinic",
+              "type": "string"
+            },
+            {
+              "id": "f68bfb19-7d07-4a86-ae24-a0100453d46a",
+              "name": "timezone",
+              "value": "Asia/Karachi",
+              "type": "string"
+            },
+            {
+              "id": "c8b4f3b9-19ca-4040-a9a1-8e521b57ef31",
+              "name": "opening_time",
+              "value": "10:00",
+              "type": "string"
+            },
+            {
+              "id": "78e664ee-d048-467c-ad51-c422ef32a8f2",
+              "name": "closing_time",
+              "value": "19:00",
+              "type": "string"
+            },
+            {
+              "id": "18a22267-7d46-46d7-a376-8170020150ca",
+              "name": "closed_days",
+              "value": "Sunday",
+              "type": "string"
+            },
+            {
+              "id": "43ef8f31-a792-488c-ab50-0128cf80ced6",
+              "name": "slot_minutes",
+              "value": 30,
+              "type": "number"
+            },
+            {
+              "id": "4239099d-91da-491e-ae96-2f0c80b2119d",
+              "name": "owner_name",
+              "value": "Dr. Sara",
+              "type": "string"
+            },
+            {
+              "id": "cbf02e1d-1c27-4c89-ae57-fc7aefe5a678",
+              "name": "owner_email",
+              "value": "owner@example.com",
+              "type": "string"
+            },
+            {
+              "id": "967e865a-0ce2-4c11-ac14-046bfa5257d0",
+              "name": "google_sheet_id",
+              "value": "PASTE_GOOGLE_SHEET_ID",
+              "type": "string"
+            },
+            {
+              "id": "1de1f743-26be-49b8-a8de-d1c6761d1778",
+              "name": "google_calendar_id",
+              "value": "yourname@gmail.com",
+              "type": "string"
+            },
+            {
+              "id": "caaf53a9-3294-4cfa-a02e-8afcee386583",
+              "name": "whatsapp_phone_number_id",
+              "value": "PASTE_WHATSAPP_PHONE_NUMBER_ID",
+              "type": "string"
+            },
+            {
+              "id": "1502c7e8-1de9-4126-a46c-5fef31a139be",
+              "name": "instagram_api_base_url",
+              "value": "https://graph.facebook.com/v23.0",
+              "type": "string"
+            },
+            {
+              "id": "fce95dd3-c1d1-416d-a018-9390e4917fc5",
+              "name": "instagram_page_id",
+              "value": "PASTE_FACEBOOK_PAGE_ID",
+              "type": "string"
+            },
+            {
+              "id": "c99f10a1-ca93-4bbb-a3a9-cc8b4b2599e4",
+              "name": "claude_model",
+              "value": "claude-opus-5-5",
+              "type": "string"
+            },
+            {
+              "id": "d4c218ab-da73-450a-a223-39bd9bc0f11e",
+              "name": "claude_effort",
+              "value": "low",
+              "type": "string"
+            },
+            {
+              "id": "93c09e86-9c9b-4925-acba-1e3f24574abe",
+              "name": "handoff_confidence_threshold",
+              "value": 0.6,
+              "type": "number"
+            },
+            {
+              "id": "356246e4-106b-4390-a480-865e59b4f711",
+              "name": "max_history_turns",
+              "value": 10,
+              "type": "number"
+            },
+            {
+              "id": "7915f317-ec9b-45ed-a357-4f52ba59ec7c",
+              "name": "human_mode_timeout_hours",
+              "value": 12,
+              "type": "number"
+            },
+            {
+              "id": "e9b3dab5-27b9-4dbb-aef2-10e6e9a72bfb",
+              "name": "handoff_message",
+              "value": "Thanks for your message! I've passed this to our team and someone will get back to you shortly.",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "id": "758707d7-2f50-4644-afde-c3ebbee566a6",
+      "name": "Client Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        520,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "sheet",
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Client Config').first().json.google_sheet_id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Knowledge",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "f61b0ea4-2060-4b41-a3eb-b3c1df0f5560",
+      "name": "Load Knowledge Base",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        780,
+        100
+      ],
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "sheet",
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Client Config').first().json.google_sheet_id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "contact_key",
+              "lookupValue": "={{ $('Normalize Message').first().json.contact_key }}"
+            }
+          ]
+        },
+        "combineFilters": "AND",
+        "options": {}
+      },
+      "id": "1368c8b3-1752-4d2d-a969-cc7f262454ec",
+      "name": "Lookup Lead",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1040,
+        100
+      ],
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "sheet",
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Client Config').first().json.google_sheet_id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Conversations",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "contact_key",
+              "lookupValue": "={{ $('Normalize Message').first().json.contact_key }}"
+            }
+          ]
+        },
+        "combineFilters": "AND",
+        "options": {}
+      },
+      "id": "4e6fa4e7-2731-4d7c-a6da-4495d705c1b9",
+      "name": "Load Conversation History",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1300,
+        100
+      ],
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================================\n// 2 · ASSEMBLE CONTEXT\n// ----------------------------------------------------------------------------\n// Gathers everything the AI step needs into ONE item:\n//   message   → the normalized customer message\n//   config    → the per-client settings from \"Client Config\"\n//   kb_text   → the approved knowledge base, formatted for the prompt\n//   history   → the last N turns of this conversation (Claude message format)\n//   lead      → the customer's existing row in the Leads sheet (or null)\n//   triage    → \"bot\" | \"human\" | \"ignore\"\n//       bot    = the assistant answers\n//       human  = a person took over this chat (status = human in Leads) → stay silent, alert owner\n//       ignore = Meta re-delivered a message we already processed (same message_id)\n// ============================================================================\n\nconst message = $('Normalize Message').first().json;\nconst config = $('Client Config').first().json;\nconst zone = config.timezone || 'UTC';\n\n// Google Sheets nodes return one empty item when nothing matches → drop those.\nconst rows = (items) => items.map((i) => i.json).filter((r) => r && Object.keys(r).length > 0);\n\nconst kbRows = rows($('Load Knowledge Base').all());\nconst leadRows = rows($('Lookup Lead').all()).filter((r) => String(r.contact_key) === message.contact_key);\nconst logRows = rows($('Load Conversation History').all()).filter((r) => String(r.contact_key) === message.contact_key);\n\n// --- Knowledge base → readable text, grouped by category ---------------------\nconst ORDER = ['services', 'hours', 'location', 'booking', 'policies', 'faq'];\nconst groups = {};\nfor (const r of kbRows) {\n  const cat = String(r.category || 'faq').trim().toLowerCase();\n  if (!r.title && !r.content) continue;\n  (groups[cat] = groups[cat] || []).push(`- ${String(r.title || '').trim()}: ${String(r.content || '').trim()}`);\n}\nconst cats = [...ORDER.filter((c) => groups[c]), ...Object.keys(groups).filter((c) => !ORDER.includes(c))];\nconst kb_text = cats.map((c) => `## ${c.toUpperCase()}\\n${groups[c].join('\\n')}`).join('\\n\\n') || '(The knowledge base is empty.)';\n\n// --- Timestamps: accept ISO strings, \"yyyy-LL-dd HH:mm\" or Sheets date serials\nfunction parseWhen(value) {\n  if (value === undefined || value === null || value === '') return null;\n  if (typeof value === 'number') return DateTime.fromMillis(Math.round((value - 25569) * 86400000), { zone });\n  const s = String(value);\n  let dt = DateTime.fromISO(s, { zone });\n  if (!dt.isValid) dt = DateTime.fromFormat(s, 'yyyy-LL-dd HH:mm:ss', { zone });\n  if (!dt.isValid) dt = DateTime.fromFormat(s, 'yyyy-LL-dd HH:mm', { zone });\n  return dt.isValid ? dt : null;\n}\n\n// --- Conversation history → Claude messages (oldest first, last N turns) -----\nlogRows.sort((a, b) => {\n  const ta = parseWhen(a.timestamp), tb = parseWhen(b.timestamp);\n  return (ta ? ta.toMillis() : 0) - (tb ? tb.toMillis() : 0);\n});\nconst maxTurns = Number(config.max_history_turns) || 10;\nconst history = [];\nfor (const r of logRows.slice(-maxTurns)) {\n  if (r.customer_message) history.push({ role: 'user', content: String(r.customer_message) });\n  if (r.bot_reply) history.push({ role: 'assistant', content: String(r.bot_reply) });\n}\n\n// --- Triage -------------------------------------------------------------------\nconst lead = leadRows[0] || null;\nconst is_duplicate = logRows.some((r) => r.message_id && String(r.message_id) === message.message_id);\n\nlet human_mode = false;\nif (lead && String(lead.status || '').trim().toLowerCase() === 'human') {\n  const since = parseWhen(lead.handoff_at);\n  const hours = since ? (Date.now() - since.toMillis()) / 3600000 : 0;\n  human_mode = hours < (Number(config.human_mode_timeout_hours) || 12);   // auto-resume the bot after the timeout\n}\n\nconst triage = is_duplicate ? 'ignore' : human_mode ? 'human' : 'bot';\n\nreturn [{ json: { message, config, lead, kb_text, kb_row_count: kbRows.length, history, triage, is_duplicate, human_mode } }];\n"
+      },
+      "id": "4be84460-8031-41de-a2ff-d81e5e9191f1",
+      "name": "Assemble Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1560,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "dd9a79c9-1be2-40ab-a268-79d870ea5222",
+                    "leftValue": "={{ $json.triage }}",
+                    "rightValue": "bot",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "bot"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9f2283b7-974c-449c-adad-1c74066d8261",
+                    "leftValue": "={{ $json.triage }}",
+                    "rightValue": "human",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "human"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a4b17a70-9e58-4b9e-adc0-2835545b6231",
+                    "leftValue": "={{ $json.triage }}",
+                    "rightValue": "ignore",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ignore"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8e7549bd-9b1d-457b-a6ef-8bb32f434e20",
+      "name": "Triage",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1820,
+        100
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "387e0d17-9bf2-4e95-a3e9-8a0ff312255b",
+      "name": "Ignore Duplicate",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2080,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ee7dcc10-57fa-4158-a590-5ee629b5f839",
+              "name": "timestamp",
+              "value": "={{ $now.setZone($('Client Config').first().json.timezone).toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "75857e48-9ad6-4e31-a6b8-2762bd607ad7",
+              "name": "contact_key",
+              "value": "={{ $json.message.contact_key }}",
+              "type": "string"
+            },
+            {
+              "id": "f41369e1-a487-446f-ab91-9cb511855fc1",
+              "name": "channel",
+              "value": "={{ $json.message.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "b37429b5-b609-413d-a35f-df76aaf8413b",
+              "name": "customer_name",
+              "value": "={{ ($json.lead || {}).name || $json.message.contact_name }}",
+              "type": "string"
+            },
+            {
+              "id": "38c2ff6d-bc7b-411a-ad9e-046375df427d",
+              "name": "customer_message",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "f8ba710a-96de-4050-ac2d-c9c83f2cedb5",
+              "name": "bot_reply",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "b4283697-f422-4466-ac21-6f17c5202c34",
+              "name": "intent",
+              "value": "human_mode",
+              "type": "string"
+            },
+            {
+              "id": "3b4098ad-88bc-4a9b-a661-9bb3f636fd3e",
+              "name": "confidence",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "8e9031c3-61f4-488e-a07d-8d0f95f47e31",
+              "name": "decision",
+              "value": "human",
+              "type": "string"
+            },
+            {
+              "id": "d20506a1-4ba6-44e1-a4ad-3ae2e400669d",
+              "name": "guardrails",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "dc6af101-4043-4e11-a25b-a9146d583e9a",
+              "name": "message_id",
+              "value": "={{ $json.message.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "50832d65-744c-482d-a295-5120cbd44bfa",
+              "name": "tokens_used",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "id": "2e3b6833-d6c6-4cbd-a9b0-9ffd03e8eb72",
+      "name": "Human Mode Log Row",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2080,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "sheet",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Client Config').first().json.google_sheet_id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Conversations",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": null,
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "a511643f-aad8-4c60-a970-2b1978bed080",
+      "name": "Log Message (Human Mode)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2340,
+        300
+      ],
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $('Client Config').first().json.owner_email }}",
+        "subject": "=💬 New message from {{ $('Human Mode Log Row').first().json.customer_name || 'a customer' }} – you are handling this chat ({{ $('Client Config').first().json.client_name }})",
+        "emailType": "text",
+        "message": "=Hi {{ $('Client Config').first().json.owner_name }},\n\nA customer you are handling personally sent a new message. The assistant stayed silent.\n\nCustomer: {{ $('Human Mode Log Row').first().json.customer_name || 'unknown' }}\nChannel: {{ $('Normalize Message').first().json.channel }} ({{ $('Normalize Message').first().json.contact_id }})\n\nMessage:\n\"{{ $('Normalize Message').first().json.text }}\"\n\nReply directly from the WhatsApp Business app or the Instagram inbox.\nTo let the assistant take over again, open the Leads sheet and set status = bot (it also resumes automatically after {{ $('Client Config').first().json.human_mode_timeout_hours }} hours).\nLeads sheet: https://docs.google.com/spreadsheets/d/{{ $('Client Config').first().json.google_sheet_id }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "4406bc5b-ef41-44c0-a034-e9d1aca8b558",
+      "name": "Notify Owner (Human Mode)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2600,
+        300
+      ],
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================================\n// 3 · BUILD CLAUDE REQUEST\n// ----------------------------------------------------------------------------\n// Builds the body for the Anthropic Messages API call. The design choices that\n// keep the bot \"limited to approved information\" live here:\n//   • the knowledge base is injected into the system prompt and the rules say\n//     \"answer ONLY from it, otherwise hand off\";\n//   • the reply is returned as STRICT JSON (output_config.format) so the\n//     workflow — not the model — decides what is sent, booked or escalated;\n//   • the model never confirms bookings; it only collects details.\n// ============================================================================\n\nconst ctx = $input.first().json;\nconst { message, config, kb_text, history, lead } = ctx;\nconst zone = config.timezone || 'UTC';\nconst now = DateTime.now().setZone(zone);\n\nconst stableRules = `You are the virtual assistant of ${config.client_name} (${config.business_type}). You chat with customers on WhatsApp and Instagram.\n\nSTRICT RULES\n1. Answer ONLY from the APPROVED KNOWLEDGE BASE below. If the answer is not there, do NOT guess, estimate or invent anything. Say you will check with the team and set needs_human = true.\n2. Quote prices, durations, hours, addresses and policies exactly as written. Never offer discounts, promises, diagnoses or medical/legal advice.\n3. Never confirm an appointment yourself. Your job is only to collect: (a) the service, (b) the date, (c) the time, (d) the customer's name. Once all four are known, repeat them back in one short message and ask the customer to confirm. Set booking.ready_to_book = true ONLY after the customer has confirmed. The booking system then checks the calendar and sends the confirmation.\n4. Appointments are possible only during the booking hours listed below. If the customer asks for a time outside them, politely offer the booking hours instead.\n5. Hand off to a human (needs_human = true, with a short polite reply) when the customer asks for a person, is upset or complaining, asks for medical/legal advice, asks about something not in the knowledge base, or when you are unsure.\n6. Reply in the customer's language. Keep replies short: at most 3 short sentences or a short list. Plain text only — no markdown, no headings, no bold.\n7. Capture lead details (name, phone, email, service interest) whenever the customer shares them.\n8. If the customer message is a placeholder such as \"[The customer sent a image message ...]\", politely ask them to type their question.\n9. confidence = how fully your reply is supported by the knowledge base (1.0 = fully supported, below 0.6 = unsure).\n\nBOOKING HOURS: ${config.opening_time}–${config.closing_time} (${zone}), closed on: ${config.closed_days || 'none'}. Appointment length: ${config.slot_minutes} minutes.\n\nAPPROVED KNOWLEDGE BASE\n${kb_text}`;\n\nconst profile = lead\n  ? `name: ${lead.name || 'unknown'}; service interest: ${lead.service_interest || 'unknown'}; previous booking: ${lead.booking_datetime || 'none'}`\n  : 'new customer, no previous chats';\n\nconst liveContext = `TODAY: ${now.toFormat('cccc, d LLLL yyyy')} · current time ${now.toFormat('HH:mm')} (${zone}). Resolve relative dates such as \"tomorrow\" or \"next Monday\" into absolute dates.\nCHANNEL: ${message.channel}. CUSTOMER PROFILE: ${profile}.`;\n\n// JSON schema the model MUST follow (structured outputs) ---------------------\nconst nullableString = { anyOf: [{ type: 'string' }, { type: 'null' }] };\nconst schema = {\n  type: 'object',\n  additionalProperties: false,\n  required: ['intent', 'reply', 'confidence', 'needs_human', 'handoff_reason', 'lead', 'booking'],\n  properties: {\n    intent: {\n      type: 'string',\n      enum: ['faq', 'booking', 'lead', 'handoff', 'smalltalk'],\n      description: 'faq = question answerable from the knowledge base · booking = wants an appointment · lead = sharing contact details / interest · handoff = needs a human · smalltalk = greeting or thanks',\n    },\n    reply: { type: 'string', description: \"The exact message to send to the customer. Plain text, short, friendly, in the customer's language.\" },\n    confidence: { type: 'number', description: '0 to 1. How fully the reply is supported by the approved knowledge base.' },\n    needs_human: { type: 'boolean', description: 'true when a human must take over this conversation.' },\n    handoff_reason: { ...nullableString, description: 'Short reason when needs_human is true, otherwise null.' },\n    lead: {\n      type: 'object',\n      additionalProperties: false,\n      required: ['name', 'phone', 'email', 'service_interest'],\n      properties: {\n        name: nullableString,\n        phone: nullableString,\n        email: nullableString,\n        service_interest: nullableString,\n      },\n    },\n    booking: {\n      type: 'object',\n      additionalProperties: false,\n      required: ['requested', 'service', 'date', 'time', 'ready_to_book'],\n      properties: {\n        requested: { type: 'boolean', description: 'true if the customer wants an appointment.' },\n        service: nullableString,\n        date: { ...nullableString, description: 'Absolute date as YYYY-MM-DD, resolved from TODAY.' },\n        time: { ...nullableString, description: 'Start time as HH:MM in 24-hour format.' },\n        ready_to_book: { type: 'boolean', description: 'true ONLY when service, date, time and name are all known AND the customer confirmed them in their latest message.' },\n      },\n    },\n  },\n};\n\nconst claude_request = {\n  model: config.claude_model || 'claude-opus-5-5',\n  max_tokens: 2048,\n  system: [\n    { type: 'text', text: stableRules, cache_control: { type: 'ephemeral' } },   // stable → cached between messages\n    { type: 'text', text: liveContext },                                          // changes every call → after the cache breakpoint\n  ],\n  messages: [...history, { role: 'user', content: message.text }],\n  output_config: {\n    effort: config.claude_effort || 'low',\n    format: { type: 'json_schema', schema },\n  },\n};\n\nreturn [{ json: { ...ctx, claude_request } }];\n"
+      },
+      "id": "b76b86ed-1bd1-4420-a0b9-e4a1d1b7def7",
+      "name": "Build Claude Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2080,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "anthropicApi",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.claude_request) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "36034cc9-189f-4e0d-ae84-006fd3217700",
+      "name": "Ask Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2340,
+        100
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1500,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================================\n// 4 · PARSE CLAUDE RESPONSE + GUARDRAILS\n// ----------------------------------------------------------------------------\n// Reads the model's JSON and then applies DETERMINISTIC checks that the model\n// cannot talk its way around. Any failed check → \"handoff\" (safe default).\n//   • unreadable / refused / errored API response\n//   • empty reply\n//   • the model itself asked for a human\n//   • confidence below the threshold set in Client Config\n//   • PRICE GUARD: every money amount in the reply must exist in the knowledge base\n//   • the customer explicitly asked for a person\n// Output adds: ai, guard[], needs_human, decision (\"answer\" | \"book\" | \"handoff\"), lead_merged\n// ============================================================================\n\nconst ctx = $('Build Claude Request').first().json;\nconst res = $input.first().json || {};\nconst config = ctx.config;\n\n// --- 1. Read the structured JSON -------------------------------------------\nlet ai = null;\nlet problem = null;\nif (res.error) problem = 'ai_api_error';\nelse if (res.stop_reason === 'refusal') problem = 'ai_refusal';\nelse if (res.stop_reason === 'max_tokens') problem = 'ai_output_truncated';\nelse {\n  try {\n    const text = (res.content || []).filter((b) => b.type === 'text').map((b) => b.text).join('').trim();\n    ai = JSON.parse(text);\n  } catch (e) {\n    problem = 'ai_output_unreadable';\n  }\n}\nif (!ai || typeof ai !== 'object') { ai = {}; problem = problem || 'ai_output_unreadable'; }\n\n// --- 2. Normalize fields with safe defaults ----------------------------------\nconst INTENTS = ['faq', 'booking', 'lead', 'handoff', 'smalltalk'];\nai.intent = INTENTS.includes(ai.intent) ? ai.intent : 'faq';\nai.reply = String(ai.reply || '').trim();\nai.confidence = Math.max(0, Math.min(1, Number(ai.confidence) || 0));\nai.needs_human = Boolean(ai.needs_human);\nai.handoff_reason = ai.handoff_reason ? String(ai.handoff_reason) : null;\nai.lead = Object.assign({ name: null, phone: null, email: null, service_interest: null }, ai.lead || {});\nai.booking = Object.assign({ requested: false, service: null, date: null, time: null, ready_to_book: false }, ai.booking || {});\n\n// --- 3. Guardrails (outside the model) ---------------------------------------\nconst guard = [];\nif (problem) guard.push(problem);\nif (!ai.reply) guard.push('empty_reply');\nif (ai.needs_human) guard.push(ai.handoff_reason ? `model: ${ai.handoff_reason}` : 'model_requested_handoff');\n\nconst threshold = Number(config.handoff_confidence_threshold) || 0.6;\nif (!problem && ai.confidence < threshold) guard.push(`low_confidence (${ai.confidence} < ${threshold})`);\n\n// Price guard: any currency amount in the reply must appear in the approved knowledge base.\nconst MONEY = /(?:PKR|Rs\\.?|₨|\\$|USD|€|EUR|£|GBP|AED|SAR|INR|₹)\\s?\\d[\\d,]*(?:\\.\\d+)?|\\d[\\d,]*(?:\\.\\d+)?\\s?(?:PKR|Rs\\.?|USD|EUR|GBP|AED|SAR|INR|dollars|rupees|euros|pounds)\\b/gi;\nconst kbNumbers = new Set((String(ctx.kb_text).match(/\\d[\\d,]*(?:\\.\\d+)?/g) || []).map((n) => n.replace(/,/g, '')));\nfor (const amount of ai.reply.match(MONEY) || []) {\n  const n = (amount.match(/\\d[\\d,]*(?:\\.\\d+)?/) || [''])[0].replace(/,/g, '');\n  if (n && !kbNumbers.has(n)) { guard.push(`price_not_in_knowledge_base: ${amount.trim()}`); break; }\n}\n\n// Explicit request for a person (checked on the customer's own words).\nif (/\\b(human|real person|speak to (?:someone|a person|the doctor|the owner)|talk to (?:someone|a person|the doctor|the owner)|manager|complaint|complain)\\b/i.test(ctx.message.text)) {\n  guard.push('customer_asked_for_human');\n}\n\nconst needs_human = guard.length > 0;\nconst b = ai.booking;\nconst booking_ready = !needs_human && b.ready_to_book && b.service && b.date && b.time;\nconst decision = needs_human ? 'handoff' : booking_ready ? 'book' : 'answer';\n\n// --- 4. Merge lead details: this turn > existing sheet row > channel profile --\nconst old = ctx.lead || {};\nconst lead_merged = {\n  name: ai.lead.name || old.name || ctx.message.contact_name || '',\n  phone: ai.lead.phone || old.phone || (ctx.message.channel === 'whatsapp' ? ctx.message.contact_id : ''),\n  email: ai.lead.email || old.email || '',\n  service_interest: ai.lead.service_interest || b.service || old.service_interest || '',\n};\n\nconst usage = res.usage || {};\nconst tokens_used = (Number(usage.input_tokens) || 0) + (Number(usage.cache_read_input_tokens) || 0) + (Number(usage.cache_creation_input_tokens) || 0) + (Number(usage.output_tokens) || 0);\n\nreturn [{ json: { ...ctx, ai, guard, needs_human, decision, lead_merged, tokens_used } }];\n"
+      },
+      "id": "4f3cced1-edac-4616-a3f8-2622ba19aff8",
+      "name": "Parse Claude Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2600,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0d17eb0c-5783-4f20-a0ae-c79d3fba3768",
+                    "leftValue": "={{ $json.decision }}",
+                    "rightValue": "answer",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "answer"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6058ea5e-06ec-491a-af8e-7e0e0a1ba1ad",
+                    "leftValue": "={{ $json.decision }}",
+                    "rightValue": "book",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "book"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "db106a0b-6c41-4f9c-a93f-501e87762d68",
+                    "leftValue": "={{ $json.decision }}",
+                    "rightValue": "handoff",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "handoff"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5ee46429-9bb2-4ee8-af30-5b95aa7d30fd",
+      "name": "Route Decision",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2860,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "15fac324-cb57-470b-a2e2-225377c6c843",
+              "name": "reply_text",
+              "value": "={{ $json.ai.reply }}",
+              "type": "string"
+            },
+            {
+              "id": "e36d343e-fbbe-4782-af6c-94a10c828812",
+              "name": "decision",
+              "value": "answer",
+              "type": "string"
+            },
+            {
+              "id": "d63af646-71e7-4fb4-af59-f7f2b86ce1cd",
+              "name": "status",
+              "value": "bot",
+              "type": "string"
+            },
+            {
+              "id": "9d6f2ca7-9765-4c15-a7aa-91a856554ed6",
+              "name": "booking_confirmed",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "1a112e2f-2372-4452-ac21-4270988a2be7",
+              "name": "booking_datetime",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "b239d22c-bf2e-4dc2-ab32-9e9615b2033c",
+              "name": "calendar_event_link",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "id": "4578ca02-1996-4284-a0a4-a327431d6970",
+      "name": "Answer Reply",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3120,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================================\n// 5 · VALIDATE BOOKING SLOT\n// ----------------------------------------------------------------------------\n// The model only proposes a date + time. The WORKFLOW decides whether that slot\n// is allowed: in the future, on an open day, inside booking hours. Only a valid\n// slot is checked against Google Calendar.\n// Output adds: slot { valid, error, error_text, start_iso, end_iso, human }\n// ============================================================================\n\nconst ctx = $input.first().json;\nconst config = ctx.config;\nconst b = ctx.ai.booking;\nconst zone = config.timezone || 'UTC';\nconst slotMinutes = Number(config.slot_minutes) || 30;\n\nconst start = DateTime.fromISO(`${b.date}T${b.time}`, { zone });\nlet error = null;\n\nif (!start.isValid) error = 'invalid_datetime';\nelse {\n  const now = DateTime.now().setZone(zone);\n  const [oh, om] = String(config.opening_time || '09:00').split(':').map(Number);\n  const [ch, cm] = String(config.closing_time || '18:00').split(':').map(Number);\n  const closedDays = String(config.closed_days || '').split(',').map((d) => d.trim().toLowerCase()).filter(Boolean);\n  const opens = start.set({ hour: oh, minute: om, second: 0, millisecond: 0 });\n  const closes = start.set({ hour: ch, minute: cm, second: 0, millisecond: 0 });\n\n  if (start <= now) error = 'in_the_past';\n  else if (closedDays.includes(start.weekdayLong.toLowerCase())) error = 'closed_day';\n  else if (start < opens || start.plus({ minutes: slotMinutes }) > closes) error = 'outside_hours';\n}\n\nconst end = start.isValid ? start.plus({ minutes: slotMinutes }) : null;\n\nconst ERROR_TEXT = {\n  in_the_past: 'That time has already passed.',\n  closed_day: \"We're closed on that day.\",\n  outside_hours: 'That time is outside our booking hours.',\n  invalid_datetime: \"I couldn't understand that date or time.\",\n};\n\nreturn [{\n  json: {\n    ...ctx,\n    slot: {\n      valid: !error,\n      error,\n      error_text: error ? ERROR_TEXT[error] : '',\n      start_iso: start.isValid ? start.toISO() : null,\n      end_iso: end ? end.toISO() : null,\n      human: start.isValid ? start.toFormat(\"cccc d LLLL yyyy 'at' h:mm a\") : `${b.date} ${b.time}`,\n    },\n  },\n}];\n"
+      },
+      "id": "1c4e07ff-9d91-44d3-a48f-aabfdc56870d",
+      "name": "Validate Booking Slot",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "10be35ff-988c-49b3-a6d0-78a8bbc3d47f",
+              "leftValue": "={{ $json.slot.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e88db360-510a-4e08-a25d-9933227407d3",
+      "name": "Slot Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3380,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "calendar",
+        "operation": "availability",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('Client Config').first().json.google_calendar_id }}",
+          "mode": "id"
+        },
+        "timeMin": "={{ $json.slot.start_iso }}",
+        "timeMax": "={{ $json.slot.end_iso }}",
+        "options": {
+          "outputFormat": "availability"
+        }
+      },
+      "id": "9bde2038-6a3c-4857-aeec-362049edd122",
+      "name": "Check Calendar Availability",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        3640,
+        40
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "06ba2c67-9688-424b-aaf4-b2908a702f81",
+              "leftValue": "={{ $json.available }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "bb4adb87-910c-4324-ab67-46a2426e409d",
+      "name": "Slot Free?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3900,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "event",
+        "operation": "create",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('Client Config').first().json.google_calendar_id }}",
+          "mode": "id"
+        },
+        "start": "={{ $('Validate Booking Slot').first().json.slot.start_iso }}",
+        "end": "={{ $('Validate Booking Slot').first().json.slot.end_iso }}",
+        "useDefaultReminders": true,
+        "additionalFields": {
+          "summary": "={{ $('Validate Booking Slot').first().json.ai.booking.service }} – {{ $('Parse Claude Response').first().json.lead_merged.name || 'customer' }}",
+          "description": "=Booked by the AI assistant via {{ $('Normalize Message').first().json.channel }}.\nCustomer: {{ $('Parse Claude Response').first().json.lead_merged.name || 'unknown' }}\nPhone: {{ $('Parse Claude Response').first().json.lead_merged.phone || '-' }}\nContact id: {{ $('Normalize Message').first().json.contact_id }}\nService: {{ $('Validate Booking Slot').first().json.ai.booking.service }}\nLast message: \"{{ $('Normalize Message').first().json.text }}\""
+        }
+      },
+      "id": "cca623c5-079b-45d6-aa8f-6648b094d877",
+      "name": "Create Calendar Event",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        4160,
+        -20
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ccd1fc68-94b8-4a6c-a02e-ef03af067dcd",
+              "name": "reply_text",
+              "value": "=✅ Your appointment is confirmed!\n\nService: {{ $('Validate Booking Slot').first().json.ai.booking.service }}\nWhen: {{ $('Validate Booking Slot').first().json.slot.human }}\nName: {{ $('Parse Claude Response').first().json.lead_merged.name }}\n\nSee you at {{ $('Client Config').first().json.client_name }}. Reply here if you need to change it.",
+              "type": "string"
+            },
+            {
+              "id": "e983f535-a2ad-48c3-a2f9-1a605c337c05",
+              "name": "decision",
+              "value": "book",
+              "type": "string"
+            },
+            {
+              "id": "d63af646-71e7-4fb4-af59-f7f2b86ce1cd",
+              "name": "status",
+              "value": "bot",
+              "type": "string"
+            },
+            {
+              "id": "78a4f1f3-0efd-4317-a1de-f90983b2c62c",
+              "name": "booking_confirmed",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "1e05b827-da41-487e-a53e-065d8d5c20b3",
+              "name": "booking_datetime",
+              "value": "={{ $('Validate Booking Slot').first().json.slot.start_iso }}",
+              "type": "string"
+            },
+            {
+              "id": "c4ef56c5-3d89-479e-aa37-4da3fa1512d4",
+              "name": "calendar_event_link",
+              "value": "={{ $json.htmlLink || '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "id": "89522af9-8edf-4eb8-a697-b950dc74ccea",
+      "name": "Booking Confirmed Reply",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4420,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6fea5075-d48e-4b65-a898-3a8ba4e1f424",
+              "name": "reply_text",
+              "value": "=Sorry, {{ $('Validate Booking Slot').first().json.slot.human }} is already booked. Could you suggest another date or time? We're open {{ $('Client Config').first().json.opening_time }}–{{ $('Client Config').first().json.closing_time }}, closed on {{ $('Client Config').first().json.closed_days }}.",
+              "type": "string"
+            },
+            {
+              "id": "e36d343e-fbbe-4782-af6c-94a10c828812",
+              "name": "decision",
+              "value": "answer",
+              "type": "string"
+            },
+            {
+              "id": "d63af646-71e7-4fb4-af59-f7f2b86ce1cd",
+              "name": "status",
+              "value": "bot",
+              "type": "string"
+            },
+            {
+              "id": "9d6f2ca7-9765-4c15-a7aa-91a856554ed6",
+              "name": "booking_confirmed",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "1a112e2f-2372-4452-ac21-4270988a2be7",
+              "name": "booking_datetime",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "b239d22c-bf2e-4dc2-ab32-9e9615b2033c",
+              "name": "calendar_event_link",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "id": "d1fe7c09-03af-49f3-a120-977e00407a9f",
+      "name": "Slot Taken Reply",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4160,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "28cb95a3-c02b-43c5-a4f9-c2d409defcdf",
+              "name": "reply_text",
+              "value": "={{ $json.slot.error_text }} We're open {{ $('Client Config').first().json.opening_time }}–{{ $('Client Config').first().json.closing_time }}, closed on {{ $('Client Config').first().json.closed_days }}. Which day and time would suit you?",
+              "type": "string"
+            },
+            {
+              "id": "e36d343e-fbbe-4782-af6c-94a10c828812",
+              "name": "decision",
+              "value": "answer",
+              "type": "string"
+            },
+            {
+              "id": "d63af646-71e7-4fb4-af59-f7f2b86ce1cd",
+              "name": "status",
+              "value": "bot",
+              "type": "string"
+            },
+            {
+              "id": "9d6f2ca7-9765-4c15-a7aa-91a856554ed6",
+              "name": "booking_confirmed",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "1a112e2f-2372-4452-ac21-4270988a2be7",
+              "name": "booking_datetime",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "b239d22c-bf2e-4dc2-ab32-9e9615b2033c",
+              "name": "calendar_event_link",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "id": "99844605-1b79-4901-af92-ea794cb98d0e",
+      "name": "Invalid Slot Reply",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3640,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bdb60d09-7707-401d-a8aa-29c5b411a5b1",
+              "name": "reply_text",
+              "value": "={{ $('Client Config').first().json.handoff_message }}",
+              "type": "string"
+            },
+            {
+              "id": "4af91072-ca76-41bb-a992-4c44a0dee564",
+              "name": "decision",
+              "value": "handoff",
+              "type": "string"
+            },
+            {
+              "id": "3c717ca6-ec47-483f-a7dd-85effbbed945",
+              "name": "status",
+              "value": "human",
+              "type": "string"
+            },
+            {
+              "id": "9d6f2ca7-9765-4c15-a7aa-91a856554ed6",
+              "name": "booking_confirmed",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "1a112e2f-2372-4452-ac21-4270988a2be7",
+              "name": "booking_datetime",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "b239d22c-bf2e-4dc2-ab32-9e9615b2033c",
+              "name": "calendar_event_link",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "id": "a0ec51b6-cd6d-45c6-a466-c22310282026",
+      "name": "Handoff Reply",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3120,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================================\n// 6 · FINALIZE REPLY\n// ----------------------------------------------------------------------------\n// Single merge point for every branch (answer / booking / handoff). Produces the\n// exact item the \"send\" nodes and the logging nodes read:\n//   channel, contact_id, contact_key, reply_text, decision, status,\n//   booking_confirmed, booking_datetime, calendar_event_link\n// Also applies last-mile formatting rules per channel.\n// ============================================================================\n\nconst r = $input.first().json;\nconst message = $('Normalize Message').first().json;\nconst config = $('Client Config').first().json;\n\nlet text = String(r.reply_text || '')\n  .replace(/^#{1,6}\\s+/gm, '')      // markdown headings → plain\n  .replace(/\\*\\*(.+?)\\*\\*/g, '*$1*') // **bold** → *bold* (WhatsApp style)\n  .replace(/`/g, '')\n  .trim();\n\nif (message.channel === 'instagram') text = text.replace(/\\*/g, '');   // Instagram has no text formatting\nif (text.length > 1000) text = text.slice(0, 997) + '...';             // keep chat replies short\nif (!text) text = String(config.handoff_message || 'Thanks for your message! Our team will get back to you shortly.');\n\nreturn [{\n  json: {\n    channel: message.channel,\n    contact_id: message.contact_id,\n    contact_key: message.contact_key,\n    reply_text: text,\n    decision: r.decision || 'answer',\n    status: r.status || 'bot',\n    booking_confirmed: Boolean(r.booking_confirmed),\n    booking_datetime: r.booking_datetime || '',\n    calendar_event_link: r.calendar_event_link || '',\n  },\n}];\n"
+      },
+      "id": "fc8b41e2-fcd4-4b43-a5a6-c331da5541ab",
+      "name": "Finalize Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4680,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4d77d839-cd95-4880-adba-7083fba4a287",
+                    "leftValue": "={{ $json.channel }}",
+                    "rightValue": "whatsapp",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "whatsapp"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "835ab5e1-c4d2-4995-a13f-9f1c1e6956fe",
+                    "leftValue": "={{ $json.channel }}",
+                    "rightValue": "instagram",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "instagram"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "07781681-31f0-4b5e-a522-08ea9c41050b",
+      "name": "Route by Channel",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        4940,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "phoneNumberId": "={{ $('Client Config').first().json.whatsapp_phone_number_id }}",
+        "recipientPhoneNumber": "={{ $json.contact_id }}",
+        "messageType": "text",
+        "textBody": "={{ $json.reply_text }}",
+        "additionalFields": {}
+      },
+      "id": "c0a80ca3-5049-4843-a13d-01eef68504af",
+      "name": "Send WhatsApp Reply",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        5200,
+        20
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1500
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Client Config').first().json.instagram_api_base_url }}/{{ $('Client Config').first().json.instagram_page_id }}/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ recipient: { id: $json.contact_id }, messaging_type: 'RESPONSE', message: { text: $json.reply_text } }) }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "16049631-0417-4fb9-aa89-d1a16e462087",
+      "name": "Send Instagram Reply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5200,
+        180
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1500
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2eaed9be-8fef-4bca-a163-786958c76f04",
+              "name": "contact_key",
+              "value": "={{ $('Normalize Message').first().json.contact_key }}",
+              "type": "string"
+            },
+            {
+              "id": "06c784fb-205b-489b-a6ef-7b5b2ea67d39",
+              "name": "channel",
+              "value": "={{ $('Normalize Message').first().json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "ac697fea-43ae-4174-abc4-fb4c20519db3",
+              "name": "contact_id",
+              "value": "={{ $('Normalize Message').first().json.contact_id }}",
+              "type": "string"
+            },
+            {
+              "id": "90fe537a-60fa-44be-af78-d2efaee67ce7",
+              "name": "name",
+              "value": "={{ $('Parse Claude Response').first().json.lead_merged.name }}",
+              "type": "string"
+            },
+            {
+              "id": "db4cc135-a474-42d2-a37e-4afd53931ed0",
+              "name": "phone",
+              "value": "={{ $('Parse Claude Response').first().json.lead_merged.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "e4b9d5d7-e33f-4313-a505-fa82aefe52ce",
+              "name": "email",
+              "value": "={{ $('Parse Claude Response').first().json.lead_merged.email }}",
+              "type": "string"
+            },
+            {
+              "id": "16113654-4fab-410a-a3a1-14142f68515c",
+              "name": "service_interest",
+              "value": "={{ $('Parse Claude Response').first().json.lead_merged.service_interest }}",
+              "type": "string"
+            },
+            {
+              "id": "93d712c5-f4f6-404a-a4d5-0783b50e973c",
+              "name": "last_intent",
+              "value": "={{ $('Parse Claude Response').first().json.ai.intent }}",
+              "type": "string"
+            },
+            {
+              "id": "2f792a2f-b248-40a8-a416-acd03aa6a6bf",
+              "name": "status",
+              "value": "={{ $('Finalize Reply').first().json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "2a261732-9753-452c-a6ba-7cc602a4b95d",
+              "name": "handoff_at",
+              "value": "={{ $('Finalize Reply').first().json.status === 'human' ? $now.setZone($('Client Config').first().json.timezone).toISO() : (($('Assemble Context').first().json.lead || {}).handoff_at || '') }}",
+              "type": "string"
+            },
+            {
+              "id": "acc78d4c-8e85-439e-ad6d-c247a7b680a2",
+              "name": "handoff_reason",
+              "value": "={{ $('Finalize Reply').first().json.status === 'human' ? $('Parse Claude Response').first().json.guard.join(' | ') : '' }}",
+              "type": "string"
+            },
+            {
+              "id": "5bb1530e-df6f-4427-a7c0-7681bb7289a3",
+              "name": "booking_datetime",
+              "value": "={{ $('Finalize Reply').first().json.booking_datetime || (($('Assemble Context').first().json.lead || {}).booking_datetime || '') }}",
+              "type": "string"
+            },
+            {
+              "id": "d4da066c-4495-4d4c-a772-36b32325440f",
+              "name": "calendar_event_link",
+              "value": "={{ $('Finalize Reply').first().json.calendar_event_link || (($('Assemble Context').first().json.lead || {}).calendar_event_link || '') }}",
+              "type": "string"
+            },
+            {
+              "id": "04ea527e-d408-4298-a20d-d20f129daadc",
+              "name": "last_message",
+              "value": "={{ $('Normalize Message').first().json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "551c1ffb-30e5-4054-a2c0-a9f6e709d176",
+              "name": "last_message_at",
+              "value": "={{ $now.setZone($('Client Config').first().json.timezone).toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "408ed09d-65b8-4907-ad6d-7a88b238ab7c",
+              "name": "first_seen_at",
+              "value": "={{ ($('Assemble Context').first().json.lead || {}).first_seen_at || $now.setZone($('Client Config').first().json.timezone).toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "id": "7cb84ba6-bbe3-4d3b-a60d-afec6a39ddc1",
+      "name": "Lead Row",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5460,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "sheet",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Client Config').first().json.google_sheet_id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": null,
+          "matchingColumns": [
+            "contact_key"
+          ],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "5eccb8cf-254e-4d2d-ab64-cb6c1732f0b0",
+      "name": "Upsert Lead",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        5720,
+        100
+      ],
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ee7dcc10-57fa-4158-a590-5ee629b5f839",
+              "name": "timestamp",
+              "value": "={{ $now.setZone($('Client Config').first().json.timezone).toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "2eaed9be-8fef-4bca-a163-786958c76f04",
+              "name": "contact_key",
+              "value": "={{ $('Normalize Message').first().json.contact_key }}",
+              "type": "string"
+            },
+            {
+              "id": "06c784fb-205b-489b-a6ef-7b5b2ea67d39",
+              "name": "channel",
+              "value": "={{ $('Normalize Message').first().json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "243f56d4-0974-4f13-a0c0-24693238a9c0",
+              "name": "customer_name",
+              "value": "={{ $('Parse Claude Response').first().json.lead_merged.name }}",
+              "type": "string"
+            },
+            {
+              "id": "50bb8533-6335-4a3d-a581-c877da51c477",
+              "name": "customer_message",
+              "value": "={{ $('Normalize Message').first().json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "51b8b54b-06c2-483c-a3df-3f2eb652bcab",
+              "name": "bot_reply",
+              "value": "={{ $('Finalize Reply').first().json.reply_text }}",
+              "type": "string"
+            },
+            {
+              "id": "88cf5940-872e-4ddd-afd8-02b61aa0c30f",
+              "name": "intent",
+              "value": "={{ $('Parse Claude Response').first().json.ai.intent }}",
+              "type": "string"
+            },
+            {
+              "id": "e7b8bfdd-71a6-4adf-a262-a0551de51c97",
+              "name": "confidence",
+              "value": "={{ $('Parse Claude Response').first().json.ai.confidence }}",
+              "type": "number"
+            },
+            {
+              "id": "62029be2-1648-484a-afc0-2fdb9afd1fc9",
+              "name": "decision",
+              "value": "={{ $('Finalize Reply').first().json.decision }}",
+              "type": "string"
+            },
+            {
+              "id": "07d75607-efab-45f4-ad20-b0dca59d4bae",
+              "name": "guardrails",
+              "value": "={{ $('Parse Claude Response').first().json.guard.join(' | ') }}",
+              "type": "string"
+            },
+            {
+              "id": "5fb3f859-0629-474d-a81d-5058a2b66bea",
+              "name": "message_id",
+              "value": "={{ $('Normalize Message').first().json.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "016f2d1a-41c9-4a68-a840-c303c762d550",
+              "name": "tokens_used",
+              "value": "={{ $('Parse Claude Response').first().json.tokens_used }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "id": "2698e03b-4d4a-4a14-aebb-1d532c2b1d11",
+      "name": "Conversation Log Row",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5980,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "sheet",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Client Config').first().json.google_sheet_id }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Conversations",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": null,
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "87e0a9f3-2d63-4dbe-a07f-205675d3d93a",
+      "name": "Append Conversation Log",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        6240,
+        100
+      ],
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0c99d595-f907-45eb-a1e9-164ff62d35cb",
+              "leftValue": "={{ $('Finalize Reply').first().json.decision === 'handoff' || $('Finalize Reply').first().json.booking_confirmed === true }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b2ba4034-5d98-4492-a335-20c939a30c4a",
+      "name": "Owner Alert Needed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6500,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $('Client Config').first().json.owner_email }}",
+        "subject": "={{ $('Finalize Reply').first().json.decision === 'handoff' ? '🙋 A customer needs you' : '📅 New appointment booked' }} – {{ $('Client Config').first().json.client_name }}",
+        "emailType": "text",
+        "message": "=Hi {{ $('Client Config').first().json.owner_name }},\n\n{{ $('Finalize Reply').first().json.decision === 'handoff' ? 'The assistant handed this conversation to you. It stays silent for this customer until you set status = bot in the Leads sheet (or automatically after ' + $('Client Config').first().json.human_mode_timeout_hours + ' hours).' : 'The assistant booked an appointment and added it to Google Calendar.' }}\n\nCustomer: {{ $('Parse Claude Response').first().json.lead_merged.name || 'unknown' }}\nChannel: {{ $('Normalize Message').first().json.channel }} ({{ $('Normalize Message').first().json.contact_id }})\nPhone: {{ $('Parse Claude Response').first().json.lead_merged.phone || '-' }}\nService interest: {{ $('Parse Claude Response').first().json.lead_merged.service_interest || '-' }}\n\nLast message from the customer:\n\"{{ $('Normalize Message').first().json.text }}\"\n\nAssistant replied:\n\"{{ $('Finalize Reply').first().json.reply_text }}\"\n\n{{ $('Finalize Reply').first().json.decision === 'handoff' ? 'Why: ' + $('Parse Claude Response').first().json.guard.join(' | ') : 'Appointment: ' + DateTime.fromISO($('Finalize Reply').first().json.booking_datetime).setZone($('Client Config').first().json.timezone).toFormat('cccc d LLLL yyyy, h:mm a') + '\\nCalendar event: ' + $('Finalize Reply').first().json.calendar_event_link }}\n\nLeads sheet: https://docs.google.com/spreadsheets/d/{{ $('Client Config').first().json.google_sheet_id }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "e9c10664-1d3c-414d-aa64-d236b7f80a69",
+      "name": "Notify Owner",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        6760,
+        100
+      ],
+      "executeOnce": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "content": "## 1 · Inbound channels\n**WhatsApp** → the WhatsApp Trigger node (needs the Meta app's Client ID + Secret; it registers the webhook for you).\n\n**Instagram** → two Webhook nodes on the same path `instagram-inbound`:\n- GET = Meta's one-time verification handshake (edit the verify token in *Verify Token OK?*)\n- POST = incoming DMs (replies 200 immediately, as Meta requires)\n\n**Normalize Message** converts every payload (WhatsApp, Instagram, ManyChat) into one shape: `channel, contact_id, contact_key, contact_name, text, message_id`. Status receipts, echoes and non-text events produce no item → the run ends quietly.",
+        "height": 440,
+        "width": 520,
+        "color": 5
+      },
+      "id": "20514bf6-8f41-4d55-a33a-6eabdf7cd2d8",
+      "name": "Note · 1 Inbound",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -620
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 2 · Context (one place to configure a client)\n**Client Config** holds everything client-specific: name, timezone, hours, Sheet / Calendar / WhatsApp / Instagram IDs, model, thresholds and the hand-off message. Duplicate the workflow per client and edit only this node.\n\nThree Google Sheets reads (all \"execute once\", \"always output data\"):\n- **Knowledge** tab → the approved price list, services, hours, FAQs\n- **Leads** tab → is this customer already known? is a human handling them?\n- **Conversations** tab → the last turns, for memory\n\n**Assemble Context** formats the knowledge base, rebuilds the chat history and decides the **Triage**:\n- `bot` → the assistant answers\n- `human` → a person took over (status = human in Leads) → log + alert owner, send nothing\n- `ignore` → Meta re-delivered a message we already logged",
+        "height": 440,
+        "width": 1560,
+        "color": 4
+      },
+      "id": "cd832368-6dce-464e-a125-4e6d951e4e94",
+      "name": "Note · 2 Context",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        480,
+        -620
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 3 · AI brain + guardrails\n**Build Claude Request** writes the system prompt: strict rules + the knowledge base (cached) + today's date, hours and customer profile. The model must answer as strict JSON (`output_config.format`), never free text.\n\n**Ask Claude** = one HTTP call to the Anthropic Messages API (credential: *Anthropic account*). On API errors it continues so the customer still gets a safe hand-off reply.\n\n**Parse Claude Response** applies checks the model cannot bypass: unreadable/refused output, empty reply, model asked for a human, confidence below threshold, **price guard** (every amount in the reply must exist in the knowledge base), customer asked for a person. Any failure → `handoff`.\n\n**Route Decision**: `answer` · `book` · `handoff`.",
+        "height": 440,
+        "width": 1040,
+        "color": 6
+      },
+      "id": "b8d26d83-a1ae-4b53-a62d-8366e4869711",
+      "name": "Note · 3 AI",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2040,
+        -620
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 4 · Actions\n- **answer** → send the model's reply as-is.\n- **book** → the model only *proposed* a slot. **Validate Booking Slot** checks it is in the future, on an open day and inside booking hours → **Check Calendar Availability** (Google Calendar free/busy) → **Create Calendar Event** → confirmation text written by the workflow, not the model. Busy or invalid slots get a deterministic \"please pick another time\" reply.\n- **handoff** → fixed, safe hand-off message; the Leads row is switched to `status = human` and the owner is emailed (section 6).\n\nEvery branch ends in a Set node that produces the same fields: `reply_text, decision, status, booking_confirmed, booking_datetime, calendar_event_link`.",
+        "height": 440,
+        "width": 1560,
+        "color": 3
+      },
+      "id": "f0ff0dc4-782f-468a-af15-ec92847e4c8c",
+      "name": "Note · 4 Actions",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3080,
+        -620
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 5 · Send the reply\n**Finalize Reply** is the single merge point: strips markdown, applies channel formatting (Instagram has no bold), caps length, falls back to the hand-off message if the text is empty.\n\n**Route by Channel** → WhatsApp Business Cloud node or Instagram Send API (HTTP, header credential `Authorization: Bearer <page token>`).",
+        "height": 440,
+        "width": 780,
+        "color": 7
+      },
+      "id": "480fa8bd-c390-42a2-a684-9d33c809559a",
+      "name": "Note · 5 Send",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4640,
+        -620
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 6 · Lead capture · memory · owner alerts\n- **Upsert Lead** → one row per customer in *Leads* (matched on `contact_key`): name, phone, email, service interest, status (bot/human), booking, last message.\n- **Append Conversation Log** → one row per turn in *Conversations* (customer message, bot reply, intent, confidence, guardrail notes, tokens). This is also the bot's memory.\n- **Owner Alert Needed?** → Gmail to the owner on every hand-off and every confirmed booking, with what to do next.\n\nTo hand a chat back to the bot: set `status = bot` in the Leads sheet (auto-resumes after `human_mode_timeout_hours`).",
+        "height": 440,
+        "width": 1560,
+        "color": 4
+      },
+      "id": "a38d5bd8-16f2-453a-a0c1-ba5c98da2261",
+      "name": "Note · 6 Log",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5420,
+        -620
+      ]
+    }
+  ],
+  "connections": {
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "Normalize Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Instagram Inbound (POST)": {
+      "main": [
+        [
+          {
+            "node": "Normalize Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Instagram Verify (GET)": {
+      "main": [
+        [
+          {
+            "node": "Verify Token OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Token OK?": {
+      "main": [
+        [
+          {
+            "node": "Respond: hub.challenge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond: 403 Forbidden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Message": {
+      "main": [
+        [
+          {
+            "node": "Client Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Client Config": {
+      "main": [
+        [
+          {
+            "node": "Load Knowledge Base",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Knowledge Base": {
+      "main": [
+        [
+          {
+            "node": "Lookup Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup Lead": {
+      "main": [
+        [
+          {
+            "node": "Load Conversation History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Conversation History": {
+      "main": [
+        [
+          {
+            "node": "Assemble Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assemble Context": {
+      "main": [
+        [
+          {
+            "node": "Triage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Triage": {
+      "main": [
+        [
+          {
+            "node": "Build Claude Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Human Mode Log Row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ignore Duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Human Mode Log Row": {
+      "main": [
+        [
+          {
+            "node": "Log Message (Human Mode)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Message (Human Mode)": {
+      "main": [
+        [
+          {
+            "node": "Notify Owner (Human Mode)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Claude Request": {
+      "main": [
+        [
+          {
+            "node": "Ask Claude",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ask Claude": {
+      "main": [
+        [
+          {
+            "node": "Parse Claude Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Claude Response": {
+      "main": [
+        [
+          {
+            "node": "Route Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Decision": {
+      "main": [
+        [
+          {
+            "node": "Answer Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Validate Booking Slot",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handoff Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Booking Slot": {
+      "main": [
+        [
+          {
+            "node": "Slot Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slot Valid?": {
+      "main": [
+        [
+          {
+            "node": "Check Calendar Availability",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Invalid Slot Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Calendar Availability": {
+      "main": [
+        [
+          {
+            "node": "Slot Free?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slot Free?": {
+      "main": [
+        [
+          {
+            "node": "Create Calendar Event",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slot Taken Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Calendar Event": {
+      "main": [
+        [
+          {
+            "node": "Booking Confirmed Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer Reply": {
+      "main": [
+        [
+          {
+            "node": "Finalize Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Booking Confirmed Reply": {
+      "main": [
+        [
+          {
+            "node": "Finalize Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slot Taken Reply": {
+      "main": [
+        [
+          {
+            "node": "Finalize Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Invalid Slot Reply": {
+      "main": [
+        [
+          {
+            "node": "Finalize Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handoff Reply": {
+      "main": [
+        [
+          {
+            "node": "Finalize Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finalize Reply": {
+      "main": [
+        [
+          {
+            "node": "Route by Channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Channel": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Instagram Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WhatsApp Reply": {
+      "main": [
+        [
+          {
+            "node": "Lead Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Instagram Reply": {
+      "main": [
+        [
+          {
+            "node": "Lead Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Row": {
+      "main": [
+        [
+          {
+            "node": "Upsert Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert Lead": {
+      "main": [
+        [
+          {
+            "node": "Conversation Log Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversation Log Row": {
+      "main": [
+        [
+          {
+            "node": "Append Conversation Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append Conversation Log": {
+      "main": [
+        [
+          {
+            "node": "Owner Alert Needed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Owner Alert Needed?": {
+      "main": [
+        [
+          {
+            "node": "Notify Owner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {
+    "WhatsApp Trigger": [
+      {
+        "json": {
+          "messaging_product": "whatsapp",
+          "metadata": {
+            "display_phone_number": "15550000000",
+            "phone_number_id": "PASTE_WHATSAPP_PHONE_NUMBER_ID"
+          },
+          "contacts": [
+            {
+              "profile": {
+                "name": "Ayesha Khan"
+              },
+              "wa_id": "923001234567"
+            }
+          ],
+          "messages": [
+            {
+              "from": "923001234567",
+              "id": "wamid.TEST0001",
+              "timestamp": "1791489016",
+              "type": "text",
+              "text": {
+                "body": "Hi! How much is teeth cleaning and when are you open?"
+              }
+            }
+          ],
+          "field": "messages"
+        }
+      }
+    ],
+    "Instagram Inbound (POST)": [
+      {
+        "json": {
+          "headers": {
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "object": "instagram",
+            "entry": [
+              {
+                "id": "17841400000000000",
+                "time": 1791489016797,
+                "messaging": [
+                  {
+                    "sender": {
+                      "id": "1234567890123456"
+                    },
+                    "recipient": {
+                      "id": "17841400000000000"
+                    },
+                    "timestamp": 1791489016797,
+                    "message": {
+                      "mid": "m_TEST0001",
+                      "text": "Do you do teeth whitening? What does it cost?"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveExecutionProgress": true,
+    "timezone": "Asia/Karachi"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}
