@@ -1,0 +1,117 @@
+{
+  "name": "AI Chatbot – Error Alert",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "858db935-8d70-4b42-a391-13a3cfbf29a3",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cbf02e1d-1c27-4c89-ae57-fc7aefe5a678",
+              "name": "owner_email",
+              "value": "owner@example.com",
+              "type": "string"
+            },
+            {
+              "id": "9be048f9-617c-40c2-aa9e-a7f1c0a4d863",
+              "name": "client_name",
+              "value": "Bright Smile Dental Clinic",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "id": "4e1c5f92-1a0e-462d-a0d4-9db6d35744c1",
+      "name": "Alert Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $json.owner_email }}",
+        "subject": "=⚠️ Chatbot run failed – {{ $json.client_name }} ({{ $('Error Trigger').first().json.workflow.name }})",
+        "emailType": "text",
+        "message": "=A chatbot run failed and the customer may not have received a reply.\n\nWorkflow: {{ $('Error Trigger').first().json.workflow.name }}\nFailed node: {{ $('Error Trigger').first().json.execution.lastNodeExecuted }}\nError: {{ $('Error Trigger').first().json.execution.error.message }}\nExecution: {{ $('Error Trigger').first().json.execution.url }}\n\nWhat to do: open the execution link, check the failed node (usually an expired Google/Meta token or a renamed sheet tab), fix it, then use \"Retry\" on the execution so the customer gets their reply.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "655d1144-bd5b-41a4-a839-9b30115ca986",
+      "name": "Email Owner About Failure",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        520,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Error alert\nImport this workflow, pick the Gmail credential, set the owner e-mail in **Alert Settings**, then open the main chatbot workflow → Settings → **Error workflow** → choose this one. Any failed run (expired token, renamed sheet tab, API outage) e-mails the owner with a link to retry it.",
+        "height": 220,
+        "width": 820,
+        "color": 3
+      },
+      "id": "07cd1b45-f924-405a-a484-2c771e482f62",
+      "name": "Note · Error alert",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -300
+      ]
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Alert Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert Settings": {
+      "main": [
+        [
+          {
+            "node": "Email Owner About Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

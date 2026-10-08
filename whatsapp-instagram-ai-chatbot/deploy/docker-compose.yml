@@ -1,0 +1,32 @@
+# Self-hosted n8n for the AI chatbot (single server, Docker Compose).
+# 1. Copy .env.example to .env and fill it in.
+# 2. docker compose up -d
+# 3. Open https://<N8N_HOST> → create the owner account → import the two workflows from ../n8n/
+# Meta's webhooks require a public HTTPS URL: put a reverse proxy with TLS in front
+# (Caddy, Nginx + certbot, Cloudflare Tunnel, or a managed host such as Hetzner/Railway).
+services:
+  n8n:
+    image: n8nio/n8n:${N8N_VERSION:-latest}   # after the first successful test, pin the exact version (Help → About in n8n) in .env
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5678:5678"       # only the reverse proxy talks to n8n directly
+    env_file: .env
+    environment:
+      - N8N_HOST=${N8N_HOST}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - WEBHOOK_URL=https://${N8N_HOST}/
+      - N8N_EDITOR_BASE_URL=https://${N8N_HOST}/
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+      - TZ=${GENERIC_TIMEZONE}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=all
+      - EXECUTIONS_DATA_SAVE_ON_ERROR=all
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=336      # keep 14 days of execution logs
+      - N8N_DEFAULT_BINARY_DATA_MODE=filesystem
+    volumes:
+      - n8n_data:/home/node/.n8n
+volumes:
+  n8n_data:

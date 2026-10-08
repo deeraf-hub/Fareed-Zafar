@@ -148,3 +148,9 @@ scripts/
   check-whatsapp.js   Credential check: sends a test WhatsApp message (npm run test:whatsapp)
 test/                 Unit tests (npm test)
 ```
+
+---
+
+## Also in this repository
+
+- **[`whatsapp-instagram-ai-chatbot/`](whatsapp-instagram-ai-chatbot/README.md)** — an importable **n8n** workflow for a WhatsApp + Instagram AI assistant: FAQ answers from a Google Sheet knowledge base, lead capture to Google Sheets, Google Calendar booking, human hand-off with owner e-mails, guardrails against wrong answers, and a pre-launch test checklist.

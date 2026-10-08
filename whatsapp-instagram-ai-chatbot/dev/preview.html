@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bright Smile · Chatbot preview</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230d9488%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-size=%2736%27 text-anchor=%27middle%27%3E%F0%9F%A6%B7%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/preview.css">
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="/"><span class="brand-mark">🦷</span><span><b>Bright Smile Dental Clinic</b><small>AI assistant · local preview</small></span></a>
+  <nav class="nav"><a href="/" class="active">Chat preview</a><a href="/walkthrough">Recruiter walkthrough</a></nav>
+  <span class="demo-label">Local demo — external services simulated.</span>
+</div></header>
+
+<main class="wrap">
+  <div class="grid">
+    <section>
+      <div class="phone"><div class="phone-screen" id="screen">
+        <div class="chat-head"><span class="chat-avatar">🦷</span><span><b>Bright Smile Dental Clinic</b><small id="chan-label">WhatsApp · business account</small></span></div>
+        <div class="chat-body" id="chat"><div class="bubble system">This is a local preview. Messages run through the real workflow logic; WhatsApp, Instagram, Google and the AI model are simulated.</div></div>
+        <div class="chat-foot"><input id="text" placeholder="Type a message as the customer…" autocomplete="off"><button class="send" id="send" title="Send">➤</button></div>
+      </div></div>
+      <div class="card" style="margin-top:12px"><div class="card-b">
+        <div class="row">
+          <label class="small">Channel <select id="channel"><option value="whatsapp">WhatsApp</option><option value="instagram">Instagram (Meta API)</option></select></label>
+          <label class="small">Customer <input class="input" id="name" value="Ayesha Khan" style="width:130px"></label>
+          <label class="small">Number / IGSID <input class="input" id="contact" value="923001234567" style="width:140px"></label>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <label class="small"><input type="checkbox" id="hook"> Test hook: force the simulated model to misquote a price (shows the real price guard)</label>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <button class="btn" id="reset">Reset this preview session</button>
+          <span class="muted" id="session"></span>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="story">
+      <div class="card"><div class="card-h"><h2>Behind the scenes · last message</h2><span class="muted" id="ms"></span></div><div class="card-b">
+        <div class="legend" style="margin-bottom:10px"><span class="pill real">real</span> Code node executed &nbsp; <span class="pill logic">logic</span> n8n expressions evaluated &nbsp; <span class="pill simulated">simulated</span> provider stand-in &nbsp; <span class="pill entry">entry</span> trigger</div>
+        <div class="trace" id="trace"><span class="empty">Send a message to see which workflow nodes ran.</span></div>
+        <div class="kv" id="verdict" style="margin-top:12px"></div>
+      </div></div>
+      <div class="card">
+        <div class="tabs" id="tabs"><button class="tab active" data-tab="leads">Leads sheet</button><button class="tab" data-tab="conversations">Conversations sheet</button><button class="tab" data-tab="calendar">Calendar</button><button class="tab" data-tab="emails">Owner emails</button><button class="tab" data-tab="request">Model request</button></div>
+        <div class="card-b" id="tabbody"><span class="empty">Nothing yet.</span></div>
+      </div>
+    </section>
+  </div>
+</main>
+<script src="/preview.js"></script>
+</body>
+</html>

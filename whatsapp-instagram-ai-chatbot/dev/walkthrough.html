@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bright Smile · Recruiter walkthrough</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230d9488%27/%3E%3Ctext x=%2732%27 y=%2744%27 font-size=%2736%27 text-anchor=%27middle%27%3E%F0%9F%A6%B7%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/preview.css">
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="/"><span class="brand-mark">🦷</span><span><b>Bright Smile Dental Clinic</b><small>AI assistant · recruiter walkthrough</small></span></a>
+  <nav class="nav"><a href="/">Chat preview</a><a href="/walkthrough" class="active">Recruiter walkthrough</a></nav>
+  <span class="demo-label">Local demo — external services simulated.</span>
+</div></header>
+
+<main class="wrap">
+  <div class="wt-head">
+    <h1>How the WhatsApp + Instagram assistant works</h1>
+    <span class="muted" id="duration">≈ 3 min · 7 scenes</span>
+    <span class="muted" style="margin-left:auto"><span class="status-dot" id="dot"></span> <span id="status">Ready</span></span>
+  </div>
+  <div class="scenes" id="scenes" role="tablist" aria-label="Scenes"></div>
+  <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+
+  <div class="stage">
+    <section>
+      <div class="phone"><div class="phone-screen" id="screen">
+        <div class="chat-head"><span class="chat-avatar">🦷</span><span><b>Bright Smile Dental Clinic</b><small id="chan-label">WhatsApp · business account</small></span></div>
+        <div class="chat-body" id="chat"></div>
+        <div class="chat-foot"><input id="text" readonly placeholder="Customer is typing…" aria-label="Customer message (animated)"><button class="send" disabled aria-hidden="true">➤</button></div>
+      </div></div>
+      <p class="muted" style="text-align:center;margin:8px 0 0" id="session">Isolated walkthrough session</p>
+      <p class="muted" style="text-align:center;margin:4px 0 0">Fictional customers only. No real phone numbers or accounts.</p>
+    </section>
+
+    <section class="story">
+      <div class="caption" id="caption" aria-live="polite">Press <b>Start</b> to begin the walkthrough.</div>
+      <div class="story-scroll" id="story-scroll">
+      <div class="panel hidden" id="p-intro"></div>
+      <div class="panel hidden card" id="p-kb"><div class="card-h"><h3>Approved knowledge base · <code>Knowledge</code> sheet</h3><span class="pill teal">source of truth</span></div><div class="card-b" id="kb-body"></div></div>
+      <div class="panel hidden card" id="p-model"><div class="card-h"><h3>Model output</h3><span class="pill simulated">simulated responder · not Claude</span></div><div class="card-b" id="model-body"></div></div>
+      <div class="panel hidden card" id="p-verdict"><div class="card-h"><h3>Parse Claude Response · verdict</h3><span class="pill real">real Code node</span></div><div class="card-b" id="verdict-body"></div></div>
+      <div class="panel hidden card" id="p-slot"><div class="card-h"><h3>Validate Booking Slot</h3><span class="pill real">real Code node</span></div><div class="card-b" id="slot-body"></div></div>
+      <div class="panel hidden card" id="p-calendar"><div class="card-h"><h3>Google Calendar event</h3><span class="pill simulated">simulated calendar</span></div><div class="card-b" id="calendar-body"></div></div>
+      <div class="panel hidden card" id="p-lead"><div class="card-h"><h3>Leads sheet row</h3><span class="pill simulated">simulated sheet</span></div><div class="card-b" id="lead-body"></div></div>
+      <div class="panel hidden card" id="p-email"><div class="card-h"><h3>Owner notification</h3><span class="pill simulated">simulated · nothing sent</span></div><div class="card-b" id="email-body"></div></div>
+      <div class="panel hidden card" id="p-pipeline"><div class="card-h"><h3>Workflow nodes that ran</h3><span class="muted" id="pipeline-meta"></span></div><div class="card-b"><div class="legend" style="margin-bottom:8px"><span class="pill real">real</span> Code node executed &nbsp;<span class="pill logic">logic</span> n8n expressions evaluated &nbsp;<span class="pill simulated">simulated</span> provider stand-in &nbsp;<span class="pill entry">entry</span> trigger</div><div class="trace" id="pipeline-body"></div></div></div>
+      <div class="panel hidden card" id="p-tech"><div class="card-h"><h3>The n8n workflow</h3><span class="muted" id="tech-meta"></span></div><div class="card-b" id="tech-body"></div></div>
+      <div class="panel hidden card" id="p-closing"><div class="card-b" id="closing-body"></div></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="controls"><div class="controls-inner">
+  <button class="btn primary" id="play" aria-label="Start">▶ Start</button>
+  <button class="btn" id="restart" aria-label="Restart">↺ Restart</button>
+  <button class="btn" id="prev" aria-label="Previous scene">◀ Prev</button>
+  <button class="btn" id="next" aria-label="Next scene">Next ▶</button>
+  <span class="spacer"></span>
+  <span class="muted" id="scene-label">Scene — of 7</span>
+  <span class="muted mono" id="clock">0:00 / —</span>
+  <span class="muted" id="rm" title="Animations follow your system's reduced-motion setting"></span>
+</div></div>
+<script src="/walkthrough.js"></script>
+</body>
+</html>

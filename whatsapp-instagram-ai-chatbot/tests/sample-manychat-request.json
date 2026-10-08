@@ -1,0 +1,8 @@
+{
+  "_comment": "If Instagram is connected through ManyChat instead of the Meta API: add an 'External Request' action in ManyChat that POSTs this JSON to the 'Instagram Inbound (POST)' webhook URL. The Normalize Message node understands this shape too.",
+  "channel": "instagram",
+  "contact_id": "{{ig_id}}",
+  "contact_name": "{{full_name}}",
+  "text": "{{last_input_text}}",
+  "message_id": "{{last_input_text_id}}"
+}
