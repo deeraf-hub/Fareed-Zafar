@@ -1,7 +1,7 @@
 {
   "name": "framewright",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Browser-based video editor: multi-track timeline, canvas preview, in-browser MP4 export.",
   "type": "module",
   "scripts": {
@@ -28,6 +28,7 @@
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-router-dom": "^7.18.4",
+    "webm-muxer": "^5.1.4",
     "zustand": "^5.0.16"
   },
   "devDependencies": {

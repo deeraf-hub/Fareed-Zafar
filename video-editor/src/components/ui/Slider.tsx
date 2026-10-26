@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { clamp } from '@/lib/time';
 
 export interface SliderProps {
@@ -13,9 +13,11 @@ export interface SliderProps {
   /** Fired when the pointer is released / the number input is committed. */
   onCommit?: () => void;
   disabled?: boolean;
+  /** Rendered before the label (e.g. a keyframe toggle). */
+  leading?: ReactNode;
 }
 
-export function Slider({ label, value, min, max, step = 0.01, unit = '', decimals = 2, onChange, onCommit, disabled }: SliderProps) {
+export function Slider({ label, value, min, max, step = 0.01, unit = '', decimals = 2, onChange, onCommit, disabled, leading }: SliderProps) {
   const [text, setText] = useState(value.toFixed(decimals));
   const [lastValue, setLastValue] = useState(value);
   if (value !== lastValue) {
@@ -30,6 +32,7 @@ export function Slider({ label, value, min, max, step = 0.01, unit = '', decimal
   };
   return (
     <div className="flex items-center gap-2">
+      {leading}
       <span className="w-20 shrink-0 truncate text-xs text-ink-300" title={label}>
         {label}
       </span>

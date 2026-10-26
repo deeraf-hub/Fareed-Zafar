@@ -13,9 +13,14 @@ interface AuthState {
   session: Session | null;
   user: User | null;
   error: string | null;
+  /** True after the user arrived through a password-recovery link. */
+  recovery: boolean;
   init(): Promise<void>;
   signIn(email: string, password: string): Promise<void>;
   signUp(email: string, password: string): Promise<{ needsConfirmation: boolean }>;
+  signInWithGoogle(): Promise<void>;
+  requestPasswordReset(email: string): Promise<void>;
+  updatePassword(password: string): Promise<void>;
   signOut(): Promise<void>;
   /** The repository the dashboard/editor should use right now. */
   repository(): ProjectRepository;
@@ -29,6 +34,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   session: null,
   user: null,
   error: null,
+  recovery: false,
 
   async init() {
     const sb = getSupabase();
@@ -39,8 +45,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     const { data } = await sb.auth.getSession();
     set({ session: data.session, user: data.session?.user ?? null, ready: true });
     unsubscribe?.();
-    const { data: sub } = sb.auth.onAuthStateChange((_event, session) => {
-      set({ session, user: session?.user ?? null });
+    const { data: sub } = sb.auth.onAuthStateChange((event, session) => {
+      set({ session, user: session?.user ?? null, ...(event === 'PASSWORD_RECOVERY' ? { recovery: true } : {}) });
     });
     unsubscribe = () => sub.subscription.unsubscribe();
   },
@@ -70,10 +76,35 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     return { needsConfirmation: !data.session };
   },
 
+  async signInWithGoogle() {
+    const sb = getSupabase();
+    if (!sb) throw new Error('Cloud mode is not configured');
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/projects` },
+    });
+    if (error) throw new Error(error.message);
+  },
+
+  async requestPasswordReset(email) {
+    const sb = getSupabase();
+    if (!sb) throw new Error('Cloud mode is not configured');
+    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` });
+    if (error) throw new Error(error.message);
+  },
+
+  async updatePassword(password) {
+    const sb = getSupabase();
+    if (!sb) throw new Error('Cloud mode is not configured');
+    const { error } = await sb.auth.updateUser({ password });
+    if (error) throw new Error(error.message);
+    set({ recovery: false });
+  },
+
   async signOut() {
     const sb = getSupabase();
     if (sb) await sb.auth.signOut();
-    set({ session: null, user: null });
+    set({ session: null, user: null, recovery: false });
   },
 
   repository() {

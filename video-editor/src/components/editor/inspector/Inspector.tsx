@@ -1,10 +1,11 @@
 import { useRef } from 'react';
-import { AlignCenter, AlignLeft, AlignRight, Bold, Eye, EyeOff, Italic, Lock, LockOpen, Plus, RotateCcw, Trash2, Volume2, VolumeX } from 'lucide-react';
+import { AlignCenter, AlignLeft, AlignRight, Bold, Diamond, Eye, EyeOff, FoldHorizontal, Italic, Lock, LockOpen, Plus, RotateCcw, Trash2, Volume2, VolumeX } from 'lucide-react';
 import clsx from 'clsx';
 import type {
   AspectRatio,
   AudibleClip,
   Clip,
+  KeyframeProperty,
   TextAnimation,
   TextClip,
   TextPreset,
@@ -16,7 +17,8 @@ import type {
 } from '@/types/project';
 import { hasAdjust, hasSpeed, isAudibleClip, isVisualClip } from '@/types/project';
 import { ASPECT_PRESETS, clipEnd, defaultAdjust, defaultTransform, textStyleForPreset } from '@/model/project';
-import { previousAdjacentClip } from '@/model/clipMath';
+import { hasKeyframes, keyframeAt, previousAdjacentClip, transformAt, withKeyframe, withoutKeyframe } from '@/model/clipMath';
+import { clamp } from '@/lib/time';
 import { FILTER_PRESETS } from '@/engine/filters';
 import { useProjectStore, selectSelectedClip, type CommitOpts } from '@/store/projectStore';
 import { Section, Field } from '@/components/ui/Field';
@@ -133,22 +135,59 @@ function TransformSection({ clip }: { clip: VisualClip }) {
   const updateClip = useProjectStore((s) => s.updateClip);
   const W = useProjectStore((s) => s.project?.settings.width ?? 1920);
   const H = useProjectStore((s) => s.project?.settings.height ?? 1080);
-  const set = (patch: Partial<VisualClip['transform']>) => update<VisualClip>((c) => ({ transform: { ...c.transform, ...patch } }));
-  const t = clip.transform;
+  const fps = useProjectStore((s) => s.project?.settings.fps ?? 30);
+  const playhead = useProjectStore((s) => s.playhead);
+  const local = clamp(playhead - clip.start, 0, clip.duration);
+  const tolerance = 0.5 / fps;
+  // Values shown are the animated values at the playhead.
+  const t = transformAt(clip, clip.start + local);
+  const set = (prop: KeyframeProperty, v: number) =>
+    update<VisualClip>((c) =>
+      hasKeyframes(c, prop)
+        ? { keyframes: withKeyframe(c.keyframes, prop, local, v, tolerance) }
+        : { transform: { ...c.transform, [prop]: v } },
+    );
+  const toggleKeyframe = (prop: KeyframeProperty) => {
+    updateClip<VisualClip>(clip.id, (c) => {
+      const existing = keyframeAt(c.keyframes, prop, local, tolerance);
+      if (existing) return { keyframes: withoutKeyframe(c.keyframes, prop, local, tolerance) };
+      return { keyframes: withKeyframe(c.keyframes, prop, local, transformAt(c, c.start + local)[prop], tolerance) };
+    });
+  };
+  const kfButton = (prop: KeyframeProperty, label: string) => {
+    const has = hasKeyframes(clip, prop);
+    const at = Boolean(keyframeAt(clip.keyframes, prop, local, tolerance));
+    return (
+      <button
+        type="button"
+        onClick={() => toggleKeyframe(prop)}
+        title={at ? `Remove ${label} keyframe at the playhead` : `Add ${label} keyframe at the playhead`}
+        aria-label={`${label} keyframe`}
+        aria-pressed={at}
+        className={clsx('flex h-5 w-5 shrink-0 items-center justify-center rounded', at ? 'text-accent-400' : has ? 'text-accent-400/60' : 'text-ink-500 hover:text-ink-200')}
+        data-testid={`kf-${prop}`}
+      >
+        <Diamond className="h-3 w-3" fill={at ? 'currentColor' : 'none'} />
+      </button>
+    );
+  };
   return (
     <Section
       title="Transform"
       actions={
-        <IconButton label="Reset transform" size="sm" onClick={() => updateClip<VisualClip>(clip.id, { transform: defaultTransform() })}>
+        <IconButton label="Reset transform and keyframes" size="sm" onClick={() => updateClip<VisualClip>(clip.id, { transform: defaultTransform(), keyframes: undefined })}>
           <RotateCcw className="h-3.5 w-3.5" />
         </IconButton>
       }
     >
-      <Slider label="Position X" value={t.x} min={-W} max={W} step={1} decimals={0} unit="px" onChange={(v) => set({ x: v })} onCommit={commit} />
-      <Slider label="Position Y" value={t.y} min={-H} max={H} step={1} decimals={0} unit="px" onChange={(v) => set({ y: v })} onCommit={commit} />
-      <Slider label="Scale" value={t.scale} min={0.05} max={4} step={0.01} onChange={(v) => set({ scale: v })} onCommit={commit} />
-      <Slider label="Rotation" value={t.rotation} min={-180} max={180} step={1} decimals={0} unit="°" onChange={(v) => set({ rotation: v })} onCommit={commit} />
-      <Slider label="Opacity" value={t.opacity} min={0} max={1} step={0.01} onChange={(v) => set({ opacity: v })} onCommit={commit} />
+      <Slider leading={kfButton('x', 'Position X')} label="Position X" value={t.x} min={-W} max={W} step={1} decimals={0} unit="px" onChange={(v) => set('x', v)} onCommit={commit} />
+      <Slider leading={kfButton('y', 'Position Y')} label="Position Y" value={t.y} min={-H} max={H} step={1} decimals={0} unit="px" onChange={(v) => set('y', v)} onCommit={commit} />
+      <Slider leading={kfButton('scale', 'Scale')} label="Scale" value={t.scale} min={0.05} max={4} step={0.01} onChange={(v) => set('scale', v)} onCommit={commit} />
+      <Slider leading={kfButton('rotation', 'Rotation')} label="Rotation" value={t.rotation} min={-180} max={180} step={1} decimals={0} unit="°" onChange={(v) => set('rotation', v)} onCommit={commit} />
+      <Slider leading={kfButton('opacity', 'Opacity')} label="Opacity" value={t.opacity} min={0} max={1} step={0.01} onChange={(v) => set('opacity', v)} onCommit={commit} />
+      <p className="text-[11px] text-ink-400">
+        Click a diamond to add a keyframe at the playhead. Once a property has keyframes, changing it at another time adds a keyframe there and the value animates between them.
+      </p>
     </Section>
   );
 }
@@ -389,6 +428,7 @@ function ProjectInspector() {
   const addTrack = useProjectStore((s) => s.addTrack);
   const removeTrack = useProjectStore((s) => s.removeTrack);
   const updateTrack = useProjectStore((s) => s.updateTrack);
+  const closeGaps = useProjectStore((s) => s.closeGaps);
   return (
     <div data-testid="project-inspector">
       <Section title="Project">
@@ -446,7 +486,7 @@ function ProjectInspector() {
       >
         <ul className="space-y-1">
           {project.tracks.map((t) => (
-            <TrackRowItem key={t.id} track={t} onUpdate={(p) => updateTrack(t.id, p)} onRemove={() => removeTrack(t.id)} canRemove={project.tracks.filter((x) => x.kind === t.kind).length > 1} />
+            <TrackRowItem key={t.id} track={t} onUpdate={(p) => updateTrack(t.id, p)} onRemove={() => removeTrack(t.id)} onCloseGaps={() => closeGaps([t.id])} canRemove={project.tracks.filter((x) => x.kind === t.kind).length > 1} />
           ))}
         </ul>
       </Section>
@@ -457,7 +497,7 @@ function ProjectInspector() {
   );
 }
 
-function TrackRowItem({ track, onUpdate, onRemove, canRemove }: { track: Track; onUpdate: (p: Partial<Track>) => void; onRemove: () => void; canRemove: boolean }) {
+function TrackRowItem({ track, onUpdate, onRemove, onCloseGaps, canRemove }: { track: Track; onUpdate: (p: Partial<Track>) => void; onRemove: () => void; onCloseGaps: () => void; canRemove: boolean }) {
   return (
     <li className="flex items-center gap-1 rounded-md border border-ink-700 bg-ink-850 px-2 py-1">
       <Input className="!border-transparent !bg-transparent !px-1 !py-0.5 text-xs" value={track.name} onChange={(e) => onUpdate({ name: e.target.value })} aria-label="Track name" />
@@ -471,6 +511,9 @@ function TrackRowItem({ track, onUpdate, onRemove, canRemove }: { track: Track; 
       </IconButton>
       <IconButton label={track.locked ? 'Unlock track' : 'Lock track'} size="sm" active={track.locked} onClick={() => onUpdate({ locked: !track.locked })}>
         {track.locked ? <Lock className="h-3.5 w-3.5" /> : <LockOpen className="h-3.5 w-3.5" />}
+      </IconButton>
+      <IconButton label="Close gaps on this track" size="sm" disabled={track.locked} onClick={onCloseGaps}>
+        <FoldHorizontal className="h-3.5 w-3.5" />
       </IconButton>
       <IconButton label="Remove track" size="sm" className="text-red-300" disabled={!canRemove} onClick={onRemove}>
         <Trash2 className="h-3.5 w-3.5" />

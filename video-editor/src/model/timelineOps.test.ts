@@ -9,6 +9,7 @@ import {
   hasCollision,
   moveClip,
   moveClips,
+  rippleDelete,
   snapPoints,
   snapTime,
   splitAt,
@@ -129,6 +130,17 @@ describe('split', () => {
     expect((out[1] as VideoClip).trimStart).toBe(2);
   });
 
+  it('keeps keyframed motion identical across a split and a start trim', () => {
+    const animated: Clip = { ...video('a', 2, 4), keyframes: { opacity: [{ time: 0, value: 0 }, { time: 4, value: 1 }] } };
+    const { clips: out } = splitClip([animated], 'a', 4);
+    const left = out[0] as VideoClip;
+    const right = out[1] as VideoClip;
+    expect(left.keyframes!.opacity).toEqual([{ time: 0, value: 0 }, { time: 2, value: 0.5 }]);
+    expect(right.keyframes!.opacity).toEqual([{ time: 0, value: 0.5 }, { time: 2, value: 1 }]);
+    const trimmed = trimClipStart([animated], 'a', 3) as VideoClip[];
+    expect(trimmed[0].keyframes!.opacity!.map((k) => k.time)).toEqual([-1, 3]);
+  });
+
   it('ignores splits at the edges', () => {
     const clips: Clip[] = [video('a', 0, 4)];
     expect(splitClip(clips, 'a', 0).clips).toBe(clips);
@@ -155,6 +167,19 @@ describe('duplicate / delete / gaps', () => {
   it('deletes by id', () => {
     const clips: Clip[] = [video('a', 0, 4), video('b', 5, 4)];
     expect(deleteClips(clips, ['a']).map((c) => c.id)).toEqual(['b']);
+  });
+
+  it('ripple deletes and shifts only later clips on the same track', () => {
+    const clips: Clip[] = [video('a', 0, 2), video('b', 3, 2), video('c', 6, 1), video('x', 4, 1, 'v2')];
+    const out = rippleDelete(clips, ['b']);
+    expect(out.map((c) => c.id)).toEqual(['a', 'c', 'x']);
+    expect(out.find((c) => c.id === 'a')!.start).toBe(0);
+    expect(out.find((c) => c.id === 'c')!.start).toBe(4);
+    expect(out.find((c) => c.id === 'x')!.start).toBe(4);
+    // Deleting two clips shifts by the sum of their durations.
+    const out2 = rippleDelete(clips, ['a', 'b']);
+    expect(out2.find((c) => c.id === 'c')!.start).toBe(2);
+    expect(rippleDelete(clips, ['nope'])).toBe(clips);
   });
 
   it('closes gaps on a track', () => {

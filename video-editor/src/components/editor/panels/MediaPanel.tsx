@@ -6,7 +6,7 @@ import { useProjectStore } from '@/store/projectStore';
 import { toast } from '@/store/uiStore';
 import { mediaRegistry } from '@/media/mediaRegistry';
 import { importFile } from '@/media/importMedia';
-import { ACCEPT, ASSET_MIME, importFilesIntoProject, useMediaRegistryVersion } from '@/media/importFlow';
+import { ACCEPT, ASSET_MIME, importFilesIntoProject, missingAssets, useMediaRegistryVersion } from '@/media/importFlow';
 import { localDb } from '@/persistence/localDb';
 import { Button } from '@/components/ui/Button';
 import { IconButton } from '@/components/ui/IconButton';
@@ -29,6 +29,7 @@ export function MediaPanel() {
   const [relinkId, setRelinkId] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [importing, setImporting] = useState(0);
+  const missingCount = missingAssets().length;
 
   const doImport = useCallback(async (files: File[]) => {
     if (!files.length) return;
@@ -127,6 +128,16 @@ export function MediaPanel() {
         <p className="mt-2 text-center text-[11px] text-ink-400">
           Video, audio and images. Files stay on this computer.
         </p>
+        {missingCount > 0 && (
+          <div className="mt-3 rounded-md border border-amber-700/60 bg-amber-950/40 p-2 text-xs text-amber-100" data-testid="missing-banner">
+            <p>
+              {missingCount} media file{missingCount > 1 ? 's are' : ' is'} missing on this device.
+            </p>
+            <Button size="sm" className="mt-2 w-full" icon={<Link2 className="h-3.5 w-3.5" />} onClick={() => inputRef.current?.click()}>
+              Relink by choosing the same files…
+            </Button>
+          </div>
+        )}
       </div>
 
       {assets.length === 0 ? (

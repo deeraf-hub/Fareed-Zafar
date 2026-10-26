@@ -17,11 +17,13 @@ import {
 } from '@/model/project';
 import {
   canPlaceOnTrack,
+  closeGaps as closeGapsOnTrack,
   deleteClips,
   duplicateClips,
   findFreePosition,
   hasCollision,
   moveClip,
+  rippleDelete,
   moveClips,
   splitAt,
   trimClipEnd,
@@ -97,6 +99,10 @@ export interface ProjectState {
   splitAtPlayhead(): void;
   duplicateSelected(): void;
   deleteSelected(): void;
+  /** Delete the selection and close the holes it leaves on each track. */
+  rippleDeleteSelected(): void;
+  /** Remove gaps on the given tracks (default: tracks of the selection, or every unlocked track). */
+  closeGaps(trackIds?: string[]): void;
   setClipSpeed(clipId: string, speed: number): void;
 
   // history
@@ -379,6 +385,27 @@ export const useProjectStore = create<ProjectState>((set, get) => {
       if (ids.length === 0) return;
       commit((p) => ({ clips: deleteClips(p.clips, ids) }));
       set({ selectedClipIds: [] });
+    },
+    rippleDeleteSelected() {
+      const ids = get().selectedClipIds;
+      if (ids.length === 0) return;
+      commit((p) => ({ clips: rippleDelete(p.clips, ids) }));
+      set({ selectedClipIds: [] });
+    },
+    closeGaps(trackIds) {
+      commit((p) => {
+        const locked = new Set(p.tracks.filter((t) => t.locked).map((t) => t.id));
+        let targets = trackIds;
+        if (!targets || targets.length === 0) {
+          const sel = get().selectedClipIds;
+          targets = sel.length
+            ? [...new Set(p.clips.filter((c) => sel.includes(c.id)).map((c) => c.trackId))]
+            : p.tracks.map((t) => t.id);
+        }
+        let clips = p.clips;
+        for (const id of targets) if (!locked.has(id)) clips = closeGapsOnTrack(clips, id);
+        return clips === p.clips || clips.every((c, i) => c === p.clips[i]) ? null : { clips };
+      });
     },
     setClipSpeed(clipId, speed) {
       commit((p) => {

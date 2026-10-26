@@ -8,6 +8,7 @@ import {
   easeInOut,
   easeOutBack,
   previousAdjacentClip,
+  transformAt,
   transitionInState,
   transitionOutState,
   visualTracksBottomUp,
@@ -109,7 +110,8 @@ function drawVisual(
   const H = project.settings.height;
   const t = opts.transition;
   const presence = easeInOut(transitionPresence(t));
-  let alpha = clamp(clip.transform.opacity, 0, 1) * opts.alphaMul;
+  const transform = transformAt(clip, time);
+  let alpha = clamp(transform.opacity, 0, 1) * opts.alphaMul;
   let dx = 0;
   let extraScale = 1;
   let clipRect: { x: number; y: number; w: number; h: number } | null = null;
@@ -145,11 +147,11 @@ function drawVisual(
     ctx.clip();
   }
   ctx.globalAlpha = clamp(alpha, 0, 1);
-  const cx = W / 2 + clip.transform.x + dx;
-  const cy = H / 2 + clip.transform.y;
+  const cx = W / 2 + transform.x + dx;
+  const cy = H / 2 + transform.y;
   ctx.translate(cx, cy);
-  if (clip.transform.rotation) ctx.rotate((clip.transform.rotation * Math.PI) / 180);
-  const s = clip.transform.scale * extraScale;
+  if (transform.rotation) ctx.rotate((transform.rotation * Math.PI) / 180);
+  const s = transform.scale * extraScale;
   ctx.scale(s, s);
 
   if (clip.kind === 'text') {
@@ -320,6 +322,7 @@ function roundRect(ctx: Ctx2D, x: number, y: number, w: number, h: number, r: nu
 export function clipBounds(
   project: Project,
   clip: VisualClip,
+  time: number,
   sourceSizeFor: (clip: VideoClip | ImageClip) => { w: number; h: number } | null,
   measure?: Ctx2D,
 ): { x: number; y: number; w: number; h: number } | null {
@@ -342,10 +345,11 @@ export function clipBounds(
     w = size.w * fit;
     h = size.h * fit;
   }
-  const s = clip.transform.scale;
+  const transform = transformAt(clip, time);
+  const s = transform.scale;
   return {
-    x: W / 2 + clip.transform.x - (w * s) / 2,
-    y: H / 2 + clip.transform.y - (h * s) / 2,
+    x: W / 2 + transform.x - (w * s) / 2,
+    y: H / 2 + transform.y - (h * s) / 2,
     w: w * s,
     h: h * s,
   };

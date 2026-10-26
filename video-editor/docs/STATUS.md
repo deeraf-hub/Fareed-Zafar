@@ -1,12 +1,15 @@
 # Status: working features, gaps, limitations, tests
 
-_Last updated: 2026-10-26 (v0.1.0)._
+_Last updated: 2026-10-26 (v0.2.0)._
 
 ## Working features
 
 **Accounts & projects**
-- Registration, login, logout with Supabase Auth (email + password); protected
-  `/projects` and `/editor/:id` routes redirect to `/login` when signed out.
+- Registration, login, logout with Supabase Auth (email + password), "Continue
+  with Google" (OAuth, once the provider is enabled in Supabase) and password
+  reset by email (`/forgot-password` → emailed link → `/reset-password`);
+  protected `/projects` and `/editor/:id` routes redirect to `/login` when
+  signed out.
 - Local-project mode when `VITE_SUPABASE_*` are not set: no account, projects
   stored in IndexedDB, banner explains the mode.
 - Create (name + 16:9 / 9:16 / 1:1), rename, reopen, delete projects from the
@@ -21,16 +24,20 @@ _Last updated: 2026-10-26 (v0.1.0)._
   library, or drag-and-drop straight onto a timeline track.
 - Metadata probing (duration, dimensions), JPEG thumbnails, audio waveforms
   computed in a Web Worker; files persisted as Blobs in IndexedDB so projects
-  survive reloads; "Missing" badge + relink for files absent on another device.
+  survive reloads; "Missing" badge, a relink banner, and automatic relinking:
+  importing a file whose name and size match a missing asset repairs that
+  asset instead of creating a new one.
 - Import limits enforced (500 MB per file, 100 assets, 400 clips).
 
 **Timeline**
 - Unlimited video and audio tracks (add/remove, mute, hide, lock, rename).
 - Drag clips to move in time and across compatible tracks; multi-select move
   (Shift-click); trim either edge with handles; split at playhead (all or
-  selected clips); duplicate; delete; overlap-free placement with nearest-free-
-  spot resolution; snapping to clip edges/playhead (toggle); zoom (slider,
-  Ctrl+wheel, +/-), fit-to-sequence; ruler scrubbing; auto-scroll on playback.
+  selected clips); duplicate; delete; ripple delete (Shift+Del, closes the
+  hole on that track); close gaps per track or for the selection; overlap-free
+  placement with nearest-free-spot resolution; snapping to clip edges/playhead
+  (toggle); zoom (slider, Ctrl+wheel, +/-), fit-to-sequence; ruler scrubbing;
+  auto-scroll on playback.
 - Undo/redo (60 steps) covering every timeline operation; drag gestures are
   one step.
 - Keyboard shortcuts (Space, S, Del, Ctrl+D, Ctrl+Z/Y, arrows, Home/End, N, ?).
@@ -41,6 +48,11 @@ _Last updated: 2026-10-26 (v0.1.0)._
   wrap width, animations (fade, slide-up, pop, typewriter).
 - Image overlays and picture-in-picture video on upper tracks.
 - Per-clip position, scale, rotation, opacity (sliders + drag in the preview).
+- Keyframes for position X/Y, scale, rotation and opacity: a diamond next to
+  each property adds/removes a key at the playhead, changing a keyframed
+  property at another time adds a key there, values ease between keys, keys
+  show as markers on the clip, and splitting/trimming keeps the motion
+  identical. The preview overlay drag writes keyframes when the clip has them.
 - Speed 0.25×–4× for video and audio clips (adjusts clip length, trims kept).
 - Brightness, contrast, saturation plus looks (vivid, warm, cool, vintage,
   black & white, sepia, invert).
@@ -56,12 +68,16 @@ _Last updated: 2026-10-26 (v0.1.0)._
 
 **Preview & export**
 - Canvas preview renders the actual composition (same `drawFrame` as export).
-- MP4 (H.264 + AAC) export at 1080p/720p/480p with progress, phase, frame
-  counter and cancellation; download + inline playback of the result.
+- Export to MP4 (H.264 + AAC), WebM (VP9 + Opus) or animated GIF (15 fps, no
+  audio, ≤ 30 s) at 1080p/720p/480p (short side), of the whole sequence or a
+  custom start/end range (with "use playhead" buttons), with progress, phase,
+  frame counter and cancellation; download + inline playback of the result.
 - Two interchangeable engines behind one `Renderer` interface:
-  WebCodecs + mp4-muxer (fast, Chrome with H.264 encoder) and FFmpeg.wasm
-  (`libx264`, segment-based, bounded memory). Automatic selection.
-- Audio encoded to AAC by WebCodecs when available, otherwise FFmpeg.wasm.
+  WebCodecs + mp4-muxer / webm-muxer (fast; H.264 or VP9 via the browser's
+  encoders) and FFmpeg.wasm (`libx264` / `libvpx-vp9` / `gif`, segment-based,
+  bounded memory). The engine list is filtered per format; selection is
+  automatic by default.
+- Audio encoded to AAC/Opus by WebCodecs when available, otherwise FFmpeg.wasm.
 
 **UI**
 - Dark, desktop-first layout: library | preview | inspector over a resizable
@@ -69,15 +85,13 @@ _Last updated: 2026-10-26 (v0.1.0)._
 
 ## Incomplete / not yet implemented
 
-- Keyframe animation of transforms/opacity (only presets and transitions).
-- Ripple delete / ripple trim and track-wide "close gaps" UI (the pure
-  `closeGaps` helper exists, no button yet).
+- Keyframe easing choices (only ease-in-out) and keyframes for filters,
+  volume or text style.
+- Ripple trim (trimming does not shift later clips).
 - Video crop, masks, chroma key, blend modes, audio EQ/ducking.
-- Export of a sub-range (always the full sequence) and export presets other
-  than H.264/AAC MP4 (e.g. WebM, GIF).
 - Cloud media storage, sharing/collaboration, server-side rendering (the
   `Renderer` interface is ready for it; no backend is shipped).
-- Password reset and OAuth providers (email/password only).
+- OAuth providers other than Google; magic-link sign-in.
 - Mobile/touch layout.
 
 ## Known limitations
@@ -111,8 +125,8 @@ _Last updated: 2026-10-26 (v0.1.0)._
 | Layer | Tool | What is covered | Result |
 |---|---|---|---|
 | Static | `tsc -b` (strict), ESLint (TS + react-hooks) | whole codebase | pass |
-| Unit | Vitest, 39 tests in 7 files | collision/placement, move (single + multi), trim start/end (source limits, speed, neighbours), split (trim/speed continuity), duplicate/delete/close gaps, snapping, project factory, project normalisation and round-trip, clip source time, gains/fades/mutes, transition windows, crossfade adjacency, track ordering, WAV encoding, interleave, filter strings, export dimensions, renderer registry, time formatting | pass |
-| E2E | Playwright + Chromium, real media generated with ffmpeg (VP9/Opus WebM, VP8 WebM, WAV, PNG), 4 specs | (1) dashboard create / rename / reopen / delete; (2) HTML5 drag-and-drop from the library onto a chosen video/audio lane at a given time, dragging a clip to another lane; (3) full edit: import 4 files, add clips at the playhead, image overlay placed on a free upper track, inspector transform edits, title text with animation, music with fade-out, filters/adjustments/transition, split at playhead, delete + undo + redo, trim with the edge handle, move with snapping, duplicate, 2× speed, play preview and verify the canvas is painted, autosave status, reload with identical timeline and media restored, 480p export (WebCodecs engine, AAC muxed by FFmpeg.wasm) downloaded and probed: `h264` 854×480 + `aac`, 10.0 s; (4) 1:1 project exported with the FFmpeg.wasm engine forced (libx264 in WebAssembly): `h264` 480×480 + `aac`, 4.0 s | pass (4/4, ≈ 50 s total) |
+| Unit | Vitest, 43 tests in 7 files | collision/placement, move (single + multi), trim start/end (source limits, speed, neighbours), split (trim/speed/keyframe continuity), duplicate/delete/ripple delete/close gaps, snapping, project factory, project normalisation and round-trip, clip source time, gains/fades/mutes, transition windows, crossfade adjacency, track ordering, keyframe interpolation/edit/shift/split helpers, WAV encoding, interleave, filter strings, export dimensions and formats, renderer registry, time formatting | pass |
+| E2E | Playwright + Chromium, real media generated with ffmpeg (VP9/Opus WebM, VP8 WebM, WAV, PNG), 7 specs | (1) dashboard create / rename / reopen / delete; (2) HTML5 drag-and-drop from the library onto a chosen video/audio lane at a given time, dragging a clip to another lane; (3) full edit: import 4 files, add clips at the playhead, image overlay placed on a free upper track, inspector transform edits, title text with animation, music with fade-out, filters/adjustments/transition, split at playhead, delete + undo + redo, trim with the edge handle, move with snapping, duplicate, 2× speed, play preview and verify the canvas is painted, autosave status, reload with identical timeline and media restored, 480p MP4 export (WebCodecs engine, AAC muxed by FFmpeg.wasm) downloaded and probed: `h264` 854×480 + `aac`, 10.0 s; (4) 1:1 project exported as MP4 with the FFmpeg.wasm engine forced (libx264 in WebAssembly): `h264` 480×480 + `aac`, 4.0 s; (5) ripple delete, then WebM export (`vp9` 854×480 + `opus`, 5.0 s) and a GIF of a custom 1–3 s range (`gif` 854×480, 30 frames at 15 fps); (6) keyframes: scale keys at 0 s and 2 s, eased value 0.75 at 1 s, held value before the first key, preview overlay grows with the animation, split adds boundary keys, reset clears them | 4 of 7 pass so far; full run in progress (final result in the PR) |
 
 **Manual checks in this environment**
 

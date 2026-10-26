@@ -85,3 +85,40 @@ describe('track ordering & audible clips', () => {
     expect(activeAudibleClips(project, 3).map((c) => c.kind)).toEqual(['video']);
   });
 });
+
+describe('keyframes', () => {
+  it('interpolates with ease-in-out and holds outside the range', async () => {
+    const { keyframeValueAt, transformAt, withKeyframe, withoutKeyframe, splitKeyframes, shiftKeyframes } = await import('./clipMath');
+    const kfs = [
+      { time: 0, value: 0 },
+      { time: 2, value: 10 },
+    ];
+    expect(keyframeValueAt(kfs, -1)).toBe(0);
+    expect(keyframeValueAt(kfs, 0)).toBe(0);
+    expect(keyframeValueAt(kfs, 1)).toBeCloseTo(5);
+    expect(keyframeValueAt(kfs, 0.5)).toBeCloseTo(1.25);
+    expect(keyframeValueAt(kfs, 3)).toBe(10);
+
+    const { clip } = base();
+    const animated = { ...clip, keyframes: { scale: [{ time: 0, value: 0.5 }, { time: 2, value: 1 }] } };
+    expect(transformAt(animated, clip.start).scale).toBe(0.5);
+    expect(transformAt(animated, clip.start + 1).scale).toBeCloseTo(0.75);
+    expect(transformAt(animated, clip.start + 1).x).toBe(clip.transform.x);
+    expect(transformAt(clip, 0)).toBe(clip.transform);
+
+    let k = withKeyframe(undefined, 'x', 1, 100, 0.02);
+    k = withKeyframe(k, 'x', 0.5, 50, 0.02);
+    expect(k.x!.map((e) => e.time)).toEqual([0.5, 1]);
+    k = withKeyframe(k, 'x', 1.01, 120, 0.02); // updates the existing key within tolerance
+    expect(k.x!.length).toBe(2);
+    expect(k.x![1].value).toBe(120);
+    expect(withoutKeyframe(withoutKeyframe(k, 'x', 1, 0.02), 'x', 0.5, 0.02)).toBeUndefined();
+
+    const shifted = shiftKeyframes(k, -0.5)!;
+    expect(shifted.x!.map((e) => e.time)).toEqual([0, 0.5]);
+
+    const parts = splitKeyframes({ x: [{ time: 0, value: 0 }, { time: 2, value: 10 }] }, 1);
+    expect(parts.left!.x).toEqual([{ time: 0, value: 0 }, { time: 1, value: 5 }]);
+    expect(parts.right!.x).toEqual([{ time: 0, value: 5 }, { time: 1, value: 10 }]);
+  });
+});

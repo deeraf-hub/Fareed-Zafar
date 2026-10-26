@@ -1,4 +1,4 @@
-import type { Renderer } from './renderer';
+import type { ExportFormat, Renderer } from './renderer';
 import { WebCodecsRenderer } from './webcodecsRenderer';
 import { FfmpegRenderer } from './ffmpegRenderer';
 
@@ -7,8 +7,10 @@ export * from './renderer';
 /** Registry in priority order. A server-side renderer would be added here. */
 export const RENDERERS: Renderer[] = [new WebCodecsRenderer(), new FfmpegRenderer()];
 
-export async function availableRenderers(): Promise<Renderer[]> {
-  const flags = await Promise.all(RENDERERS.map((r) => r.isSupported().catch(() => false)));
+export async function availableRenderers(format?: ExportFormat): Promise<Renderer[]> {
+  const flags = await Promise.all(
+    RENDERERS.map((r) => (format ? r.supportsFormat(format) : r.isSupported()).catch(() => false)),
+  );
   return RENDERERS.filter((_, i) => flags[i]);
 }
 

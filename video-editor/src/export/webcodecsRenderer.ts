@@ -1,32 +1,47 @@
 /**
- * Fast path: WebCodecs VideoEncoder (H.264) + mp4-muxer. Audio is encoded
- * with WebCodecs AAC when the platform supports it, otherwise the video-only
- * MP4 is muxed with a WAV mixdown through FFmpeg.wasm (audio → AAC, video
- * stream copied).
+ * Fast path: WebCodecs VideoEncoder + a JavaScript muxer (mp4-muxer for MP4,
+ * webm-muxer for WebM). Audio is encoded with WebCodecs (AAC / Opus) when
+ * the platform has an encoder; otherwise the video-only file is muxed with a
+ * WAV mixdown through FFmpeg.wasm (audio transcoded, video stream copied).
  */
-import { ArrayBufferTarget, Muxer } from 'mp4-muxer';
+import { ArrayBufferTarget as Mp4Target, Muxer as Mp4Muxer } from 'mp4-muxer';
+import { ArrayBufferTarget as WebmTarget, Muxer as WebmMuxer } from 'webm-muxer';
 import type { Project } from '@/types/project';
 import { renderAudioMix } from '@/engine/audioMix';
 import { ExportFrameSource } from './frameSource';
-import { getFfmpeg, muxAudioIntoMp4, safeDelete } from './ffmpegClient';
+import { getFfmpeg, muxAudioInto, safeDelete } from './ffmpegClient';
 import { audioBufferToWav, interleave } from './wav';
-import { RenderCancelled, throwIfAborted, type RenderOptions, type RenderResult, type Renderer } from './renderer';
+import {
+  FORMAT_INFO,
+  RenderCancelled,
+  throwIfAborted,
+  type ExportFormat,
+  type RenderOptions,
+  type RenderResult,
+  type Renderer,
+} from './renderer';
 
 const H264_CANDIDATES = ['avc1.640028', 'avc1.4d0028', 'avc1.42e028', 'avc1.42001f'];
+const VP9_CANDIDATES = ['vp09.00.10.08', 'vp09.00.31.08', 'vp09.00.40.08'];
 
-async function pickVideoCodec(width: number, height: number, fps: number, bitrate: number): Promise<string | null> {
+interface VideoCodecChoice {
+  codec: string;
+  /** Muxer codec id: 'avc' for MP4, 'V_VP9' / 'V_VP8' for WebM. */
+  muxCodec: 'avc' | 'V_VP9' | 'V_VP8';
+}
+
+async function pickVideoCodec(format: ExportFormat, width: number, height: number, fps: number, bitrate: number): Promise<VideoCodecChoice | null> {
   if (typeof VideoEncoder === 'undefined') return null;
-  for (const codec of H264_CANDIDATES) {
+  const candidates: VideoCodecChoice[] =
+    format === 'mp4'
+      ? H264_CANDIDATES.map((codec) => ({ codec, muxCodec: 'avc' as const }))
+      : [...VP9_CANDIDATES.map((codec) => ({ codec, muxCodec: 'V_VP9' as const })), { codec: 'vp8', muxCodec: 'V_VP8' as const }];
+  for (const choice of candidates) {
     try {
-      const { supported } = await VideoEncoder.isConfigSupported({
-        codec,
-        width,
-        height,
-        framerate: fps,
-        bitrate,
-        avc: { format: 'avc' },
-      });
-      if (supported) return codec;
+      const config: VideoEncoderConfig = { codec: choice.codec, width, height, framerate: fps, bitrate };
+      if (choice.muxCodec === 'avc') config.avc = { format: 'avc' };
+      const { supported } = await VideoEncoder.isConfigSupported(config);
+      if (supported) return choice;
     } catch {
       /* try next */
     }
@@ -34,36 +49,87 @@ async function pickVideoCodec(width: number, height: number, fps: number, bitrat
   return null;
 }
 
-async function aacSupported(sampleRate: number, channels: number): Promise<boolean> {
+async function audioEncoderSupported(codec: 'mp4a.40.2' | 'opus', sampleRate: number, channels: number): Promise<boolean> {
   if (typeof AudioEncoder === 'undefined') return false;
   try {
-    const { supported } = await AudioEncoder.isConfigSupported({
-      codec: 'mp4a.40.2',
-      sampleRate,
-      numberOfChannels: channels,
-      bitrate: 192_000,
-    });
+    const { supported } = await AudioEncoder.isConfigSupported({ codec, sampleRate, numberOfChannels: channels, bitrate: codec === 'opus' ? 128_000 : 192_000 });
     return Boolean(supported);
   } catch {
     return false;
   }
 }
 
+/** Minimal common surface of mp4-muxer and webm-muxer. */
+interface MuxerAdapter {
+  addVideoChunk(chunk: EncodedVideoChunk, meta?: EncodedVideoChunkMetadata): void;
+  addAudioChunk(chunk: EncodedAudioChunk, meta?: EncodedAudioChunkMetadata): void;
+  finalize(): Uint8Array;
+}
+
+function createMuxer(
+  format: ExportFormat,
+  choice: VideoCodecChoice,
+  width: number,
+  height: number,
+  fps: number,
+  audio: { sampleRate: number; channels: number } | null,
+): MuxerAdapter {
+  if (format === 'mp4') {
+    const target = new Mp4Target();
+    const muxer = new Mp4Muxer({
+      target,
+      video: { codec: 'avc', width, height, frameRate: fps },
+      audio: audio ? { codec: 'aac', numberOfChannels: audio.channels, sampleRate: audio.sampleRate } : undefined,
+      fastStart: 'in-memory',
+      firstTimestampBehavior: 'offset',
+    });
+    return {
+      addVideoChunk: (c, m) => muxer.addVideoChunk(c, m),
+      addAudioChunk: (c, m) => muxer.addAudioChunk(c, m),
+      finalize: () => {
+        muxer.finalize();
+        return new Uint8Array(target.buffer);
+      },
+    };
+  }
+  const target = new WebmTarget();
+  const muxer = new WebmMuxer({
+    target,
+    video: { codec: choice.muxCodec, width, height, frameRate: fps },
+    audio: audio ? { codec: 'A_OPUS', numberOfChannels: audio.channels, sampleRate: audio.sampleRate } : undefined,
+    firstTimestampBehavior: 'offset',
+  });
+  return {
+    addVideoChunk: (c, m) => muxer.addVideoChunk(c, m),
+    addAudioChunk: (c, m) => muxer.addAudioChunk(c, m),
+    finalize: () => {
+      muxer.finalize();
+      return new Uint8Array(target.buffer);
+    },
+  };
+}
+
 export class WebCodecsRenderer implements Renderer {
   readonly id = 'webcodecs';
   readonly label = 'Hardware (WebCodecs)';
-  readonly description = 'Fast H.264 encoding using the browser’s built-in encoder. Chrome 94+.';
+  readonly description = 'Fast encoding with the browser’s built-in encoders (H.264 for MP4, VP9 for WebM). Chrome 94+.';
 
   async isSupported(): Promise<boolean> {
     if (typeof VideoEncoder === 'undefined' || typeof VideoFrame === 'undefined') return false;
-    return (await pickVideoCodec(1280, 720, 30, 5_000_000)) !== null;
+    return (await this.supportsFormat('mp4')) || (await this.supportsFormat('webm'));
+  }
+
+  async supportsFormat(format: ExportFormat): Promise<boolean> {
+    if (format === 'gif') return false;
+    return (await pickVideoCodec(format, 1280, 720, 30, 5_000_000)) !== null;
   }
 
   async render(project: Project, options: RenderOptions): Promise<RenderResult> {
     const started = performance.now();
-    const { width, height, fps, startTime, duration, signal, onProgress } = options;
-    const codec = await pickVideoCodec(width, height, fps, options.videoBitrate);
-    if (!codec) throw new Error('No supported H.264 encoder configuration for this size');
+    const { format, width, height, fps, startTime, duration, signal, onProgress } = options;
+    if (format === 'gif') throw new Error('GIF export needs the FFmpeg engine');
+    const choice = await pickVideoCodec(format, width, height, fps, options.videoBitrate);
+    if (!choice) throw new Error(`No supported ${format === 'mp4' ? 'H.264' : 'VP9/VP8'} encoder configuration for this size`);
 
     onProgress({ phase: 'preparing', fraction: 0, message: 'Preparing media…' });
     const source = new ExportFrameSource(project, width, height);
@@ -71,23 +137,24 @@ export class WebCodecsRenderer implements Renderer {
       await source.prepare(startTime, duration);
       throwIfAborted(signal);
 
-      // --- Audio first so we know whether to declare an AAC track in the muxer ---
+      // --- Audio first so we know whether to declare an audio track in the muxer ---
       let audioBuffer: AudioBuffer | null = null;
-      if (options.includeAudio) {
+      if (options.includeAudio && FORMAT_INFO[format].audio) {
         onProgress({ phase: 'audio', fraction: 0.02, message: 'Mixing audio…' });
         audioBuffer = await renderAudioMix(project, { startTime, duration, sampleRate: 48000, signal });
         throwIfAborted(signal);
       }
-      const useAac = audioBuffer ? await aacSupported(audioBuffer.sampleRate, 2) : false;
+      const audioCodec = format === 'mp4' ? 'mp4a.40.2' : 'opus';
+      const useWebCodecsAudio = audioBuffer ? await audioEncoderSupported(audioCodec, audioBuffer.sampleRate, 2) : false;
 
-      const target = new ArrayBufferTarget();
-      const muxer = new Muxer({
-        target,
-        video: { codec: 'avc', width, height, frameRate: fps },
-        audio: useAac && audioBuffer ? { codec: 'aac', numberOfChannels: 2, sampleRate: audioBuffer.sampleRate } : undefined,
-        fastStart: 'in-memory',
-        firstTimestampBehavior: 'offset',
-      });
+      const muxer = createMuxer(
+        format,
+        choice,
+        width,
+        height,
+        fps,
+        useWebCodecsAudio && audioBuffer ? { sampleRate: audioBuffer.sampleRate, channels: 2 } : null,
+      );
 
       let encodeError: Error | null = null;
       const encoder = new VideoEncoder({
@@ -96,15 +163,16 @@ export class WebCodecsRenderer implements Renderer {
           encodeError = e instanceof Error ? e : new Error(String(e));
         },
       });
-      encoder.configure({
-        codec,
+      const config: VideoEncoderConfig = {
+        codec: choice.codec,
         width,
         height,
         bitrate: options.videoBitrate,
         framerate: fps,
-        avc: { format: 'avc' },
         latencyMode: 'quality',
-      });
+      };
+      if (choice.muxCodec === 'avc') config.avc = { format: 'avc' };
+      encoder.configure(config);
 
       const totalFrames = Math.max(1, Math.round(duration * fps));
       const frameUs = Math.round(1_000_000 / fps);
@@ -129,45 +197,41 @@ export class WebCodecsRenderer implements Renderer {
           if (performance.now() - waitStart > 30_000) throw new Error('Video encoder stalled');
         }
         if (i % 3 === 0 || i === totalFrames - 1) {
-          onProgress({
-            phase: 'rendering',
-            fraction: 0.05 + (i / totalFrames) * 0.8,
-            frame: i + 1,
-            totalFrames,
-          });
+          onProgress({ phase: 'rendering', fraction: 0.05 + (i / totalFrames) * 0.8, frame: i + 1, totalFrames });
         }
       }
       await encoder.flush();
       encoder.close();
       if (encodeError) throw encodeError;
 
-      if (audioBuffer && useAac) {
+      if (audioBuffer && useWebCodecsAudio) {
         onProgress({ phase: 'audio', fraction: 0.87, message: 'Encoding audio…' });
-        await encodeAacInto(muxer, audioBuffer, signal);
+        await encodeAudioInto(muxer, audioBuffer, audioCodec, signal);
       }
-      onProgress({ phase: 'muxing', fraction: 0.92, message: 'Writing MP4…' });
-      muxer.finalize();
-      let bytes: Uint8Array = new Uint8Array(target.buffer);
+      onProgress({ phase: 'muxing', fraction: 0.92, message: `Writing ${format.toUpperCase()}…` });
+      let bytes = muxer.finalize();
 
-      if (audioBuffer && !useAac) {
-        // Platform has no AAC encoder: mux WAV → AAC with FFmpeg.wasm.
+      if (audioBuffer && !useWebCodecsAudio) {
+        // No platform audio encoder: transcode WAV → AAC/Opus with FFmpeg.wasm, video copied.
         onProgress({ phase: 'muxing', fraction: 0.93, message: 'Adding audio track…' });
         const ff = await getFfmpeg((m) => onProgress({ phase: 'muxing', fraction: 0.93, message: m }));
         throwIfAborted(signal);
-        await ff.writeFile('video.mp4', bytes);
+        const videoName = `video.${format}`;
+        const outName = `out.${format}`;
+        await ff.writeFile(videoName, bytes);
         await ff.writeFile('audio.wav', new Uint8Array(await audioBufferToWav(audioBuffer).arrayBuffer()));
         try {
-          bytes = await muxAudioIntoMp4(ff, 'video.mp4', 'audio.wav', 'out.mp4');
+          bytes = await muxAudioInto(ff, videoName, 'audio.wav', outName, format);
         } finally {
-          await safeDelete(ff, 'video.mp4');
+          await safeDelete(ff, videoName);
           await safeDelete(ff, 'audio.wav');
-          await safeDelete(ff, 'out.mp4');
+          await safeDelete(ff, outName);
         }
       }
       onProgress({ phase: 'finalizing', fraction: 1 });
       return {
-        blob: new Blob([bytes as BlobPart], { type: 'video/mp4' }),
-        mimeType: 'video/mp4',
+        blob: new Blob([bytes as BlobPart], { type: FORMAT_INFO[format].mimeType }),
+        mimeType: FORMAT_INFO[format].mimeType,
         width,
         height,
         durationSeconds: duration,
@@ -183,7 +247,7 @@ export class WebCodecsRenderer implements Renderer {
   }
 }
 
-async function encodeAacInto(muxer: Muxer<ArrayBufferTarget>, buffer: AudioBuffer, signal: AbortSignal): Promise<void> {
+async function encodeAudioInto(muxer: MuxerAdapter, buffer: AudioBuffer, codec: 'mp4a.40.2' | 'opus', signal: AbortSignal): Promise<void> {
   const channels = 2;
   let err: Error | null = null;
   const encoder = new AudioEncoder({
@@ -192,7 +256,7 @@ async function encodeAacInto(muxer: Muxer<ArrayBufferTarget>, buffer: AudioBuffe
       err = e instanceof Error ? e : new Error(String(e));
     },
   });
-  encoder.configure({ codec: 'mp4a.40.2', sampleRate: buffer.sampleRate, numberOfChannels: channels, bitrate: 192_000 });
+  encoder.configure({ codec, sampleRate: buffer.sampleRate, numberOfChannels: channels, bitrate: codec === 'opus' ? 128_000 : 192_000 });
   const chunkFrames = 4096;
   for (let offset = 0; offset < buffer.length; offset += chunkFrames) {
     throwIfAborted(signal);

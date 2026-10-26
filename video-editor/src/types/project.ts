@@ -117,10 +117,22 @@ interface ClipBase {
   duration: number;
 }
 
+export type KeyframeProperty = 'x' | 'y' | 'scale' | 'rotation' | 'opacity';
+
+export interface Keyframe {
+  /** Seconds from the clip's start on the timeline. */
+  time: number;
+  value: number;
+}
+
+export type Keyframes = Partial<Record<KeyframeProperty, Keyframe[]>>;
+
 export interface VisualProps {
   transform: Transform;
   transitionIn: Transition;
   transitionOut: Transition;
+  /** Per-property keyframes; a property without keyframes uses `transform`. */
+  keyframes?: Keyframes;
 }
 
 export interface VideoClip extends ClipBase, VisualProps {

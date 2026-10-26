@@ -61,31 +61,26 @@ export async function safeDelete(ff: FFmpeg, path: string): Promise<void> {
   }
 }
 
-export async function muxAudioIntoMp4(
+/** Stream-copy the video and encode the WAV mixdown into the container's native audio codec. */
+export async function muxAudioInto(
   ff: FFmpeg,
   videoName: string,
   audioName: string,
   outName: string,
+  format: 'mp4' | 'webm',
 ): Promise<Uint8Array> {
+  const audioArgs = format === 'webm' ? ['-c:a', 'libopus', '-b:a', '128k'] : ['-c:a', 'aac', '-b:a', '192k'];
+  const containerArgs = format === 'mp4' ? ['-movflags', '+faststart'] : [];
   const code = await ff.exec([
     '-y',
-    '-i',
-    videoName,
-    '-i',
-    audioName,
-    '-map',
-    '0:v:0',
-    '-map',
-    '1:a:0',
-    '-c:v',
-    'copy',
-    '-c:a',
-    'aac',
-    '-b:a',
-    '192k',
+    '-i', videoName,
+    '-i', audioName,
+    '-map', '0:v:0',
+    '-map', '1:a:0',
+    '-c:v', 'copy',
+    ...audioArgs,
     '-shortest',
-    '-movflags',
-    '+faststart',
+    ...containerArgs,
     outName,
   ]);
   if (code !== 0) throw new Error(`FFmpeg mux failed (exit ${code})`);

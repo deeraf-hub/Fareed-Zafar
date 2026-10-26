@@ -6,6 +6,7 @@
 import type { Clip, MediaAsset, Track } from '@/types/project';
 import { MIN_CLIP_DURATION, SNAP_EPSILON } from '@/config/limits';
 import { clipEnd } from './project';
+import { shiftKeyframes, splitKeyframes } from './clipMath';
 import { newId } from '@/lib/id';
 import { clamp, roundTo } from '@/lib/time';
 
@@ -119,6 +120,7 @@ export function trimClipStart(clips: Clip[], clipId: string, newStart: number): 
     if (c.id !== clipId) return c;
     const next = { ...c, start: s, duration: roundTo(c.duration - delta) };
     if ('trimStart' in next) next.trimStart = roundTo(Math.max(0, next.trimStart + delta * speed));
+    if ('keyframes' in next && next.keyframes) next.keyframes = shiftKeyframes(next.keyframes, -delta);
     return next;
   });
 }
@@ -146,6 +148,11 @@ export function splitClip(clips: Clip[], clipId: string, time: number): { clips:
   const left: Clip = { ...clip, duration: leftDur } as Clip;
   const right: Clip = { ...clip, id: rightId, start: roundTo(time), duration: rightDur } as Clip;
   if ('transitionOut' in left) left.transitionOut = { type: 'none', duration: 0.5 };
+  if ('keyframes' in left && left.keyframes) {
+    const parts = splitKeyframes(left.keyframes, local);
+    left.keyframes = parts.left;
+    (right as typeof left).keyframes = parts.right;
+  }
   if ('trimStart' in right && 'speed' in right) {
     right.trimStart = roundTo(right.trimStart + local * right.speed);
   }
@@ -192,6 +199,23 @@ export function duplicateClips(clips: Clip[], clipIds: string[]): { clips: Clip[
 
 export function deleteClips(clips: Clip[], clipIds: string[]): Clip[] {
   return clips.filter((c) => !clipIds.includes(c.id));
+}
+
+/**
+ * Delete clips and pull every later clip on the same track left by the
+ * removed duration, so no hole is left behind (ripple delete).
+ */
+export function rippleDelete(clips: Clip[], clipIds: string[]): Clip[] {
+  const deleted = clips.filter((c) => clipIds.includes(c.id));
+  if (deleted.length === 0) return clips;
+  return clips
+    .filter((c) => !clipIds.includes(c.id))
+    .map((c) => {
+      const shift = deleted
+        .filter((d) => d.trackId === c.trackId && clipEnd(d) <= c.start + SNAP_EPSILON)
+        .reduce((sum, d) => sum + d.duration, 0);
+      return shift > 0 ? { ...c, start: roundTo(c.start - shift) } : c;
+    });
 }
 
 /** Collect snap targets: clip edges, playhead, zero. */

@@ -6,4 +6,4 @@ export const SUPABASE_ANON_KEY =
 export const CLOUD_ENABLED = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 
 export const APP_NAME = 'Framewright';
-export const APP_VERSION = '0.1.0';
+export const APP_VERSION = '0.2.0';

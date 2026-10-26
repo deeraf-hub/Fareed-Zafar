@@ -7,6 +7,26 @@ import type { Project } from '@/types/project';
  */
 export type RenderPhase = 'preparing' | 'rendering' | 'audio' | 'muxing' | 'finalizing';
 
+export type ExportFormat = 'mp4' | 'webm' | 'gif';
+
+export interface FormatInfo {
+  label: string;
+  mimeType: string;
+  extension: string;
+  /** Whether the container carries audio. */
+  audio: boolean;
+  /** Hard cap for this format (GIFs get big fast). */
+  maxSeconds?: number;
+  /** Forced frame rate, if the format wants one. */
+  fps?: number;
+}
+
+export const FORMAT_INFO: Record<ExportFormat, FormatInfo> = {
+  mp4: { label: 'MP4 · H.264 + AAC', mimeType: 'video/mp4', extension: 'mp4', audio: true },
+  webm: { label: 'WebM · VP9 + Opus', mimeType: 'video/webm', extension: 'webm', audio: true },
+  gif: { label: 'GIF · animated, no audio', mimeType: 'image/gif', extension: 'gif', audio: false, maxSeconds: 30, fps: 15 },
+};
+
 export interface RenderProgress {
   phase: RenderPhase;
   /** 0..1 overall. */
@@ -18,6 +38,7 @@ export interface RenderProgress {
 }
 
 export interface RenderOptions {
+  format: ExportFormat;
   width: number;
   height: number;
   fps: number;
@@ -47,6 +68,7 @@ export interface Renderer {
   readonly label: string;
   readonly description: string;
   isSupported(): Promise<boolean>;
+  supportsFormat(format: ExportFormat): Promise<boolean>;
   render(project: Project, options: RenderOptions): Promise<RenderResult>;
 }
 

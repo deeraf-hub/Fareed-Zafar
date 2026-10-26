@@ -42,20 +42,23 @@ E2E tests need `ffmpeg`/`ffprobe` on the PATH and the Playwright Chromium
 See [docs/STATUS.md](docs/STATUS.md) for the authoritative list of working
 features, incomplete features, known limitations and the tests performed.
 
-* Registration, login, logout, protected dashboard (Supabase Auth) with a
-  local-project mode when cloud is not configured
+* Registration, login, logout, Google sign-in, password reset, protected
+  dashboard (Supabase Auth) with a local-project mode when cloud is not
+  configured
 * Create, rename, save, reopen, delete projects; 16:9, 9:16 and 1:1 presets
 * Import video, audio and image files; thumbnails and waveforms
 * Multi-track timeline with drag-and-drop from the library, move between
-  tracks, trim, split, duplicate, delete, snapping, zoom, undo/redo
+  tracks, trim, split, duplicate, delete, ripple delete, close gaps, snapping,
+  zoom, undo/redo
 * Text, titles and subtitles with fonts, outline, background box, shadow and
   animations; image overlays
-* Position, scale, rotation, opacity, speed (0.25×–4×)
+* Position, scale, rotation, opacity (static or keyframed), speed (0.25×–4×)
 * Transitions (fade, crossfade, wipe, slide, zoom), looks and
   brightness/contrast/saturation
 * Audio tracks with volume, fade in/out, mute, track mute/hide/lock
 * Real-time preview of the composition with synced audio
-* MP4 export (H.264 + AAC) via WebCodecs or FFmpeg.wasm with progress and cancel
+* MP4 (H.264 + AAC), WebM (VP9 + Opus) and GIF export of the whole sequence
+  or a custom range, via WebCodecs or FFmpeg.wasm, with progress and cancel
 * Autosave with reload recovery
 
 ## Privacy and free-tier design

@@ -2,6 +2,7 @@ import { memo } from 'react';
 import clsx from 'clsx';
 import { Film, Image as ImageIcon, Music, Type } from 'lucide-react';
 import type { Clip, MediaAsset } from '@/types/project';
+import { keyframeTimes } from '@/model/clipMath';
 import { WaveformCanvas } from './WaveformCanvas';
 
 export type GestureKind = 'move' | 'trim-start' | 'trim-end';
@@ -30,6 +31,7 @@ export const ClipView = memo(function ClipView({ clip, asset, zoom, height, sele
   const hasWave = Boolean(asset?.waveform?.length) && (clip.kind === 'audio' || (clip.kind === 'video' && asset?.hasAudio));
   const fades = 'audio' in clip ? clip.audio : null;
   const label = clip.kind === 'text' ? clip.text.split('\n')[0] || 'Text' : clip.name;
+  const kfTimes = 'keyframes' in clip ? keyframeTimes(clip.keyframes) : [];
 
   return (
     <div
@@ -64,6 +66,15 @@ export const ClipView = memo(function ClipView({ clip, asset, zoom, height, sele
           {fades.fadeOut > 0 && <path d={`M${width - fades.fadeOut * zoom},0 L${width},10`} stroke="rgba(255,255,255,0.8)" strokeWidth="0.6" fill="none" vectorEffect="non-scaling-stroke" />}
         </svg>
       )}
+      {/* keyframe markers */}
+      {kfTimes.map((t) => (
+        <span
+          key={t}
+          className="pointer-events-none absolute bottom-1 h-1.5 w-1.5 rotate-45 border border-ink-900 bg-white"
+          style={{ left: t * zoom - 3 }}
+          data-testid="keyframe-marker"
+        />
+      ))}
       {/* transition markers */}
       {'transitionIn' in clip && clip.transitionIn.type !== 'none' && (
         <div className="absolute left-0 top-0 h-full bg-white/20" style={{ width: clip.transitionIn.duration * zoom }} />

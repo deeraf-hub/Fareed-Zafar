@@ -21,6 +21,7 @@ export const SHORTCUTS: { keys: string; action: string }[] = [
   { keys: 'Space', action: 'Play / pause' },
   { keys: 'S', action: 'Split clip(s) at playhead' },
   { keys: 'Delete / Backspace', action: 'Delete selected clips' },
+  { keys: 'Shift + Delete', action: 'Ripple delete (close the gap)' },
   { keys: 'Ctrl + D', action: 'Duplicate selected clips' },
   { keys: 'Ctrl + Z', action: 'Undo' },
   { keys: 'Ctrl + Shift + Z / Ctrl + Y', action: 'Redo' },
@@ -56,7 +57,8 @@ export function useKeyboardShortcuts(h: ShortcutHandlers) {
         case 'Delete':
         case 'Backspace':
           e.preventDefault();
-          s.deleteSelected();
+          if (e.shiftKey) s.rippleDeleteSelected();
+          else s.deleteSelected();
           break;
         case 'd':
         case 'D':

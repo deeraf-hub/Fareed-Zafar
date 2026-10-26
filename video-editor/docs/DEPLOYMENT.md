@@ -14,8 +14,16 @@ no accounts).
    smoothest onboarding, disable *Confirm email* during development; keep it
    enabled in production.
 3. **Authentication → URL configuration**: set *Site URL* to your deployed
-   origin (e.g. `https://framewright.pages.dev`) and add `http://localhost:5173`
-   to *Redirect URLs* for local development.
+   origin (e.g. `https://framewright.pages.dev`) and add these *Redirect URLs*
+   for every origin you use (production, previews, `http://localhost:5173`):
+   `<origin>/projects` (Google sign-in) and `<origin>/reset-password`
+   (password reset emails).
+3b. **Google sign-in (optional)**: Authentication → Providers → Google: enable
+   it and paste the OAuth client id/secret from Google Cloud Console (create an
+   OAuth 2.0 Web client whose authorised redirect URI is the one Supabase
+   shows on that screen, `https://<project>.supabase.co/auth/v1/callback`).
+   Without this step the "Continue with Google" button reports that the
+   provider is not enabled; email/password keeps working.
 4. **SQL editor**: paste and run `supabase/migrations/0001_projects.sql`. It
    creates the `projects` table, a 50-projects-per-user cap, a 2 MB JSON size
    check and Row Level Security policies so users only see their own rows.

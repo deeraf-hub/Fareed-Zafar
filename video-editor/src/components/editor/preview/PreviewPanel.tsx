@@ -4,7 +4,7 @@ import type { ImageClip, VideoClip, VisualClip } from '@/types/project';
 import { useProjectStore, selectDuration, selectSelectedClip } from '@/store/projectStore';
 import { isVisualClip } from '@/types/project';
 import { clipBounds } from '@/engine/compositor';
-import { isActive } from '@/model/clipMath';
+import { hasKeyframes, isActive, transformAt, withKeyframe } from '@/model/clipMath';
 import type { PlaybackControls } from '@/hooks/usePlayer';
 import { IconButton } from '@/components/ui/IconButton';
 import { formatTime } from '@/lib/time';
@@ -85,14 +85,16 @@ export function PreviewPanel({ controls }: { controls: PlaybackControls }) {
     },
     [player, playhead],
   );
-  const bounds = overlayClip && project ? clipBounds(project, overlayClip, sizeFor, measureCtx ?? undefined) : null;
+  const bounds = overlayClip && project ? clipBounds(project, overlayClip, playhead, sizeFor, measureCtx ?? undefined) : null;
+  const overlayTransform = overlayClip ? transformAt(overlayClip, playhead) : null;
   const pxPerUnit = project ? cssSize.w / project.settings.width : 1;
   const dragRef = useRef<{ x: number; y: number; ox: number; oy: number; started: boolean } | null>(null);
 
   const onOverlayDown = (e: React.PointerEvent) => {
     if (!overlayClip) return;
     e.preventDefault();
-    dragRef.current = { x: e.clientX, y: e.clientY, ox: overlayClip.transform.x, oy: overlayClip.transform.y, started: false };
+    const tr = transformAt(overlayClip, useProjectStore.getState().playhead);
+    dragRef.current = { x: e.clientX, y: e.clientY, ox: tr.x, oy: tr.y, started: false };
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
   const onOverlayMove = (e: React.PointerEvent) => {
@@ -105,9 +107,21 @@ export function PreviewPanel({ controls }: { controls: PlaybackControls }) {
       d.started = true;
       beginGesture();
     }
+    const nx = Math.round(d.ox + dx);
+    const ny = Math.round(d.oy + dy);
+    const local = useProjectStore.getState().playhead - overlayClip.start;
+    const tolerance = 0.5 / (project?.settings.fps ?? 30);
     updateClip<VisualClip>(
       overlayClip.id,
-      (c) => ({ transform: { ...c.transform, x: Math.round(d.ox + dx), y: Math.round(d.oy + dy) } }),
+      (c) => {
+        let keyframes = c.keyframes;
+        const transform = { ...c.transform };
+        if (hasKeyframes(c, 'x')) keyframes = withKeyframe(keyframes, 'x', local, nx, tolerance);
+        else transform.x = nx;
+        if (hasKeyframes(c, 'y')) keyframes = withKeyframe(keyframes, 'y', local, ny, tolerance);
+        else transform.y = ny;
+        return { transform, keyframes };
+      },
       { history: false },
     );
   };
@@ -131,7 +145,7 @@ export function PreviewPanel({ controls }: { controls: PlaybackControls }) {
                 top: bounds.y * pxPerUnit,
                 width: bounds.w * pxPerUnit,
                 height: bounds.h * pxPerUnit,
-                transform: `rotate(${overlayClip?.transform.rotation ?? 0}deg)`,
+                transform: `rotate(${overlayTransform?.rotation ?? 0}deg)`,
               }}
               onPointerDown={onOverlayDown}
               onPointerMove={onOverlayMove}

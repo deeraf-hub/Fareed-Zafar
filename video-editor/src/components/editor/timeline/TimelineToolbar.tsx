@@ -1,4 +1,4 @@
-import { Copy, Magnet, Maximize2, Minus, Plus, Redo2, Scissors, Trash2, Undo2 } from 'lucide-react';
+import { ArrowLeftToLine, Copy, FoldHorizontal, Magnet, Maximize2, Minus, Plus, Redo2, Scissors, Trash2, Undo2 } from 'lucide-react';
 import { useProjectStore, selectDuration } from '@/store/projectStore';
 import { IconButton } from '@/components/ui/IconButton';
 import { Button } from '@/components/ui/Button';
@@ -22,6 +22,12 @@ export function TimelineToolbar({ viewportWidth }: { viewportWidth: number }) {
       </IconButton>
       <IconButton label="Delete (Del)" size="sm" onClick={s.deleteSelected} disabled={!hasSelection} data-testid="delete">
         <Trash2 className="h-4 w-4" />
+      </IconButton>
+      <IconButton label="Ripple delete: remove and close the gap (Shift+Del)" size="sm" onClick={s.rippleDeleteSelected} disabled={!hasSelection} data-testid="ripple-delete">
+        <ArrowLeftToLine className="h-4 w-4" />
+      </IconButton>
+      <IconButton label={hasSelection ? 'Close gaps on the selected tracks' : 'Close gaps on all tracks'} size="sm" onClick={() => s.closeGaps()} data-testid="close-gaps">
+        <FoldHorizontal className="h-4 w-4" />
       </IconButton>
       <span className="mx-1 h-5 w-px bg-ink-700" />
       <IconButton label="Undo (Ctrl+Z)" size="sm" onClick={s.undo} disabled={s.past.length === 0}>

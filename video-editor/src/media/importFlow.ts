@@ -12,12 +12,32 @@ export function useMediaRegistryVersion(): number {
   return useSyncExternalStore(mediaRegistry.subscribe, () => mediaRegistry.version, () => 0);
 }
 
-/** Imports files into the current project. Shared by the library panel and timeline drops. */
+/** Assets referenced by the project whose file is not available in this browser. */
+export function missingAssets(): MediaAsset[] {
+  const project = useProjectStore.getState().project;
+  return project ? project.assets.filter((a) => !mediaRegistry.has(a.id)) : [];
+}
+
+/**
+ * Imports files into the current project. A file whose name and size match
+ * a missing asset relinks that asset instead of creating a new one, so a
+ * project opened on another device can be repaired by importing the same
+ * files again. Shared by the library panel and timeline drops.
+ */
 export async function importFilesIntoProject(files: File[], onAsset?: (asset: MediaAsset) => void): Promise<MediaAsset[]> {
   const store = useProjectStore.getState();
   const added: MediaAsset[] = [];
+  let relinked = 0;
   for (const file of files) {
     try {
+      const match = missingAssets().find((a) => a.name === file.name && a.size === file.size);
+      if (match) {
+        const { asset, waveform } = await importFile(file, { existingId: match.id });
+        useProjectStore.getState().updateAsset(match.id, { ...asset, id: match.id, addedAt: match.addedAt });
+        void waveform.then((w) => w && useProjectStore.getState().updateAsset(match.id, { waveform: w }));
+        relinked++;
+        continue;
+      }
       const { asset, waveform } = await importFile(file);
       store.addAsset(asset);
       added.push(asset);
@@ -34,6 +54,7 @@ export async function importFilesIntoProject(files: File[], onAsset?: (asset: Me
     }
   }
   if (added.length) toast(`Imported ${added.length} file${added.length > 1 ? 's' : ''}`, 'success');
+  if (relinked) toast(`Relinked ${relinked} missing file${relinked > 1 ? 's' : ''}`, 'success');
   return added;
 }
 
