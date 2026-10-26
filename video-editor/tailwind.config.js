@@ -2,6 +2,7 @@
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   darkMode: 'class',
+  safelist: ['bg-clip-video', 'bg-clip-image', 'bg-clip-text', 'bg-clip-audio'],
   theme: {
     extend: {
       colors: {

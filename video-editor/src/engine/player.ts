@@ -53,7 +53,7 @@ export class Player implements FrameSources {
     const live = new Set(project.clips.map((c) => c.id));
     this.pool.prune(live);
     for (const id of [...this.audioEls.keys()]) if (!live.has(id)) this.releaseAudio(id);
-    if (prev && !this.playing) void this.renderAt(this.time);
+    if ((prev || this.canvas) && !this.playing) void this.renderAt(this.time);
   }
 
   get currentTime(): number {

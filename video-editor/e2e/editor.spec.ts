@@ -79,6 +79,32 @@ test.describe('Framewright editor (local mode)', () => {
     await expect(page.getByTestId('project-card')).toHaveCount(0);
   });
 
+  test('drag-and-drop from the library onto a specific track', async ({ page }) => {
+    await createProject(page, 'DnD test');
+    await importFiles(page, [fixtures.video2, fixtures.audio]);
+    const lanes = page.getByTestId('track-lane');
+    await expect(lanes).toHaveCount(3);
+    // Drop the video onto the top (overlay) lane at ~2 s (120 px at 60 px/s).
+    await page.getByTestId('asset-item').nth(0).dragTo(lanes.nth(0), { targetPosition: { x: 120, y: 20 } });
+    await expect(page.getByTestId('clip')).toHaveCount(1);
+    let state = await clipState(page);
+    expect(state[0].kind).toBe('video');
+    expect(Math.abs(state[0].left - 120)).toBeLessThanOrEqual(8);
+    const topLane = await lanes.nth(0).getAttribute('data-track-lane');
+    expect(state[0].track).toBe(topLane);
+    // Drop the audio file onto the audio lane at 0.
+    await page.getByTestId('asset-item').nth(1).dragTo(lanes.nth(2), { targetPosition: { x: 5, y: 20 } });
+    await expect(page.getByTestId('clip')).toHaveCount(2);
+    state = await clipState(page);
+    expect(state.find((c) => c.kind === 'audio')!.left).toBe(0);
+    // Dragging an existing clip to another video lane moves it.
+    const videoIdx = state.findIndex((c) => c.kind === 'video');
+    await dragClip(page, videoIdx, 60, 60);
+    state = await clipState(page);
+    expect(state.find((c) => c.kind === 'video')!.track).toBe(await lanes.nth(1).getAttribute('data-track-lane'));
+    expect(state.find((c) => c.kind === 'video')!.left).toBeGreaterThan(150);
+  });
+
   test('import real media, edit the timeline, preview, autosave, reload and export an MP4', async ({ page }, testInfo) => {
     testInfo.setTimeout(12 * 60 * 1000);
     const errors: string[] = [];
@@ -110,8 +136,12 @@ test.describe('Framewright editor (local mode)', () => {
     const clips = await clipState(page);
     expect(clips.filter((c) => c.kind === 'image')).toHaveLength(1);
 
+    // The image should have landed on a free video track (the overlay layer), not been pushed to the end.
+    const imageClip = clips.find((c) => c.kind === 'image')!;
+    expect(imageClip.left).toBe(60);
+    expect(imageClip.track).not.toBe(clips.find((c) => c.kind === 'video')!.track);
+
     // Shrink image overlay and move it to the top-right in the inspector
-    await page.getByTestId('clip').filter({ has: page.locator('[data-clip-kind="image"]') }).first().click({ position: { x: 20, y: 5 } }).catch(() => undefined);
     await page.locator('[data-testid="clip"][data-clip-kind="image"]').click({ position: { x: 30, y: 8 } });
     await expect(page.getByTestId('clip-inspector')).toHaveAttribute('data-kind', 'image');
     await page.getByLabel('Scale value').fill('0.4');

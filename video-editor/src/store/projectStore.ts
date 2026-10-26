@@ -20,6 +20,7 @@ import {
   deleteClips,
   duplicateClips,
   findFreePosition,
+  hasCollision,
   moveClip,
   moveClips,
   splitAt,
@@ -130,14 +131,27 @@ export const useProjectStore = create<ProjectState>((set, get) => {
     });
   };
 
-  const pickTrack = (project: Project, kind: Track['kind'], preferredId?: string): Track | undefined => {
+  /**
+   * Choose a track for a new clip. An explicit track wins; otherwise the
+   * first unlocked track of the right kind that has room at `start` is used
+   * (video: bottom layer upwards, audio: top down), falling back to the
+   * default layer where the clip is then placed at the nearest free spot.
+   */
+  const pickTrack = (
+    project: Project,
+    kind: Track['kind'],
+    preferredId: string | undefined,
+    start: number,
+    duration: number,
+    order: 'bottom-up' | 'top-down' = 'bottom-up',
+  ): Track | undefined => {
     if (preferredId) {
       const t = project.tracks.find((x) => x.id === preferredId);
       if (t && t.kind === kind && !t.locked) return t;
     }
     const list = project.tracks.filter((t) => t.kind === kind && !t.locked);
-    // Default drop target: the lowest video layer (last video track) or first audio track.
-    return kind === 'video' ? list[list.length - 1] : list[0];
+    const ordered = kind === 'video' && order === 'bottom-up' ? [...list].reverse() : list;
+    return ordered.find((t) => !hasCollision(project.clips, t.id, start, duration)) ?? ordered[0];
   };
 
   return {
@@ -268,11 +282,13 @@ export const useProjectStore = create<ProjectState>((set, get) => {
       if (!project) return null;
       if (project.clips.length >= LIMITS.maxClipsPerProject) throw new Error('Clip limit reached for this project');
       const kind: Track['kind'] = asset.kind === 'audio' ? 'audio' : 'video';
-      let track = pickTrack(project, kind, opts.trackId);
+      const wantStart = opts.start ?? playhead;
+      const probe = makeClipFromAsset(asset, 'probe', wantStart);
+      let track = pickTrack(project, kind, opts.trackId, wantStart, probe.duration);
       if (!track) {
         track = get().addTrack(kind);
       }
-      const draft = makeClipFromAsset(asset, track.id, opts.start ?? playhead);
+      const draft = makeClipFromAsset(asset, track.id, wantStart);
       const start = findFreePosition(get().project!.clips, track.id, draft.start, draft.duration);
       if (start === null) return null;
       const clip = { ...draft, start: roundTo(start) } as Clip;
@@ -284,12 +300,12 @@ export const useProjectStore = create<ProjectState>((set, get) => {
     addTextClip(preset, opts = {}) {
       const { project, playhead } = get();
       if (!project) return null;
-      // Text goes on the top-most video track by default.
-      let track = opts.trackId
-        ? project.tracks.find((t) => t.id === opts.trackId && t.kind === 'video' && !t.locked)
-        : project.tracks.find((t) => t.kind === 'video' && !t.locked);
+      // Text prefers the top-most video track with room at the playhead.
+      const wantStart = opts.start ?? playhead;
+      const probe = makeTextClip('probe', wantStart, preset, project.settings, opts.text);
+      let track = pickTrack(project, 'video', opts.trackId, wantStart, probe.duration, 'top-down');
       if (!track) track = get().addTrack('video');
-      const draft = makeTextClip(track.id, opts.start ?? playhead, preset, project.settings, opts.text);
+      const draft = makeTextClip(track.id, wantStart, preset, project.settings, opts.text);
       const start = findFreePosition(get().project!.clips, track.id, draft.start, draft.duration);
       if (start === null) return null;
       const clip: Clip = { ...draft, start: roundTo(start) };

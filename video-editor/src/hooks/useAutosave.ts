@@ -73,9 +73,20 @@ export function useAutosave(enabled: boolean) {
     document.addEventListener('visibilitychange', onHide);
     window.addEventListener('pagehide', onHide);
     window.addEventListener('beforeunload', onUnload);
-    // Mark the initially loaded revision as saved.
+    // Mark the initially loaded revision as saved, unless the local draft
+    // still has changes the cloud never received (recovered after a crash).
     lastSavedRevision.current = useProjectStore.getState().revision;
-    setStatus(useAuthStore.getState().repository().kind === 'cloud' ? 'saved' : 'local');
+    const repoKind = useAuthStore.getState().repository().kind;
+    setStatus(repoKind === 'cloud' ? 'saved' : 'local');
+    const openId = useProjectStore.getState().project?.id;
+    if (repoKind === 'cloud' && openId) {
+      void localDb.getProject(openId).then((row) => {
+        if (row?.dirty) {
+          lastSavedRevision.current = -1;
+          schedule();
+        }
+      });
+    }
 
     return () => {
       unsub();
