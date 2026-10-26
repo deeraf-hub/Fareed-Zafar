@@ -126,7 +126,7 @@ _Last updated: 2026-10-26 (v0.2.0)._
 |---|---|---|---|
 | Static | `tsc -b` (strict), ESLint (TS + react-hooks) | whole codebase | pass |
 | Unit | Vitest, 43 tests in 7 files | collision/placement, move (single + multi), trim start/end (source limits, speed, neighbours), split (trim/speed/keyframe continuity), duplicate/delete/ripple delete/close gaps, snapping, project factory, project normalisation and round-trip, clip source time, gains/fades/mutes, transition windows, crossfade adjacency, track ordering, keyframe interpolation/edit/shift/split helpers, WAV encoding, interleave, filter strings, export dimensions and formats, renderer registry, time formatting | pass |
-| E2E | Playwright + Chromium, real media generated with ffmpeg (VP9/Opus WebM, VP8 WebM, WAV, PNG), 7 specs | (1) dashboard create / rename / reopen / delete; (2) HTML5 drag-and-drop from the library onto a chosen video/audio lane at a given time, dragging a clip to another lane; (3) full edit: import 4 files, add clips at the playhead, image overlay placed on a free upper track, inspector transform edits, title text with animation, music with fade-out, filters/adjustments/transition, split at playhead, delete + undo + redo, trim with the edge handle, move with snapping, duplicate, 2× speed, play preview and verify the canvas is painted, autosave status, reload with identical timeline and media restored, 480p MP4 export (WebCodecs engine, AAC muxed by FFmpeg.wasm) downloaded and probed: `h264` 854×480 + `aac`, 10.0 s; (4) 1:1 project exported as MP4 with the FFmpeg.wasm engine forced (libx264 in WebAssembly): `h264` 480×480 + `aac`, 4.0 s; (5) ripple delete, then WebM export (`vp9` 854×480 + `opus`, 5.0 s) and a GIF of a custom 1–3 s range (`gif` 854×480, 30 frames at 15 fps); (6) keyframes: scale keys at 0 s and 2 s, eased value 0.75 at 1 s, held value before the first key, preview overlay grows with the animation, split adds boundary keys, reset clears them | 4 of 7 pass so far; full run in progress (final result in the PR) |
+| E2E | Playwright + Chromium, real media generated with ffmpeg (VP9/Opus WebM, VP8 WebM, WAV, PNG), 6 specs in 4 files | (1) dashboard create / rename / reopen / delete; (2) HTML5 drag-and-drop from the library onto a chosen video/audio lane at a given time, dragging a clip to another lane; (3) full edit: import 4 files, add clips at the playhead, image overlay placed on a free upper track, inspector transform edits, title text with animation, music with fade-out, filters/adjustments/transition, split at playhead, delete + undo + redo, trim with the edge handle, move with snapping, duplicate, 2× speed, play preview and verify the canvas is painted, autosave status, reload with identical timeline and media restored, 480p MP4 export (WebCodecs engine, AAC muxed by FFmpeg.wasm) downloaded and probed: `h264` 854×480 + `aac`, 10.0 s; (4) 1:1 project exported as MP4 with the FFmpeg.wasm engine forced (libx264 in WebAssembly): `h264` 480×480 + `aac`, 4.0 s; (5) ripple delete, then WebM export (`vp9` 854×480 + `opus`, 5.0 s) and a GIF of a custom 1–3 s range (`gif` 854×480, 30 frames at 15 fps); (6) keyframes: scale keys at 0 s and 2 s, eased value 0.75 at 1 s, held value before the first key, preview overlay grows with the animation, split adds boundary keys, reset clears them | pass (6/6, ≈ 1.4 min total) |
 
 **Manual checks in this environment**
 
@@ -139,8 +139,10 @@ _Last updated: 2026-10-26 (v0.2.0)._
 
 | Engine | Content | Output | Wall time |
 |---|---|---|---|
-| WebCodecs (H.264) + FFmpeg.wasm AAC mux | 10 s, 5 clips incl. text + image + 2× speed | 854×480, 899 KB | 10.8 s |
-| FFmpeg.wasm (libx264 veryfast) | 4 s, video + audio + subtitle with wipe | 480×480, 117 KB | 16.1 s |
+| WebCodecs (H.264) + FFmpeg.wasm AAC mux | 10 s, 5 clips incl. text + image + 2× speed | MP4 854×480, 892 KB | 11.8 s |
+| FFmpeg.wasm (libx264 veryfast) | 4 s, video + audio + subtitle with wipe | MP4 480×480, 110 KB | 15.2 s |
+| WebCodecs (VP9) + Opus | 5 s, video + audio | WebM 854×480, 1.3 MB | 20.3 s |
+| FFmpeg.wasm (palettegen GIF) | 2 s range, 15 fps | GIF 854×480, 2.0 MB | 9.8 s |
 
 **Not tested here**: AAC via WebCodecs `AudioEncoder` (not available in this
 Chromium, so the AAC mux always went through FFmpeg.wasm; on Windows/macOS
