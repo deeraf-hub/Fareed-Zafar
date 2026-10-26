@@ -53,9 +53,12 @@ origin. It is downloaded by the browser only when an export actually needs it
 
 ### Alternatives
 
-* **Netlify**: base directory `video-editor`, build `npm run build`, publish
-  `dist`. Add a `[[redirects]]` rule to `/index.html` (status 200) or copy
-  `public/_redirects` (Netlify understands the same file).
+* **Netlify**: the repository root ships a `netlify.toml` (base
+  `video-editor`, build `npm run build`, publish `dist`, Node 22), so a
+  Netlify site connected to this repo builds the editor automatically and
+  deploy previews are created for pull requests. `public/_redirects` and
+  `public/_headers` are honoured as-is. Set the two `VITE_SUPABASE_*`
+  variables in *Site configuration → Environment variables* for cloud mode.
 * **Vercel**: root `video-editor`, framework Vite, add a rewrite of `/(.*)` to
   `/index.html`.
 * **GitHub Pages**: works for a single-level path; set Vite `base` accordingly
@@ -82,7 +85,7 @@ automatically.
 | Import file size | 500 MB | `LIMITS.maxImportFileBytes` |
 | Assets / clips per project | 100 / 400 | `LIMITS` |
 | Export length | 10 min | `LIMITS.maxExportSeconds` |
-| Export resolution | ≤ 1920 px edge | `EXPORT_PRESETS` |
+| Export resolution | 1080p / 720p / 480p (short side) | `EXPORT_PRESETS` |
 | Projects (local / cloud) | 50 / 50 | `LIMITS` + SQL trigger |
 | Project JSON size | 2 MB | client + SQL check |
 

@@ -112,7 +112,7 @@ _Last updated: 2026-10-26 (v0.1.0)._
 |---|---|---|---|
 | Static | `tsc -b` (strict), ESLint (TS + react-hooks) | whole codebase | pass |
 | Unit | Vitest, 39 tests in 7 files | collision/placement, move (single + multi), trim start/end (source limits, speed, neighbours), split (trim/speed continuity), duplicate/delete/close gaps, snapping, project factory, project normalisation and round-trip, clip source time, gains/fades/mutes, transition windows, crossfade adjacency, track ordering, WAV encoding, interleave, filter strings, export dimensions, renderer registry, time formatting | pass |
-| E2E | Playwright + Chromium, real media generated with ffmpeg (VP9/Opus WebM, VP8 WebM, WAV, PNG) | dashboard create/rename/reopen/delete; library import; drag-and-drop to tracks; add/move/trim/split/duplicate/speed/filter/transition/text; preview playback; autosave + reload; MP4 export verified with ffprobe | dashboard spec pass; full scenario run in progress (see PR for final result) |
+| E2E | Playwright + Chromium, real media generated with ffmpeg (VP9/Opus WebM, VP8 WebM, WAV, PNG), 4 specs | (1) dashboard create / rename / reopen / delete; (2) HTML5 drag-and-drop from the library onto a chosen video/audio lane at a given time, dragging a clip to another lane; (3) full edit: import 4 files, add clips at the playhead, image overlay placed on a free upper track, inspector transform edits, title text with animation, music with fade-out, filters/adjustments/transition, split at playhead, delete + undo + redo, trim with the edge handle, move with snapping, duplicate, 2× speed, play preview and verify the canvas is painted, autosave status, reload with identical timeline and media restored, 480p export (WebCodecs engine, AAC muxed by FFmpeg.wasm) downloaded and probed: `h264` 854×480 + `aac`, 10.0 s; (4) 1:1 project exported with the FFmpeg.wasm engine forced (libx264 in WebAssembly): `h264` 480×480 + `aac`, 4.0 s | pass (4/4, ≈ 50 s total) |
 
 **Manual checks in this environment**
 
@@ -121,8 +121,15 @@ _Last updated: 2026-10-26 (v0.1.0)._
 - Exported MP4 verified with `ffprobe`: `h264` video stream at the requested
   resolution, `aac` audio stream, duration within 0.6 s of the sequence.
 
-**Not tested here (needs a real desktop Chrome)**: the WebCodecs H.264 fast
-path and AAC via `AudioEncoder` (the test Chromium has no H.264 encoder, so the
-suite exercises the FFmpeg.wasm engine and automatic fallback); Supabase
-cloud mode end-to-end against a live project (the repository/auth code is
-unit-level only).
+**Observed export performance in the test Chromium (4 vCPU, software only)**
+
+| Engine | Content | Output | Wall time |
+|---|---|---|---|
+| WebCodecs (H.264) + FFmpeg.wasm AAC mux | 10 s, 5 clips incl. text + image + 2× speed | 854×480, 899 KB | 10.8 s |
+| FFmpeg.wasm (libx264 veryfast) | 4 s, video + audio + subtitle with wipe | 480×480, 117 KB | 16.1 s |
+
+**Not tested here**: AAC via WebCodecs `AudioEncoder` (not available in this
+Chromium, so the AAC mux always went through FFmpeg.wasm; on Windows/macOS
+Chrome the WebCodecs path is used end-to-end); Supabase cloud mode against a
+live project (the repository/auth code is exercised only by unit-level
+checks and typing); Windows desktop Chrome specifically.

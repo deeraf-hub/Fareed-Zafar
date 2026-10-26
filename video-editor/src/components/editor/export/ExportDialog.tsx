@@ -65,7 +65,7 @@ export function ExportDialog() {
 
   const preset = EXPORT_PRESETS.find((p) => p.id === presetId) ?? EXPORT_PRESETS[0];
   const dims = useMemo(
-    () => (project ? exportDimensions(project.settings.width, project.settings.height, preset.edge) : { width: 0, height: 0 }),
+    () => (project ? exportDimensions(project.settings.width, project.settings.height, preset.shortSide) : { width: 0, height: 0 }),
     [project, preset],
   );
   const hasAudio = project ? audibleClips(project).length > 0 : false;
