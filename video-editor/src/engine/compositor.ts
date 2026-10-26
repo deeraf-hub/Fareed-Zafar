@@ -2,7 +2,7 @@
  * Draws one frame of a project at a given time. Used by both the live
  * preview and the exporters so the output always matches the preview.
  */
-import type { ImageClip, Project, TextClip, Track, VideoClip, VisualClip } from '@/types/project';
+import type { ImageClip, Project, TextClip, Track, TransitionType, VideoClip, VisualClip } from '@/types/project';
 import {
   activeClipOnTrack,
   easeInOut,
@@ -17,6 +17,7 @@ import {
 import { clipEnd } from '@/model/project';
 import { clamp } from '@/lib/time';
 import { filterString } from './filters';
+import { motionAt } from './motion';
 
 export type Ctx2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
 
@@ -66,12 +67,15 @@ function drawClipWithTransitions(
 ): void {
   const tin = transitionInState(clip, time);
   const tout = transitionOutState(clip, time);
+  const W = project.settings.width;
 
-  if (tin?.transition.type === 'crossfade') {
+  if (tin && (tin.transition.type === 'crossfade' || tin.transition.type === 'push')) {
     const prev = previousAdjacentClip(project, clip);
     if (prev && prev.kind !== 'audio') {
-      // Draw the previous clip "extended" past its end under the new one.
-      drawVisual(ctx, project, prev as VisualClip, time, sources, { alphaMul: 1, transition: null });
+      // Draw the previous clip "extended" past its end under / beside the new one.
+      const presence = easeInOut(tin.progress);
+      const extraDx = tin.transition.type === 'push' ? -presence * W : 0;
+      drawVisual(ctx, project, prev as VisualClip, time, sources, { alphaMul: 1, transition: null, extraDx });
     }
   }
 
@@ -90,12 +94,110 @@ interface ActiveTransition extends TransitionState {
 interface DrawVisualOpts {
   alphaMul: number;
   transition: ActiveTransition | null;
+  /** Extra horizontal offset in project pixels (push transitions). */
+  extraDx?: number;
 }
 
 /** Fraction 0..1 of how "present" the clip is given its transition (1 = fully shown). */
 function transitionPresence(t: ActiveTransition | null): number {
   if (!t) return 1;
   return t.direction === 'in' ? t.progress : 1 - t.progress;
+}
+
+type PathBuilder = (ctx: Ctx2D) => void;
+
+/** Deterministic pseudo-random in [0,1) for grid cells (blocks transition). */
+function cellHash(i: number, j: number): number {
+  const v = Math.sin(i * 12.9898 + j * 78.233) * 43758.5453;
+  return v - Math.floor(v);
+}
+
+/** Clip-path builders for reveal transitions, in project coordinates. */
+function revealPath(type: TransitionType, dir: 'in' | 'out', presence: number, W: number, H: number): PathBuilder | null {
+  const p = clamp(presence, 0, 1);
+  switch (type) {
+    case 'wipe': {
+      const w = W * p;
+      return (c) => c.rect(dir === 'in' ? 0 : W - w, 0, w, H);
+    }
+    case 'wipe-left': {
+      const w = W * p;
+      return (c) => c.rect(dir === 'in' ? W - w : 0, 0, w, H);
+    }
+    case 'wipe-up': {
+      const h = H * p;
+      return (c) => c.rect(0, dir === 'in' ? H - h : 0, W, h);
+    }
+    case 'wipe-down': {
+      const h = H * p;
+      return (c) => c.rect(0, dir === 'in' ? 0 : H - h, W, h);
+    }
+    case 'circle': {
+      const r = p * Math.hypot(W / 2, H / 2);
+      return (c) => c.arc(W / 2, H / 2, Math.max(0, r), 0, Math.PI * 2);
+    }
+    case 'blinds': {
+      const n = 10;
+      const sw = W / n;
+      return (c) => {
+        for (let i = 0; i < n; i++) c.rect(i * sw, 0, sw * p + 0.5, H);
+      };
+    }
+    case 'blocks': {
+      const cols = 10;
+      const rows = 6;
+      const cw = W / cols;
+      const ch = H / rows;
+      return (c) => {
+        for (let i = 0; i < cols; i++) {
+          for (let j = 0; j < rows; j++) {
+            if (cellHash(i, j) < p) c.rect(i * cw, j * ch, cw + 0.5, ch + 0.5);
+          }
+        }
+      };
+    }
+    case 'clock': {
+      const R = Math.hypot(W, H);
+      const a0 = -Math.PI / 2;
+      return (c) => {
+        c.moveTo(W / 2, H / 2);
+        c.arc(W / 2, H / 2, R, a0, a0 + Math.PI * 2 * p);
+        c.closePath();
+      };
+    }
+    default:
+      return null;
+  }
+}
+
+let noiseTile: HTMLCanvasElement | OffscreenCanvas | null = null;
+const NOISE = 128;
+
+/** Cached grayscale noise tile for the grain effect (deterministic). */
+function getNoiseTile(): HTMLCanvasElement | OffscreenCanvas | null {
+  if (noiseTile) return noiseTile;
+  let canvas: HTMLCanvasElement | OffscreenCanvas;
+  if (typeof OffscreenCanvas !== 'undefined') canvas = new OffscreenCanvas(NOISE, NOISE);
+  else if (typeof document !== 'undefined') {
+    canvas = document.createElement('canvas');
+    canvas.width = NOISE;
+    canvas.height = NOISE;
+  } else return null;
+  const c = canvas.getContext('2d') as Ctx2D | null;
+  if (!c) return null;
+  const img = c.createImageData(NOISE, NOISE);
+  let seed = 1234567;
+  for (let i = 0; i < img.data.length; i += 4) {
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    const v = seed >>> 24;
+    img.data[i] = v;
+    img.data[i + 1] = v;
+    img.data[i + 2] = v;
+    img.data[i + 3] = 255;
+  }
+  c.putImageData(img, 0, 0);
+  noiseTile = canvas;
+  return canvas;
 }
 
 function drawVisual(
@@ -111,48 +213,80 @@ function drawVisual(
   const t = opts.transition;
   const presence = easeInOut(transitionPresence(t));
   const transform = transformAt(clip, time);
-  let alpha = clamp(transform.opacity, 0, 1) * opts.alphaMul;
-  let dx = 0;
-  let extraScale = 1;
-  let clipRect: { x: number; y: number; w: number; h: number } | null = null;
+  const motion = motionAt(clip, time, W, H);
+  let alpha = clamp(transform.opacity, 0, 1) * opts.alphaMul * motion.alpha;
+  let dx = motion.dx + (opts.extraDx ?? 0);
+  let dy = motion.dy;
+  let extraScale = motion.scale;
+  let scaleX = motion.scaleX;
+  let rotation = transform.rotation + motion.rotation;
+  let extraBlur = 0;
+  let flash = 0;
+  let clipPath: PathBuilder | null = null;
 
   if (t) {
+    const dir = t.direction;
+    const sign = dir === 'in' ? 1 : -1;
+    const q = 1 - presence;
     switch (t.transition.type) {
       case 'fade':
       case 'crossfade':
         alpha *= presence;
         break;
+      case 'push':
+        dx += q * W;
+        break;
       case 'slide':
-        dx = (t.direction === 'in' ? -1 : 1) * (1 - presence) * W;
+        dx += -sign * q * W;
+        break;
+      case 'slide-right':
+        dx += sign * q * W;
+        break;
+      case 'slide-up':
+        dy += sign * q * H;
+        break;
+      case 'slide-down':
+        dy += -sign * q * H;
         break;
       case 'zoom':
-        extraScale = 0.6 + 0.4 * presence;
+        extraScale *= 0.6 + 0.4 * presence;
         alpha *= presence;
         break;
-      case 'wipe': {
-        const w = W * presence;
-        clipRect = t.direction === 'in' ? { x: 0, y: 0, w, h: H } : { x: W - w, y: 0, w, h: H };
+      case 'spin':
+        rotation += -sign * 180 * q;
+        extraScale *= Math.max(0.01, presence);
+        alpha *= Math.min(1, presence * 1.5);
         break;
-      }
+      case 'flip':
+        scaleX *= Math.max(0.01, presence);
+        break;
+      case 'blur':
+        extraBlur = q * Math.max(W, H) * 0.02;
+        alpha *= Math.min(1, presence * 1.5);
+        break;
+      case 'flash':
+        flash = q;
+        break;
       default:
+        clipPath = revealPath(t.transition.type, dir, presence, W, H);
         break;
     }
   }
-  if (alpha <= 0.001) return;
+  if (alpha <= 0.001 && flash <= 0.001) return;
 
   ctx.save();
-  if (clipRect) {
+  if (clipPath) {
     ctx.beginPath();
-    ctx.rect(clipRect.x, clipRect.y, clipRect.w, clipRect.h);
+    clipPath(ctx);
     ctx.clip();
   }
   ctx.globalAlpha = clamp(alpha, 0, 1);
   const cx = W / 2 + transform.x + dx;
-  const cy = H / 2 + transform.y;
+  const cy = H / 2 + transform.y + dy;
   ctx.translate(cx, cy);
-  if (transform.rotation) ctx.rotate((transform.rotation * Math.PI) / 180);
+  if (rotation) ctx.rotate((rotation * Math.PI) / 180);
   const s = transform.scale * extraScale;
-  ctx.scale(s, s);
+  ctx.scale(s * scaleX, s);
 
   if (clip.kind === 'text') {
     drawText(ctx, project, clip, time);
@@ -165,15 +299,60 @@ function drawVisual(
         const fit = Math.min(W / size.w, H / size.h);
         const dw = size.w * fit;
         const dh = size.h * fit;
-        ctx.filter = filterString(clip.adjust);
+        ctx.filter = filterString(clip.adjust, extraBlur);
         ctx.drawImage(src, -dw / 2, -dh / 2, dw, dh);
         ctx.filter = 'none';
+        drawEffects(ctx, clip, time, dw, dh);
       }
     } else {
       drawMissing(ctx, W, H, clip.name);
     }
   }
   ctx.restore();
+
+  if (flash > 0.001) {
+    ctx.save();
+    ctx.globalAlpha = clamp(flash, 0, 1);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+  }
+}
+
+/** Vignette and grain, drawn over the clip's image rectangle (local coordinates). */
+function drawEffects(ctx: Ctx2D, clip: VideoClip | ImageClip, time: number, dw: number, dh: number): void {
+  const { vignette, grain } = clip.adjust;
+  if (vignette > 0.001) {
+    const r = Math.hypot(dw, dh) / 2;
+    const g = ctx.createRadialGradient(0, 0, r * 0.35, 0, 0, r);
+    g.addColorStop(0, 'rgba(0,0,0,0)');
+    g.addColorStop(1, `rgba(0,0,0,${clamp(vignette, 0, 1).toFixed(3)})`);
+    ctx.fillStyle = g;
+    ctx.fillRect(-dw / 2, -dh / 2, dw, dh);
+  }
+  if (grain > 0.001) {
+    const tile = getNoiseTile();
+    if (tile) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(-dw / 2, -dh / 2, dw, dh);
+      ctx.clip();
+      ctx.globalAlpha *= clamp(grain, 0, 1) * 0.45;
+      ctx.globalCompositeOperation = 'overlay';
+      // Jitter the tile per frame so the grain flickers like film.
+      const frame = Math.floor(time * 60);
+      const ox = (frame * 37) % NOISE;
+      const oy = (frame * 53) % NOISE;
+      const scale = Math.max(1, Math.round(Math.max(dw, dh) / 640));
+      const step = NOISE * scale;
+      for (let y = -dh / 2 - oy * scale; y < dh / 2; y += step) {
+        for (let x = -dw / 2 - ox * scale; x < dw / 2; x += step) {
+          ctx.drawImage(tile, x, y, step, step);
+        }
+      }
+      ctx.restore();
+    }
+  }
 }
 
 function sourceSize(src: CanvasImageSource): { w: number; h: number } {

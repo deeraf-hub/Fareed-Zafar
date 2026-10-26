@@ -6,6 +6,9 @@ import type {
   AudibleClip,
   Clip,
   KeyframeProperty,
+  Motion,
+  MotionInOut,
+  MotionLoop,
   TextAnimation,
   TextClip,
   TextPreset,
@@ -16,7 +19,8 @@ import type {
   VisualClip,
 } from '@/types/project';
 import { hasAdjust, hasSpeed, isAudibleClip, isVisualClip } from '@/types/project';
-import { ASPECT_PRESETS, clipEnd, defaultAdjust, defaultTransform, textStyleForPreset } from '@/model/project';
+import { ASPECT_PRESETS, clipEnd, defaultAdjust, defaultMotion, defaultTransform, textStyleForPreset } from '@/model/project';
+import { MOTION_IN_OUT, MOTION_LOOPS, MOTION_OUT_LABELS } from '@/engine/motion';
 import { hasKeyframes, keyframeAt, previousAdjacentClip, transformAt, withKeyframe, withoutKeyframe } from '@/model/clipMath';
 import { clamp } from '@/lib/time';
 import { FILTER_PRESETS } from '@/engine/filters';
@@ -31,15 +35,57 @@ import { formatTime } from '@/lib/time';
 
 const FONTS = ['Inter, Arial, sans-serif', 'Arial, sans-serif', 'Georgia, serif', 'Impact, sans-serif', 'Verdana, sans-serif', 'Trebuchet MS, sans-serif', 'Times New Roman, serif', 'Courier New, monospace'];
 const SPEEDS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
-const TRANSITIONS_IN: { id: TransitionType; label: string }[] = [
-  { id: 'none', label: 'None' },
-  { id: 'fade', label: 'Fade' },
-  { id: 'crossfade', label: 'Crossfade (from previous clip)' },
-  { id: 'wipe', label: 'Wipe' },
-  { id: 'slide', label: 'Slide' },
-  { id: 'zoom', label: 'Zoom' },
+interface TransitionOption {
+  id: TransitionType;
+  label: string;
+  /** Label when used as an out transition (defaults to `label`). */
+  outLabel?: string;
+  /** Only meaningful as an "in" transition with an adjacent previous clip. */
+  inOnly?: boolean;
+}
+const TRANSITION_GROUPS: { group: string; items: TransitionOption[] }[] = [
+  {
+    group: 'Basic',
+    items: [
+      { id: 'none', label: 'None' },
+      { id: 'fade', label: 'Fade' },
+      { id: 'crossfade', label: 'Crossfade (from previous clip)', inOnly: true },
+      { id: 'push', label: 'Push (previous clip slides out)', inOnly: true },
+    ],
+  },
+  {
+    group: 'Wipes & reveals',
+    items: [
+      { id: 'wipe', label: 'Wipe right', outLabel: 'Wipe out right' },
+      { id: 'wipe-left', label: 'Wipe left', outLabel: 'Wipe out left' },
+      { id: 'wipe-up', label: 'Wipe up', outLabel: 'Wipe out up' },
+      { id: 'wipe-down', label: 'Wipe down', outLabel: 'Wipe out down' },
+      { id: 'circle', label: 'Circle open', outLabel: 'Circle close' },
+      { id: 'clock', label: 'Clock wipe' },
+      { id: 'blinds', label: 'Blinds' },
+      { id: 'blocks', label: 'Blocks' },
+    ],
+  },
+  {
+    group: 'Moves',
+    items: [
+      { id: 'slide', label: 'Slide from left', outLabel: 'Slide out right' },
+      { id: 'slide-right', label: 'Slide from right', outLabel: 'Slide out left' },
+      { id: 'slide-up', label: 'Slide from bottom', outLabel: 'Slide out top' },
+      { id: 'slide-down', label: 'Slide from top', outLabel: 'Slide out bottom' },
+      { id: 'zoom', label: 'Zoom' },
+      { id: 'spin', label: 'Spin' },
+      { id: 'flip', label: 'Flip' },
+    ],
+  },
+  {
+    group: 'Light',
+    items: [
+      { id: 'blur', label: 'Blur' },
+      { id: 'flash', label: 'Flash (white)' },
+    ],
+  },
 ];
-const TRANSITIONS_OUT = TRANSITIONS_IN.filter((t) => t.id !== 'crossfade');
 const ANIMATIONS: { id: TextAnimation; label: string }[] = [
   { id: 'none', label: 'None' },
   { id: 'fade', label: 'Fade' },
@@ -122,6 +168,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
       </div>
       {clip.kind === 'text' && <TextSection clip={clip} />}
       {isVisualClip(clip) && <TransformSection clip={clip} />}
+      {isVisualClip(clip) && <MotionSection clip={clip} />}
       {hasAdjust(clip) && <AdjustSection clip={clip} />}
       {hasSpeed(clip) && <SpeedSection clip={clip} />}
       {isAudibleClip(clip) && (clip.kind === 'audio' || asset?.hasAudio !== false) && <AudioSection clip={clip} />}
@@ -209,7 +256,12 @@ function AdjustSection({ clip }: { clip: VideoClip | ImageClip }) {
       <Slider label="Brightness" value={a.brightness} min={0} max={2} onChange={(v) => set({ brightness: v })} onCommit={commit} />
       <Slider label="Contrast" value={a.contrast} min={0} max={2} onChange={(v) => set({ contrast: v })} onCommit={commit} />
       <Slider label="Saturation" value={a.saturation} min={0} max={2} onChange={(v) => set({ saturation: v })} onCommit={commit} />
-      <div className="grid grid-cols-4 gap-1.5 pt-1">
+      <Slider label="Hue" value={a.hue} min={-180} max={180} step={1} decimals={0} unit="°" onChange={(v) => set({ hue: v })} onCommit={commit} />
+      <Slider label="Blur" value={a.blur} min={0} max={40} step={0.5} decimals={1} unit="px" onChange={(v) => set({ blur: v })} onCommit={commit} />
+      <Slider label="Vignette" value={a.vignette} min={0} max={1} onChange={(v) => set({ vignette: v })} onCommit={commit} />
+      <Slider label="Grain" value={a.grain} min={0} max={1} onChange={(v) => set({ grain: v })} onCommit={commit} />
+      <p className="label pt-1">Looks</p>
+      <div className="grid grid-cols-4 gap-1.5">
         {FILTER_PRESETS.map((p) => (
           <button
             key={p.id}
@@ -277,6 +329,63 @@ function AudioSection({ clip }: { clip: AudibleClip }) {
   );
 }
 
+function MotionSection({ clip }: { clip: VisualClip }) {
+  const { update, commit } = useGesture(clip.id);
+  const updateClip = useProjectStore((s) => s.updateClip);
+  const m: Motion = clip.motion ?? defaultMotion();
+  const maxDur = Math.max(0.1, Math.min(3, clip.duration / 2));
+  const setMotion = (patch: Partial<Motion>) => updateClip<VisualClip>(clip.id, { motion: { ...m, ...patch } });
+  const slide = (patch: Partial<Motion>) => update<VisualClip>((c) => ({ motion: { ...(c.motion ?? defaultMotion()), ...patch } }));
+  return (
+    <Section
+      title="Motion"
+      actions={
+        <IconButton label="Remove motion" size="sm" disabled={!clip.motion} onClick={() => updateClip<VisualClip>(clip.id, { motion: undefined })}>
+          <RotateCcw className="h-3.5 w-3.5" />
+        </IconButton>
+      }
+    >
+      <Field label="In animation">
+        <Select value={m.in} onChange={(e) => setMotion({ in: e.target.value as MotionInOut })} data-testid="motion-in">
+          {MOTION_IN_OUT.map((o) => (
+            <option key={o.id} value={o.id}>
+              {o.label}
+            </option>
+          ))}
+        </Select>
+      </Field>
+      {m.in !== 'none' && <Slider label="Duration" value={m.inDuration} min={0.1} max={maxDur} step={0.05} unit="s" onChange={(v) => slide({ inDuration: v })} onCommit={commit} />}
+      <Field label="Out animation">
+        <Select value={m.out} onChange={(e) => setMotion({ out: e.target.value as MotionInOut })} data-testid="motion-out">
+          {MOTION_IN_OUT.map((o) => (
+            <option key={o.id} value={o.id}>
+              {MOTION_OUT_LABELS[o.id] ?? o.label}
+            </option>
+          ))}
+        </Select>
+      </Field>
+      {m.out !== 'none' && <Slider label="Duration" value={m.outDuration} min={0.1} max={maxDur} step={0.05} unit="s" onChange={(v) => slide({ outDuration: v })} onCommit={commit} />}
+      <Field label="Loop effect">
+        <Select value={m.loop} onChange={(e) => setMotion({ loop: e.target.value as MotionLoop })} data-testid="motion-loop">
+          {MOTION_LOOPS.map((o) => (
+            <option key={o.id} value={o.id}>
+              {o.label}
+            </option>
+          ))}
+        </Select>
+      </Field>
+      {m.loop !== 'none' && (
+        <>
+          <Slider label="Strength" value={m.loopStrength} min={0} max={1} onChange={(v) => slide({ loopStrength: v })} onCommit={commit} />
+          {!['ken-burns', 'ken-burns-out', 'pan-left', 'pan-right'].includes(m.loop) && (
+            <Slider label="Speed" value={m.loopSpeed} min={0.1} max={4} step={0.1} decimals={1} unit="×" onChange={(v) => slide({ loopSpeed: v })} onCommit={commit} />
+          )}
+        </>
+      )}
+    </Section>
+  );
+}
+
 function TransitionSection({ clip }: { clip: VisualClip }) {
   const { update, commit } = useGesture(clip.id);
   const updateClip = useProjectStore((s) => s.updateClip);
@@ -291,11 +400,15 @@ function TransitionSection({ clip }: { clip: VisualClip }) {
           onChange={(e) => updateClip<VisualClip>(clip.id, { transitionIn: { ...clip.transitionIn, type: e.target.value as TransitionType } })}
           data-testid="transition-in"
         >
-          {TRANSITIONS_IN.map((t) => (
-            <option key={t.id} value={t.id} disabled={t.id === 'crossfade' && !hasPrev}>
-              {t.label}
-              {t.id === 'crossfade' && !hasPrev ? ' – needs an adjacent clip' : ''}
-            </option>
+          {TRANSITION_GROUPS.map((g) => (
+            <optgroup key={g.group} label={g.group}>
+              {g.items.map((t) => (
+                <option key={t.id} value={t.id} disabled={t.inOnly && !hasPrev}>
+                  {t.label}
+                  {t.inOnly && !hasPrev ? ' – needs an adjacent clip' : ''}
+                </option>
+              ))}
+            </optgroup>
           ))}
         </Select>
       </Field>
@@ -308,10 +421,16 @@ function TransitionSection({ clip }: { clip: VisualClip }) {
           onChange={(e) => updateClip<VisualClip>(clip.id, { transitionOut: { ...clip.transitionOut, type: e.target.value as TransitionType } })}
           data-testid="transition-out"
         >
-          {TRANSITIONS_OUT.map((t) => (
-            <option key={t.id} value={t.id}>
-              {t.label}
-            </option>
+          {TRANSITION_GROUPS.map((g) => (
+            <optgroup key={g.group} label={g.group}>
+              {g.items
+                .filter((t) => !t.inOnly)
+                .map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.outLabel ?? t.label}
+                  </option>
+                ))}
+            </optgroup>
           ))}
         </Select>
       </Field>

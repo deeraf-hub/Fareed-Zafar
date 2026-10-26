@@ -51,23 +51,101 @@ export interface Transform {
 
 export type FilterPreset =
   | 'none'
-  | 'grayscale'
-  | 'sepia'
-  | 'invert'
+  | 'vivid'
   | 'warm'
   | 'cool'
   | 'vintage'
-  | 'vivid';
+  | 'grayscale'
+  | 'sepia'
+  | 'invert'
+  | 'noir'
+  | 'faded'
+  | 'cinematic'
+  | 'sunset'
+  | 'cyber'
+  | 'pastel'
+  | 'dramatic'
+  | 'chrome';
 
 export interface ColorAdjust {
   /** 1 = unchanged. Range 0..2 */
   brightness: number;
   contrast: number;
   saturation: number;
+  /** Degrees, -180..180. */
+  hue: number;
+  /** Blur radius in project pixels (0 = off). */
+  blur: number;
+  /** Edge darkening strength 0..1. */
+  vignette: number;
+  /** Film grain strength 0..1. */
+  grain: number;
   preset: FilterPreset;
 }
 
-export type TransitionType = 'none' | 'fade' | 'crossfade' | 'wipe' | 'slide' | 'zoom';
+export type TransitionType =
+  | 'none'
+  | 'fade'
+  | 'crossfade'
+  | 'push'
+  | 'wipe'
+  | 'wipe-left'
+  | 'wipe-up'
+  | 'wipe-down'
+  | 'slide'
+  | 'slide-right'
+  | 'slide-up'
+  | 'slide-down'
+  | 'zoom'
+  | 'spin'
+  | 'flip'
+  | 'circle'
+  | 'blinds'
+  | 'blocks'
+  | 'clock'
+  | 'blur'
+  | 'flash';
+
+export type MotionInOut =
+  | 'none'
+  | 'fade'
+  | 'zoom-in'
+  | 'zoom-out'
+  | 'slide-left'
+  | 'slide-right'
+  | 'slide-up'
+  | 'slide-down'
+  | 'spin'
+  | 'bounce'
+  | 'flip'
+  | 'drop';
+
+export type MotionLoop =
+  | 'none'
+  | 'ken-burns'
+  | 'ken-burns-out'
+  | 'pan-left'
+  | 'pan-right'
+  | 'pulse'
+  | 'shake'
+  | 'float'
+  | 'spin'
+  | 'swing'
+  | 'flicker';
+
+/** Per-clip motion presets, layered on top of the transform and keyframes. */
+export interface Motion {
+  in: MotionInOut;
+  /** Seconds. */
+  inDuration: number;
+  out: MotionInOut;
+  outDuration: number;
+  loop: MotionLoop;
+  /** Cycles per second for oscillating loops; multiplier for spins. */
+  loopSpeed: number;
+  /** 0..1 */
+  loopStrength: number;
+}
 
 export interface Transition {
   type: TransitionType;
@@ -133,6 +211,7 @@ export interface VisualProps {
   transitionOut: Transition;
   /** Per-property keyframes; a property without keyframes uses `transform`. */
   keyframes?: Keyframes;
+  motion?: Motion;
 }
 
 export interface VideoClip extends ClipBase, VisualProps {

@@ -1,6 +1,6 @@
 # Status: working features, gaps, limitations, tests
 
-_Last updated: 2026-10-26 (v0.2.0)._
+_Last updated: 2026-10-26 (v0.3.0)._
 
 ## Working features
 
@@ -54,10 +54,18 @@ _Last updated: 2026-10-26 (v0.2.0)._
   show as markers on the clip, and splitting/trimming keeps the motion
   identical. The preview overlay drag writes keyframes when the clip has them.
 - Speed 0.25×–4× for video and audio clips (adjusts clip length, trims kept).
-- Brightness, contrast, saturation plus looks (vivid, warm, cool, vintage,
-  black & white, sepia, invert).
-- Transitions: fade, crossfade (with the adjacent previous clip), wipe, slide,
-  zoom; in and out with adjustable duration.
+- Brightness, contrast, saturation, hue rotation, blur, vignette and film
+  grain, plus 16 looks (vivid, warm, cool, cinematic, dramatic, faded, pastel,
+  sunset, vintage, chrome, cyber, black & white, noir, sepia, invert).
+- Transitions (in and out, adjustable duration), 21 types: fade, crossfade
+  and push (with the adjacent previous clip), wipe right/left/up/down, circle,
+  clock wipe, blinds, blocks, slide from left/right/top/bottom, zoom, spin,
+  flip, blur, flash.
+- Motion presets per clip, layered on transform and keyframes: 11 in/out
+  animations (fade, zoom in/out, slide from four sides, spin, bounce, flip,
+  drop/fall) with durations, and 10 loop effects (Ken Burns in/out, pan
+  left/right, pulse, float, swing, shake, spin, flicker) with strength and
+  speed.
 - Project background colour, frame rate 24–60.
 
 **Audio**
@@ -87,6 +95,8 @@ _Last updated: 2026-10-26 (v0.2.0)._
 
 - Keyframe easing choices (only ease-in-out) and keyframes for filters,
   volume or text style.
+- Transitions that need the *next* clip's frames (e.g. push-out), 3D cube /
+  page-turn transitions, and GPU shader effects (glow, chromatic aberration).
 - Ripple trim (trimming does not shift later clips).
 - Video crop, masks, chroma key, blend modes, audio EQ/ducking.
 - Cloud media storage, sharing/collaboration, server-side rendering (the
@@ -125,8 +135,8 @@ _Last updated: 2026-10-26 (v0.2.0)._
 | Layer | Tool | What is covered | Result |
 |---|---|---|---|
 | Static | `tsc -b` (strict), ESLint (TS + react-hooks) | whole codebase | pass |
-| Unit | Vitest, 43 tests in 7 files | collision/placement, move (single + multi), trim start/end (source limits, speed, neighbours), split (trim/speed/keyframe continuity), duplicate/delete/ripple delete/close gaps, snapping, project factory, project normalisation and round-trip, clip source time, gains/fades/mutes, transition windows, crossfade adjacency, track ordering, keyframe interpolation/edit/shift/split helpers, WAV encoding, interleave, filter strings, export dimensions and formats, renderer registry, time formatting | pass |
-| E2E | Playwright + Chromium, real media generated with ffmpeg (VP9/Opus WebM, VP8 WebM, WAV, PNG), 6 specs in 4 files | (1) dashboard create / rename / reopen / delete; (2) HTML5 drag-and-drop from the library onto a chosen video/audio lane at a given time, dragging a clip to another lane; (3) full edit: import 4 files, add clips at the playhead, image overlay placed on a free upper track, inspector transform edits, title text with animation, music with fade-out, filters/adjustments/transition, split at playhead, delete + undo + redo, trim with the edge handle, move with snapping, duplicate, 2× speed, play preview and verify the canvas is painted, autosave status, reload with identical timeline and media restored, 480p MP4 export (WebCodecs engine, AAC muxed by FFmpeg.wasm) downloaded and probed: `h264` 854×480 + `aac`, 10.0 s; (4) 1:1 project exported as MP4 with the FFmpeg.wasm engine forced (libx264 in WebAssembly): `h264` 480×480 + `aac`, 4.0 s; (5) ripple delete, then WebM export (`vp9` 854×480 + `opus`, 5.0 s) and a GIF of a custom 1–3 s range (`gif` 854×480, 30 frames at 15 fps); (6) keyframes: scale keys at 0 s and 2 s, eased value 0.75 at 1 s, held value before the first key, preview overlay grows with the animation, split adds boundary keys, reset clears them | pass (6/6, ≈ 1.4 min total) |
+| Unit | Vitest, 49 tests in 8 files | collision/placement, move (single + multi), trim start/end (source limits, speed, neighbours), split (trim/speed/keyframe continuity), duplicate/delete/ripple delete/close gaps, snapping, project factory, project normalisation and round-trip, clip source time, gains/fades/mutes, transition windows, crossfade adjacency, track ordering, keyframe interpolation/edit/shift/split helpers, WAV encoding, interleave, filter strings, export dimensions and formats, renderer registry, motion presets (entrance/exit/loop maths, clamping), filter strings incl. hue/blur, time formatting | pass |
+| E2E | Playwright + Chromium, real media generated with ffmpeg (VP9/Opus WebM, VP8 WebM, WAV, PNG), 7 specs in 5 files | (1) dashboard create / rename / reopen / delete; (2) HTML5 drag-and-drop from the library onto a chosen video/audio lane at a given time, dragging a clip to another lane; (3) full edit: import 4 files, add clips at the playhead, image overlay placed on a free upper track, inspector transform edits, title text with animation, music with fade-out, filters/adjustments/transition, split at playhead, delete + undo + redo, trim with the edge handle, move with snapping, duplicate, 2× speed, play preview and verify the canvas is painted, autosave status, reload with identical timeline and media restored, 480p MP4 export (WebCodecs engine, AAC muxed by FFmpeg.wasm) downloaded and probed: `h264` 854×480 + `aac`, 10.0 s; (4) 1:1 project exported as MP4 with the FFmpeg.wasm engine forced (libx264 in WebAssembly): `h264` 480×480 + `aac`, 4.0 s; (5) ripple delete, then WebM export (`vp9` 854×480 + `opus`, 5.0 s) and a GIF of a custom 1–3 s range (`gif` 854×480, 30 frames at 15 fps); (6) keyframes: scale keys at 0 s and 2 s, eased value 0.75 at 1 s, held value before the first key, preview overlay grows with the animation, split adds boundary keys, reset clears them; (7) effects verified by reading preview pixels: black & white look neutralises colour, vignette darkens edges but not the centre, circle transition reveals only a disc early on, Ken Burns zooms past the letterbox by the last frame, slide-in motion starts off-screen | in progress at commit time; final result in the PR |
 
 **Manual checks in this environment**
 

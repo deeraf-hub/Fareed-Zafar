@@ -6,6 +6,7 @@ import type {
   ColorAdjust,
   ImageClip,
   MediaAsset,
+  Motion,
   Project,
   ProjectSettings,
   ProjectSummary,
@@ -32,7 +33,11 @@ export function defaultTransform(): Transform {
 }
 
 export function defaultAdjust(): ColorAdjust {
-  return { brightness: 1, contrast: 1, saturation: 1, preset: 'none' };
+  return { brightness: 1, contrast: 1, saturation: 1, hue: 0, blur: 0, vignette: 0, grain: 0, preset: 'none' };
+}
+
+export function defaultMotion(): Motion {
+  return { in: 'none', inDuration: 0.6, out: 'none', outDuration: 0.6, loop: 'none', loopSpeed: 1, loopStrength: 0.5 };
 }
 
 export function noTransition(): Transition {
@@ -266,6 +271,7 @@ function normalizeClip(c: Clip, settings: ProjectSettings): Clip {
         adjust: { ...defaultAdjust(), ...c.adjust },
         transitionIn: c.transitionIn ?? noTransition(),
         transitionOut: c.transitionOut ?? noTransition(),
+        motion: c.motion ? { ...defaultMotion(), ...c.motion } : undefined,
         audio: { ...defaultAudio(), ...c.audio },
       };
     case 'image':
@@ -275,6 +281,7 @@ function normalizeClip(c: Clip, settings: ProjectSettings): Clip {
         adjust: { ...defaultAdjust(), ...c.adjust },
         transitionIn: c.transitionIn ?? noTransition(),
         transitionOut: c.transitionOut ?? noTransition(),
+        motion: c.motion ? { ...defaultMotion(), ...c.motion } : undefined,
       };
     case 'audio':
       return { ...c, trimStart: c.trimStart ?? 0, speed: c.speed || 1, audio: { ...defaultAudio(), ...c.audio } };
@@ -287,6 +294,7 @@ function normalizeClip(c: Clip, settings: ProjectSettings): Clip {
         transform: { ...defaultTransform(), ...c.transform },
         transitionIn: c.transitionIn ?? noTransition(),
         transitionOut: c.transitionOut ?? noTransition(),
+        motion: c.motion ? { ...defaultMotion(), ...c.motion } : undefined,
       };
     default:
       throw new Error(`Unknown clip kind ${(c as Clip).kind}`);
