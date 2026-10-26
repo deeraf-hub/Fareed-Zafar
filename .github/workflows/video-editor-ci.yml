@@ -1,7 +1,13 @@
 name: video-editor CI
 
 on:
+  # Pushes to the default branch; feature branches are covered by pull_request
+  # so each change runs the suite once, not twice.
   push:
+    branches:
+      - main
+      - master
+      - claude/messenger-whatsapp-forwarding-v76e6z
     paths:
       - 'video-editor/**'
       - '.github/workflows/video-editor-ci.yml'
@@ -9,6 +15,7 @@ on:
     paths:
       - 'video-editor/**'
       - '.github/workflows/video-editor-ci.yml'
+  workflow_dispatch:
 
 defaults:
   run:
