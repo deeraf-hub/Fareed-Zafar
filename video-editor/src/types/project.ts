@@ -17,6 +17,10 @@ export interface ProjectSettings {
   fps: number;
   /** CSS colour drawn behind every frame. */
   background: string;
+  /** How much ducked audio tracks are lowered under other audible clips (0..1). */
+  duckAmount?: number;
+  /** Seconds over which ducking ramps in and out. */
+  duckRelease?: number;
 }
 
 export interface MediaAsset {
@@ -163,7 +167,19 @@ export interface AudioProps {
 }
 
 export type TextPreset = 'title' | 'subtitle' | 'body';
-export type TextAnimation = 'none' | 'fade' | 'slide-up' | 'pop' | 'typewriter';
+export type TextAnimation =
+  | 'none'
+  | 'fade'
+  | 'slide-up'
+  | 'pop'
+  | 'typewriter'
+  | 'bounce'
+  | 'zoom'
+  | 'spin'
+  | 'blur'
+  | 'wave'
+  | 'rise'
+  | 'glitch';
 
 export interface TextStyle {
   fontFamily: string;
@@ -183,6 +199,11 @@ export interface TextStyle {
   /** Fraction of project width used for word wrapping. */
   maxWidth: number;
   lineHeight: number;
+  /** Extra spacing between letters, project pixels. */
+  letterSpacing?: number;
+  uppercase?: boolean;
+  /** Second colour for a vertical gradient fill; empty = solid. */
+  gradientTo?: string;
 }
 
 interface ClipBase {
@@ -197,10 +218,38 @@ interface ClipBase {
 
 export type KeyframeProperty = 'x' | 'y' | 'scale' | 'rotation' | 'opacity';
 
+export type KeyframeEasing = 'ease' | 'linear' | 'ease-in' | 'ease-out' | 'bounce';
+
 export interface Keyframe {
   /** Seconds from the clip's start on the timeline. */
   time: number;
   value: number;
+  /** Interpolation towards the next keyframe (default 'ease'). */
+  easing?: KeyframeEasing;
+}
+
+/** Fractions (0..1) removed from each edge of the source image. */
+export interface Crop {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+
+export type MaskShape = 'none' | 'rectangle' | 'rounded' | 'circle' | 'ellipse' | 'linear';
+
+export interface Mask {
+  shape: MaskShape;
+  /** Fraction of the clip's drawn size, 0.05..1. */
+  size: number;
+  /** Soft edge, 0..1. */
+  feather: number;
+  /** Offset from the clip centre as a fraction of its drawn width/height, -0.5..0.5. */
+  x: number;
+  y: number;
+  /** Degrees. */
+  rotation: number;
+  invert: boolean;
 }
 
 export type Keyframes = Partial<Record<KeyframeProperty, Keyframe[]>>;
@@ -222,6 +271,8 @@ export interface VideoClip extends ClipBase, VisualProps {
   /** Playback rate; source seconds consumed per timeline second. */
   speed: number;
   adjust: ColorAdjust;
+  crop?: Crop;
+  mask?: Mask;
   audio: AudioProps;
 }
 
@@ -229,6 +280,8 @@ export interface ImageClip extends ClipBase, VisualProps {
   kind: 'image';
   assetId: string;
   adjust: ColorAdjust;
+  crop?: Crop;
+  mask?: Mask;
 }
 
 export interface AudioClip extends ClipBase {
@@ -259,6 +312,8 @@ export interface Track {
   muted: boolean;
   hidden: boolean;
   locked: boolean;
+  /** Audio tracks only: lower this track while other (non-ducked) clips are audible. */
+  duck?: boolean;
 }
 
 export interface Project {

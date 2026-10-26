@@ -231,7 +231,7 @@ export class Player implements FrameSources {
         } else if (Math.abs(v.el.currentTime - want) > DRIFT_TOLERANCE && !v.el.seeking) {
           v.el.currentTime = want;
         }
-        if (v.gain) v.gain.gain.value = clipGainAt(clip, track, t);
+        if (v.gain) v.gain.gain.value = clipGainAt(clip, track, t, project);
       } else if (clip.kind === 'image' && isActive(clip, t)) {
         void this.pool.ensureImage(clip);
       }
@@ -267,7 +267,7 @@ export class Player implements FrameSources {
         a.el.currentTime = want;
       }
       const track = project.tracks.find((x) => x.id === clip.trackId);
-      const g = clipGainAt(clip, track, t);
+      const g = clipGainAt(clip, track, t, project);
       if (a.gain) a.gain.gain.value = g;
       else a.el.volume = Math.min(1, g);
     }

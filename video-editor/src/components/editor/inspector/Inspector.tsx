@@ -1,11 +1,15 @@
 import { useRef } from 'react';
-import { AlignCenter, AlignLeft, AlignRight, Bold, Diamond, Eye, EyeOff, FoldHorizontal, Italic, Lock, LockOpen, Plus, RotateCcw, Trash2, Volume2, VolumeX } from 'lucide-react';
+import { AlignCenter, AlignLeft, AlignRight, ArrowDownToLine, Bold, Diamond, Eye, EyeOff, FoldHorizontal, Italic, Lock, LockOpen, Plus, RotateCcw, Trash2, Volume2, VolumeX } from 'lucide-react';
 import clsx from 'clsx';
 import type {
   AspectRatio,
   AudibleClip,
   Clip,
+  Crop,
+  KeyframeEasing,
   KeyframeProperty,
+  Mask,
+  MaskShape,
   Motion,
   MotionInOut,
   MotionLoop,
@@ -19,9 +23,9 @@ import type {
   VisualClip,
 } from '@/types/project';
 import { hasAdjust, hasSpeed, isAudibleClip, isVisualClip } from '@/types/project';
-import { ASPECT_PRESETS, clipEnd, defaultAdjust, defaultMotion, defaultTransform, textStyleForPreset } from '@/model/project';
+import { ASPECT_PRESETS, DEFAULT_DUCK_AMOUNT, clipEnd, defaultAdjust, defaultCrop, defaultMask, defaultMotion, defaultTransform, textStyleForPreset } from '@/model/project';
 import { MOTION_IN_OUT, MOTION_LOOPS, MOTION_OUT_LABELS } from '@/engine/motion';
-import { hasKeyframes, keyframeAt, previousAdjacentClip, transformAt, withKeyframe, withoutKeyframe } from '@/model/clipMath';
+import { KEYFRAME_EASINGS, hasKeyframes, keyframeAt, keyframeEasingAt, previousAdjacentClip, transformAt, withKeyframe, withKeyframeEasing, withoutKeyframe } from '@/model/clipMath';
 import { clamp } from '@/lib/time';
 import { FILTER_PRESETS } from '@/engine/filters';
 import { useProjectStore, selectSelectedClip, type CommitOpts } from '@/store/projectStore';
@@ -91,7 +95,29 @@ const ANIMATIONS: { id: TextAnimation; label: string }[] = [
   { id: 'fade', label: 'Fade' },
   { id: 'slide-up', label: 'Slide up' },
   { id: 'pop', label: 'Pop' },
+  { id: 'bounce', label: 'Bounce' },
+  { id: 'zoom', label: 'Zoom' },
+  { id: 'spin', label: 'Spin' },
+  { id: 'blur', label: 'Blur' },
   { id: 'typewriter', label: 'Typewriter' },
+  { id: 'rise', label: 'Rise (letter by letter)' },
+  { id: 'wave', label: 'Wave (letters)' },
+  { id: 'glitch', label: 'Glitch' },
+];
+const MASK_SHAPES: { id: MaskShape; label: string }[] = [
+  { id: 'none', label: 'None' },
+  { id: 'rectangle', label: 'Rectangle' },
+  { id: 'rounded', label: 'Rounded rectangle' },
+  { id: 'circle', label: 'Circle' },
+  { id: 'ellipse', label: 'Ellipse' },
+  { id: 'linear', label: 'Linear (split)' },
+];
+const CROP_ASPECTS: { label: string; ratio: number }[] = [
+  { label: '1:1', ratio: 1 },
+  { label: '16:9', ratio: 16 / 9 },
+  { label: '9:16', ratio: 9 / 16 },
+  { label: '4:5', ratio: 4 / 5 },
+  { label: '4:3', ratio: 4 / 3 },
 ];
 
 /** Groups rapid slider changes into one undo step. */
@@ -170,6 +196,7 @@ function ClipInspector({ clip }: { clip: Clip }) {
       {isVisualClip(clip) && <TransformSection clip={clip} />}
       {isVisualClip(clip) && <MotionSection clip={clip} />}
       {hasAdjust(clip) && <AdjustSection clip={clip} />}
+      {hasAdjust(clip) && <CropMaskSection clip={clip} />}
       {hasSpeed(clip) && <SpeedSection clip={clip} />}
       {isAudibleClip(clip) && (clip.kind === 'audio' || asset?.hasAudio !== false) && <AudioSection clip={clip} />}
       {isVisualClip(clip) && <TransitionSection clip={clip} />}
@@ -201,6 +228,7 @@ function TransformSection({ clip }: { clip: VisualClip }) {
       return { keyframes: withKeyframe(c.keyframes, prop, local, transformAt(c, c.start + local)[prop], tolerance) };
     });
   };
+  const easingHere = keyframeEasingAt(clip.keyframes, local, tolerance);
   const kfButton = (prop: KeyframeProperty, label: string) => {
     const has = hasKeyframes(clip, prop);
     const at = Boolean(keyframeAt(clip.keyframes, prop, local, tolerance));
@@ -232,9 +260,92 @@ function TransformSection({ clip }: { clip: VisualClip }) {
       <Slider leading={kfButton('scale', 'Scale')} label="Scale" value={t.scale} min={0.05} max={4} step={0.01} onChange={(v) => set('scale', v)} onCommit={commit} />
       <Slider leading={kfButton('rotation', 'Rotation')} label="Rotation" value={t.rotation} min={-180} max={180} step={1} decimals={0} unit="°" onChange={(v) => set('rotation', v)} onCommit={commit} />
       <Slider leading={kfButton('opacity', 'Opacity')} label="Opacity" value={t.opacity} min={0} max={1} step={0.01} onChange={(v) => set('opacity', v)} onCommit={commit} />
+      {easingHere !== undefined && (
+        <Field label="Easing from this keyframe">
+          <Select value={easingHere} onChange={(e) => updateClip<VisualClip>(clip.id, (c) => ({ keyframes: withKeyframeEasing(c.keyframes, local, e.target.value as KeyframeEasing, tolerance) }))} data-testid="kf-easing">
+            {KEYFRAME_EASINGS.map((o) => (
+              <option key={o.id} value={o.id}>
+                {o.label}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      )}
       <p className="text-[11px] text-ink-400">
         Click a diamond to add a keyframe at the playhead. Once a property has keyframes, changing it at another time adds a keyframe there and the value animates between them.
       </p>
+    </Section>
+  );
+}
+
+function CropMaskSection({ clip }: { clip: VideoClip | ImageClip }) {
+  const { update, commit } = useGesture(clip.id);
+  const updateClip = useProjectStore((s) => s.updateClip);
+  const asset = useProjectStore((s) => s.project?.assets.find((a) => a.id === clip.assetId));
+  const crop: Crop = clip.crop ?? defaultCrop();
+  const mask: Mask = clip.mask ?? defaultMask();
+  const setCrop = (patch: Partial<Crop>) => update<VideoClip | ImageClip>((c) => ({ crop: { ...(c.crop ?? defaultCrop()), ...patch } }));
+  const setMask = (patch: Partial<Mask>, history = false) =>
+    history
+      ? updateClip<VideoClip | ImageClip>(clip.id, { mask: { ...mask, ...patch } })
+      : update<VideoClip | ImageClip>((c) => ({ mask: { ...(c.mask ?? defaultMask()), ...patch } }));
+  const cropToAspect = (ratio: number) => {
+    const w = asset?.width || 16;
+    const h = asset?.height || 9;
+    const current = w / h;
+    let next: Crop;
+    if (current > ratio) {
+      const keep = (h * ratio) / w; // fraction of width to keep
+      next = { left: (1 - keep) / 2, right: (1 - keep) / 2, top: 0, bottom: 0 };
+    } else {
+      const keep = w / ratio / h;
+      next = { top: (1 - keep) / 2, bottom: (1 - keep) / 2, left: 0, right: 0 };
+    }
+    updateClip<VideoClip | ImageClip>(clip.id, { crop: next });
+  };
+  const maxCrop = 0.9;
+  return (
+    <Section
+      title="Crop & mask"
+      actions={
+        <IconButton label="Reset crop and mask" size="sm" disabled={!clip.crop && !clip.mask} onClick={() => updateClip<VideoClip | ImageClip>(clip.id, { crop: undefined, mask: undefined })}>
+          <RotateCcw className="h-3.5 w-3.5" />
+        </IconButton>
+      }
+    >
+      <div className="flex flex-wrap gap-1.5">
+        {CROP_ASPECTS.map((a) => (
+          <button key={a.label} type="button" onClick={() => cropToAspect(a.ratio)} className="rounded-md border border-ink-600 px-2 py-1 text-xs text-ink-300 hover:border-ink-500" data-testid={`crop-${a.label}`}>
+            {a.label}
+          </button>
+        ))}
+      </div>
+      <Slider label="Crop left" value={crop.left} min={0} max={maxCrop} onChange={(v) => setCrop({ left: Math.min(v, maxCrop - crop.right) })} onCommit={commit} />
+      <Slider label="Crop right" value={crop.right} min={0} max={maxCrop} onChange={(v) => setCrop({ right: Math.min(v, maxCrop - crop.left) })} onCommit={commit} />
+      <Slider label="Crop top" value={crop.top} min={0} max={maxCrop} onChange={(v) => setCrop({ top: Math.min(v, maxCrop - crop.bottom) })} onCommit={commit} />
+      <Slider label="Crop bottom" value={crop.bottom} min={0} max={maxCrop} onChange={(v) => setCrop({ bottom: Math.min(v, maxCrop - crop.top) })} onCommit={commit} />
+      <Field label="Mask shape">
+        <Select value={mask.shape} onChange={(e) => setMask({ shape: e.target.value as MaskShape }, true)} data-testid="mask-shape">
+          {MASK_SHAPES.map((m) => (
+            <option key={m.id} value={m.id}>
+              {m.label}
+            </option>
+          ))}
+        </Select>
+      </Field>
+      {mask.shape !== 'none' && (
+        <>
+          <Slider label="Size" value={mask.size} min={0.05} max={1} onChange={(v) => setMask({ size: v })} onCommit={commit} />
+          <Slider label="Feather" value={mask.feather} min={0} max={1} onChange={(v) => setMask({ feather: v })} onCommit={commit} />
+          <Slider label="Offset X" value={mask.x} min={-0.5} max={0.5} onChange={(v) => setMask({ x: v })} onCommit={commit} />
+          <Slider label="Offset Y" value={mask.y} min={-0.5} max={0.5} onChange={(v) => setMask({ y: v })} onCommit={commit} />
+          <Slider label="Rotation" value={mask.rotation} min={-180} max={180} step={1} decimals={0} unit="°" onChange={(v) => setMask({ rotation: v })} onCommit={commit} />
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-ink-300">Invert mask</span>
+            <Toggle label="Invert mask" checked={mask.invert} onChange={(v) => setMask({ invert: v }, true)} />
+          </div>
+        </>
+      )}
     </Section>
   );
 }
@@ -534,6 +645,18 @@ function TextSection({ clip }: { clip: TextClip }) {
         <Toggle label="Drop shadow" checked={st.shadow} onChange={(v) => setStyle({ shadow: v })} />
       </div>
       <Slider label="Max width" value={st.maxWidth} min={0.2} max={1} step={0.05} onChange={(v) => setStyle({ maxWidth: v }, false)} onCommit={commit} />
+      <Slider label="Letter spacing" value={st.letterSpacing ?? 0} min={-10} max={60} step={1} decimals={0} unit="px" onChange={(v) => setStyle({ letterSpacing: v }, false)} onCommit={commit} />
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-ink-300">Uppercase</span>
+        <Toggle label="Uppercase" checked={Boolean(st.uppercase)} onChange={(v) => setStyle({ uppercase: v })} />
+      </div>
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xs text-ink-300">Gradient fill</span>
+        <div className="flex items-center gap-2">
+          <input type="color" value={st.gradientTo || '#7aa2ff'} disabled={!st.gradientTo} onChange={(e) => setStyle({ gradientTo: e.target.value }, false)} onBlur={commit} aria-label="Gradient end colour" />
+          <Toggle label="Gradient fill" checked={Boolean(st.gradientTo)} onChange={(v) => setStyle({ gradientTo: v ? '#7aa2ff' : '' })} />
+        </div>
+      </div>
     </Section>
   );
 }
@@ -548,6 +671,7 @@ function ProjectInspector() {
   const removeTrack = useProjectStore((s) => s.removeTrack);
   const updateTrack = useProjectStore((s) => s.updateTrack);
   const closeGaps = useProjectStore((s) => s.closeGaps);
+  const hasDucking = project.tracks.some((t) => t.duck);
   return (
     <div data-testid="project-inspector">
       <Section title="Project">
@@ -589,6 +713,15 @@ function ProjectInspector() {
             <input type="color" value={project.settings.background} onChange={(e) => setBackground(e.target.value)} aria-label="Background colour" className="!h-9 !w-full" />
           </Field>
         </div>
+        {hasDucking && (
+          <Slider
+            label="Ducking"
+            value={project.settings.duckAmount ?? DEFAULT_DUCK_AMOUNT}
+            min={0}
+            max={1}
+            onChange={(v) => useProjectStore.getState().setDuckAmount(v)}
+          />
+        )}
       </Section>
       <Section
         title="Tracks"
@@ -623,6 +756,11 @@ function TrackRowItem({ track, onUpdate, onRemove, onCloseGaps, canRemove }: { t
       {track.kind === 'video' && (
         <IconButton label={track.hidden ? 'Show track' : 'Hide track'} size="sm" active={track.hidden} onClick={() => onUpdate({ hidden: !track.hidden })}>
           {track.hidden ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+        </IconButton>
+      )}
+      {track.kind === 'audio' && (
+        <IconButton label={track.duck ? 'Stop ducking under other audio' : 'Duck under other audio (auto lower)'} size="sm" active={Boolean(track.duck)} onClick={() => onUpdate({ duck: !track.duck })} data-testid="track-duck">
+          <ArrowDownToLine className="h-3.5 w-3.5" />
         </IconButton>
       )}
       <IconButton label={track.muted ? 'Unmute track' : 'Mute track'} size="sm" active={track.muted} onClick={() => onUpdate({ muted: !track.muted })}>

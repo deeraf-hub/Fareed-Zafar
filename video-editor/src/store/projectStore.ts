@@ -77,6 +77,7 @@ export interface ProjectState {
   setAspect(aspect: AspectRatio): void;
   setFps(fps: number): void;
   setBackground(color: string): void;
+  setDuckAmount(amount: number): void;
 
   // assets
   addAsset(asset: MediaAsset): void;
@@ -231,6 +232,9 @@ export const useProjectStore = create<ProjectState>((set, get) => {
     },
     setBackground(color) {
       commit((p) => ({ settings: { ...p.settings, background: color } }), { history: false });
+    },
+    setDuckAmount(amount) {
+      commit((p) => ({ settings: { ...p.settings, duckAmount: clamp(amount, 0, 1) } }), { history: false });
     },
 
     addAsset(asset) {

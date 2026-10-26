@@ -122,3 +122,39 @@ describe('keyframes', () => {
     expect(parts.right!.x).toEqual([{ time: 0, value: 5 }, { time: 1, value: 10 }]);
   });
 });
+
+describe('ducking', () => {
+  it('lowers ducked tracks while other audible clips play, with a release ramp', async () => {
+    const { duckingFactor, clipGainAt } = await import('./clipMath');
+    const { project, clip } = base(); // video clip 2..7 s on the video track
+    const audioTrack = { ...project.tracks[2], duck: true };
+    project.tracks[2] = audioTrack;
+    project.settings.duckAmount = 0.6;
+    project.settings.duckRelease = 0.5;
+    expect(duckingFactor(project, audioTrack, 4)).toBeCloseTo(0.4); // inside the voice interval
+    expect(duckingFactor(project, audioTrack, 0)).toBe(1); // far before
+    expect(duckingFactor(project, audioTrack, 1.75)).toBeCloseTo(0.7); // halfway through the ramp
+    expect(duckingFactor(project, { ...audioTrack, duck: false }, 4)).toBe(1);
+    const music = { ...clip, id: 'm', kind: 'audio' as const, trackId: audioTrack.id, start: 0, duration: 10 };
+    expect(clipGainAt(music, audioTrack, 4, project)).toBeCloseTo(0.4);
+    expect(clipGainAt(music, audioTrack, 4)).toBe(1); // no project → no ducking
+  });
+});
+
+describe('keyframe easing', () => {
+  it('honours per-key easing and edits it', async () => {
+    const { keyframeValueAt, applyEasing, withKeyframeEasing, keyframeEasingAt } = await import('./clipMath');
+    const linear = [{ time: 0, value: 0, easing: 'linear' as const }, { time: 2, value: 10 }];
+    expect(keyframeValueAt(linear, 0.5)).toBeCloseTo(2.5);
+    expect(applyEasing('ease-out', 0.5)).toBeCloseTo(0.875);
+    expect(applyEasing('ease-in', 0.5)).toBeCloseTo(0.125);
+    expect(applyEasing('bounce', 1)).toBeCloseTo(1);
+    const edited = withKeyframeEasing({ x: linear, y: [{ time: 0, value: 1 }] }, 0, 'bounce', 0.01)!;
+    expect(edited.x![0].easing).toBe('bounce');
+    expect(edited.y![0].easing).toBe('bounce');
+    expect(edited.x![1].easing).toBeUndefined();
+    expect(keyframeEasingAt(edited, 0, 0.01)).toBe('bounce');
+    expect(keyframeEasingAt(edited, 2, 0.01)).toBe('ease');
+    expect(keyframeEasingAt(edited, 1, 0.01)).toBeUndefined();
+  });
+});

@@ -76,4 +76,46 @@ test('filters, vignette, transitions and motion change the rendered preview', as
   await expect.poll(async () => (await pixel(page, 0.5, 0.5))[0]).toBeLessThan(20);
   await page.getByTestId('time-ruler').click({ position: { x: 120, y: 10 } });
   await expect.poll(async () => (await pixel(page, 0.5, 0.5))[0]).toBeGreaterThan(200);
+  await page.getByTestId('motion-in').selectOption('none');
+  await page.getByTestId('motion-loop').selectOption('none');
+
+  // Crop to 1:1: the 400×200 image becomes a centred square, so the far left is background.
+  await page.getByTestId('crop-1:1').click();
+  await expect.poll(async () => (await pixel(page, 0.1, 0.5))[0]).toBeLessThan(20);
+  await expect.poll(async () => (await pixel(page, 0.5, 0.5))[0]).toBeGreaterThan(200);
+  await page.getByLabel('Reset crop and mask').click();
+  await expect.poll(async () => (await pixel(page, 0.1, 0.5))[0]).toBeGreaterThan(200);
+
+  // Circle mask hides the image outside the disc; invert flips it.
+  await page.getByTestId('mask-shape').selectOption('circle');
+  await page.getByLabel('Size value').fill('0.5');
+  await page.getByLabel('Size value').press('Enter');
+  await expect.poll(async () => (await pixel(page, 0.2, 0.5))[0]).toBeLessThan(20);
+  await expect.poll(async () => (await pixel(page, 0.5, 0.5))[0]).toBeGreaterThan(200);
+  await page.getByLabel('Invert mask').click();
+  await expect.poll(async () => (await pixel(page, 0.5, 0.5))[0]).toBeLessThan(20);
+  await expect.poll(async () => (await pixel(page, 0.2, 0.5))[0]).toBeGreaterThan(200);
+  await page.getByLabel('Reset crop and mask').click();
+
+  // Text animations render without errors.
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.getByTestId('tab-text').click();
+  await page.getByTestId('add-text-title').click();
+  await page.getByTestId('text-content').fill('Wave hello');
+  for (const anim of ['wave', 'rise', 'glitch', 'blur', 'spin', 'bounce']) {
+    await page.getByTestId('text-animation').selectOption(anim);
+    await page.getByTestId('time-ruler').click({ position: { x: 130 + Math.floor(Math.random() * 10), y: 10 } });
+    await page.waitForTimeout(80);
+  }
+  await page.getByLabel('Uppercase').click();
+  await page.getByLabel('Gradient fill').click();
+  expect(errors).toEqual([]);
+
+  // Audio tracks can be set to duck; the project-level amount appears.
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('project-inspector')).toBeVisible();
+  await page.getByTestId('track-duck').click();
+  await expect(page.getByTestId('track-duck')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByLabel('Ducking value')).toHaveValue('0.70');
 });

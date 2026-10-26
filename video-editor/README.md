@@ -50,15 +50,17 @@ features, incomplete features, known limitations and the tests performed.
 * Multi-track timeline with drag-and-drop from the library, move between
   tracks, trim, split, duplicate, delete, ripple delete, close gaps, snapping,
   zoom, undo/redo
-* Text, titles and subtitles with fonts, outline, background box, shadow and
-  animations; image overlays
-* Position, scale, rotation, opacity (static or keyframed), speed (0.25×–4×)
+* Text, titles and subtitles with fonts, outline, background box, shadow,
+  letter spacing, gradients and 11 animations; image overlays
+* Position, scale, rotation, opacity (static or keyframed with easing), crop,
+  shape masks with feather, speed (0.25×–4×)
 * 21 transitions (fades, crossfade, push, directional wipes, circle, clock,
   blinds, blocks, slides, zoom, spin, flip, blur, flash), 16 looks, and
   brightness/contrast/saturation/hue/blur/vignette/grain
 * Motion presets: 11 in/out animations and 10 loop effects (Ken Burns, pan,
   pulse, float, swing, shake, spin, flicker)
-* Audio tracks with volume, fade in/out, mute, track mute/hide/lock
+* Audio tracks with volume, fade in/out, mute, automatic ducking under other
+  audio, track mute/hide/lock
 * Real-time preview of the composition with synced audio
 * MP4 (H.264 + AAC), WebM (VP9 + Opus) and GIF export of the whole sequence
   or a custom range, via WebCodecs or FFmpeg.wasm, with progress and cancel

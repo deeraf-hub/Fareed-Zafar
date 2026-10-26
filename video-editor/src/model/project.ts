@@ -4,7 +4,9 @@ import type {
   AudioProps,
   Clip,
   ColorAdjust,
+  Crop,
   ImageClip,
+  Mask,
   MediaAsset,
   Motion,
   Project,
@@ -35,6 +37,17 @@ export function defaultTransform(): Transform {
 export function defaultAdjust(): ColorAdjust {
   return { brightness: 1, contrast: 1, saturation: 1, hue: 0, blur: 0, vignette: 0, grain: 0, preset: 'none' };
 }
+
+export function defaultCrop(): Crop {
+  return { left: 0, top: 0, right: 0, bottom: 0 };
+}
+
+export function defaultMask(): Mask {
+  return { shape: 'none', size: 0.8, feather: 0, x: 0, y: 0, rotation: 0, invert: false };
+}
+
+export const DEFAULT_DUCK_AMOUNT = 0.7;
+export const DEFAULT_DUCK_RELEASE = 0.4;
 
 export function defaultMotion(): Motion {
   return { in: 'none', inDuration: 0.6, out: 'none', outDuration: 0.6, loop: 'none', loopSpeed: 1, loopStrength: 0.5 };

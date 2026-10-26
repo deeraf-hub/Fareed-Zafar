@@ -7,6 +7,7 @@ import type { AudibleClip, Project } from '@/types/project';
 import { mediaRegistry } from '@/media/mediaRegistry';
 import { decodeAudio } from '@/media/audioDecode';
 import { clipEnd } from '@/model/project';
+import { duckingFactor } from '@/model/clipMath';
 
 export interface MixOptions {
   startTime: number;
@@ -85,6 +86,22 @@ export async function renderAudioMix(project: Project, opts: MixOptions): Promis
         g.setValueAtTime(startVal, s);
         g.linearRampToValueAtTime(0, fadeEndMix);
       }
+    }
+    // Ducking: sample the envelope and apply it through a second gain stage.
+    const track = project.tracks.find((t) => t.id === clip.trackId);
+    if (track?.duck) {
+      const duck = offline.createGain();
+      gain.disconnect();
+      gain.connect(duck);
+      duck.connect(offline.destination);
+      const stepS = 0.05;
+      const n = Math.max(2, Math.ceil(remainingTimeline / stepS) + 1);
+      const curve = new Float32Array(n);
+      for (let i = 0; i < n; i++) {
+        const tl = clip.start + skipped + Math.min(remainingTimeline, i * stepS);
+        curve[i] = duckingFactor(project, track, tl);
+      }
+      duck.gain.setValueCurveAtTime(curve, playFrom, Math.max(0.001, remainingTimeline));
     }
     source.start(playFrom, Math.min(sourceOffset, Math.max(0, buffer.duration - 0.001)), remainingTimeline * clip.speed);
     scheduled++;

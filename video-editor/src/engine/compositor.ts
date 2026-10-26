@@ -2,7 +2,7 @@
  * Draws one frame of a project at a given time. Used by both the live
  * preview and the exporters so the output always matches the preview.
  */
-import type { ImageClip, Project, TextClip, Track, TransitionType, VideoClip, VisualClip } from '@/types/project';
+import type { Crop, ImageClip, Mask, Project, TextClip, Track, TransitionType, VideoClip, VisualClip } from '@/types/project';
 import {
   activeClipOnTrack,
   easeInOut,
@@ -295,13 +295,19 @@ function drawVisual(
     if (src) {
       const size = sourceSize(src);
       if (size.w > 0 && size.h > 0) {
-        // "Contain" fit into the project frame at scale 1.
-        const fit = Math.min(W / size.w, H / size.h);
-        const dw = size.w * fit;
-        const dh = size.h * fit;
-        ctx.filter = filterString(clip.adjust, extraBlur);
-        ctx.drawImage(src, -dw / 2, -dh / 2, dw, dh);
-        ctx.filter = 'none';
+        // Crop the source, then "contain" fit the remaining region at scale 1.
+        const { sx, sy, sw, sh } = cropRect(size, clip.crop);
+        const fit = Math.min(W / sw, H / sh);
+        const dw = sw * fit;
+        const dh = sh * fit;
+        const filter = filterString(clip.adjust, extraBlur);
+        if (clip.mask && clip.mask.shape !== 'none') {
+          drawMaskedImage(ctx, src, sx, sy, sw, sh, dw, dh, clip.mask, filter);
+        } else {
+          ctx.filter = filter;
+          ctx.drawImage(src, sx, sy, sw, sh, -dw / 2, -dh / 2, dw, dh);
+          ctx.filter = 'none';
+        }
         drawEffects(ctx, clip, time, dw, dh);
       }
     } else {
@@ -317,6 +323,119 @@ function drawVisual(
     ctx.fillRect(0, 0, W, H);
     ctx.restore();
   }
+}
+
+/** Source rectangle after applying the crop fractions. */
+export function cropRect(size: { w: number; h: number }, crop?: Crop): { sx: number; sy: number; sw: number; sh: number } {
+  if (!crop) return { sx: 0, sy: 0, sw: size.w, sh: size.h };
+  const l = clamp(crop.left, 0, 0.95);
+  const t = clamp(crop.top, 0, 0.95);
+  const r = clamp(crop.right, 0, 0.95);
+  const b = clamp(crop.bottom, 0, 0.95);
+  const sw = size.w * Math.max(0.02, 1 - l - r);
+  const sh = size.h * Math.max(0.02, 1 - t - b);
+  return { sx: size.w * l, sy: size.h * t, sw, sh };
+}
+
+interface Scratch {
+  canvas: HTMLCanvasElement | OffscreenCanvas;
+  ctx: Ctx2D;
+}
+let scratch: Scratch | null = null;
+
+/** A reusable offscreen canvas at least w×h pixels (for masks). */
+function getScratch(w: number, h: number): Scratch | null {
+  const cw = Math.max(1, Math.ceil(w));
+  const ch = Math.max(1, Math.ceil(h));
+  if (!scratch) {
+    let canvas: HTMLCanvasElement | OffscreenCanvas;
+    if (typeof OffscreenCanvas !== 'undefined') canvas = new OffscreenCanvas(cw, ch);
+    else if (typeof document !== 'undefined') canvas = document.createElement('canvas');
+    else return null;
+    const c = canvas.getContext('2d') as Ctx2D | null;
+    if (!c) return null;
+    scratch = { canvas, ctx: c };
+  }
+  if (scratch.canvas.width < cw || scratch.canvas.height < ch) {
+    scratch.canvas.width = Math.max(scratch.canvas.width, cw);
+    scratch.canvas.height = Math.max(scratch.canvas.height, ch);
+  }
+  return scratch;
+}
+
+/** Build the mask shape path centred on the clip's drawn rectangle (origin at its top-left). */
+function maskPath(c: Ctx2D, mask: Mask, dw: number, dh: number): void {
+  const size = clamp(mask.size, 0.02, 1);
+  const cx = dw / 2 + clamp(mask.x, -0.5, 0.5) * dw;
+  const cy = dh / 2 + clamp(mask.y, -0.5, 0.5) * dh;
+  c.save();
+  c.translate(cx, cy);
+  if (mask.rotation) c.rotate((mask.rotation * Math.PI) / 180);
+  c.beginPath();
+  switch (mask.shape) {
+    case 'rectangle':
+      c.rect((-dw * size) / 2, (-dh * size) / 2, dw * size, dh * size);
+      break;
+    case 'rounded': {
+      const w = dw * size;
+      const h = dh * size;
+      roundRect(c, -w / 2, -h / 2, w, h, Math.min(w, h) * 0.2);
+      break;
+    }
+    case 'circle':
+      c.arc(0, 0, (Math.min(dw, dh) / 2) * size, 0, Math.PI * 2);
+      break;
+    case 'ellipse':
+      c.ellipse(0, 0, (dw / 2) * size, (dh / 2) * size, 0, 0, Math.PI * 2);
+      break;
+    case 'linear':
+      // Everything left of the edge; `size` moves the edge across the width.
+      c.rect(-3 * dw, -3 * dh, 3 * dw + (size - 0.5) * dw, 6 * dh);
+      break;
+    default:
+      c.rect(-dw, -dh, dw * 2, dh * 2);
+  }
+  c.restore();
+}
+
+/** Draw a cropped image through a (possibly feathered) mask using an offscreen canvas. */
+function drawMaskedImage(
+  ctx: Ctx2D,
+  src: CanvasImageSource,
+  sx: number,
+  sy: number,
+  sw: number,
+  sh: number,
+  dw: number,
+  dh: number,
+  mask: Mask,
+  filter: string,
+): void {
+  const s = getScratch(dw, dh);
+  if (!s) {
+    ctx.filter = filter;
+    ctx.drawImage(src, sx, sy, sw, sh, -dw / 2, -dh / 2, dw, dh);
+    ctx.filter = 'none';
+    return;
+  }
+  const oc = s.ctx;
+  oc.setTransform(1, 0, 0, 1, 0, 0);
+  oc.globalCompositeOperation = 'source-over';
+  oc.globalAlpha = 1;
+  oc.filter = 'none';
+  oc.clearRect(0, 0, s.canvas.width, s.canvas.height);
+  oc.filter = filter;
+  oc.drawImage(src, sx, sy, sw, sh, 0, 0, dw, dh);
+  oc.filter = 'none';
+  oc.globalCompositeOperation = mask.invert ? 'destination-out' : 'destination-in';
+  const featherPx = clamp(mask.feather, 0, 1) * Math.min(dw, dh) * 0.15;
+  if (featherPx > 0.5) oc.filter = `blur(${featherPx.toFixed(1)}px)`;
+  oc.fillStyle = '#ffffff';
+  maskPath(oc, mask, dw, dh);
+  oc.fill();
+  oc.filter = 'none';
+  oc.globalCompositeOperation = 'source-over';
+  ctx.drawImage(s.canvas, 0, 0, Math.ceil(dw), Math.ceil(dh), -dw / 2, -dh / 2, Math.ceil(dw), Math.ceil(dh));
 }
 
 /** Vignette and grain, drawn over the clip's image rectangle (local coordinates). */
@@ -403,19 +522,48 @@ export function wrapText(ctx: Ctx2D, text: string, maxWidth: number): string[] {
   return lines;
 }
 
+const PER_CHAR_ANIMATIONS = new Set(['wave', 'rise', 'glitch']);
+
+function easeOutCubic(p: number): number {
+  return 1 - Math.pow(1 - p, 3);
+}
+function easeOutBounce(p: number): number {
+  const n1 = 7.5625;
+  const d1 = 2.75;
+  if (p < 1 / d1) return n1 * p * p;
+  if (p < 2 / d1) return n1 * (p -= 1.5 / d1) * p + 0.75;
+  if (p < 2.5 / d1) return n1 * (p -= 2.25 / d1) * p + 0.9375;
+  return n1 * (p -= 2.625 / d1) * p + 0.984375;
+}
+function hash2(a: number, b: number): number {
+  const v = Math.sin(a * 127.1 + b * 311.7) * 43758.5453;
+  return v - Math.floor(v);
+}
+
+interface CharOffset {
+  dx: number;
+  dy: number;
+  alpha: number;
+  /** Draw colour-split ghost copies (glitch). */
+  split?: number;
+}
+
 function drawText(ctx: Ctx2D, project: Project, clip: TextClip, time: number): void {
   const st = clip.style;
   const W = project.settings.width;
   const local = time - clip.start;
   const remaining = clipEnd(clip) - time;
   const animDur = Math.min(TEXT_ANIM_SECONDS, clip.duration / 2);
-  let text = clip.text;
+  let text = st.uppercase ? clip.text.toUpperCase() : clip.text;
   let alpha = 1;
   let dy = 0;
   let sc = 1;
-  if (clip.animation !== 'none') {
-    const pIn = clamp(local / animDur, 0, 1);
-    const pOut = clamp(remaining / animDur, 0, 1);
+  let rot = 0;
+  let blur = 0;
+  const pIn = clamp(local / animDur, 0, 1);
+  const pOut = clamp(remaining / animDur, 0, 1);
+  const perChar = PER_CHAR_ANIMATIONS.has(clip.animation);
+  if (clip.animation !== 'none' && !perChar) {
     switch (clip.animation) {
       case 'fade':
         alpha = Math.min(pIn, pOut);
@@ -430,21 +578,48 @@ function drawText(ctx: Ctx2D, project: Project, clip: TextClip, time: number): v
         break;
       case 'typewriter': {
         const chars = Math.ceil(clip.text.length * clamp(local / Math.min(clip.duration * 0.6, 2.5), 0, 1));
-        text = clip.text.slice(0, chars);
+        text = text.slice(0, chars);
         alpha = pOut;
         break;
       }
+      case 'bounce':
+        alpha = Math.min(1, pIn * 3) * pOut;
+        sc = pIn < 1 ? Math.max(0.01, easeOutBounce(pIn)) : 1;
+        break;
+      case 'zoom':
+        alpha = Math.min(pIn, pOut);
+        sc = pIn < 1 ? 1.6 - 0.6 * easeOutCubic(pIn) : pOut < 1 ? 1 + 0.6 * (1 - pOut) : 1;
+        break;
+      case 'spin':
+        alpha = Math.min(pIn, pOut);
+        rot = pIn < 1 ? (1 - easeOutCubic(pIn)) * 180 : pOut < 1 ? -(1 - pOut) * 180 : 0;
+        sc = pIn < 1 ? 0.3 + 0.7 * easeOutCubic(pIn) : 1;
+        break;
+      case 'blur':
+        alpha = Math.min(pIn, pOut);
+        blur = Math.max(1 - pIn, 1 - pOut) * st.fontSize * 0.35;
+        break;
+      default:
+        break;
     }
+  } else if (perChar) {
+    // Per-character animations fade the whole block out; entrance is per character.
+    alpha = clip.animation === 'wave' ? Math.min(pIn, pOut) : pOut;
   }
   if (alpha <= 0.001 || !text) return;
 
   ctx.save();
   ctx.globalAlpha *= clamp(alpha, 0, 1);
   ctx.translate(0, dy);
+  if (rot) ctx.rotate((rot * Math.PI) / 180);
   ctx.scale(sc, sc);
+  if (blur > 0.3) ctx.filter = `blur(${blur.toFixed(1)}px)`;
   ctx.font = fontString(clip);
   ctx.textBaseline = 'middle';
-  ctx.textAlign = st.align;
+  const spacing = st.letterSpacing ?? 0;
+  const styled = ctx as Ctx2D & { letterSpacing?: string };
+  if ('letterSpacing' in styled) styled.letterSpacing = `${spacing}px`;
+  ctx.textAlign = 'left';
   const maxWidth = W * clamp(st.maxWidth, 0.1, 1);
   const lines = wrapText(ctx, text, maxWidth);
   const lineH = st.fontSize * st.lineHeight;
@@ -457,33 +632,105 @@ function drawText(ctx: Ctx2D, project: Project, clip: TextClip, time: number): v
     ctx.save();
     ctx.globalAlpha *= clamp(st.backgroundOpacity, 0, 1);
     ctx.fillStyle = st.background;
-    const bx = st.align === 'left' ? -blockW / 2 : st.align === 'right' ? -blockW / 2 : -blockW / 2;
-    roundRect(ctx, bx - pad, -totalH / 2 - pad * 0.6, blockW + pad * 2, totalH + pad * 1.2, pad * 0.5);
+    roundRect(ctx, -blockW / 2 - pad, -totalH / 2 - pad * 0.6, blockW + pad * 2, totalH + pad * 1.2, pad * 0.5);
     ctx.fill();
     ctx.restore();
   }
 
-  const xForAlign = st.align === 'left' ? -blockW / 2 : st.align === 'right' ? blockW / 2 : 0;
-  lines.forEach((line, i) => {
-    const y = -totalH / 2 + lineH * (i + 0.5);
+  let fill: string | CanvasGradient = st.color;
+  if (st.gradientTo) {
+    const g = ctx.createLinearGradient(0, -totalH / 2, 0, totalH / 2);
+    g.addColorStop(0, st.color);
+    g.addColorStop(1, st.gradientTo);
+    fill = g;
+  }
+  const strokeOn = Boolean(st.stroke && st.strokeWidth > 0);
+  const applyShadow = () => {
     if (st.shadow) {
       ctx.shadowColor = 'rgba(0,0,0,0.6)';
       ctx.shadowBlur = st.fontSize * 0.15;
       ctx.shadowOffsetX = st.fontSize * 0.04;
       ctx.shadowOffsetY = st.fontSize * 0.06;
     }
-    if (st.stroke && st.strokeWidth > 0) {
+  };
+  const clearShadow = () => {
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+  };
+  const drawGlyphs = (str: string, x: number, y: number) => {
+    applyShadow();
+    if (strokeOn) {
       ctx.lineJoin = 'round';
       ctx.lineWidth = st.strokeWidth * 2;
       ctx.strokeStyle = st.stroke;
-      ctx.strokeText(line, xForAlign, y);
+      ctx.strokeText(str, x, y);
     }
-    ctx.fillStyle = st.color;
-    ctx.fillText(line, xForAlign, y);
-    ctx.shadowColor = 'transparent';
-    ctx.shadowBlur = 0;
+    ctx.fillStyle = fill;
+    ctx.fillText(str, x, y);
+    clearShadow();
+  };
+
+  let charIndex = 0;
+  lines.forEach((line, i) => {
+    const y = -totalH / 2 + lineH * (i + 0.5);
+    const lw = widths[i];
+    const x0 = st.align === 'left' ? -blockW / 2 : st.align === 'right' ? blockW / 2 - lw : -lw / 2;
+    if (!perChar) {
+      drawGlyphs(line, x0, y);
+      return;
+    }
+    let x = x0;
+    for (const ch of Array.from(line)) {
+      const w = ctx.measureText(ch).width;
+      const off = charOffset(clip, charIndex, local, animDur, time);
+      if (off.alpha > 0.001) {
+        ctx.save();
+        ctx.globalAlpha *= clamp(off.alpha, 0, 1);
+        if (off.split) {
+          ctx.save();
+          ctx.globalAlpha *= 0.5;
+          ctx.fillStyle = '#ff2a6d';
+          ctx.fillText(ch, x + off.dx - off.split, y + off.dy);
+          ctx.fillStyle = '#05d9e8';
+          ctx.fillText(ch, x + off.dx + off.split, y + off.dy);
+          ctx.restore();
+        }
+        drawGlyphs(ch, x + off.dx, y + off.dy);
+        ctx.restore();
+      }
+      x += w;
+      charIndex++;
+    }
+    charIndex++; // line break counts as a character for staggering
   });
   ctx.restore();
+}
+
+function charOffset(clip: TextClip, i: number, local: number, animDur: number, time: number): CharOffset {
+  const fs = clip.style.fontSize;
+  switch (clip.animation) {
+    case 'wave':
+      return { dx: 0, dy: Math.sin(local * 4 + i * 0.6) * fs * 0.15, alpha: 1 };
+    case 'rise': {
+      const p = clamp((local - i * 0.04) / Math.max(0.15, animDur * 0.7), 0, 1);
+      return { dx: 0, dy: (1 - easeOutCubic(p)) * fs * 0.9, alpha: p };
+    }
+    case 'glitch': {
+      const frame = Math.floor(time * 30);
+      const burst = hash2(frame, 7) < 0.25; // glitch bursts on ~25% of frames
+      const hit = burst && hash2(frame, i + 1) < 0.5;
+      const entering = clamp(local / Math.max(0.15, animDur), 0, 1);
+      if (!hit) return { dx: 0, dy: 0, alpha: entering };
+      return {
+        dx: (hash2(frame + 3, i) - 0.5) * fs * 0.4,
+        dy: (hash2(frame + 5, i) - 0.5) * fs * 0.15,
+        alpha: entering,
+        split: fs * 0.06,
+      };
+    }
+    default:
+      return { dx: 0, dy: 0, alpha: 1 };
+  }
 }
 
 function roundRect(ctx: Ctx2D, x: number, y: number, w: number, h: number, r: number): void {
