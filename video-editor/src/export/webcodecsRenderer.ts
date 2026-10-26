@@ -119,10 +119,14 @@ export class WebCodecsRenderer implements Renderer {
         });
         encoder.encode(frame, { keyFrame: i % (fps * 2) === 0 });
         frame.close();
-        // Back-pressure: do not let the encoder queue grow unbounded.
+        // Back-pressure: do not let the encoder queue grow unbounded. Bail out
+        // if the encoder stops draining (error or stalled platform encoder).
+        const waitStart = performance.now();
         while (encoder.encodeQueueSize > 4) {
           await new Promise((r) => setTimeout(r, 2));
           throwIfAborted(signal);
+          if (encodeError) throw encodeError;
+          if (performance.now() - waitStart > 30_000) throw new Error('Video encoder stalled');
         }
         if (i % 3 === 0 || i === totalFrames - 1) {
           onProgress({

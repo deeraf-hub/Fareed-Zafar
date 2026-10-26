@@ -15,6 +15,8 @@ export default defineConfig({
     ...devices['Desktop Chrome'],
     viewport: { width: 1500, height: 940 },
     trace: 'retain-on-failure',
+    actionTimeout: 20_000,
+    navigationTimeout: 30_000,
     video: 'off',
     launchOptions: {
       args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream'],
