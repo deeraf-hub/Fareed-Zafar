@@ -1,0 +1,67 @@
+name: video-editor CI
+
+on:
+  # Pushes to the default branch; feature branches are covered by pull_request
+  # so each change runs the suite once, not twice.
+  push:
+    branches:
+      - main
+      - master
+      - claude/messenger-whatsapp-forwarding-v76e6z
+    paths:
+      - 'video-editor/**'
+      - '.github/workflows/video-editor-ci.yml'
+  pull_request:
+    paths:
+      - 'video-editor/**'
+      - '.github/workflows/video-editor-ci.yml'
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: video-editor
+
+jobs:
+  checks:
+    name: Typecheck, lint, unit tests, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: video-editor/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-editor-dist
+          path: video-editor/dist
+          retention-days: 7
+
+  e2e:
+    name: Browser E2E (real media + MP4 export)
+    runs-on: ubuntu-latest
+    needs: checks
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: video-editor/package-lock.json
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: video-editor/playwright-report
+          retention-days: 7

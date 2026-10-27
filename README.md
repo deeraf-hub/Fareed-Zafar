@@ -1,3 +1,7 @@
+> **This repository now contains two projects.**
+> * [`video-editor/`](video-editor/README.md) — **Framewright**, a browser-based video editor (React + TypeScript + Vite, FFmpeg.wasm/WebCodecs export, Supabase auth). See its README and [`video-editor/docs/STATUS.md`](video-editor/docs/STATUS.md).
+> * The Messenger → WhatsApp forwarder documented below (root `src/`).
+
 # Messenger → WhatsApp Forwarder
 
 A small, self-hosted Node.js service that watches your **Facebook Page inbox 24/7** and forwards **every incoming Messenger message to your WhatsApp Business number in real time**, including:
