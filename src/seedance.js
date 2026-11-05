@@ -52,22 +52,17 @@ export async function toImageUrl(source) {
 }
 
 /**
- * Build the JSON body for POST /contents/generations/tasks.
- * Pure function so it can be unit-tested without network access.
+ * Validate the provider-independent options shared by every Seedance backend.
+ * Throws a descriptive Error so the CLI can fail before any credits are spent.
  */
-export function buildTaskPayload({
-  model = DEFAULT_MODEL,
+export function validateVideoOptions({
   prompt,
   firstFrame,
   lastFrame,
-  referenceImages = [],
   referenceVideos = [],
   ratio,
   resolution,
   duration,
-  generateAudio,
-  watermark,
-  seed,
   outputFormat,
   draft,
 } = {}) {
@@ -97,6 +92,35 @@ export function buildTaskPayload({
   if (outputFormat && !OUTPUT_FORMATS.includes(outputFormat)) {
     throw new Error(`Invalid output format "${outputFormat}" — use mp4 or mov`);
   }
+  for (const url of referenceVideos) {
+    if (!/^(https?:|asset:)/i.test(url)) {
+      throw new Error(`Reference videos must be http(s) or asset:// URLs, got "${url}"`);
+    }
+  }
+}
+
+/**
+ * Build the JSON body for POST /contents/generations/tasks.
+ * Pure function so it can be unit-tested without network access.
+ */
+export function buildTaskPayload(options = {}) {
+  validateVideoOptions(options);
+  const {
+    model = DEFAULT_MODEL,
+    prompt,
+    firstFrame,
+    lastFrame,
+    referenceImages = [],
+    referenceVideos = [],
+    ratio,
+    resolution,
+    duration,
+    generateAudio,
+    watermark,
+    seed,
+    outputFormat,
+    draft,
+  } = options;
 
   const content = [{ type: "text", text: String(prompt).trim() }];
   if (firstFrame) content.push({ type: "image_url", image_url: { url: firstFrame }, role: "first_frame" });
@@ -105,9 +129,6 @@ export function buildTaskPayload({
     content.push({ type: "image_url", image_url: { url }, role: "reference_image" });
   }
   for (const url of referenceVideos) {
-    if (!/^(https?:|asset:)/i.test(url)) {
-      throw new Error(`Reference videos must be http(s) or asset:// URLs, got "${url}"`);
-    }
     content.push({ type: "video_url", video_url: { url }, role: "reference_video" });
   }
 
