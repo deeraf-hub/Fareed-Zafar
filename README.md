@@ -134,6 +134,65 @@ The destination stays WhatsApp either way — these are just different ways to r
 
 ---
 
+---
+
+## Bonus: AI video generation with Seedance 2.5
+
+The repo also ships a small, standalone CLI for ByteDance's **Seedance 2.5** video model. It is independent of the forwarder (none of the Meta variables are needed) and is handy for turning a prompt, a product photo or a brand reference into a short reel.
+
+It works with **either of two providers** — use whichever you can open an account with. The same command and options work for both; only the key differs.
+
+### Option A — BytePlus ModelArk (ByteDance's official API)
+1. Create a BytePlus account at [console.byteplus.com](https://console.byteplus.com) and complete verification.
+2. Open **ModelArk → API Key management** and click **Create API Key**. Copy it immediately.
+3. **Activate Seedance 2.5** in ModelArk → Model management. BytePlus requires a purchased resource pack (or credits) before the model can be activated — there is no free tier for video.
+4. Put the key in `.env` as `ARK_API_KEY`. Keys are region-bound; Seedance runs on the Asia-Pacific endpoint, which is the default base URL.
+
+### Option B — fal.ai (reseller, simplest signup)
+1. Sign up at [fal.ai](https://fal.ai) (GitHub or Google login) and add a card under **Billing**. Usage is pay-as-you-go per second of video, no minimum pack.
+2. Open [fal.ai/dashboard/keys](https://fal.ai/dashboard/keys) and create a key.
+3. Put it in `.env` as `FAL_KEY`.
+
+The CLI picks the provider automatically from whichever key is set. With both keys present, choose with `--provider byteplus|fal` or `SEEDANCE_PROVIDER` in `.env`.
+
+### Usage
+```bash
+# text → video (vertical reel, 5 s, with generated audio)
+npm run video -- --prompt "A barista pours latte art, warm morning light, slow push-in" --ratio 9:16 --duration 5
+
+# image → video: animate a product photo (aspect ratio follows the image)
+npm run video -- --prompt "Slow 360° turntable, soft studio lighting" --image ./product.jpg
+
+# first + last frame
+npm run video -- --prompt "Day turns to night" --image day.jpg --last-image night.jpg
+
+# style/character references (mention them as @Image1, @Video1 in the prompt)
+npm run video -- --prompt "The model from @Image1 walks through a neon street" --ref-image model.png
+
+# cheap 480p draft to test a prompt before paying for a full render
+npm run video -- --prompt "..." --draft
+
+# force a provider; see all options
+npm run video -- --provider fal --prompt "..."
+npm run video -- --help
+```
+
+The script submits the job, polls until it finishes (usually 1–5 minutes), prints the temporary video URL and saves the file to `output/` (ignored by git). Local image files are sent inline; reference **videos** must be public URLs.
+
+| Option | Values | Default |
+|---|---|---|
+| `--ratio` | `21:9 16:9 4:3 1:1 3:4 9:16 adaptive` | `adaptive` (model picks; `9:16` for reels) |
+| `--resolution` | `480p 720p 1080p` | `720p` |
+| `--duration` | `4`–`30` seconds, or `-1` | model picks |
+| `--no-audio` / `--watermark` / `--seed N` / `--format mp4\|mov` / `--draft` | | audio on, no watermark, mp4 |
+
+Notes:
+- With `--image` (first frame) Seedance only accepts `adaptive` ratio, and `--draft` only renders 480p — the script checks both before sending so you don't burn credits on a rejected job.
+- **fal.ai differences:** it has no watermark option, always returns mp4, only honours `--seed` on reference jobs, and cannot combine `--image` with `--ref-*` in one job (pass the frame as a reference instead). The CLI prints a note when it drops one of these.
+- Official references: BytePlus [Create a video generation task](https://docs.byteplus.com/en/docs/ModelArk/1520757), [Seedance 2.5 tutorial](https://docs.byteplus.com/en/docs/ModelArk/2607688), [prompt guide](https://docs.byteplus.com/en/docs/ModelArk/2607689); fal.ai [text-to-video](https://fal.ai/models/bytedance/seedance-2.5/text-to-video/api), [image-to-video](https://fal.ai/models/bytedance/seedance-2.5/image-to-video/api), [reference-to-video](https://fal.ai/models/bytedance/seedance-2.5/reference-to-video/api), [queue API](https://fal.ai/docs/documentation/model-apis/inference/queue).
+
+---
+
 ## Project layout
 
 ```
@@ -144,7 +203,10 @@ src/
   messenger.js        Sender-name lookup (Graph API) with caching
   whatsapp.js         Cloud API sender: text, media (link + upload), template fallback, retries
   config.js           Environment configuration
+  seedance.js         Seedance 2.5 client for BytePlus ModelArk + shared option validation
+  seedance-fal.js     Seedance 2.5 client for fal.ai (queue API)
 scripts/
   check-whatsapp.js   Credential check: sends a test WhatsApp message (npm run test:whatsapp)
+  seedance-video.js   Generate a video/reel with Seedance 2.5 via either provider (npm run video)
 test/                 Unit tests (npm test)
 ```
