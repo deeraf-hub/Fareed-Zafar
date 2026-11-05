@@ -148,3 +148,9 @@ scripts/
   check-whatsapp.js   Credential check: sends a test WhatsApp message (npm run test:whatsapp)
 test/                 Unit tests (npm test)
 ```
+
+---
+
+## Also in this repository: `postiz-clone/`
+
+A front-end clone of [postiz.com](https://postiz.com) (social media scheduling tool): marketing site plus a working scheduling dashboard with calendar, multi-channel composer, analytics, plugs, marketplace, settings and billing. Built with Next.js 16 and Tailwind CSS 4. See [`postiz-clone/README.md`](postiz-clone/README.md) to run it.
